@@ -47,11 +47,11 @@ const Home: React.FC = () => {
         <div className="rect rect-13" />
         {account === '' ? <ConnectWallet className="iframe-connect" /> : ''}
       </div>
-      <div className="flex-row row iframe-row">
-        <div className="flex-row row col-2">
+      <div className="flex-row row iframe-row" style={{ paddingBottom: '0px' }}>
+        <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>
           <HeaderLabel>MarsDoge</HeaderLabel>
         </div>
-        <div className="flex-row row col-6">
+        <div className="flex-row row col-6" style={{ paddingBottom: '0px' }}>
           <Button
             className="mg-8"
             variant="contained"
@@ -71,7 +71,7 @@ const Home: React.FC = () => {
             <Typography variant="subtitle1">Vend at ArcadeMarket</Typography>
           </Button>
         </div>
-        <div className="flex-row row col-2">
+        <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>
           <ThemeProvider theme={homeTheme}>
             <Button
               className="mg-8"

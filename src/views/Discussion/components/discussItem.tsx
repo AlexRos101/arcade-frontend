@@ -9,6 +9,7 @@ import ChartIcon from 'assets/img/bxs-chart.svg'
 import IconLabel from 'components/Label/IconLabel'
 import DisucssionLabel from 'components/Label/DiscussionLabel'
 import ReactTimeAgo from 'react-time-ago'
+import Badge from 'components/badge'
 
 import { Discussion } from 'global/interface'
 
@@ -29,7 +30,10 @@ const DiscussItem: React.FC<Props> = (props) => {
     <Link href={`/discussion/details/${discussion.stuff_id}/${discussion.id}`} underline="none">
       <ItemContainer>
         <Grid container alignItems="center" justifyContent="space-between" direction="row">
-          <DisucssionLabel>{discussion.content}</DisucssionLabel>
+          <DisucssionLabel style={{ display: 'flex' }}>
+            {props.badge != undefined ? <Badge type="danger" content={String(props.badge)} /> : ''}
+            {discussion.content}
+          </DisucssionLabel>
         </Grid>
         <Grid container alignItems="center" justifyContent="space-between" direction="row">
           <div className="flex-row r-flex-row">

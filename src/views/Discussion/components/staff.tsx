@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Grid, ThemeProvider, Typography } from '@material-ui/core'
 
@@ -8,6 +8,7 @@ import DiscussItem from './discussItem'
 import DetailLink from './detailLink'
 import { getAllDiscussion } from 'hooks/api'
 
+import Pagination from 'components/Pagination'
 import { greenTheme } from 'styles/theme'
 
 import { Stuff, Discussion } from 'global/interface'
@@ -22,24 +23,67 @@ const Staff: React.FC<Props> = (props) => {
   const staff = props.staff
   const [discussions, setDiscussions] = useState<Array<Discussion>>([])
   const [dscIsSet, setDscIsSet] = useState(false)
+  const [total, setTotal] = useState(0)
+  const [pageNum, setPageNum] = useState(0)
 
   useEffect(() => {
     if (dscIsSet == false) {
       setDscIsSet(true)
       const data = staff.discussions as Array<Discussion>
       if (data && data.length > 0) {
+        let hotIndex = -1
+        let hotValue = -1
+
+        for (let i = 0; i < data.length; i++) {
+          const tempDiscussion = data[i] as Discussion
+          if (tempDiscussion.likes > hotValue) {
+            hotIndex = i
+            hotValue = tempDiscussion.likes
+          }
+        }
+
+        data.sort((x: Discussion, y: Discussion) => {
+          return x == data[hotIndex] ? -1 : y == data[hotIndex] ? 1 : 0
+        })
+
         setDiscussions(data)
       } else {
-        getAllDiscussion(staff.id, 0, 3).then((res) => {
+        getAllDiscussion(staff.id, pageNum * 8, 8).then((response) => {
+          let hotIndex = -1
+          let hotValue = -1
+
+          const res = response.data
+
+          for (let i = 0; i < res.length; i++) {
+            const tempDiscussion = res[i] as Discussion
+            if (tempDiscussion.likes > hotValue) {
+              hotIndex = i
+              hotValue = tempDiscussion.likes
+            }
+          }
+
+          res.sort((x: Discussion, y: Discussion) => {
+            return x == res[hotIndex] ? -1 : y == res[hotIndex] ? 1 : 0
+          })
+
           setDiscussions(res)
+          setTotal(response.total)
         })
       }
     }
   })
 
-  const onAddNewThread = () => {
+  const onAddNewThread = useCallback(() => {
     history.push(`/discussion/new/${staff.id}`)
-  }
+  }, [])
+
+  const onPageChanged = useCallback(
+    (pageNum: number) => {
+      setPageNum(pageNum)
+      setDscIsSet(false)
+    },
+    [pageNum, dscIsSet],
+  )
 
   return (
     <div style={{ marginBottom: '2rem' }}>
@@ -66,13 +110,21 @@ const Staff: React.FC<Props> = (props) => {
           </Grid>
         </Grid>
         {discussions.map((discussion, index) => {
-          return <DiscussItem key={index} content={discussion} />
+          if (index == 0) {
+            return <DiscussItem key={index} content={discussion} badge="Hot Discussion" />
+          } else {
+            return <DiscussItem key={index} content={discussion} />
+          }
         })}
       </Card>
       {props.link == false ? (
-        ''
+        <Pagination totalPage={total} onChange={onPageChanged} />
       ) : (
-        <DetailLink href={`/discussion/stuff/${staff.id}`} content={`View All ${staff.title} Discussions`}></DetailLink>
+        <DetailLink
+          href={`/discussion/stuff/${staff.id}`}
+          content={`View All ${staff.title} Discussions`}
+          type={`forward`}
+        ></DetailLink>
       )}
     </div>
   )

@@ -36,7 +36,7 @@ const NewDiscussion: React.FC<Props> = (props) => {
         </Grid>
         <AddDiscussionForm stuff={staff} />
       </Card>
-      <DetailLink href={`/discussion/`} content={`Return to All Discussions`}></DetailLink>
+      <DetailLink href={`/discussion/`} content={`Return to All Discussions`} type={`back`}></DetailLink>
     </div>
   )
 }

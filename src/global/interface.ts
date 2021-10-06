@@ -49,6 +49,7 @@ export interface Discussion {
   content: string
   comment_cnt?: number
   updated_at?: string
+  is_hot?: boolean
 }
 
 export interface Stuff {

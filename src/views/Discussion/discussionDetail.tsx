@@ -33,6 +33,7 @@ const DiscussionDetail: React.FC = () => {
     user: '',
     user_type: -1,
     content: '',
+    is_hot: false,
   })
   const [dscIsSet, setDscIsSet] = useState(false)
 
@@ -59,6 +60,21 @@ const DiscussionDetail: React.FC = () => {
       setDscIsSet(true)
       getDiscussion(Number(discussionId)).then((data) => {
         setDiscussion(data)
+
+        let hotValue = -1
+        let hotItem = null
+
+        for (let i = 0; i < data.comments.length; i++) {
+          const tempComment = data.comments[i] as Comment
+          if (tempComment.likes > hotValue) {
+            hotValue = tempComment.likes
+            hotItem = tempComment
+          }
+        }
+        if (hotItem != null) {
+          data.comments.unshift(hotItem)
+        }
+
         setComments(data.comments)
       })
     }
@@ -79,7 +95,7 @@ const DiscussionDetail: React.FC = () => {
     setCommentState(2)
     setShowAddComments(true)
     setCommentOn(true)
-  }, [])
+  }, [commentOn, showAddComments, commentState])
 
   return (
     <Page className="styled-search">
@@ -106,7 +122,11 @@ const DiscussionDetail: React.FC = () => {
             ''
           )}
           {comments.map((comment: Comment, index: number) => {
-            return <CommentItem key={index} comment={comment} />
+            if (index == 0) {
+              return <CommentItem key={index} comment={comment} badge="Hot Comment" />
+            } else {
+              return <CommentItem key={index} comment={comment} />
+            }
           })}
         </Grid>
         <Grid item sm={12} md={4}>

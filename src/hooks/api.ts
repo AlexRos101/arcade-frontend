@@ -23,7 +23,7 @@ export const getStuff = async (id: number): Promise<any> => {
 
 export const getAllDiscussion = async (id: number, limit: number, cnt: number): Promise<any> => {
   const response = await sendPost('discussion/all/', { id: id, limit: limit, cnt: cnt })
-  return response.data
+  return response
 }
 
 export const getSearch = async (keyword: string): Promise<any> => {

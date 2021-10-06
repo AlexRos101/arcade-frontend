@@ -14,11 +14,13 @@ import ReactTimeAgo from 'react-time-ago'
 import { setLikes, getLikes } from 'hooks/api'
 import { useGlobalState } from 'state-pool'
 import { Comment } from 'global/interface'
+import Badge from 'components/badge'
 
 import AddReply from './addReply'
 
 interface Props {
   comment: Comment
+  badge?: string
 }
 
 const CommentContent: React.FC<Props> = (props) => {
@@ -73,7 +75,7 @@ const CommentContent: React.FC<Props> = (props) => {
       /* setIsLike(0) */
       document.location.reload()
     }
-  }, [isLike])
+  }, [isLike, account, comment])
 
   return (
     <div style={{ flexGrow: 1 }}>
@@ -84,7 +86,10 @@ const CommentContent: React.FC<Props> = (props) => {
         direction="row"
         style={{ display: 'inline-block', wordBreak: 'break-word' }}
       >
-        <CommentLabel>{comment.content}</CommentLabel>
+        <CommentLabel style={{ display: 'flex' }}>
+          {props.badge == undefined ? '' : <Badge type="note" content={String(props.badge)} />}
+          {comment.content}
+        </CommentLabel>
       </Grid>
       <Grid container alignItems="center" justifyContent="space-between" direction="row">
         <div className="flex-row r-flex-row r-comment-count-row r-wd-100">

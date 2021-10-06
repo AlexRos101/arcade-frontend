@@ -9,6 +9,7 @@ import IconLabel from 'components/Label/IconLabel'
 import { useGlobalState } from 'state-pool'
 import { setLikes, getLikes, getDiscussion } from 'hooks/api'
 import ReactTimeAgo from 'react-time-ago'
+import Badge from 'components/badge'
 
 import { Discussion } from 'global/interface'
 
@@ -55,7 +56,14 @@ const DiscussionContent: React.FC<Props> = (props) => {
   return (
     <Card>
       <Grid container alignItems="center" justifyContent="space-between" direction="row" className="dsc-content-header">
-        <p> {discussion.content}</p>
+        <p>
+          {discussion.is_hot == undefined || discussion.is_hot == false ? (
+            ''
+          ) : (
+            <Badge type="danger" content="Hot Discussion" style={{ marginLeft: '0px', marginBottom: '10px' }} />
+          )}
+          {discussion.content}
+        </p>
       </Grid>
       <Grid container alignItems="center" justifyContent="space-between" direction="row" className="mt-5">
         <div className="flex-row r-flex-row r-comment-count-row r-wd-100">

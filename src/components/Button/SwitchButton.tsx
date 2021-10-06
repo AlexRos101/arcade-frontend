@@ -75,7 +75,7 @@ const SwitchButton: React.FC<Props> = (props) => {
           lineHeight: '16px',
           color: '#B7B091',
           whiteSpace: 'nowrap',
-          margin: '6px 0px',
+          margin: '6px 12px',
         }}
       >
         {props.text}

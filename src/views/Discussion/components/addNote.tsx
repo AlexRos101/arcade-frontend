@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     color: '#9D9468',
   },
   searchCardBody: {
-    color: '#433F2F',
+    color: '#5E5630',
   },
 })
 
