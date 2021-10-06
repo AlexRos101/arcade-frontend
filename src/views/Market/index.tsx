@@ -24,6 +24,8 @@ import ExpandButton from "components/Button/ExpandButton"
 import TabRow from "./components/TabRow"
 import { stringify } from "querystring"
 
+import OrderApprovalModal from "components/Modal/OrderApproval"
+
 
 const skinCards = [
     {
@@ -166,7 +168,11 @@ const Market = () => {
 
     const [maplevel, setMapLevel] = React.useState(0)
     const [open, setOpen] = React.useState(false)
+    
     const [selectedCard, setSelectedCard] = React.useState({color: '', tokenId: '', price: 0})
+
+
+    const [testopen, setTestOpen] = React.useState(false)
     
     const handleClose = () => {
         setOpen(false)
@@ -194,11 +200,17 @@ const Market = () => {
     })
 
     const onClickMarsDogAll = () => {
-        history.push("/market/doge")
+        //history.push("/market/doge")
+        setTestOpen(true)
+
     }
 
     const onClickOtherAll = () => {
         history.push("/market/other")
+    }
+
+    const handleTestClose = () => {
+        setTestOpen(false)
     }
 
     return (
@@ -246,6 +258,7 @@ const Market = () => {
                 <ExpandButton onClick={onClickOtherAll}>View All Another Game</ExpandButton>
             </MarketRow>
             <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/>
+            <OrderApprovalModal onClose={handleTestClose} open={testopen} title='Skin #012345'/>
         </Page>
     )
 }

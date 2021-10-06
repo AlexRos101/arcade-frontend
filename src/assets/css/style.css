@@ -1019,6 +1019,116 @@ button {
     color: #22303D;
   }
 
+  .step-item {
+    border: 1px solid #B7B091;
+    border-radius: 13px;
+    padding: 2vh 2vw;
+    min-width: 320px;
+  }
+
+  .item-processed .step-item {
+    background: #FFF0D3;
+  }
+
+  .approval-header {
+    font-family: 'Tovari Sans Bold';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 27px;
+
+    color: #FF6C50;
+    text-shadow: 0px 1px 0px #B53C2C;
+    
+    margin: auto !important;
+  }
+
+  .item-connect {
+    height: 2.5vh;
+    border-left: solid 2px #B7B091;
+    margin-left: 3vw;
+  }
+
+  .modal-order-content {
+    width: fit-content !important;
+    padding: 5vh 2vw !important;
+  }
+
+  .circle-number {
+    width: 34px;
+    height: 34px;
+    border-radius: 18px;
+    border: 2px solid #B7B091;
+  }
+
+  .item-processed .circle-number {
+    border-color: #E4CEA4;
+    background: #E4CEA4;
+  }
+
+  .circle-number p {
+    margin: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+
+    color: #9D9468;
+  }
+
+  .item-processed .circle-number p {
+    color: #7E5504;
+  }
+
+  .step-item #header {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #5E5630;
+    margin: 0 !important;
+  }
+
+  .item-processed .step-item #header {
+    color: #7E5504;
+  }
+
+  .item-disabled .item-disabler {
+    background-color: rgba(252, 253, 248, 0.5);
+    position: absolute;
+    width: calc(100% - 4vw);
+    height: calc(50% - 10vh);
+    z-index: 1400;
+  }
+
+  .item .item-disabler {
+    display: none;
+  }
+
+  .item-processed button {
+    background: #E4CEA4;
+    box-shadow: none !important;
+  }
+
+  .step-item #content {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+
+    color: #9D9468;
+    margin: 0 !important;
+  }
+
   @media screen and (max-width: 1080px) {
     .r-no-display {
       display: none !important;
