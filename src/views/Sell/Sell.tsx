@@ -216,8 +216,11 @@ const Sell: React.FC<SkinProps> = (data) => {
     async (files: Array<File>) => {
       setShowThumbnailWarning(false)
       const file = files[0]
-      if (file.name.slice(file.name.length - 4, file.name.length) != '.rar') {
-        Swal('Please select *.rar file.')
+      if (
+        file.name.slice(file.name.length - 4, file.name.length) != '.rar' &&
+        file.name.slice(file.name.length - 4, file.name.length) != '.zip'
+      ) {
+        Swal('Please select *.rar or *.zip file.')
         return
       }
 
@@ -227,7 +230,7 @@ const Sell: React.FC<SkinProps> = (data) => {
 
       const formData = new FormData()
       // Update the formData object
-      formData.append('myFile', file, tokenTemp + '.rar')
+      formData.append('myFile', file, tokenTemp + file.name.slice(file.name.length - 4, file.name.length))
 
       // Request made to the backend api
       // Send formData object
