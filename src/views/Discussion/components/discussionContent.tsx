@@ -37,7 +37,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
                 direction="row"
                 className="mt-5"
               >
-                <div className="flex-row r-flex-row"> 
+                <div className="flex-row r-flex-row r-comment-count-row r-wd-100"> 
                   <IconLabel
                   avatar={RocketIcon}
                   label={discussion.likes}

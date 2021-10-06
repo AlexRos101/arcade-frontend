@@ -88,7 +88,7 @@ const FooterRoadmap = () => {
               className={classes.title}>
               Community
             </Typography>
-            <Link href="#">
+            <Link href="/discussion">
               <RoadmapEntry title="Discussions" />
             </Link>
             <Link href="https://t.me/ArcadeDoge">

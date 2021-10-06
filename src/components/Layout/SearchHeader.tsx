@@ -10,27 +10,15 @@ import {
     InputAdornment
 } from '@material-ui/core'
 
-import {
-    makeStyles
-} from '@material-ui/core/styles'
-
 import SearchIcon from '@material-ui/icons/Search'
 
-import { OutlinedCard } from 'components/Card'
+interface Props
+{
+    content: string
+}
 
-const useStyles = makeStyles({
-    searchCardTitle: {
-      color: '#9D9468'
-    },
-    searchCardBody: {
-      color: '#433F2F'
-    }
-  })
-
-const SearchBox = () => {
+const SearchHeader: React.FC<Props> = (props) =>{
     const history = useHistory()
-    const classes = useStyles()
-
     const [keyword, setKeyword] = useState('')
 
     const handleKeyDown = (e: any) => {
@@ -40,26 +28,11 @@ const SearchBox = () => {
         }
     }
 
-    return (
-        <OutlinedCard className="outlined-card">
-            <Typography
-                gutterBottom
-                variant="h3"
-                component="div"
-                className={classes.searchCardTitle}
-            >
-                Looking for something specific?
-            </Typography>
-            <Typography
-                gutterBottom
-                variant="subtitle1"
-                component="div"
-                className={`${classes.searchCardBody} r-display-none`}
-            >
-                Try searching for it first before you create a discussion thread.
-            </Typography>
+    return(
+        <div className="flex-row wd-100">
+            <p style={{marginBottom:'0'}}>{props.content}</p>
             <TextField
-                fullWidth
+                
                 placeholder="Search for Discussion"
                 InputProps={{
                 startAdornment: (
@@ -68,13 +41,15 @@ const SearchBox = () => {
                     </InputAdornment>
                 )
                 }}
+                style={{marginLeft: 'auto', marginTop:'auto', marginBottom:'auto'}}
+                className="r-display-none"
                 variant="outlined"
                 onKeyDown={handleKeyDown}
                 value={keyword}
                 onChange={e => setKeyword(e.currentTarget.value)}
             />
-        </OutlinedCard>
-)
+        </div>
+    )
 }
 
-export default SearchBox
+export default SearchHeader

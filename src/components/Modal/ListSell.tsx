@@ -18,7 +18,6 @@ import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
-import * as CONST from '../../global/const'
 
 const DialogContent = withStyles((theme) => ({
 root: {

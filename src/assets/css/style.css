@@ -992,6 +992,11 @@ button {
     text-shadow: 0px 1px 0px #B53C2C;
   }
 
+  .dicuss-header-image {
+    width: 53px;
+    height: 53px;
+  }
+
   .dsc-content-header {
     border-bottom: 1px solid #EFECDC;
   }
@@ -1017,6 +1022,7 @@ button {
 
     /* Black */
     color: #22303D;
+    overflow-wrap: break-word;
   }
 
   .step-item {
@@ -1129,6 +1135,19 @@ button {
     margin: 0 !important;
   }
 
+  .staff-select-item {
+    font-family: Montserrat !important;
+    font-style: normal  !important;
+    font-weight: 500  !important;
+    font-size: 14px  !important;
+    line-height: 157.4%  !important;
+    color: #5E5630;
+  }
+
+  .r-display {
+    display: none;
+  }
+
   @media screen and (max-width: 1080px) {
     .r-no-display {
       display: none !important;
@@ -1136,6 +1155,10 @@ button {
 
     .r-wd-50 {
       width: 50%;
+    }
+
+    .r-wd-100 {
+      width: 100% !important;
     }
 
     .no-display {
@@ -1194,7 +1217,7 @@ button {
     }
 
     .flex-row {
-      flex-direction: column;
+      flex-direction: column !important;
     }
 
     .row {
@@ -1253,6 +1276,14 @@ button {
 
     .market-listing-btn {
       display: none !important;
+    }
+
+    .r-display-none {
+      display: none !important;
+    }
+
+    .r-display {
+      display: block !important;
     }
 
     .market-info-tag {
@@ -1324,7 +1355,7 @@ button {
     }
     
     .r-flex-row {
-      flex-direction: row;
+      flex-direction: row !important;
     }
 
     #arcade_map {
@@ -1433,6 +1464,76 @@ button {
       width: 75vw;
       overflow-wrap: break-word;
       margin-right: 0 !important;
+    }
+
+    .outlined-card {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background: #FFFDF1 !important;
+      z-index: 100;
+      margin: 1vh 3vw !important;
+      border-radius: 10px;
+      padding: 1vh 3vw !important;
+      width: 88vw !important;
+      box-shadow: 0px 2px 0px #b7b091 !important;
+    }
+
+    .footer-search-layout {
+      margin-bottom: calc(4vh + 75px) !important;
+    }
+
+    .footer-rule-layout {
+      margin-bottom: calc(4vh + 115px) !important;
+    }
+
+    .staff-header {
+      border-bottom: none;
+    }
+
+    .discussion-btn {
+      width: 100% !important;
+      margin-top: 1.5vh;
+      padding-top: 1.5vh;
+      border-top: 1px solid #EFECDC;
+    }
+
+    .discussion-btn button {
+      width: 100% !important;
+    }
+
+    .discuss-header-label {
+      font-size: 24px;
+      line-height: 20px;
+    }
+
+    .dicuss-header-image {
+      width: 26px;
+      height: 26px;
+    }
+
+    .dsc-content-header p {
+      font-size: 20px;
+      line-height: 132.9%;
+      margin-bottom: 0 !important;
+    }
+
+    .dsc-content-header {
+      border-bottom: none;
+    }
+
+    .r-comment-count-row {
+      border-bottom: 1px solid #EFECDC;
+      padding-bottom: 1vh;
+      margin-bottom: 1.5vh;
+    }
+
+    .r-comment-label {
+      width: calc(100% - 16px);
+    }
+
+    .r-comment-btn {
+      width: calc(100% - 16px) !important;
     }
   }
 

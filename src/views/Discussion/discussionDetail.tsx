@@ -19,6 +19,8 @@ import CommentItem from './components/commentItem'
 
 import DiscussionContent from './components/discussionContent'
 import SearchBox from './components/searchBox'
+import AddComment from './components/addComment'
+import { store, useGlobalState } from 'state-pool'
 import { getStuff, getDiscussion } from 'hooks/api'
 
 import { greenTheme } from 'styles/theme'
@@ -39,6 +41,11 @@ const DiscussionDetail = () => {
 
   const { staffId, discussionId } = useParams<ParamTypes>()
 
+  const [showAddComments, setShowAddComments] = useState(false)
+
+  const [commentState, setCommentState] = useGlobalState('commentState')
+  const [commentOn, setCommentOn] = useState(false)
+
   useEffect(() => {
     if (staffIsSet == false) {
       setStaffIsSet(true)
@@ -58,6 +65,24 @@ const DiscussionDetail = () => {
       })
     }
   })
+
+  useEffect(() => {
+    if (commentState == 2) {
+      if (commentOn == false) {
+        setShowAddComments(false)
+      } else {
+        setCommentOn(false)
+        setCommentState(0)
+      }
+    }
+  })
+
+  const onAddComment = () => {
+    setCommentState(2)
+    setShowAddComments(true)
+    setCommentOn(true)
+  }
+
   return (
     <Page>
       <Header>
@@ -66,14 +91,19 @@ const DiscussionDetail = () => {
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>    
           <DiscussionContent discussion={discussion}/>
-          <ThemeProvider theme={greenTheme}>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{marginTop: '2vh', marginBottom: '2vh', paddingLeft:'2vw', paddingRight:'2vw'}}>
-              Add Comment
-            </Button>
-          </ThemeProvider>
+          <AddComment visible={showAddComments} discussion={discussion}/>
+          {showAddComments == false ? 
+            (<ThemeProvider theme={greenTheme}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onAddComment}
+                className="r-wd-100"
+                style={{marginTop: '2vh', marginBottom: '2vh', paddingLeft:'2vw', paddingRight:'2vw'}}>
+                Add Comment
+              </Button>
+            </ThemeProvider>) : ''
+          }
           {
             comments.map((comment: any) => {
               return (<CommentItem comment={comment}/>)

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useHistory } from 'react-router-dom'
+import {store, useGlobalState} from 'state-pool'
 
 import {
     Button,
@@ -15,8 +16,8 @@ import {
 } from '@material-ui/core/styles'
 
 import SearchIcon from '@material-ui/icons/Search'
-
 import { OutlinedCard } from 'components/Card'
+import DiscussionRule from "components/Modal/DiscussionRule"
 
 const useStyles = makeStyles({
     searchCardTitle: {
@@ -27,17 +28,18 @@ const useStyles = makeStyles({
     }
   })
 
-const SearchBox = () => {
+const AddNote = () => {
     const history = useHistory()
     const classes = useStyles()
 
-    const [keyword, setKeyword] = useState('')
+    const [openRule, setOpenRule] = useGlobalState('openDiscussionRule')
 
-    const handleKeyDown = (e: any) => {
-        if (e.key === 'Enter' && keyword != '') {
-            history.push(`/discussion/search/${keyword}`)
-            document.location.reload()
-        }
+    const handleClose = () => {
+        setOpenRule(false)
+    }
+
+    const handleOpenRules = () => {
+        setOpenRule(true)
     }
 
     return (
@@ -48,33 +50,19 @@ const SearchBox = () => {
                 component="div"
                 className={classes.searchCardTitle}
             >
-                Looking for something specific?
+                Keep discussions safe!
             </Typography>
             <Typography
                 gutterBottom
                 variant="subtitle1"
                 component="div"
-                className={`${classes.searchCardBody} r-display-none`}
+                className={classes.searchCardBody}
             >
-                Try searching for it first before you create a discussion thread.
+                By posting a discussion thread, you agree to the <a href="#" onClick={handleOpenRules} className={classes.searchCardBody}>ArcadeDoge Discussion Rules & Regulation.</a>
             </Typography>
-            <TextField
-                fullWidth
-                placeholder="Search for Discussion"
-                InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                    <SearchIcon />
-                    </InputAdornment>
-                )
-                }}
-                variant="outlined"
-                onKeyDown={handleKeyDown}
-                value={keyword}
-                onChange={e => setKeyword(e.currentTarget.value)}
-            />
+            <DiscussionRule onClose={handleClose} open={openRule} />
         </OutlinedCard>
 )
 }
 
-export default SearchBox
+export default AddNote

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import Card from 'components/Card'
 import CommentContent from './commentContent'
+import ReplyItem from './replyItem'
 
 
 interface Props {
@@ -15,12 +16,19 @@ const ItemContainer = styled.div`
 
 const CommentItem: React.FC<Props> = (props) => {
     const comment = props.comment
+    const reply = comment.reply?comment.reply:[]
     
     return (
-        <ItemContainer>
+        <ItemContainer style={{maxWidth: '100vw-32px'}}>
             <Card>
                 <CommentContent comment={comment}/>
-                
+                {
+                    reply.map((replyItem: any) => {
+                        return (
+                            <ReplyItem comment={replyItem} depth={0} />
+                        )
+                    })
+                }
             </Card>
         </ItemContainer>
     )

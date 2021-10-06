@@ -30,6 +30,11 @@ export const getAllDiscussion = async(id: number, limit: number, cnt: number) =>
   return response.data
 }
 
+export const getSearch = async(keyword: string) => {
+  const response  = await sendPost("stuff/search/", {keyword: keyword})
+  return response.data
+}
+
 export const getDiscussion = async(id: number) => {
   const response = await sendPost("discussion", {id: id})
   return response.data
@@ -50,12 +55,12 @@ export const getMarketItems = async(game_id: number, category_id: number, sort_t
   return response
 }
 
-export const getItemsByAddress = async(address: string, sort_type: number, limit: number, cnt: number) => {
-  const response = await sendPost("get_items_by_address", {address: address, sort: sort_type, limit: limit, cnt: cnt})
+export const addNewComment = async(discussion_id: number, parent_id: number, content: string, user_type: number, user: string) => {
+  const response = await sendPost("comment/new", {discussion_id: discussion_id, parent_id: parent_id, content: content, user_type: user_type, user: user})
   return response
 }
 
-export const getItemById = async(id: number) => {
-  const response = await sendPost("get_item_by_id", {id: id})
+export const addNewDiscussion = async(stuff_id: number, content: string, user_type: number, user: string) => {
+  const response = await sendPost("discussion/new", {stuff_id: stuff_id, content: content, user_type: user_type, user: user})
   return response
 }

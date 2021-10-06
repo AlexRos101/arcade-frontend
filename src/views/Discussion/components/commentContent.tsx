@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
     Button,
     Grid,
@@ -16,20 +16,46 @@ import RocketIcon from 'assets/img/rocket.svg'
 import ReplyIcon from 'assets/img/reply.svg'
 import IconLabel from 'components/Label/IconLabel'
 
+import { store, useGlobalState } from 'state-pool'
+
+import AddReply from './addReply'
+import { Add } from "@material-ui/icons"
+
 interface Props {
     comment: any
 }
 
 const CommentContent: React.FC<Props> = (props) => {
     const comment = props.comment
-    
+    const [showAddReply, setShowAddReply] = useState(false)
+    const [commentState, setCommentState] = useGlobalState('commentState')
+    const [replyOn, setReplyOn] = useState(false)
+
+    useEffect(() => {
+        if (commentState == 2) {
+            if (replyOn == false) {
+                setShowAddReply(false)
+            } else {
+                setReplyOn(false)
+                setCommentState(0)
+            }
+        }
+    })
+
+    const onAddReply = () => {
+        setCommentState(2)
+        setReplyOn(true)
+        setShowAddReply(true)
+    }
+
     return  (
-        <div>
+        <div style={{flexGrow: 1}}>
             <Grid
                 container
                 alignItems="center"
                 justifyContent="space-between"
                 direction="row"
+                style={{display: 'inline-block', wordBreak: 'break-word'}}
             >
                 <CommentLabel>{comment.content}</CommentLabel>
             </Grid>
@@ -38,13 +64,13 @@ const CommentContent: React.FC<Props> = (props) => {
                 alignItems="center"
                 justifyContent="space-between"
                 direction="row">
-                <div className="flex-row r-flex-row"> 
+                <div className="flex-row r-flex-row r-comment-count-row r-wd-100"> 
                     <IconLabel
                     avatar={RocketIcon}
                     label={comment.likes}
                     style={{ color: '#B7B091', marginRight: '1rem' }}
                     />
-                    <Link href="#">
+                    <Link href="#" onClick={onAddReply}>
                         <IconLabel
                         avatar={ReplyIcon}
                         label="Send a reply"
@@ -63,6 +89,7 @@ const CommentContent: React.FC<Props> = (props) => {
                     />
                 </div>
             </Grid>
+            <AddReply visible={showAddReply} comment={comment}/>
         </div>
     )
 }

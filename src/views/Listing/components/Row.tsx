@@ -42,10 +42,11 @@ const Thumb = styled(Card)<{
   ${({bgImage}) => 'background-image: url(' + bgImage + ');background-size: 100% 100%;' ?? ''}
 `
 
-const Row = ({ data, index, toggleClicked }: {
+const Row = ({ data, index, toggleClicked, burnToken }: {
   data: any
   index: number
   toggleClicked: (index: number) => any
+  burnToken: (index: number) => any
 }) => {
   const [row, setRow] = useState(data)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -68,6 +69,10 @@ const Row = ({ data, index, toggleClicked }: {
 
   const handleCloseMenu = () => {
     setAnchorEl(null)
+  }
+
+  const handleBurn = () => {
+    burnToken(index)
   }
 
   return (
@@ -133,7 +138,7 @@ const Row = ({ data, index, toggleClicked }: {
                 <MenuItem key="edit" onClick={handleCloseMenu}>
                   <Typography variant="subtitle1">Edit</Typography>
                 </MenuItem>
-                <MenuItem key="delete" onClick={handleCloseMenu}>
+                <MenuItem key="delete" onClick={handleBurn}>
                   <Typography variant="subtitle1">Delete</Typography>
                 </MenuItem>
               </Menu>
@@ -146,7 +151,7 @@ const Row = ({ data, index, toggleClicked }: {
           <StyledTableCell component="th" scope="row">
             <Grid container spacing={1} justifyContent="space-between" alignItems="center">
               <Grid item xs={6}>
-                <Thumb width="80px" borderRadius="3px" padding="0px" bgColor={row.item} />
+              <Thumb width="80px" height="70px" borderRadius="3px" padding="0px" bgImage={`${process.env.REACT_APP_THUMBNAIL_NODE}${row.token_id}.png`} />
               </Grid>
               <Grid item>
                 <Flex flexDirection="column">
@@ -204,8 +209,8 @@ const Row = ({ data, index, toggleClicked }: {
                     <MenuItem key="edit" onClick={handleCloseMenu}>
                       <Typography variant="subtitle1">Edit</Typography>
                     </MenuItem>
-                    <MenuItem key="delete" onClick={handleCloseMenu}>
-                      <Typography variant="subtitle1">DELETE</Typography>
+                    <MenuItem key="delete" onClick={handleBurn}>
+                      <Typography variant="subtitle1">Delete</Typography>
                     </MenuItem>
                   </Menu>
                 </Flex>

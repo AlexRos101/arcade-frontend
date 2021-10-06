@@ -114,6 +114,12 @@ const Sell = ({ data } : {
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
 
+  const [anonymous, setAnonymous] = useState(false)
+
+  const onSwitchAnonymous = () => {
+      setAnonymous(!anonymous)
+  }
+
   useEffect(() => {
     const cardHeight = `${sellCardRef?.current?.clientHeight}px`
     setCardHeight(cardHeight)
@@ -257,7 +263,10 @@ const Sell = ({ data } : {
                   />
                 </LabelComponent>
                 <LabelComponent label="Anonymous?" className="wd-50">
-                  <SwitchButton>You are not anonymous</SwitchButton>
+                  <SwitchButton 
+                    value={anonymous} 
+                    onChange={onSwitchAnonymous} 
+                    text={anonymous == false ? 'You are not anonymous' : 'You are anonymous'} />
                 </LabelComponent>
               </Flex>
               <Flex 

@@ -30,7 +30,7 @@ interface Props {
 const DiscussItem: React.FC<Props> = (props) => {
     const discussion = props.content
     return (
-        <Link href={`/discussion/${discussion.stuff_id}/${discussion.id}`} underline="none">
+        <Link href={`/discussion/details/${discussion.stuff_id}/${discussion.id}`} underline="none">
           <ItemContainer>
               <Grid
                 container

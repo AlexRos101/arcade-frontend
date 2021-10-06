@@ -105,6 +105,10 @@ const NavBarMenu = () => {
     initAddress()
   })
 
+  const onClickDiscussions = () => {
+    history.push('/discussion')
+  }
+
   return (
     <div>
       <IconButton edge="start" className="menu-expand" color="inherit" aria-label="menu" onClick={onPressMenu}>
@@ -113,7 +117,7 @@ const NavBarMenu = () => {
       <div className={`${classes.root} menu-inspect ${hiddenMenu}`}>
         <div className = "menu">
             <SubMenu text="Games" menuData={gameMenu}/>
-            <MenuItem text="Discussions" />
+            <MenuItem text="Discussions" onClick={onClickDiscussions}/>
             <SubMenu text="ArcadeMarket" menuData={marketMenu}/>
         </div>
         { account === '' ?

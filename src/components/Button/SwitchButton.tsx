@@ -56,15 +56,20 @@ const IOSSwitch = styled((props) => (
       }),
     },
   }))
+interface Props {
+    value: boolean,
+    onChange: any,
+    text: string, 
+}
 
-const SwitchButton: React.FC<React.HTMLAttributes<HTMLDivElement>>= ({ children, ...props }) => {
+const SwitchButton: React.FC<Props>= (props) => {
     return (
         <div  
          style={{
           display:'flex', 
           flexDirection: 'row', 
           }}>
-            <IOSSwitch sx={{ m: 0 }} {...props} />
+            <IOSSwitch sx={{ m: 0 }} value={props.value} onChange={props.onChange}/>
             <p style={{
                 fontFamily: 'Montserrat',
                 fontStyle: 'normal',
@@ -75,7 +80,7 @@ const SwitchButton: React.FC<React.HTMLAttributes<HTMLDivElement>>= ({ children,
                 whiteSpace: 'nowrap',
                 margin: '6px 0px',
                 }}>
-                    {children}
+                    {props.text}
             </p>
         </div>
     )

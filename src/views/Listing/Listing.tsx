@@ -22,9 +22,12 @@ import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import * as API from '../../hooks/api'
-import * as Wallet from '../../global/wallet'
 import ListSellModal from 'components/Modal/ListSell'
 import RemoveSellModal from 'components/Modal/RemoveSell'
+import Web3 from 'web3'
+import { AbiItem } from 'web3-utils'
+import * as Wallet from '../../global/wallet'
+import ERC721 from '../../contracts/ERC721.json'
 
 import Row from './components/Row'
 
@@ -48,6 +51,7 @@ const Listing = () => {
   const [showListModal, setShowListModal] = useState(false)
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState({name: '', token_id: 0})
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -81,6 +85,39 @@ const Listing = () => {
     }
   }
 
+  const burnToken = async (index: number) => {
+    setIsLoading(true);
+
+    if (!await (Wallet.isConnected())) {
+        setIsLoading(false)
+        setShowConnectWalletModal(true)
+        return
+    }
+
+    const provider = await Wallet.getCurrentProvider()
+    const address = await Wallet.getCurrentWallet()
+
+    const web3 = new Web3(provider)
+    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+
+    NFT.methods.burn(rows[index].token_id).send({from: address})
+    .then((res: any) => {
+        const checkItemStatus = async () => {
+          const item = (await API.getItemById(rows[index].id)).data
+          if (item.is_burnt) {
+            document.location.reload()
+          } else {
+            setTimeout(checkItemStatus, 500)
+          }
+        }
+
+        checkItemStatus()
+    })
+    .catch((err: any) => {
+        setIsLoading(false)
+    })
+  }
+
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
@@ -111,7 +148,7 @@ const Listing = () => {
               {
                 rows.map((row, index) => {
                   return (
-                    <Row index={index} data={row} key={`table-row-${index}`} toggleClicked={toggleVisibility}/>
+                    <Row index={index} data={row} key={`table-row-${index}`} toggleClicked={toggleVisibility} burnToken={burnToken}/>
                   )
                 })
               }

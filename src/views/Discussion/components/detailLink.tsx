@@ -8,7 +8,6 @@ interface Props {
 }
 
 const DetailLink: React.FC<Props> = (props => {
-    console.log(props)
     return  (
         <Link className="discuss-detail-link flex-row r-flex-row" href={props.href}> {props.content} <ArrowForwardIos fontSize="small" style={{marginLeft:'0.5rem'}}/></Link>
     )

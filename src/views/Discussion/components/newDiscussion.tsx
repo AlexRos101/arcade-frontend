@@ -11,9 +11,9 @@ import {
 
 import AvatarIcon from 'assets/img/avatar.svg'
 import Card from 'components/Card'
-import DiscussItem from './discussItem'
 import DetailLink from './detailLink'
 import { getAllDiscussion } from 'hooks/api'
+import AddDiscussionForm from './addDiscussion'
 
 import { greenTheme } from 'styles/theme'
 
@@ -22,7 +22,7 @@ interface Props {
   link?: boolean,
 }
 
-const Staff: React.FC<Props> = (props => {
+const NewDiscussion: React.FC<Props> = (props => {
     const history = useHistory()
     const staff = props.staff
     const [discussions, setDiscussions] = useState<any[]>([])
@@ -71,34 +71,16 @@ const Staff: React.FC<Props> = (props => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item className="discussion-btn">
-                <ThemeProvider theme={greenTheme}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={onAddNewThread}>
-                    + Add Discussion Thread
-                  </Button>
-                </ThemeProvider>
+              <Grid item>
               </Grid>
             </Grid>
-            {
-                discussions.map((discussion, index) => {
-                    return (
-                        <DiscussItem content={discussion}/>
-                    )
-                })
-            }
+            <AddDiscussionForm stuff={staff}/>
         </Card>
-        {
-          props.link == false?
-            '' :
-            (<DetailLink href={`/discussion/stuff/${staff.id}`} content={`View All ${staff.title} Discussions`}></DetailLink>)
+        <DetailLink href={`/discussion/`} content={`Return to All Discussions`}></DetailLink>
             
-        }
         
       </div>
     )
 })
 
-export default Staff
+export default NewDiscussion
