@@ -519,6 +519,7 @@ button {
   .market-title {
     position:relative;
     border-bottom: 1px solid #EFECDC;
+    margin-bottom: 2vh;
   }
 
   .market-slide {

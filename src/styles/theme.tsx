@@ -47,6 +47,25 @@ const theme = responsiveFontSizes(createTheme({
       secondary: '#FFFEFB'
     }
   },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'Montserrat',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      'Oxygen',
+      'Ubuntu',
+      'Cantarell',
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue'
+    ].join(','),
+    fontSize: 11,
+    subtitle1: {
+      fontSize: 14
+    }
+  }
 }))
 
 export default theme

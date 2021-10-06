@@ -1,0 +1,20 @@
+import styled from 'styled-components'
+
+const Card = styled.div<{
+  width?: string
+  padding?: string
+  border?: string
+  borderRadius?: string,
+  bgColor?: string
+}>`
+  width: ${({ width }) => width ?? '100%' };
+  padding: 1.25rem;
+  padding: ${({ padding }) => padding };
+  border: 1px solid ${({ border }) => border ?? '#EAE5CE' };
+  border-radius: 7px;
+  border-radius: ${({ borderRadius }) => borderRadius };
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
+  background-color: ${({ bgColor }) => bgColor ?? '#FFFEFB' };
+`
+
+export default Card
