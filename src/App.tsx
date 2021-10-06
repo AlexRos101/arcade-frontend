@@ -11,6 +11,7 @@ import PageLoader from './components/Loader/PageLoader'
 const Home = lazy(() => import('./views/Home'))
 const Market = lazy(() => import('./views/Market'))
 const Listing = lazy(() => import('./views/Listing'))
+const Sell = lazy(() => import('./views/Sell'))
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
               </Route>
               <Route path="/listing" exact>
                 <Listing />
+              </Route>
+              <Route path="/sell" exact>
+                <Sell />
               </Route>
             </Switch>
           </Suspense>
