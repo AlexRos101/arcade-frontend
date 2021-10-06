@@ -132,8 +132,6 @@ const Listing = () => {
     if (initialized) return
     setInitialized(true)
 
-    if (account == '') setShowConnectWalletModal(true)
-
     getMyItems(0, 10)
   })
 

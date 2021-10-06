@@ -149,8 +149,6 @@ const Sell = ({ data } : {
   const { itemTokenId } = useParams<ParamTypes>()
 
   useEffect(() => {
-    if (account == '') setShowConnectWalletModal(true)
-    
     if (paramIsSet == false && window.location.pathname.indexOf('/item/edit') >= 0) {
       
       setTokenID(Number(itemTokenId))

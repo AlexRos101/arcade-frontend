@@ -114,11 +114,11 @@ const NavBarMenu = () => {
     if (initialized) return
     setInitialized(true)
 
+    initAddress()
+
     if (window.ethereum != null) {
       window.ethereum.on('accountsChanged', walletChanged)
     }
-
-    initAddress()
   })
 
   return (
