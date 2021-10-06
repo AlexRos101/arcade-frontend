@@ -42,9 +42,10 @@ const Thumb = styled(Card)<{
   ${({bgImage}) => 'background-image: url(' + bgImage + ');background-size: 100% 100%;' ?? ''}
 `
 
-const Row = ({ data, index, toggleClicked, burnToken }: {
+const Row = ({ data, index, toggleClicked, burnToken, rate }: {
   data: any
   index: number
+  rate: number
   toggleClicked: (index: number) => any
   burnToken: (index: number) => any
 }) => {
@@ -103,7 +104,7 @@ const Row = ({ data, index, toggleClicked, burnToken }: {
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={bnb}
-                price={row.arcadedoge_price}
+                price={row.arcadedoge_price * rate}
                 pricePerUsd={row.priceBnbPerUsd}
                 />
             </Flex>

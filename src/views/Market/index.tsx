@@ -222,9 +222,8 @@ const Market = () => {
     })
 
     const onClickMarsDogAll = () => {
-        //history.push("/market/doge")
-        setTestOpen(true)
-
+        history.push("/market/doge")
+        //setTestOpen(true)
     }
 
     const onClickOtherAll = () => {

@@ -28,6 +28,7 @@ import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
+import EXCHANGE from '../../contracts/EXCHANGE.json'
 
 import Row from './components/Row'
 
@@ -52,6 +53,7 @@ const Listing = () => {
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState({name: '', token_id: 0})
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [rate, setRate] = useState(0.0)
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -125,6 +127,25 @@ const Listing = () => {
     getMyItems(0, 10)
   })
 
+  const getRate = async () => {
+    const provider = await Wallet.getCurrentProvider()
+
+    const web3 = new Web3(provider)
+    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
+
+    exchange.methods.getRate().call()
+    .then((res: any) => {
+      setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+
+      setTimeout(getRate, 1000)
+    })
+    .catch((err: any) => {
+      setTimeout(getRate, 500)
+    })
+  }
+
+  getRate()
+
   return (
     <Page>
       <Header>
@@ -148,7 +169,7 @@ const Listing = () => {
               {
                 rows.map((row, index) => {
                   return (
-                    <Row index={index} data={row} key={`table-row-${index}`} toggleClicked={toggleVisibility} burnToken={burnToken}/>
+                    <Row index={index} data={row} key={`table-row-${index}`} toggleClicked={toggleVisibility} burnToken={burnToken} rate={rate}/>
                   )
                 })
               }

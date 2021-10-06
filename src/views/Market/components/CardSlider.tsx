@@ -22,7 +22,7 @@ interface Props {
 
 const CardSlider: React.FC<Props>= (props) => {
     const settings = {
-        slidesToShow: 5,
+        slidesToShow: (props.context.length > 5 ? 5 : props.context.length),
         swipeToSlide: true,
         draggable: true,
         arrows: false,
