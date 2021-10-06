@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-const useCommonStyles = makeStyles(theme => ({
+const useCommonStyles = makeStyles((theme) => ({
   containerWidth: {
     width: '100%',
     paddingLeft: theme.spacing(4),
@@ -8,8 +8,8 @@ const useCommonStyles = makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       maxWidth: '100%',
       paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3)
-    }
+      paddingRight: theme.spacing(3),
+    },
   },
   breakWords: {
     overflow: 'hidden',
@@ -17,9 +17,7 @@ const useCommonStyles = makeStyles(theme => ({
     WebkitBoxOrient: 'vertical',
     textOverflow: 'ellipsis',
     overflowWrap: 'break-word',
-  }
-}));
+  },
+}))
 
-export {
-  useCommonStyles
-}
+export { useCommonStyles }

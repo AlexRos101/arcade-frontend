@@ -6,20 +6,19 @@ import logo from '../../assets/img/logo.png'
 
 const useStyles = makeStyles(() => ({
   logo: {
-    display: 'flex'
+    display: 'flex',
   },
-  image: {
-
-  },
-  "@media (max-width: 1080px)": {
+  image: {},
+  '@media (max-width: 1080px)': {
     image: {
-      width: 'auto', height: '35px'
+      width: 'auto',
+      height: '35px',
     },
     logo: {
       height: '35px',
       width: 'auto',
     },
-  }
+  },
 }))
 
 const Logo = () => {
@@ -28,14 +27,8 @@ const Logo = () => {
   return (
     <Link href="/">
       <div className={classes.logo}>
-        <img
-          src={avatar}
-          alt="avatar" 
-          className={classes.image}/>
-        <img
-          src={logo}
-          alt="logo" 
-          className={classes.image}/>
+        <img src={avatar} alt="avatar" className={classes.image} />
+        <img src={logo} alt="logo" className={classes.image} />
       </div>
     </Link>
   )

@@ -1,12 +1,8 @@
 import React, { memo, useState, Suspense, lazy, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  Typography,
-  Button,
-  Hidden
-} from '@material-ui/core'
+import { Typography, Button, Hidden } from '@material-ui/core'
 
-import {store, useGlobalState} from 'state-pool'
+import { store, useGlobalState } from 'state-pool'
 import * as WalletUtils from '../../global/wallet'
 
 import MenuItem from './menuItem'
@@ -15,32 +11,30 @@ import SubMenu from './subMenu'
 import { makeStyles } from '@material-ui/core'
 import { ReactComponent as Astronaut } from 'assets/img/astronaut.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
-import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu'
+import IconButton from '@material-ui/core/IconButton'
 import RowLabel from 'components/Label/RowLabel'
 import CloseIcon from '@material-ui/icons/Close'
 
 import { connect } from 'global/wallet'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     '& > *': {
-      margin: theme.spacing(1)
-    }
+      margin: theme.spacing(1),
+    },
   },
-  "@media (max-width: 1080px)": {
-    
-  }
+  '@media (max-width: 1080px)': {},
 }))
 
 const gameMenu = [
   {
     content: 'MargsDoge',
     href: '/',
-    label: 'Hot Releases'
+    label: 'Hot Releases',
   },
 ]
 
@@ -48,14 +42,13 @@ const marketMenu = [
   {
     content: 'MargsDoge',
     href: '/market/doge',
-    label: 'Hot Releases'
+    label: 'Hot Releases',
   },
 ]
 
 declare let window: any
 
 const NavBarMenu = () => {
-
   const history = useHistory()
 
   const [hiddenMenu, setHiddenMenu] = useState('hidden-menu')
@@ -82,16 +75,15 @@ const NavBarMenu = () => {
   }
 
   const shortenString = (source: string) => {
-    if (source.length <= 12)
-      return source
-    
+    if (source.length <= 12) return source
+
     return '********' + source.substring(source.length - 6, source.length)
   }
 
   const initAddress = async () => {
     const address = await WalletUtils.getCurrentWallet()
     if (await WalletUtils.isConnected()) {
-      setAccount(address == null? '': address)
+      setAccount(address == null ? '' : address)
     } else {
       setAccount('')
     }
@@ -119,45 +111,43 @@ const NavBarMenu = () => {
         <MenuIcon />
       </IconButton>
       <div className={`${classes.root} menu-inspect ${hiddenMenu}`}>
-        <div className = "menu">
-            <SubMenu text="Games" menuData={gameMenu}/>
-            <MenuItem text="Discussions" onClick={onClickDiscussions}/>
-            <SubMenu text="ArcadeMarket" menuData={marketMenu}/>
+        <div className="menu">
+          <SubMenu text="Games" menuData={gameMenu} />
+          <MenuItem text="Discussions" onClick={onClickDiscussions} />
+          <SubMenu text="ArcadeMarket" menuData={marketMenu} />
         </div>
-        { account === '' ?
-          (<Button
+        {account === '' ? (
+          <Button
             variant="contained"
             color="primary"
             onClick={onConnectWalletHandler}
             className="menu-btn"
-            startIcon={<Wallet />}>
-            <Typography variant="subtitle1">
-              Connect Wallet
-            </Typography>
-          </Button>) :
-          (<Button
+            startIcon={<Wallet />}
+          >
+            <Typography variant="subtitle1">Connect Wallet</Typography>
+          </Button>
+        ) : (
+          <Button
             variant="outlined"
             color="primary"
             onClick={onConnectWalletHandler}
             className="menu-btn btn-note"
-            startIcon={<Wallet />}>
-            <Typography variant="subtitle1">
-              {shortenString(account)}
-            </Typography>
-          </Button>)
-        }
+            startIcon={<Wallet />}
+          >
+            <Typography variant="subtitle1">{shortenString(account)}</Typography>
+          </Button>
+        )}
         <Button
           variant="contained"
           color="secondary"
           onClick={onPlayGameHandler}
           className="menu-btn"
-          startIcon={<Astronaut />}>
-          <Typography variant="subtitle1">
-            Play Game
-          </Typography>
+          startIcon={<Astronaut />}
+        >
+          <Typography variant="subtitle1">Play Game</Typography>
         </Button>
         <IconButton aria-label="close" className="menu-close" onClick={onCloseMenu}>
-            <CloseIcon />
+          <CloseIcon />
         </IconButton>
       </div>
     </div>

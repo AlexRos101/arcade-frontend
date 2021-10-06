@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import {
-  Button,
-  Grid,
-  ThemeProvider,
-  TextField,
-  Typography,
-  InputAdornment
-} from '@material-ui/core'
-
+import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -24,7 +16,7 @@ const Discussion = () => {
   useEffect(() => {
     if (staffIsSet == false) {
       setStaffIsSet(true)
-      getAllStuff().then(data => {
+      getAllStuff().then((data) => {
         setStaffs(data)
       })
     }
@@ -35,15 +27,10 @@ const Discussion = () => {
         <HeaderLabel>Community Discussion</HeaderLabel>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>    
-        {
-          staffs.map((staff: any) => {
-            return (
-              <Staff key={staff.title} staff={staff}/>
-            )
-          })
-        }
-          
+        <Grid item sm={12} md={8}>
+          {staffs.map((staff: any) => {
+            return <Staff key={staff.title} staff={staff} />
+          })}
         </Grid>
         <Grid item sm={12} md={4}>
           <SearchBox />

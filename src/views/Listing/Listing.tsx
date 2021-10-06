@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import {
-  Hidden,
-  TablePagination,
-} from '@material-ui/core'
-import {
-  makeStyles
-} from '@material-ui/core/styles'
+import { Hidden, TablePagination } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -14,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import {store, useGlobalState} from 'state-pool'
+import { store, useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
 
 import Card from 'components/Card'
@@ -35,11 +30,11 @@ import Row from './components/Row'
 const useStyles = makeStyles({
   tableContainer: {
     backgroundColor: 'transparent',
-    boxShadow: 'none'
+    boxShadow: 'none',
   },
   usdPrice: {
-    color: 'rgba(34, 48, 61, 0.5)'
-  }
+    color: 'rgba(34, 48, 61, 0.5)',
+  },
 })
 
 const Listing = () => {
@@ -52,7 +47,7 @@ const Listing = () => {
   const [initialized, setInitialized] = useState(false)
   const [showListModal, setShowListModal] = useState(false)
   const [showUnlistModal, setShowUnlistModal] = useState(false)
-  const [selectedItem, setSelectedItem] = useState({name: '', token_id: 0})
+  const [selectedItem, setSelectedItem] = useState({ name: '', token_id: 0 })
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [account, setAccount] = useGlobalState('account')
   const [rate, setRate] = useState(0.0)
@@ -67,10 +62,10 @@ const Listing = () => {
     setRowsPerPage(+event.target.value)
     setPage(0)
 
-    getMyItems(0, (+event.target.value))
+    getMyItems(0, +event.target.value)
   }
 
-  const getMyItems = async (limit:number, cnt:number) => {
+  const getMyItems = async (limit: number, cnt: number) => {
     const address = await Wallet.getCurrentWallet()
     if (address == null) {
       return
@@ -96,12 +91,12 @@ const Listing = () => {
   }
 
   const burnToken = async (index: number) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
-    if (!await (Wallet.isConnected())) {
-        setIsLoading(false)
-        setShowConnectWalletModal(true)
-        return
+    if (!(await Wallet.isConnected())) {
+      setIsLoading(false)
+      setShowConnectWalletModal(true)
+      return
     }
 
     const provider = await Wallet.getCurrentProvider()
@@ -110,8 +105,10 @@ const Listing = () => {
     const web3 = new Web3(provider)
     const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
 
-    NFT.methods.burn(rows[index].token_id).send({from: address})
-    .then((res: any) => {
+    NFT.methods
+      .burn(rows[index].token_id)
+      .send({ from: address })
+      .then((res: any) => {
         const checkItemStatus = async () => {
           const item = (await API.getItemById(rows[index].id)).data
           if (item.is_burnt) {
@@ -122,10 +119,10 @@ const Listing = () => {
         }
 
         checkItemStatus()
-    })
-    .catch((err: any) => {
+      })
+      .catch((err: any) => {
         setIsLoading(false)
-    })
+      })
   }
 
   useEffect(() => {
@@ -141,15 +138,17 @@ const Listing = () => {
     const web3 = new Web3(provider)
     const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
-    exchange.methods.getRate().call()
-    .then((res: any) => {
-      setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+    exchange.methods
+      .getRate()
+      .call()
+      .then((res: any) => {
+        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
-      setTimeout(getRate, 1000)
-    })
-    .catch((err: any) => {
-      setTimeout(getRate, 500)
-    })
+        setTimeout(getRate, 1000)
+      })
+      .catch((err: any) => {
+        setTimeout(getRate, 500)
+      })
   }
 
   getRate()
@@ -174,13 +173,18 @@ const Listing = () => {
               </Hidden>
             </TableHead>
             <TableBody>
-              {
-                rows.map((row, index) => {
-                  return (
-                    <Row index={index} data={row} key={`table-row-${index}`} toggleClicked={toggleVisibility} burnToken={burnToken} rate={rate}/>
-                  )
-                })
-              }
+              {rows.map((row, index) => {
+                return (
+                  <Row
+                    index={index}
+                    data={row}
+                    key={`table-row-${index}`}
+                    toggleClicked={toggleVisibility}
+                    burnToken={burnToken}
+                    rate={rate}
+                  />
+                )
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -194,18 +198,10 @@ const Listing = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
-      <ListSellModal
-        item={selectedItem}
-        open={showListModal}
-        onClose={() => setShowListModal(false)}
-      />
-      <RemoveSellModal
-        item={selectedItem}
-        open={showUnlistModal}
-        onClose={() => setShowUnlistModal(false)}
-      />
+      <ListSellModal item={selectedItem} open={showListModal} onClose={() => setShowListModal(false)} />
+      <RemoveSellModal item={selectedItem} open={showUnlistModal} onClose={() => setShowUnlistModal(false)} />
     </Page>
   )
 }
 
-export default Listing;
+export default Listing

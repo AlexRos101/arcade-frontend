@@ -1,2 +1,2 @@
-export { default as Toggle } from "./Toggle";
-export type { ToggleProps } from "./types";
+export { default as Toggle } from './Toggle'
+export type { ToggleProps } from './types'

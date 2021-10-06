@@ -32,10 +32,9 @@ const DiscussionAdd = lazy(() => import('./views/Discussion/discussionAdd'))
 declare let window: any
 
 function App() {
-
   const [account, setAccount] = useGlobalState('account')
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-  
+
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>
@@ -44,27 +43,27 @@ function App() {
             <Menu />
             <Suspense fallback={<PageLoader />}>
               <Switch>
-                <Route path="/" exact component={Home}/>
-                <Route path="/market" exact component={Market}/>
-                <Route path="/market/doge" exact component={MarketDoge}/>
-                <Route path="/market/other" exact component={MarketOther}/>
-                <Route path="/listing" exact component={Listing}/>
-                <Route path="/sell" exact component={Sell}/>
-                <Route path="/item/edit/:itemTokenId" exact component={Sell}/>
-                <Route path="/discussion" exact component={Discussion}/>
+                <Route path="/" exact component={Home} />
+                <Route path="/market" exact component={Market} />
+                <Route path="/market/doge" exact component={MarketDoge} />
+                <Route path="/market/other" exact component={MarketOther} />
+                <Route path="/listing" exact component={Listing} />
+                <Route path="/sell" exact component={Sell} />
+                <Route path="/item/edit/:itemTokenId" exact component={Sell} />
+                <Route path="/discussion" exact component={Discussion} />
                 <Route path="/discussion/new/:stuffId" exact component={DiscussionAdd} />
-                <Route path="/discussion/stuff/:staffId" exact component={DiscussionStaff}/>
-                <Route path="/discussion/details/:staffId/:discussionId" exact component={DiscussionDetail}/>
+                <Route path="/discussion/stuff/:staffId" exact component={DiscussionStaff} />
+                <Route path="/discussion/details/:staffId/:discussionId" exact component={DiscussionDetail} />
                 <Route path="/discussion/search/:keyword" exact component={DiscussionSearch} />
               </Switch>
             </Suspense>
             <Footer />
           </Router>
         </StylesProvider>
-        <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet."/>
+        <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet." />
       </ThemeProvider>
     </MuiThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App

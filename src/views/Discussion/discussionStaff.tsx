@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import {
-  Button,
-  Grid,
-  ThemeProvider,
-  TextField,
-  Typography,
-  InputAdornment
-} from '@material-ui/core'
-
+import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -31,11 +23,10 @@ const DiscussionStaff = () => {
   useEffect(() => {
     if (staffIsSet == false) {
       setStaffIsSet(true)
-      getStuff(Number(staffId)).then(data => {
+      getStuff(Number(staffId)).then((data) => {
         setStaff(data)
       })
     }
-    
   })
   return (
     <Page className="styled-search">
@@ -43,8 +34,8 @@ const DiscussionStaff = () => {
         <HeaderLabel>Community Discussion</HeaderLabel>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>    
-          <Staff key={staff.title} staff={staff} link={false}/>       
+        <Grid item sm={12} md={8}>
+          <Staff key={staff.title} staff={staff} link={false} />
         </Grid>
         <Grid item sm={12} md={4}>
           <SearchBox />

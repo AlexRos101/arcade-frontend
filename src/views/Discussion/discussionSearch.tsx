@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import {
-  Button,
-  Grid,
-  ThemeProvider,
-  TextField,
-  Typography,
-  InputAdornment
-} from '@material-ui/core'
-
+import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -42,16 +34,14 @@ const DiscussionSearch = () => {
   useEffect(() => {
     if (staffIsSet == false) {
       setStaffIsSet(true)
-      getSearch(keyword).then(data => {
+      getSearch(keyword).then((data) => {
         setStaffs(data)
         let cnt = 0
-        for(let i = 0; i < data.length; i ++) {
+        for (let i = 0; i < data.length; i++) {
           const discussions = data[i].discussions as any
           cnt += discussions.length
-          if (discussions.length == 0)
-              checkArray.push(false)
-          else
-              checkArray.push(true)
+          if (discussions.length == 0) checkArray.push(false)
+          else checkArray.push(true)
           setCheckArray(checkArray)
         }
         setTotalSearch(cnt)
@@ -65,24 +55,21 @@ const DiscussionSearch = () => {
       <Header>
         <HeaderContainer>
           <HeaderLabel>Search a Discussion</HeaderLabel>
-          <SearchHeader content={`You are currently searching for “${keyword}”. Showing ${totalSearch} results.`}/>
+          <SearchHeader content={`You are currently searching for “${keyword}”. Showing ${totalSearch} results.`} />
         </HeaderContainer>
       </Header>
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>
-        {
-          checkArray.map((check: any, index: number) => {
+          {checkArray.map((check: any, index: number) => {
             const staff = staffs[index] as any
             console.log(check)
-            if (check == false)
-              return ('')
-            return (<Staff key={staff.title} staff={staff}/>)
-          })
-        }
+            if (check == false) return ''
+            return <Staff key={staff.title} staff={staff} />
+          })}
         </Grid>
         <Grid item sm={12} md={4}>
           <div className="r-display-none">
-            <StaffSelect staffs={staffs} checkArray={checkArray} setCheckArray={updateCheckArray}/>
+            <StaffSelect staffs={staffs} checkArray={checkArray} setCheckArray={updateCheckArray} />
           </div>
           <div className="r-display">
             <SearchBox />

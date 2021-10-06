@@ -1,10 +1,7 @@
 import React, { memo } from 'react'
-import {store, useGlobalState} from 'state-pool'
+import { store, useGlobalState } from 'state-pool'
 
-import {
-  Grid,
-  Typography
-} from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -28,14 +25,14 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 'bold',
     color: theme.palette.text.secondary,
-    marginBottom: theme.spacing(1.5)
+    marginBottom: theme.spacing(1.5),
   },
-  "@media (max-width: 1080px)": {
+  '@media (max-width: 1080px)': {
     block: {
       marginLeft: '0',
       marginBottom: '5vh',
-    }
-  }
+    },
+  },
 }))
 
 const FooterRoadmap = () => {
@@ -46,7 +43,7 @@ const FooterRoadmap = () => {
   const onClickTermOfUse = () => {
     setOpenTerm(true)
   }
-  
+
   const onClickPrivacyPolicy = () => {
     setOpenPrivacyPolicy(true)
   }
@@ -56,9 +53,7 @@ const FooterRoadmap = () => {
       <Grid container>
         <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
-            <Typography
-              variant="subtitle1"
-              className={classes.title}>
+            <Typography variant="subtitle1" className={classes.title}>
               Play Game
             </Typography>
             <Link href="/">
@@ -68,9 +63,7 @@ const FooterRoadmap = () => {
         </Grid>
         <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
-            <Typography
-              variant="subtitle1"
-              className={classes.title}>
+            <Typography variant="subtitle1" className={classes.title}>
               ArcadeMarket
             </Typography>
             <Link href="/sell">
@@ -83,9 +76,7 @@ const FooterRoadmap = () => {
         </Grid>
         <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
-            <Typography
-              variant="subtitle1"
-              className={classes.title}>
+            <Typography variant="subtitle1" className={classes.title}>
               Community
             </Typography>
             <Link href="/discussion">
@@ -98,9 +89,7 @@ const FooterRoadmap = () => {
         </Grid>
         <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
-            <Typography
-              variant="subtitle1"
-              className={classes.title}>
+            <Typography variant="subtitle1" className={classes.title}>
               Company
             </Typography>
             <Link href="#" onClick={onClickTermOfUse}>

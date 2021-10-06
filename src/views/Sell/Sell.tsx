@@ -1,23 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
-import axios from 'axios';
-import {store, useGlobalState} from 'state-pool'
+import axios from 'axios'
+import { store, useGlobalState } from 'state-pool'
 import styled from 'styled-components'
-import {
-  Box,
-  Button,
-  Grid,
-  Select
-} from '@material-ui/core'
-import {
-  Theme,
-  ThemeProvider,
-  createStyles,
-  makeStyles,
-  withStyles
-} from '@material-ui/core/styles'
+import { Box, Button, Grid, Select } from '@material-ui/core'
+import { Theme, ThemeProvider, createStyles, makeStyles, withStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -48,8 +37,6 @@ import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 import SelectInput from '@material-ui/core/Select/SelectInput'
 
-
-
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
     // root: {
@@ -67,15 +54,15 @@ const BootstrapInput = withStyles((theme: Theme) =>
       '&:focus': {
         borderRadius: '7px',
         // boxShadow: '0px 2px 2px #D0CCB7'
-      }
-    }
-  })
+      },
+    },
+  }),
 )(InputBase)
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
     '&::placeholder': {
-      textOverflow: 'ellipsis !important'
+      textOverflow: 'ellipsis !important',
     },
     width: '100%',
     // '& input': {
@@ -86,18 +73,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     // }
   },
   spacing: {
-    padding: theme.spacing(1, 0)
+    padding: theme.spacing(1, 0),
   },
   margin: {
-    margin: theme.spacing(1, 1)
-  }
+    margin: theme.spacing(1, 1),
+  },
 }))
 
 const Category = {
-  "1": "Category1",
-  "2": "Category2",
-  "3": "Category3",
-  "4": "Category4"
+  '1': 'Category1',
+  '2': 'Category2',
+  '3': 'Category3',
+  '4': 'Category4',
 }
 
 const initData: SkinProps = {
@@ -117,9 +104,7 @@ interface ParamTypes {
   itemTokenId: string
 }
 
-const Sell = ({ data } : {
-  data?: SkinProps | undefined
-}) => {
+const Sell = ({ data }: { data?: SkinProps | undefined }) => {
   const classes = useStyles()
   const [skinItem, setSkinItem] = useState<SkinProps | undefined>(data ?? initData)
   const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
@@ -149,19 +134,17 @@ const Sell = ({ data } : {
   const history = useHistory()
 
   const onSwitchAnonymous = () => {
-      setAnonymous(!anonymous)
+    setAnonymous(!anonymous)
   }
 
   const { itemTokenId } = useParams<ParamTypes>()
 
   useEffect(() => {
     if (paramIsSet == false && window.location.pathname.indexOf('/item/edit') >= 0) {
-      
       setTokenID(Number(itemTokenId))
       setParamIsSet(true)
-  
-      API.getItemByTokenID(Number(itemTokenId))
-      .then((response:any) => {
+
+      API.getItemByTokenID(Number(itemTokenId)).then((response: any) => {
         if (response.result == true) {
           const data = response.data as any
           setSelectedGameID(data.game_id)
@@ -182,18 +165,18 @@ const Sell = ({ data } : {
 
     if (initialized) return
     setInitialized(true)
-    
+
     const getGamesAndCategories = async () => {
-      setIsLoading(true);
-      let response = await API.getGames();
+      setIsLoading(true)
+      let response = await API.getGames()
       if (response.result) {
         setGames(response.data)
       } else {
-        setIsLoading(false);
-        return;
+        setIsLoading(false)
+        return
       }
 
-      response = await API.getCategories();
+      response = await API.getCategories()
       if (response.result) {
         setCategories(response.data)
       }
@@ -224,19 +207,16 @@ const Sell = ({ data } : {
 
     const tokenTemp = Date.now()
 
-    setIsLoading(true);
+    setIsLoading(true)
 
-    const formData = new FormData(); 
-      // Update the formData object 
-      formData.append( 
-          "myFile", 
-          file, 
-          tokenTemp + ".rar"
-      ); 
-      
-      // Request made to the backend api 
-      // Send formData object 
-      axios.post(process.env.REACT_APP_API_NODE + "upload_material", formData)
+    const formData = new FormData()
+    // Update the formData object
+    formData.append('myFile', file, tokenTemp + '.rar')
+
+    // Request made to the backend api
+    // Send formData object
+    axios
+      .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
       .then((res) => {
         setIsLoading(false);
         if (res.data.code == -1) {
@@ -252,12 +232,12 @@ const Sell = ({ data } : {
   }
 
   const isNumeric = (str: string) => {
-    if (typeof str != "string") return false
+    if (typeof str != 'string') return false
     return !isNaN(parseFloat(str))
   }
 
   function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   const MintToken = async () => {
@@ -281,12 +261,12 @@ const Sell = ({ data } : {
       return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
 
-    if (!await (Wallet.isConnected())) {
-        setIsLoading(false)
-        setShowConnectWalletModal(true)
-        return
+    if (!(await Wallet.isConnected())) {
+      setIsLoading(false)
+      setShowConnectWalletModal(true)
+      return
     }
 
     const provider = await Wallet.getCurrentProvider()
@@ -302,80 +282,85 @@ const Sell = ({ data } : {
       name: name,
       description: description,
       arcadedoge_price: Number(price),
-      is_anonymous: (anonymous === false ? 0 : 1)
+      is_anonymous: anonymous === false ? 0 : 1,
     }
 
-    NFT.methods.mint(tokenID, metaData, JSON.stringify(tokenInfo)).send({from: address})
-    .then(async (res: any) => {
-      console.log(res)
-      // await sleep(3000)
+    NFT.methods
+      .mint(tokenID, metaData, JSON.stringify(tokenInfo))
+      .send({ from: address })
+      .then(async (res: any) => {
+        console.log(res)
+        // await sleep(3000)
 
-      const checkDBStatus = async () => {
+        const checkDBStatus = async () => {
           const item = (await API.getItemByTokenID(tokenID)).data as any
           if (item != undefined && item != null) {
-              setIsLoading(false)
-              history.push('/listing')
-              document.location.reload()
+            setIsLoading(false)
+            history.push('/listing')
+            document.location.reload()
           } else {
-              setTimeout(checkDBStatus, 500)
+            setTimeout(checkDBStatus, 500)
           }
-      }
+        }
 
-      checkDBStatus()
-    })
-    .catch((err: any) => {
-      setIsLoading(false)
-    })
+        checkDBStatus()
+      })
+      .catch((err: any) => {
+        setIsLoading(false)
+      })
   }
 
-const UpdateItem = () => {
-    API.updateItemByID(itemId, selectedGameID, selectedCategoryID, description, name, (anonymous == false? 0 : 1), Number(price))
-    .then(data => {
+  const UpdateItem = () => {
+    API.updateItemByID(
+      itemId,
+      selectedGameID,
+      selectedCategoryID,
+      description,
+      name,
+      anonymous == false ? 0 : 1,
+      Number(price),
+    ).then((data) => {
       if (data.data == true) {
-        Swal("Item updated successfully!")
+        Swal('Item updated successfully!')
         history.push('/listing')
         document.location.reload()
       }
     })
   }
-const getRate = async () => {
+  const getRate = async () => {
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
     const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
-    exchange.methods.getRate().call()
-    .then((res: any) => {
+    exchange.methods
+      .getRate()
+      .call()
+      .then((res: any) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
         setTimeout(getRate, 1000)
-    })
-    .catch((err: any) => {
+      })
+      .catch((err: any) => {
         setTimeout(getRate, 500)
-    })
+      })
   }
 
   const onHandleResetFile = () => {
     setTokenID(0)
   }
 
-  getRate()  
+  getRate()
   return (
     <Page>
       <Header>
-        <HeaderLabel>{paramIsSet == true?'Edit Item':'Sell Customized Item'}</HeaderLabel>
+        <HeaderLabel>{paramIsSet == true ? 'Edit Item' : 'Sell Customized Item'}</HeaderLabel>
       </Header>
       <Grid container spacing={1} alignItems="flex-start">
         <Grid item xs={12} sm={6}>
           <Card ref={sellCardRef}>
-            <Flex
-              flexDirection="column"
-              alignItems="flex-start"
-            >
-              <Flex 
-                flexDirection="row"
-                alignItems="flex-start"
-                className="wd-100 r-flex-column">
+            <Flex flexDirection="column" alignItems="flex-start">
+              <Flex flexDirection="row" alignItems="flex-start" className="wd-100 r-flex-column">
                 <LabelComponent label="Game" className="wd-50 r-wd-100">
                   <Select
                     fullWidth
@@ -383,16 +368,14 @@ const getRate = async () => {
                     onChange={handleSelectGame}
                     className={classes.input}
                     label="Select Game"
-                    input={<BootstrapInput >Select Game</BootstrapInput>}
+                    input={<BootstrapInput>Select Game</BootstrapInput>}
                   >
-                    {
-                      games.map((game: any, index: number) => {
-                        return <MenuItem value={game.id}>{game.name}</MenuItem>
-                      })
-                    }
+                    {games.map((game: any, index: number) => {
+                      return <MenuItem value={game.id}>{game.name}</MenuItem>
+                    })}
                   </Select>
                 </LabelComponent>
-                <LabelComponent label="Category" className="wd-50  r-wd-100"> 
+                <LabelComponent label="Category" className="wd-50  r-wd-100">
                   <Select
                     fullWidth
                     value={selectedCategoryID}
@@ -401,74 +384,57 @@ const getRate = async () => {
                     placeholder="Select Category"
                     input={<BootstrapInput />}
                   >
-                    {
-                      categories.map((category: any, index: number) => {
-                        if (category.game_id == selectedGameID) {
-                          return <MenuItem value={category.id}>{category.name}</MenuItem>
-                        }
-                      })
-                    }
+                    {categories.map((category: any, index: number) => {
+                      if (category.game_id == selectedGameID) {
+                        return <MenuItem value={category.id}>{category.name}</MenuItem>
+                      }
+                    })}
                   </Select>
                 </LabelComponent>
               </Flex>
-              <Flex 
-                flexDirection="row"
-                alignItems="flex-start"
-                className="wd-100 r-flex-column">
-                <LabelComponent
-                  label="Name" 
-                  className="wd-50  r-wd-100"
-                >
+              <Flex flexDirection="row" alignItems="flex-start" className="wd-100 r-flex-column">
+                <LabelComponent label="Name" className="wd-50  r-wd-100">
                   <TextField
                     fullWidth
                     placeholder="Name"
-                    InputProps={{ classes: {input: classes.input} }}
+                    InputProps={{ classes: { input: classes.input } }}
                     variant="outlined"
                     value={name}
-                    onChange={e => setName(e.currentTarget.value)}
+                    onChange={(e) => setName(e.currentTarget.value)}
                   />
                 </LabelComponent>
                 <LabelComponent label="Anonymous?" className="wd-50 r-wd-100">
-                  <SwitchButton 
-                    value={anonymous} 
-                    onChange={onSwitchAnonymous} 
-                    text={anonymous == false ? 'You are not anonymous' : 'You are anonymous'} />
+                  <SwitchButton
+                    value={anonymous}
+                    onChange={onSwitchAnonymous}
+                    text={anonymous == false ? 'You are not anonymous' : 'You are anonymous'}
+                  />
                 </LabelComponent>
               </Flex>
-              <Flex 
-              flexDirection="row"
-              alignItems="flex-start"
-              className="wd-100 r-flex-column">
-                <LabelComponent
-                  label="Description"
-                  className={classes.input}
-                >
+              <Flex flexDirection="row" alignItems="flex-start" className="wd-100 r-flex-column">
+                <LabelComponent label="Description" className={classes.input}>
                   <TextField
                     fullWidth
                     multiline
                     rows={4}
                     placeholder="Description"
-                    InputProps={{ classes: {input: classes.input} }}
+                    InputProps={{ classes: { input: classes.input } }}
                     variant="outlined"
                     value={description}
-                    onChange={e => setDescription(e.currentTarget.value)}
+                    onChange={(e) => setDescription(e.currentTarget.value)}
                   />
                 </LabelComponent>
               </Flex>
-              <Grid container
-                spacing={2}
-                alignItems="flex-start"
-                className={classes.spacing}
-              >
+              <Grid container spacing={2} alignItems="flex-start" className={classes.spacing}>
                 <Grid item sm={4}>
                   <LabelComponent label="Price in ARCADEDOGE">
                     <TextField
                       fullWidth
                       placeholder="00.00"
-                      InputProps={{ classes: {input: classes.input} }}
+                      InputProps={{ classes: { input: classes.input } }}
                       variant="outlined"
                       value={price}
-                      onChange={e => setPrice(e.currentTarget.value)}
+                      onChange={(e) => setPrice(e.currentTarget.value)}
                     />
                   </LabelComponent>
                 </Grid>
@@ -479,7 +445,7 @@ const getRate = async () => {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={avatar}
-                          price={isNaN(Number.parseFloat(price))? 0: Number.parseFloat(price).toFixed(2)}
+                          price={isNaN(Number.parseFloat(price)) ? 0 : Number.parseFloat(price).toFixed(2)}
                           pricePerUsd={skinItem?.priceArcPerUsd}
                         />
                       </Grid>
@@ -487,7 +453,7 @@ const getRate = async () => {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={bnb}
-                          price={isNaN(Number.parseFloat(price))? 0: (Number.parseFloat(price) * rate).toFixed(2)}
+                          price={isNaN(Number.parseFloat(price)) ? 0 : (Number.parseFloat(price) * rate).toFixed(2)}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
                         />
                       </Grid>
@@ -495,40 +461,39 @@ const getRate = async () => {
                   </LabelComponent>
                 </Grid>
               </Grid>
-              <Flex
-                alignItems="center"
-                className={`${classes.spacing} ${classes.margin} r-wd-100`}>
+              <Flex alignItems="center" className={`${classes.spacing} ${classes.margin} r-wd-100`}>
                 <ThemeProvider theme={greenTheme}>
-                    <Box component="span" mr={1} className="r-wd-100">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        className="r-wd-100"
-                        onClick={paramIsSet == false ? MintToken : UpdateItem}>
-                        {paramIsSet == false ? 'Save and Publish' : 'Update Item'}
-                      </Button>
-                    </Box>
-                    {showThumbnailWarning == true ? (<ErrorLabel>Upload file must have ‘thumbnail.png’</ErrorLabel>) : ''}
-                    
+                  <Box component="span" mr={1} className="r-wd-100">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className="r-wd-100"
+                      onClick={paramIsSet == false ? MintToken : UpdateItem}
+                    >
+                      {paramIsSet == false ? 'Save and Publish' : 'Update Item'}
+                    </Button>
+                  </Box>
+                  {showThumbnailWarning == true ? <ErrorLabel>Upload file must have ‘thumbnail.png’</ErrorLabel> : ''}
                 </ThemeProvider>
               </Flex>
             </Flex>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6}>
-          { tokenID == 0 ? 
-            (<ItemDropdown height={cardHeight} onDrop={uploadMeterial}>drop files</ItemDropdown>) :
-            (
-              <Relative>
-                <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img"/>
-                {paramIsSet == false?(<HoverButton onClick={onHandleResetFile}>Reset File</HoverButton>):''}
-              </Relative>
-            )
-          }
+          {tokenID == 0 ? (
+            <ItemDropdown height={cardHeight} onDrop={uploadMeterial}>
+              drop files
+            </ItemDropdown>
+          ) : (
+            <Relative>
+              <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img" />
+              {paramIsSet == false ? <HoverButton onClick={onHandleResetFile}>Reset File</HoverButton> : ''}
+            </Relative>
+          )}
         </Grid>
       </Grid>
     </Page>
   )
 }
 
-export default Sell;
+export default Sell

@@ -8,7 +8,6 @@ import Facebook from '../../assets/img/facebook.svg'
 import Twitter from '../../assets/img/twitter.svg'
 import Telegram from '../../assets/img/telegram.svg'
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -21,14 +20,14 @@ const useStyles = makeStyles((theme) => ({
   container: {
     flexDirection: 'row',
     '& > *': {
-      margin: theme.spacing(0, 1, 0, 0)
-    }
+      margin: theme.spacing(0, 1, 0, 0),
+    },
   },
-  "@media (max-width: 1080px)" : {
+  '@media (max-width: 1080px)': {
     root: {
       marginLeft: '0',
-    }
-  }
+    },
+  },
 }))
 
 const FooterFollowUs = () => {
@@ -36,32 +35,20 @@ const FooterFollowUs = () => {
 
   return (
     <div className={classes.root}>
-      <Typography
-        variant="subtitle1">
-        Follow Us
-      </Typography>
+      <Typography variant="subtitle1">Follow Us</Typography>
       <div className={classes.container}>
         <Link href="https://www.facebook.com/ArcadeDoge/">
-          <img
-            src={Facebook}
-            alt="Facebook" />
+          <img src={Facebook} alt="Facebook" />
         </Link>
         <Link href="https://www.reddit.com/r/ArcadeDoge">
-          <img
-            src={Reddit}
-            alt="Reddit" />
+          <img src={Reddit} alt="Reddit" />
         </Link>
         <Link href="https://t.me/ArcadeDoge">
-          <img
-            src={Telegram}
-            alt="Telegram" />
+          <img src={Telegram} alt="Telegram" />
         </Link>
         <Link href="https://twitter.com/ArcadeDoge">
-          <img
-            src={Twitter}
-            alt="Twitter" />
+          <img src={Twitter} alt="Twitter" />
         </Link>
-        
       </div>
     </div>
   )

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import {store, useGlobalState} from 'state-pool'
+import { store, useGlobalState } from 'state-pool'
 
-import {
-  Typography,
-  Button
-} from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 
 import { ThemeProvider, makeStyles } from '@material-ui/core'
-import {ReactComponent as AstronautBuy} from 'assets/img/astronautbuy.svg'
+import { ReactComponent as AstronautBuy } from 'assets/img/astronautbuy.svg'
 import Info from '@material-ui/icons/Info'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 
@@ -27,89 +24,84 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Home: React.FC = () => {
-    const history = useHistory()
-    const [account, setAccount] = useGlobalState('account')
-    const [showHowToPlay, setShowHowToPlay] = useState(false)
+  const history = useHistory()
+  const [account, setAccount] = useGlobalState('account')
+  const [showHowToPlay, setShowHowToPlay] = useState(false)
 
-    const onClickButton = () => {
-        console.log("asdf")
-    }
+  const onClickButton = () => {
+    console.log('asdf')
+  }
 
-    const onClickArcadeMarket = () => {
-      history.push('/market')
-    }
+  const onClickArcadeMarket = () => {
+    history.push('/market')
+  }
 
-    const onClickBuyArcadeDoge = () => {
-      location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-    }
+  const onClickBuyArcadeDoge = () => {
+    location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+  }
 
-    return (
-      <Page className="no-width-limit">
-        <div className="iframe-template">
-          <iframe />
-          <div className="rect rect-1" />
-          <div className="rect rect-2" />
-          <div className="rect rect-3" />
-          <div className="rect rect-4" />
-          <div className="rect rect-5" />
-          <div className="rect rect-6" />
-          <div className="rect rect-7" />
-          <div className="rect rect-8" />
-          <div className="rect rect-9" />
-          <div className="rect rect-10" />
-          <div className="rect rect-11" />
-          <div className="rect rect-12" />
-          <div className="rect rect-13" />
-          {account === '' ? (<ConnectWallet className="iframe-connect"/>) : ''}
-          
+  return (
+    <Page className="no-width-limit">
+      <div className="iframe-template">
+        <iframe />
+        <div className="rect rect-1" />
+        <div className="rect rect-2" />
+        <div className="rect rect-3" />
+        <div className="rect rect-4" />
+        <div className="rect rect-5" />
+        <div className="rect rect-6" />
+        <div className="rect rect-7" />
+        <div className="rect rect-8" />
+        <div className="rect rect-9" />
+        <div className="rect rect-10" />
+        <div className="rect rect-11" />
+        <div className="rect rect-12" />
+        <div className="rect rect-13" />
+        {account === '' ? <ConnectWallet className="iframe-connect" /> : ''}
+      </div>
+      <div className="flex-row row iframe-row">
+        <div className="flex-row row col-2">
+          <HeaderLabel>MarsDoge</HeaderLabel>
         </div>
-        <div className="flex-row row iframe-row">
-          <div className="flex-row row col-2">
-            <HeaderLabel>MarsDoge</HeaderLabel>
-          </div>
-          <div className="flex-row row col-6">
-            <Button
-              className="mg-8"
-              variant="contained"
-              color="secondary"
-              onClick={onClickBuyArcadeDoge}
-              startIcon={<AstronautBuy />}>
-              <Typography variant="subtitle1">
-                Buy ArcadeDoges
-              </Typography>
-            </Button>
+        <div className="flex-row row col-6">
+          <Button
+            className="mg-8"
+            variant="contained"
+            color="secondary"
+            onClick={onClickBuyArcadeDoge}
+            startIcon={<AstronautBuy />}
+          >
+            <Typography variant="subtitle1">Buy ArcadeDoges</Typography>
+          </Button>
+          <Button
+            className="mg-8"
+            variant="contained"
+            color="primary"
+            onClick={onClickArcadeMarket}
+            startIcon={<ShoppingCart />}
+          >
+            <Typography variant="subtitle1">Vend at ArcadeMarket</Typography>
+          </Button>
+        </div>
+        <div className="flex-row row col-2">
+          <ThemeProvider theme={homeTheme}>
             <Button
               className="mg-8"
               variant="contained"
               color="primary"
-              onClick={onClickArcadeMarket}
-              startIcon={<ShoppingCart />}>
-              <Typography variant="subtitle1">
-                Vend at ArcadeMarket
-              </Typography>
+              onClick={() => setShowHowToPlay(true)}
+              startIcon={<Info />}
+            >
+              <Typography variant="subtitle1">How to Play</Typography>
             </Button>
-          </div>
-          <div className="flex-row row col-2">
-            <ThemeProvider theme={homeTheme}>
-              <Button
-                className="mg-8"
-                variant="contained"
-                color="primary"
-                onClick={() => setShowHowToPlay(true)}
-                startIcon={<Info />}>
-                <Typography variant="subtitle1">
-                  How to Play
-                </Typography>
-              </Button>
-            </ThemeProvider>
-          </div>
+          </ThemeProvider>
         </div>
+      </div>
 
-        <HowToPlay open={showHowToPlay} onClose={() => setShowHowToPlay(false)}/>
-          
-      </Page>
-    )
-    /* <Button
+      <HowToPlay open={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
+    </Page>
+  )
+  /* <Button
             variant="contained"
             color="secondary"
             startIcon={<AstronautBuy />}>

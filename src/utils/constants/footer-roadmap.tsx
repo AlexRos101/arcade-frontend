@@ -1,54 +1,56 @@
 const DEFAULT_FOOTER_ROADMAP = [
   {
-    title: "Play Game",
+    title: 'Play Game',
     items: [
       {
-        title: "How to Play",
-        link: '#'
-      },{
-        title: "Buy ArcadeDoges",
-        link: '#'
-      }
-    ]
+        title: 'How to Play',
+        link: '#',
+      },
+      {
+        title: 'Buy ArcadeDoges',
+        link: '#',
+      },
+    ],
   },
   {
-    title: "ArcadeMarket",
+    title: 'ArcadeMarket',
     items: [
       {
-        title: "Sell Customized Item",
-        link: '#'
-      },{
-        title: "View Your Listings",
-        link: '#'
-      }
-    ]
+        title: 'Sell Customized Item',
+        link: '#',
+      },
+      {
+        title: 'View Your Listings',
+        link: '#',
+      },
+    ],
   },
   {
-    title: "Community",
+    title: 'Community',
     items: [
       {
-        title: "Join the Official",
-        link: '#'
-      },{
-        title: "Discord Server!",
-        link: '#'
-      }
-    ]
+        title: 'Join the Official',
+        link: '#',
+      },
+      {
+        title: 'Discord Server!',
+        link: '#',
+      },
+    ],
   },
   {
-    title: "Company",
+    title: 'Company',
     items: [
       {
-        title: "Term of Use",
-        link: '#'
-      },{
-        title: "Privacy Policy",
-        link: '#'
-      }
-    ]
-  }
+        title: 'Term of Use',
+        link: '#',
+      },
+      {
+        title: 'Privacy Policy',
+        link: '#',
+      },
+    ],
+  },
 ]
 
-export {
-  DEFAULT_FOOTER_ROADMAP
-}
+export { DEFAULT_FOOTER_ROADMAP }

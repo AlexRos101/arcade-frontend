@@ -6,23 +6,23 @@ const Card = styled.div<{
   height?: string
   padding?: string
   border?: string
-  borderRadius?: string,
+  borderRadius?: string
   bgColor?: string
 }>`
   padding: 1.25rem;
-  padding: ${({ padding }) => padding };
-  width: ${({ width }) => width ?? 'inherit' };
+  padding: ${({ padding }) => padding};
+  width: ${({ width }) => width ?? 'inherit'};
   height: ${({ height, padding }) => {
     if (height) {
       return `calc(${height} - 2 * ${padding ?? '1.25rem'})`
     }
     return 'inherit'
   }};
-  border: 1px solid ${({ border }) => border ?? '#EAE5CE' };
+  border: 1px solid ${({ border }) => border ?? '#EAE5CE'};
   border-radius: 7px;
-  border-radius: ${({ borderRadius }) => borderRadius };
+  border-radius: ${({ borderRadius }) => borderRadius};
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
-  background-color: ${({ bgColor }) => bgColor ?? '#FFFEFB' };
+  background-color: ${({ bgColor }) => bgColor ?? '#FFFEFB'};
 `
 
 export const OutlinedCard = styled(Card)`

@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import {
-  Button,
-  Grid,
-  ThemeProvider,
-  TextField,
-  Typography,
-  InputAdornment
-} from '@material-ui/core'
-
+import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -26,8 +18,8 @@ import { getStuff, getDiscussion } from 'hooks/api'
 import { greenTheme } from 'styles/theme'
 
 interface ParamTypes {
-  staffId: string,
-  discussionId: string,
+  staffId: string
+  discussionId: string
 }
 
 const DiscussionDetail = () => {
@@ -49,7 +41,7 @@ const DiscussionDetail = () => {
   useEffect(() => {
     if (staffIsSet == false) {
       setStaffIsSet(true)
-      getStuff(Number(staffId)).then(data => {
+      getStuff(Number(staffId)).then((data) => {
         setStaff(data)
       })
     }
@@ -58,8 +50,7 @@ const DiscussionDetail = () => {
   useEffect(() => {
     if (dscIsSet == false) {
       setDscIsSet(true)
-      getDiscussion(Number(discussionId))
-      .then(data => {
+      getDiscussion(Number(discussionId)).then((data) => {
         setDiscussion(data)
         setComments(data.comments)
       })
@@ -89,26 +80,27 @@ const DiscussionDetail = () => {
         <DiscussionHeaderLabel>{staff.title}</DiscussionHeaderLabel>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>    
-          <DiscussionContent discussion={discussion}/>
-          <AddComment visible={showAddComments} discussion={discussion} onReset={() => setDscIsSet(false)}/>
-          {showAddComments == false ? 
-            (<ThemeProvider theme={greenTheme}>
+        <Grid item sm={12} md={8}>
+          <DiscussionContent discussion={discussion} />
+          <AddComment visible={showAddComments} discussion={discussion} onReset={() => setDscIsSet(false)} />
+          {showAddComments == false ? (
+            <ThemeProvider theme={greenTheme}>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={onAddComment}
                 className="r-wd-100"
-                style={{marginTop: '2vh', marginBottom: '2vh', paddingLeft:'2vw', paddingRight:'2vw'}}>
+                style={{ marginTop: '2vh', marginBottom: '2vh', paddingLeft: '2vw', paddingRight: '2vw' }}
+              >
                 Add Comment
               </Button>
-            </ThemeProvider>) : ''
-          }
-          {
-            comments.map((comment: any) => {
-              return (<CommentItem comment={comment}/>)
-            })
-          }
+            </ThemeProvider>
+          ) : (
+            ''
+          )}
+          {comments.map((comment: any) => {
+            return <CommentItem comment={comment} />
+          })}
         </Grid>
         <Grid item sm={12} md={4}>
           <SearchBox />

@@ -14,18 +14,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0),
     whiteSpace: 'nowrap',
     '&:hover': {
-      textDecoration: 'underline'
-    }
-  }
+      textDecoration: 'underline',
+    },
+  },
 }))
 
 const FooterRoadmap = (props: Props) => {
   const classes = useStyles()
 
   return (
-    <Typography
-      variant="subtitle2"
-      className={classes.item}>
+    <Typography variant="subtitle2" className={classes.item}>
       {props.title}
     </Typography>
   )

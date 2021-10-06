@@ -1,9 +1,6 @@
-import React, { SVGProps } from "react"
-import styled from "styled-components"
-import {
-  Typography,
-  Grid
-} from '@material-ui/core'
+import React, { SVGProps } from 'react'
+import styled from 'styled-components'
+import { Typography, Grid } from '@material-ui/core'
 
 import avatar from 'assets/img/avatar.svg'
 import { ScaleDefaults, ScaleTypes } from 'utils/constants/types'
@@ -32,10 +29,10 @@ const ImageWrapper = styled.img<{
 `
 
 const PriceWrapper = styled.div<{
-  scales?: ScaleTypes,
+  scales?: ScaleTypes
   foreColor?: string
 }>`
-  color: ${({ theme, foreColor }) => foreColor ?? theme.palette.text.primary };
+  color: ${({ theme, foreColor }) => foreColor ?? theme.palette.text.primary};
   font-size: ${({ theme, scales }) => {
     if (!scales || scales === ScaleDefaults.SM) {
       return `${theme.typography.body1.fontSize}px`
@@ -48,10 +45,10 @@ const PriceWrapper = styled.div<{
 `
 
 interface PriceLabelProps {
-  scales: ScaleTypes,
-  avatar: string, // React.FunctionComponent<SVGProps<SVGSVGElement>>,
-  price: number | string,
-  pricePerUsd: number,
+  scales: ScaleTypes
+  avatar: string // React.FunctionComponent<SVGProps<SVGSVGElement>>,
+  price: number | string
+  pricePerUsd: number
 }
 
 const PriceLabelDefaults = {
@@ -61,8 +58,8 @@ const PriceLabelDefaults = {
   pricePerUsd: 0,
 }
 
-const PriceLabel = (props : Partial<PriceLabelProps> = {}) => {
-  const params = {...PriceLabelDefaults, ...props}
+const PriceLabel = (props: Partial<PriceLabelProps> = {}) => {
+  const params = { ...PriceLabelDefaults, ...props }
 
   return (
     <Grid container spacing={1} alignItems="center">
@@ -70,9 +67,7 @@ const PriceLabel = (props : Partial<PriceLabelProps> = {}) => {
         <ImageWrapper scales={params.scales} src={params.avatar} />
       </Grid>
       <Grid item>
-        <PriceWrapper scales={params.scales}>
-          {params.price}
-        </PriceWrapper>
+        <PriceWrapper scales={params.scales}>{params.price}</PriceWrapper>
       </Grid>
       {/* <Grid item>
         <PriceWrapper scales={ScaleDefaults.SM} foreColor="rgba(34, 48, 61, 0.5)">

@@ -1,16 +1,13 @@
-import React from "react"
-import {
-  Box,
-  Typography
-} from '@material-ui/core'
+import React from 'react'
+import { Box, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 
 interface LabelProps extends React.HTMLAttributes<HTMLDivElement> {
-  label: string,
+  label: string
   labelClass?: string
 }
 
-const LabelComponent: React.FC<LabelProps>= ({ label, labelClass, children, ...props }) => {
+const LabelComponent: React.FC<LabelProps> = ({ label, labelClass, children, ...props }) => {
   const theme = useTheme()
 
   return (

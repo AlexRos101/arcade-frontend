@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(2),
-  }
+  },
 }))
 
 const FooterContact = () => {
@@ -15,14 +15,10 @@ const FooterContact = () => {
 
   return (
     <div className={classes.root}>
-      <Typography
-        variant="body1"
-        color="inherit">
+      <Typography variant="body1" color="inherit">
         ArcadeDoge Game © 2021.
       </Typography>
-      <Typography
-        variant="body1"
-        color="inherit">
+      <Typography variant="body1" color="inherit">
         All Rights Reserved.
       </Typography>
     </div>

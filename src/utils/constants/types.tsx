@@ -1,10 +1,10 @@
 export const ScaleDefaults = {
-  SM: "sm",
-  MD: "md",
-  LG: "lg",
-} as const;
+  SM: 'sm',
+  MD: 'md',
+  LG: 'lg',
+} as const
 
-export type ScaleTypes = typeof ScaleDefaults[keyof typeof ScaleDefaults];
+export type ScaleTypes = typeof ScaleDefaults[keyof typeof ScaleDefaults]
 
 export interface SkinProps {
   item: string // current is background color
@@ -35,7 +35,6 @@ export interface MapProps {
   visible: boolean
 }
 
- export interface MapsProps {
+export interface MapsProps {
   skins: MapProps[]
 }
-

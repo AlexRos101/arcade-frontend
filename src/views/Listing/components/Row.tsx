@@ -1,16 +1,8 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import {
-  Hidden,
-  Typography,
-  Grid
-} from '@material-ui/core'
-import {
-  withStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core/styles'
+import { Hidden, Typography, Grid } from '@material-ui/core'
+import { withStyles, createStyles, Theme } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -29,21 +21,27 @@ import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     body: {
-      borderBottom: '0px'
-    }
-  })
+      borderBottom: '0px',
+    },
+  }),
 )(TableCell)
 
 const Thumb = styled(Card)<{
   height?: string
   bgImage?: string
 }>`
-  height: ${({ height }) => height ?? '57px' };
+  height: ${({ height }) => height ?? '57px'};
   border: 0px;
-  ${({bgImage}) => 'background-image: url(' + bgImage + ');background-size: 100% 100%;' ?? ''}
+  ${({ bgImage }) => 'background-image: url(' + bgImage + ');background-size: 100% 100%;' ?? ''}
 `
 
-const Row = ({ data, index, toggleClicked, burnToken, rate }: {
+const Row = ({
+  data,
+  index,
+  toggleClicked,
+  burnToken,
+  rate,
+}: {
   data: any
   index: number
   rate: number
@@ -91,17 +89,19 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
       <Hidden xsDown>
         <TableRow key={row.name}>
           <StyledTableCell component="th" scope="row">
-            <Thumb width="80px" height="70px" borderRadius="3px" padding="0px" bgImage={`${process.env.REACT_APP_THUMBNAIL_NODE}${row.token_id}.png`} />
+            <Thumb
+              width="80px"
+              height="70px"
+              borderRadius="3px"
+              padding="0px"
+              bgImage={`${process.env.REACT_APP_THUMBNAIL_NODE}${row.token_id}.png`}
+            />
           </StyledTableCell>
           <StyledTableCell>
-            <Typography variant="subtitle1">
-              {row.category_name}
-            </Typography>
+            <Typography variant="subtitle1">{row.category_name}</Typography>
           </StyledTableCell>
           <StyledTableCell>
-            <Typography variant="subtitle1">
-              {row.name}
-            </Typography>
+            <Typography variant="subtitle1">{row.name}</Typography>
           </StyledTableCell>
           <StyledTableCell>
             <Flex>
@@ -110,27 +110,19 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
                 avatar={avatar}
                 price={row.arcadedoge_price.toFixed(2)}
                 pricePerUsd={row.priceArcPerUsd}
-                />
+              />
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={bnb}
                 price={(row.arcadedoge_price * rate).toFixed(2)}
                 pricePerUsd={row.priceBnbPerUsd}
-                />
+              />
             </Flex>
           </StyledTableCell>
           <StyledTableCell>
             <Flex>
-              <Toggle
-                checked={row.is_visible}
-                onChange={handleToggleClick}
-                scale="md" />
-              <IconButton
-                aria-label="more"
-                aria-controls="long-menu"
-                aria-haspopup="true"
-                onClick={handleClickMenu}
-              >
+              <Toggle checked={row.is_visible} onChange={handleToggleClick} scale="md" />
+              <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClickMenu}>
                 <MoreVertIcon />
               </IconButton>
               <Menu
@@ -142,8 +134,8 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
                   style: {
                     maxHeight: 180,
                     width: '120px',
-                    boxShadow: '0px 2px 2px rgb(0 0 0 / 8%)'
-                  }
+                    boxShadow: '0px 2px 2px rgb(0 0 0 / 8%)',
+                  },
                 }}
               >
                 <MenuItem key="edit" onClick={handleEditMenu}>
@@ -162,16 +154,18 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
           <StyledTableCell component="th" scope="row">
             <Grid container spacing={1} justifyContent="space-between" alignItems="center">
               <Grid item xs={6}>
-              <Thumb width="80px" height="70px" borderRadius="3px" padding="0px" bgImage={`${process.env.REACT_APP_THUMBNAIL_NODE}${row.token_id}.png`} />
+                <Thumb
+                  width="80px"
+                  height="70px"
+                  borderRadius="3px"
+                  padding="0px"
+                  bgImage={`${process.env.REACT_APP_THUMBNAIL_NODE}${row.token_id}.png`}
+                />
               </Grid>
               <Grid item>
                 <Flex flexDirection="column">
-                  <Typography variant="subtitle1">
-                    {row.category}
-                  </Typography>
-                  <Typography variant="subtitle1">
-                    {row.name}
-                  </Typography>
+                  <Typography variant="subtitle1">{row.category}</Typography>
+                  <Typography variant="subtitle1">{row.name}</Typography>
                 </Flex>
               </Grid>
               <Grid item xs={8}>
@@ -181,21 +175,18 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
                     avatar={avatar}
                     price={row.arcadedoge_price}
                     // pricePerUsd={row.priceArcPerUsd}
-                    />
+                  />
                   <PriceLabel
                     scales={ScaleDefaults.MD}
                     avatar={bnb}
                     price={row.arcadedoge_price}
                     // pricePerUsd={row.priceBnbPerUsd}
-                    />
+                  />
                 </Flex>
               </Grid>
               <Grid item xs={4}>
                 <Flex flexDirection="row" justifyContent="flex-end">
-                  <Toggle
-                    checked={row.visible}
-                    onChange={handleToggleClick}
-                    scale="md" />
+                  <Toggle checked={row.visible} onChange={handleToggleClick} scale="md" />
                   <IconButton
                     aria-label="more"
                     aria-controls="long-menu"
@@ -213,8 +204,8 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
                       style: {
                         maxHeight: 180,
                         width: '120px',
-                        boxShadow: '0px 2px 2px rgb(0 0 0 / 8%)'
-                      }
+                        boxShadow: '0px 2px 2px rgb(0 0 0 / 8%)',
+                      },
                     }}
                   >
                     <MenuItem key="edit" onClick={handleEditMenu}>
@@ -230,7 +221,6 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
           </StyledTableCell>
         </TableRow>
       </Hidden>
-      
     </>
   )
 }

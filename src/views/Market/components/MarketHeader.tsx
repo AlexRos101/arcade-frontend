@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import Storefront from '@material-ui/icons/Storefront'
@@ -6,19 +6,19 @@ import { Button } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
 import { marketTheme } from 'styles/theme'
-import { ReactComponent as Sell } from "assets/img/sell.svg"
+import { ReactComponent as Sell } from 'assets/img/sell.svg'
 
 import $ from 'jquery'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     '& > *': {
-      margin: theme.spacing(1)
-    }
-  }
+      margin: theme.spacing(1),
+    },
+  },
 }))
 
 const MarketHeader = () => {
@@ -42,14 +42,11 @@ const MarketHeader = () => {
             variant="outlined"
             color="primary"
             onClick={onClickViewListing}
-            startIcon={<Storefront />}>
+            startIcon={<Storefront />}
+          >
             View Your Listings
           </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={onClickSellItem}
-            startIcon={<Sell />}>
+          <Button variant="contained" color="secondary" onClick={onClickSellItem} startIcon={<Sell />}>
             Sell Customized Item
           </Button>
         </div>

@@ -1,7 +1,7 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 
 const Relative = styled.div`
-    position: relative;
+  position: relative;
 `
 
 export default Relative
