@@ -120,6 +120,7 @@ const Sell = ({ data } : {
   const [selectedCategoryID, setSelectedCategoryID] = useState(-1)
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
+  const [rate, setRate] = useState(0.0)
 
   const [description, setDescription] = useState('')
   const [name, setName] = useState('')
@@ -270,6 +271,25 @@ const Sell = ({ data } : {
       setIsLoading(false)
     })
   }
+
+  const getRate = async () => {
+    const provider = await Wallet.getCurrentProvider()
+
+    const web3 = new Web3(provider)
+    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
+
+    exchange.methods.getRate().call()
+    .then((res: any) => {
+        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+
+        setTimeout(getRate, 1000)
+    })
+    .catch((err: any) => {
+        setTimeout(getRate, 500)
+    })
+  }
+
+  getRate()
   
   return (
     <Page>
@@ -390,7 +410,7 @@ const Sell = ({ data } : {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={avatar}
-                          price={skinItem?.priceArc}
+                          price={Number.parseFloat(price)}
                           pricePerUsd={skinItem?.priceArcPerUsd}
                         />
                       </Grid>
@@ -398,7 +418,7 @@ const Sell = ({ data } : {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={bnb}
-                          price={skinItem?.priceBnb}
+                          price={Number.parseFloat(price) * rate}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
                         />
                       </Grid>
