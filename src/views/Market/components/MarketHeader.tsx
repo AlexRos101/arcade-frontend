@@ -36,7 +36,7 @@ const MarketHeader = () => {
       <ThemeProvider theme={marketTheme}>
         <div className={`${classes.root} market-header-action`}>
           <Button
-            className="market-listing-btn"
+            className=""
             variant="outlined"
             color="primary"
             onClick={onClickViewListing}
