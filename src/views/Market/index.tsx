@@ -4,37 +4,29 @@ import {
     Button
   } from '@material-ui/core'
 import Page from 'components/Layout/Page'
-import { createTheme, ThemeProvider  } from '@material-ui/core/styles';
+
+
+import Select from '@material-ui/core/Select'
+import FormControl from '@material-ui/core/FormControl'
 import Info from '@material-ui/icons/Info'
-import Storefront from '@material-ui/icons/Storefront'
-import Link from '@material-ui/core/Link'
-import Select from '@material-ui/core/Select';
-import { Directions } from "@material-ui/icons";
-import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos"
-import FormControl from '@material-ui/core/FormControl';
 
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-import Card from "./Card";
-import { ReactComponent as Sell } from "assets/img/sell.svg";
+import Dialog from '@material-ui/core/Dialog'
+import MuiDialogTitle from '@material-ui/core/DialogTitle'
+import MuiDialogContent from '@material-ui/core/DialogContent'
+import MuiDialogActions from '@material-ui/core/DialogActions'
 
 
-const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#FFFCED',
-        contrastText: '#308D7B',
-      },
-      secondary: {
-        main: '#30C5A8',
-        contrastText: '#FFFCED',
-      },
-    },
-  });
+import MarketHeader from './components/MarketHeader'
+import MarketRow from './components/MarketRow'
+import CardSlider from './components/CardSlider'
 
-  const skinCards = [
+import Header from 'components/Layout/Header'
+import HeaderLabel from 'components/Label/HeaderLabel'
+import RowLabel from 'components/Label/RowLabel'
+import ExpandButton from "components/Button/ExpandButton"
+
+
+const skinCards = [
     {
         color: '#30C5A8',
         tokenId: '012345',
@@ -122,79 +114,34 @@ const Market = () => {
 
     return (
         <Page>
-            <div className="market-row flex-row market-title "> 
-                <p className="market-label mg-0 "> ArcadeMarket</p>
+            <Header>
+                <HeaderLabel>ArcadeMarket</HeaderLabel>
                 <Info className="mh-auto ml-10 market-info-tag"/>
-                <div className="right">
-                    <ThemeProvider theme={theme}>
-                        <Button
-                            className="mg-8 market-listing-btn"
-                            variant="contained"
-                            color="primary"
-                            startIcon={<Storefront />}>
-                            View Your Listings
-                        </Button>
-                        <Button
-                            className="mg-8 market-customizing-btn"
-                            variant="contained"
-                            color="secondary"
-                            startIcon={<Sell />}>
-                            Sell Customized Item
-                        </Button>
-                    </ThemeProvider>
-                </div>
-            </div>
-            <div className="market-row flex-row">
-                <p className="market-sublabel mg-0 "> ArcadeDoge Skins</p>
-            </div>
-            <div className="market-row flex-row" style={{flexDirection: 'row'}}>
-                <div className="market-slide">
-                    <Slider slidesToShow={5} swipeToSlide={true} draggable={true} arrows={false}> 
-                    {
-                        skinCards.map(map => {
-                            return ( <Card color={map.color} tokenId={map.tokenId} price={map.price} />)
-                        })
-                    }
-                    </Slider>
-                </div>
-                <div className="market-expand">
-                    <Link href="#" className="market-expand-link" >
-                        <ArrowForwardIos fontSize="small" style={{margin: 'auto'}}/>
-                        <p>View All Skins</p>
-                    </Link>
-                </div>
-            </div>
-            <div className="market-row flex-row">
-                <p className="market-sublabel mg-0 "> Arcade Maps</p>
+                <MarketHeader />
+            </Header>
+            <MarketRow>
+                <RowLabel>ArcadeDoge Skins</RowLabel>
+            </MarketRow>
+            <MarketRow style={{flexDirection: 'row'}}>
+                <CardSlider context={skinCards} />
+                <ExpandButton>View All Skins</ExpandButton>
+            </MarketRow>
+            <MarketRow>
+                <RowLabel> Arcade Maps</RowLabel>
                 <FormControl variant="outlined" className="market-form-control">
-                    <Select
-                        value={maplevel} className="market-map-select"
-                        >
+                    <Select value={maplevel} className="market-map-select">
                         <option value={0}>All Difficulty</option>
                         <option value={1}>Easy</option>
                         <option value={2}>Normal</option>
                         <option value={3}>Difficult</option>
                         <option value={4}>Extreme</option>
-                        </Select>
+                    </Select>
                 </FormControl>
-            </div>
-            <div className="market-row flex-row" style={{flexDirection: 'row'}}>
-                <div className="market-slide">
-                    <Slider slidesToShow={5} swipeToSlide={true} draggable={true} arrows={false}> 
-                    {
-                        mapsCards.map(map => {
-                            return ( <Card color={map.color} tokenId={map.tokenId} price={map.price} />)
-                        })
-                    }
-                    </Slider>
-                </div>
-                <div className="market-expand">
-                    <Link href="#" className="market-expand-link" >
-                        <ArrowForwardIos fontSize="small" style={{margin: 'auto'}}/>
-                        <p>View All Maps</p>
-                    </Link>
-                </div>
-            </div>
+            </MarketRow>
+            <MarketRow style={{flexDirection: 'row'}}>
+                <CardSlider context={mapsCards} />
+                <ExpandButton>View All Maps</ExpandButton>
+            </MarketRow>
         </Page>
     )
 }
