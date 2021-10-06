@@ -7,6 +7,11 @@ import logo from '../../assets/img/logo.png'
 const useStyles = makeStyles(() => ({
   logo: {
     display: 'flex'
+  },
+  "@media (max-width: 600px)": {
+    logo: {
+      height: '35px',
+    },
   }
 }))
 

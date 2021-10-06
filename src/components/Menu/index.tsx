@@ -10,6 +10,8 @@ import Logo from '../Logo'
 import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
 
+import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     display: 'flex',
@@ -39,6 +41,7 @@ const Menu = () => {
       className={classes.appBar}
     >
       <Toolbar className={clsx(classes.toolbar, commonClasses.containerWidth)}>
+        <Wallet className="wallet-cage"/>
         <div className={classes.container}>
           <Logo />
         </div>

@@ -12,6 +12,19 @@ export const greenTheme = responsiveFontSizes(createTheme({
   }
 }))
 
+export const marketTheme = responsiveFontSizes(createTheme({
+  palette: {
+    primary: {
+      main: '#FFFCED',
+      contrastText: '#308D7B',
+    },
+    secondary: {
+      main: '#30C5A8',
+      contrastText: '#FFFCED',
+    },
+  },
+}))
+
 const theme = responsiveFontSizes(createTheme({
   palette: {
     primary: {
