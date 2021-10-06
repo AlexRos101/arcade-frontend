@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Typography,
   Button,
@@ -33,6 +34,8 @@ const useStyles = makeStyles(theme => ({
 
 const NavBarMenu = () => {
 
+  const history = useHistory()
+
   const [hiddenMenu, setHiddenMenu] = useState('hidden-menu')
   const classes = useStyles()
 
@@ -40,7 +43,7 @@ const NavBarMenu = () => {
     console.log('Connect Wallet')
   }
   const onPlayGameHandler = () => {
-    console.log('Play Game')
+    history.push('/')
   }
 
   const onPressMenu = () => {

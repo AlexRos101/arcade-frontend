@@ -559,6 +559,11 @@ button {
     margin: 10px 20px 10px 0px !important;
   }
 
+  .card:hover {
+    border: 1px solid #D9D2B5;
+    box-shadow: 0px 6px 9px rgba(0, 0, 0, 0.08);
+  }
+
   .card p {
     font-family: Montserrat;
     font-style: normal;

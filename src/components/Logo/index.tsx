@@ -19,7 +19,7 @@ const Logo = () => {
   const classes = useStyles()
 
   return (
-    <Link href="#">
+    <Link href="/">
       <div className={classes.logo}>
         <img
           src={avatar}

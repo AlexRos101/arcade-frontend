@@ -25,7 +25,7 @@ const Home: React.FC = () => {
         console.log("asdf")
     }
 
-    const onClickBuyArcadeDoges = () => {
+    const onClickArcadeMarket = () => {
       history.push('/market')
     }
 
@@ -51,7 +51,6 @@ const Home: React.FC = () => {
             className="mg-8"
             variant="contained"
             color="secondary"
-            onClick={onClickBuyArcadeDoges}
             startIcon={<AstronautBuy />}>
             <Typography variant="subtitle1">
               Buy ArcadeDoges
@@ -61,6 +60,7 @@ const Home: React.FC = () => {
             className="mg-8"
             variant="contained"
             color="primary"
+            onClick={onClickArcadeMarket}
             startIcon={<ShoppingCart />}>
             <Typography variant="subtitle1">
               Vend at ArcadeMarket

@@ -54,10 +54,10 @@ const FooterRoadmap = () => {
               className={classes.title}>
               ArcadeMarket
             </Typography>
-            <Link href="#">
+            <Link href="/sell">
               <RoadmapEntry title="Sell Customized Item" />
             </Link>
-            <Link href="#">
+            <Link href="/listing">
               <RoadmapEntry title="View Your Listings" />
             </Link>
           </div>

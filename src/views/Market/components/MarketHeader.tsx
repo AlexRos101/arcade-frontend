@@ -1,4 +1,5 @@
 import React from "react"
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import Storefront from '@material-ui/icons/Storefront'
 import { Button } from '@material-ui/core'
@@ -19,7 +20,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const MarketHeader = () => {
+  const history = useHistory()
   const classes = useStyles()
+
+  const onClickViewListing = () => {
+    history.push('/listing')
+  }
+
+  const onClickSellItem = () => {
+    history.push('/sell')
+  }
 
   return (
     <div className="right">
@@ -29,6 +39,7 @@ const MarketHeader = () => {
             className="mg-8 market-listing-btn"
             variant="contained"
             color="primary"
+            onClick={onClickViewListing}
             startIcon={<Storefront />}>
             View Your Listings
           </Button>
@@ -36,6 +47,7 @@ const MarketHeader = () => {
             className="mg-8 market-customizing-btn"
             variant="contained"
             color="secondary"
+            onClick={onClickSellItem}
             startIcon={<Sell />}>
             Sell Customized Item
           </Button>
