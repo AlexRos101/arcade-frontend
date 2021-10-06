@@ -149,6 +149,8 @@ const Sell = ({ data } : {
   const { itemTokenId } = useParams<ParamTypes>()
 
   useEffect(() => {
+    if (account == '') setShowConnectWalletModal(true)
+    
     if (paramIsSet == false && window.location.pathname.indexOf('/item/edit') >= 0) {
       
       setTokenID(Number(itemTokenId))
@@ -237,14 +239,11 @@ const Sell = ({ data } : {
           return
         }
         setTokenID(tokenTemp)
-        console.log(res)
       })
       .catch((err) => {
         setIsLoading(false);
         console.log(err);
       })
-    
-    console.log(file);
   }
 
   const isNumeric = (str: string) => {

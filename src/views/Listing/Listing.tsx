@@ -54,6 +54,7 @@ const Listing = () => {
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState({name: '', token_id: 0})
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [account, setAccount] = useGlobalState('account')
   const [rate, setRate] = useState(0.0)
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -130,6 +131,8 @@ const Listing = () => {
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
+
+    if (account == '') setShowConnectWalletModal(true)
 
     getMyItems(0, 10)
   })
