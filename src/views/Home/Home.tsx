@@ -16,6 +16,7 @@ import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
+import HowToPlay from 'components/Modal/HowToPlay'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Home: React.FC = () => {
     const history = useHistory()
     const [account, setAccount] = useGlobalState('account')
+    const [showHowToPlay, setShowHowToPlay] = useState(false)
 
     const onClickButton = () => {
         console.log("asdf")
@@ -39,10 +41,6 @@ const Home: React.FC = () => {
 
     const onClickBuyArcadeDoge = () => {
       location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-    }
-
-    const onClickHowToPlay = () => {
-      console.log('asdf')
     }
 
     return (
@@ -97,7 +95,7 @@ const Home: React.FC = () => {
                 className="mg-8"
                 variant="contained"
                 color="primary"
-                onClick={onClickHowToPlay}
+                onClick={() => setShowHowToPlay(true)}
                 startIcon={<Info />}>
                 <Typography variant="subtitle1">
                   How to Play
@@ -106,6 +104,8 @@ const Home: React.FC = () => {
             </ThemeProvider>
           </div>
         </div>
+
+        <HowToPlay open={showHowToPlay} onClose={() => setShowHowToPlay(false)}/>
           
       </Page>
     )
