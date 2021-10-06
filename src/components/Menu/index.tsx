@@ -1,5 +1,8 @@
-import React from 'react'
-import { AppBar, Toolbar, Typography } from '@material-ui/core'
+import React, { memo } from 'react'
+import {
+  AppBar,
+  Toolbar
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
@@ -47,4 +50,4 @@ const Menu = () => {
   )
 }
 
-export default Menu
+export default memo(Menu)

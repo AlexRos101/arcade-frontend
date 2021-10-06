@@ -9,10 +9,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
-  },
-  button: {
-    margin: theme.spacing(1)
+    alignItems: 'center',
+    '& > *': {
+      margin: theme.spacing(1)
+    }
   }
 }))
 
@@ -29,6 +29,9 @@ const NavBarMenu = () => {
   return (
     <Hidden smDown>
       <div className={classes.root}>
+        <Button>How to Play</Button>
+        <Button>Community</Button>
+        <Button>ArcadeMarket</Button>
         <Button
           variant="contained"
           color="primary"

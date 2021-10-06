@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 
 import theme from './styles/theme'
 import Menu from './components/Menu'
+import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
 
 const Home = lazy(() => import('./views/Home'))
@@ -22,6 +23,7 @@ function App() {
             </Route>
           </Switch>
         </Suspense>
+        <Footer />
       </Router>
     </ThemeProvider>
   );
