@@ -33,16 +33,16 @@ const useStyles = makeStyles({
   }
 })
 
-function createData(item: string, category: string, name: string, priceArc: number, priceArcPerUsd: number, priceBnb: number, priceBnbPerUsd: number, visible: boolean): SkinProps {
-  return { item, category, name, priceArc, priceArcPerUsd, priceBnb, priceBnbPerUsd, visible };
+function createData(item: string, category: string, combo: string, name: string, priceArc: number, priceArcPerUsd: number, priceBnb: number, priceBnbPerUsd: number, visible: boolean): SkinProps {
+  return { item, category, combo, name, priceArc, priceArcPerUsd, priceBnb, priceBnbPerUsd, visible };
 }
 
 const initRowsData: SkinProps[] = [
-  createData('#30C5A8', 'ArcadeDoge Skin', 'Skin #012345', 100, 15.0, 9, 17.0, true),
-  createData('#FB98B4', 'ArcadeDoge Skin', 'Skin #012345', 100, 15.0, 9, 17.0, false),
-  createData('#FCBF4A', 'ArcadeDoge Skin', 'Skin #012345', 100, 15.0, 9, 17.0, true),
-  createData('#1571FF', 'ArcadeDoge Skin', 'Skin #012345', 100, 15.0, 9, 17.0, false),
-  createData('#FF6C50', 'ArcadeDoge Skin', 'Skin #012345', 100, 15.0, 9, 17.0, true),
+  createData('#30C5A8', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, true),
+  createData('#FB98B4', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, false),
+  createData('#FCBF4A', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, true),
+  createData('#1571FF', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, false),
+  createData('#FF6C50', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, true),
 ]
 
 const Listing = () => {

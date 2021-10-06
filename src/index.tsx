@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Loading from 'components/loading';
 import './assets/css/style.css';
 import './assets/css/material-ui.css';
 
 ReactDOM.render(
   <React.StrictMode>
+    <Loading />
     <App />
   </React.StrictMode>,
   document.getElementById('root')

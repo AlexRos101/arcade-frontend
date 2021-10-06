@@ -14,7 +14,7 @@ const LabelComponent: React.FC<LabelProps>= ({ label, labelClass, children, ...p
   const theme = useTheme()
 
   return (
-    <Box {...props} style={{ margin: `${theme.spacing(1, 0)}` }}>
+    <Box {...props} style={{ margin: `${theme.spacing(1, 1)}` }}>
       <div style={{ marginBottom: '10px' }}>
         <Typography variant="body1" className={labelClass} component="div">
           {label}

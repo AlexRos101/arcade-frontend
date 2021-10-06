@@ -26,6 +26,8 @@ import Flex from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
+import SwitchButton from 'components/Button/SwitchButton'
+import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 
@@ -56,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&::placeholder': {
       textOverflow: 'ellipsis !important'
     },
-    width: '250px',
+    width: '100%',
     // '& input': {
     //   padding: theme.spacing(1.5)
     // },
@@ -66,6 +68,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   spacing: {
     padding: theme.spacing(1, 0)
+  },
+  margin: {
+    margin: theme.spacing(1, 1)
   }
 }))
 
@@ -77,8 +82,9 @@ const Category = {
 }
 
 const initData: SkinProps = {
-  item: 'rgba(251, 152, 180, 1)',
+  item: '',
   category: Category['1'],
+  combo: Category['1'],
   name: '',
   description: '',
   priceArc: 100,
@@ -122,50 +128,90 @@ const Sell = ({ data } : {
               flexDirection="column"
               alignItems="flex-start"
             >
-              <LabelComponent label="Category">
-                <Select
-                  fullWidth
-                  value={skinItem?.category ?? ''}
-                  onChange={handleClickCategory}
-                  className={classes.input}
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value={1}>Category1</MenuItem>
-                  <MenuItem value={2}>Category2</MenuItem>
-                  <MenuItem value={3}>Category3</MenuItem>
-                  <MenuItem value={4}>Category4</MenuItem>
+              <Flex 
+                flexDirection="row"
+                alignItems="flex-start"
+                className="wd-100">
+                <LabelComponent label="Game" className="wd-50">
+                  <Select
+                    fullWidth
+                    value={skinItem?.category ?? ''}
+                    onChange={handleClickCategory}
+                    className={classes.input}
+                    label="Select Category"
+                    input={<BootstrapInput >Select Category</BootstrapInput>}
+                  >
+                    <MenuItem value={1}>Category1</MenuItem>
+                    <MenuItem value={2}>Category2</MenuItem>
+                    <MenuItem value={3}>Category3</MenuItem>
+                    <MenuItem value={4}>Category4</MenuItem>
 
-                  {/* {
-                    Category.map((item, index) => {
-                      return <MenuItem value={index} key={`category-key-${item}`}>{item}</MenuItem>
-                    })
-                  } */}
-                </Select>
-              </LabelComponent>
-              <LabelComponent
-                label="Name" 
-                className={classes.input}
-              >
-                <TextField
-                  fullWidth
-                  placeholder="Name"
-                  InputProps={{ classes: {input: classes.input} }}
-                  variant="outlined"
-                />
-              </LabelComponent>
-              <LabelComponent
-                label="Description"
-                className={classes.input}
-              >
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  placeholder="Description"
-                  InputProps={{ classes: {input: classes.input} }}
-                  variant="outlined"
-                />
-              </LabelComponent>
+                    {/* {
+                      Category.map((item, index) => {
+                        return <MenuItem value={index} key={`category-key-${item}`}>{item}</MenuItem>
+                      })
+                    } */}
+                  </Select>
+                </LabelComponent>
+                <LabelComponent label="Combo Type" className="wd-50"> 
+                  <Select
+                    fullWidth
+                    value={skinItem?.combo ?? ''}
+                    onChange={handleClickCategory}
+                    className={classes.input}
+                    placeholder="Select Combo"
+                    input={<BootstrapInput />}
+                  >
+                    <MenuItem value={1}>Category1</MenuItem>
+                    <MenuItem value={2}>Category2</MenuItem>
+                    <MenuItem value={3}>Category3</MenuItem>
+                    <MenuItem value={4}>Category4</MenuItem>
+
+                    {/* {
+                      Category.map((item, index) => {
+                        return <MenuItem value={index} key={`category-key-${item}`}>{item}</MenuItem>
+                      })
+                    } */}
+                  </Select>
+                </LabelComponent>
+              </Flex>
+              <Flex 
+                flexDirection="row"
+                alignItems="flex-start"
+                className="wd-100">
+                <LabelComponent
+                  label="Name" 
+                  className="wd-50"
+                >
+                  <TextField
+                    fullWidth
+                    placeholder="Name"
+                    InputProps={{ classes: {input: classes.input} }}
+                    variant="outlined"
+                  />
+                </LabelComponent>
+                <LabelComponent label="Anonymous?" className="wd-50">
+                  <SwitchButton>You are not anonymous</SwitchButton>
+                </LabelComponent>
+              </Flex>
+              <Flex 
+              flexDirection="row"
+              alignItems="flex-start"
+              className="wd-100">
+                <LabelComponent
+                  label="Description"
+                  className={classes.input}
+                >
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    placeholder="Description"
+                    InputProps={{ classes: {input: classes.input} }}
+                    variant="outlined"
+                  />
+                </LabelComponent>
+              </Flex>
               <Grid container
                 spacing={2}
                 alignItems="flex-start"
@@ -206,27 +252,30 @@ const Sell = ({ data } : {
               </Grid>
               <Flex
                 alignItems="center"
-                className={classes.spacing}>
+                className={`${classes.spacing} ${classes.margin}`}>
                 <ThemeProvider theme={greenTheme}>
-                  <Box component="span" mr={1}>
-                    <Button
-                      variant="contained"
+                    <Box component="span" mr={1}>
+                      <Button
+                        variant="contained"
+                        color="primary">
+                        Save and Publish
+                      </Button>
+                    </Box>
+                    {/* <Button
+                      variant="outlined"
                       color="primary">
-                      Save and Publish
-                    </Button>
-                  </Box>
-                  <Button
-                    variant="outlined"
-                    color="primary">
-                    Save for Later
-                  </Button>
+                      Save for Later
+                    </Button> */}
                 </ThemeProvider>
               </Flex>
             </Flex>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Card bgColor={skinItem?.item} height={cardHeight} />
+          { skinItem?.item == '' ? 
+            (<ItemDropdown height={cardHeight}>drop files</ItemDropdown>) :
+            (<Card bgColor={skinItem?.item} height={cardHeight} />)
+          }
         </Grid>
       </Grid>
     </Page>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from "react-router-dom"
 import styled from 'styled-components'
 import {
   Button,
@@ -16,14 +17,25 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 
 import Staff from './components/staff'
 import SearchBox from './components/searchBox'
-import { getAllStuff } from 'hooks/api'
+import { getStuff } from 'hooks/api'
 
-const Discussion = () => {
-  const [staffs, setStaffs] = useState([])
+interface ParamTypes {
+  staffId: string
+}
+
+const DiscussionStaff = () => {
+  const [staff, setStaff] = useState<any>({})
+  const [staffIsSet, setStaffIsSet] = useState(false)
+  const { staffId } = useParams<ParamTypes>()
+
   useEffect(() => {
-    getAllStuff().then(data => {
-      setStaffs(data)
-    })
+    if (staffIsSet == false) {
+      setStaffIsSet(true)
+      getStuff(Number(staffId)).then(data => {
+        setStaff(data)
+      })
+    }
+    
   })
   return (
     <Page>
@@ -32,14 +44,7 @@ const Discussion = () => {
       </Header>
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>    
-        {
-          staffs.map((staff: any) => {
-            return (
-              <Staff key={staff.title} staff={staff}/>
-            )
-          })
-        }
-          
+          <Staff key={staff.title} staff={staff} link={false}/>       
         </Grid>
         <Grid item sm={12} md={4}>
           <SearchBox />
@@ -49,4 +54,4 @@ const Discussion = () => {
   )
 }
 
-export default Discussion
+export default DiscussionStaff

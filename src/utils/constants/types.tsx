@@ -9,6 +9,7 @@ export type ScaleTypes = typeof ScaleDefaults[keyof typeof ScaleDefaults];
 export interface SkinProps {
   item: string // current is background color
   category: string
+  combo: string
   name: string
   description?: string
   priceArc: number
