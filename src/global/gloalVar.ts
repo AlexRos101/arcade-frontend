@@ -1,8 +1,7 @@
 import { store } from 'state-pool'
-import { useCallback } from 'react'
 
-export const InitializeGlobalVar = useCallback((): void => {
+export const InitializeGlobalVar = (): void => {
   store.setState('account', '')
   store.setState('commentState', 0)
   store.setState('openDiscussionRule', false)
-}, [])
+}
