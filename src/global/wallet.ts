@@ -77,13 +77,13 @@ export const getCurrentProvider = async () => {
 
 export const getCurrentWallet = async () => {
     const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE);
+    const connected = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED);
 
     if (walletType == null) return null;
+    if (connected == null || connected == 0) return null 
 
     if (walletType == CONST.WALLET_TYPE.METAMASK) {
-        const accounts = await window.ethereum.send('eth_requestAccounts')
-        if (accounts.result.length == 0) return null
-        return accounts.result[0];
+        return Web3.givenProvider.selectedAddress;
     } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
         const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
         if (wcData.accounts.length == 0) {

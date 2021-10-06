@@ -68,6 +68,7 @@ const NavBarMenu = () => {
 
   const [account, setAccount] = useGlobalState('account')
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
+  const [headerAccount, setHeaderAccount] = useState('')
 
   const onConnectWalletHandler = async () => {
     await connect()
@@ -93,12 +94,13 @@ const NavBarMenu = () => {
 
   const initAddress = async () => {
     const address = await WalletUtils.getCurrentWallet()
+    console.log(address)
     if (address != account)
     setAccount(address == null? '': address)
+    setHeaderAccount(address == null? '': address)
   }
   
   initAddress()
-  
 
   const onClickDiscussions = () => {
     history.push('/discussion')
@@ -133,7 +135,7 @@ const NavBarMenu = () => {
             className="menu-btn btn-note"
             startIcon={<Wallet />}>
             <Typography variant="subtitle1">
-              {shortenString(account)}
+              {shortenString(headerAccount)}
             </Typography>
           </Button>)
         }
