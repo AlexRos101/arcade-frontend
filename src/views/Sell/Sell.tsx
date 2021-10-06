@@ -29,9 +29,11 @@ import PriceLabel from 'components/Label/PriceLabel'
 import Card from 'components/Card'
 import Flex from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
+import Relative from 'components/Layout/Relative'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import SwitchButton from 'components/Button/SwitchButton'
+import HoverButton from 'components/Button/HoverButton'
 import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
@@ -43,7 +45,9 @@ import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
-import SelectInput from '@material-ui/core/Select/SelectInput';
+import SelectInput from '@material-ui/core/Select/SelectInput'
+
+
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -127,6 +131,7 @@ const Sell = ({ data } : {
   const [selectedCategoryID, setSelectedCategoryID] = useState(-1)
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
+  const [rate, setRate] = useState(0.0)
 
   const [description, setDescription] = useState('')
   const [name, setName] = useState('')
@@ -320,7 +325,7 @@ const Sell = ({ data } : {
     })
   }
 
-  const UpdateItem = () => {
+const UpdateItem = () => {
     API.updateItemByID(itemId, selectedGameID, selectedCategoryID, description, name, (anonymous == false? 0 : 1), Number(price))
     .then(data => {
       if (data.data == true) {
@@ -330,7 +335,28 @@ const Sell = ({ data } : {
       }
     })
   }
-  
+const getRate = async () => {
+    const provider = await Wallet.getCurrentProvider()
+
+    const web3 = new Web3(provider)
+    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
+
+    exchange.methods.getRate().call()
+    .then((res: any) => {
+        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+
+        setTimeout(getRate, 1000)
+    })
+    .catch((err: any) => {
+        setTimeout(getRate, 500)
+    })
+  }
+
+  const onHandleResetFile = () => {
+    setTokenID(0)
+  }
+
+  getRate()  
   return (
     <Page>
       <Header>
@@ -450,7 +476,7 @@ const Sell = ({ data } : {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={avatar}
-                          price={skinItem?.priceArc}
+                          price={isNaN(Number.parseFloat(price))? 0: Number.parseFloat(price)}
                           pricePerUsd={skinItem?.priceArcPerUsd}
                         />
                       </Grid>
@@ -458,7 +484,7 @@ const Sell = ({ data } : {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={bnb}
-                          price={skinItem?.priceBnb}
+                          price={isNaN(Number.parseFloat(price))? 0: Number.parseFloat(price) * rate}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
                         />
                       </Grid>
@@ -491,7 +517,12 @@ const Sell = ({ data } : {
         <Grid item xs={12} sm={6}>
           { tokenID == 0 ? 
             (<ItemDropdown height={cardHeight} onDrop={uploadMeterial}>drop files</ItemDropdown>) :
-            (<img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img"/>)
+            (
+              <Relative>
+                <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img"/>
+                {paramIsSet == false?(<HoverButton onClick={onHandleResetFile}>Reset File</HoverButton>):''}
+              </Relative>
+            )
           }
         </Grid>
       </Grid>

@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react"
 import ReactDOM from 'react-dom'
+import {store, useGlobalState} from 'state-pool'
 import {
-    Button
+    Button,
+    Grid,
+    TablePagination
   } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 import $ from 'jquery'
@@ -16,6 +19,8 @@ import MarketRow from '../components/MarketRow'
 import CardSlider from '../components/CardSlider'
 import CardModal from '../components/CardModal'
 import TabRow from "../components/TabRow"
+import Container from "components/Layout/Container"
+import Card from "../components/Card"
 
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
@@ -25,159 +30,62 @@ import ExpandButton from "components/Button/ExpandButton"
 import { stringify } from "querystring"
 
 
-const skinCards = [
-    {
-        color: '#30C5A8',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FB98B4',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FCBF4A',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#1571FF',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FF6C50',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#30C5A8',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FB98B4',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FCBF4A',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#1571FF',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FF6C50',
-        tokenId: '012345',
-        price: 100
-    },
+import * as API from 'hooks/api'
+import * as CONST from 'global/const'
 
+const dogeTab: Array<any> = [
     {
-        color: '#1571FF',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FF6C50',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FB98B4',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FCBF4A',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#30C5A8',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#1571FF',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FF6C50',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FB98B4',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FCBF4A',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#30C5A8',
-        tokenId: '012345',
-        price: 100
-    },
-]
-
-const mapsCards = [
-    {
-        color: '#1571FF',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FF6C50',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FB98B4',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#FCBF4A',
-        tokenId: '012345',
-        price: 100
-    },
-    {
-        color: '#30C5A8',
-        tokenId: '012345',
-        price: 100
-    },
-    
-]
-
-const dogeTab = [
-    {
+        categoryId: 0,
         tabName: "All"
     },
     {
+        categoryId: 1,
         tabName: "MarsDoge Skins"
     },
     {
+        categoryId: 2,
         tabName: "MarsDoge Maps"
     },
     {
+        categoryId: 3,
         tabName: "Weapons"
     },
 ]
+
 
 const MarketDoge = () => {
     
     const [maplevel, setMapLevel] = React.useState(0)
     const [open, setOpen] = React.useState(false)
-    const [selectedCard, setSelectedCard] = React.useState({color: '', tokenId: '', price: 0})
+    const [selectedCard, setSelectedCard] = React.useState({id: 0, token_id: 0, name: '', description: '', arcadedoge_price: 0, owner: '', contract_address: ''})
+    const [marsdogeItems, setMarsdogeItems] = useState([])
+
+    const [initialized, setInitialized] = useState(false)
+    const [isLoading, setIsLoading] = useGlobalState('isLoading')
+    const [selectedCategoryName, setSelectedCategoryName] = useState('')
+
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rows, setRows] = useState<Array<any>>([])
+    const [count, setCount] = useState(0)
+
+
+    const getMarketItems = async (game: number, category: number, sort: number, limit: number, count: number) => {
+        setIsLoading(true)
+        const items = await API.getMarketItems(game, category, sort, limit, count)
+        setIsLoading(false)
+        if (items.result) {
+            setCount(items.total)
+            return items.data
+        }
+        return []
+    }
+
+    const getMarsDogeItems = async (category: number, sort: number, limit: number, cnt: number) => {
+        const items = await getMarketItems(CONST.GAME_TYPE.MARSDOGE, category, sort, limit, cnt)
+        
+        setMarsdogeItems(items)
+    }
     
     const handleClose = () => {
         setOpen(false)
@@ -185,12 +93,22 @@ const MarketDoge = () => {
 
     const handleOpenCard = (index: number) => {
         setOpen(true)
-        setSelectedCard(skinCards[index])
+        setSelectedCard(marsdogeItems[index])
+        setSelectedCategoryName(getMarsDogeCategoryName((marsdogeItems[index] as any).category_id))
+    }
+
+    const getMarsDogeCategoryName = (categoryId: number) => {
+        for (let i = 0; i < dogeTab.length; i++) {
+            if (dogeTab[i].categoryId == categoryId) {
+                return dogeTab[i].tabName
+            }
+        }
+        return ''
     }
 
     const handleOpenMaps = (index: number) => {
         setOpen(true)
-        setSelectedCard(mapsCards[index])
+        setSelectedCard(marsdogeItems[index])
     }
 
     const handleScroll = () => {
@@ -200,8 +118,28 @@ const MarketDoge = () => {
         }
     }
 
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage)
+
+        getMarsDogeItems(0, 0, newPage * rowsPerPage, rowsPerPage)
+    }
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(+event.target.value)
+        setPage(0)
+
+        getMarsDogeItems(0, 0, 0, (+event.target.value))
+    }
+
     useEffect(() => {
+        if (initialized) return;
+        setInitialized(true);
+
         document.addEventListener('scroll', handleScroll)
+
+        setIsLoading(true)
+        getMarsDogeItems(0, 0, 0, 10)
+        setIsLoading(false)
     })
 
     return (
@@ -225,10 +163,27 @@ const MarketDoge = () => {
             <MarketRow>
                 {/* <TabRow tabs={dogeTab}/> */}
             </MarketRow>
-            <MarketRow id="skin_slider">
-                <CardSlider context={skinCards} onOpen={handleOpenCard} rows={2} open-ri/>
+            <MarketRow id="skin_slider" style={{flexWrap:'wrap'}}>
+                {
+                    marsdogeItems.map((item: any, index) => {
+                        return (<Card index={index} tokenId={item.token_id} name={item.name} price={item.arcadedoge_price} onClick={handleOpenCard}/>)
+                    })
+                }
+                {/* <CardSlider context={marsdogeItems} onOpen={handleOpenCard} rows={2} open-ri/> */}
             </MarketRow>
-            {/* <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/> */}
+            <MarketRow style={{borderTop:'1px solid #EFECDC'}}>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={count}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    style={{marginLeft: 'auto'}}
+                    />
+            </MarketRow>
+            <CardModal onClose={handleClose} open={open} item={selectedCard} category={selectedCategoryName}/>
         </Page>
     )
 }

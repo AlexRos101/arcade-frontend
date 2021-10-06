@@ -129,6 +129,7 @@ const CardModal: React.FC<Props> = (props) => {
                             color="primary"
                             disabled={account == props.item.owner? true: false}
                             onClick={() => setShowBuyDlg(true)}
+                            style={{whiteSpace:'nowrap'}}
                             startIcon={<img className="mh-auto" src={avatar} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in ArcadeDoge
                         </Button>
