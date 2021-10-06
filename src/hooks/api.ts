@@ -49,3 +49,13 @@ export const getMarketItems = async(game_id: number, category_id: number, sort_t
   const response = await sendPost("get_market_items", {game: game_id, category: category_id, sort: sort_type, limit: limit, cnt: cnt})
   return response
 }
+
+export const getItemsByAddress = async(address: string, sort_type: number, limit: number, cnt: number) => {
+  const response = await sendPost("get_items_by_address", {address: address, sort: sort_type, limit: limit, cnt: cnt})
+  return response
+}
+
+export const getItemById = async(id: number) => {
+  const response = await sendPost("get_item_by_id", {id: id})
+  return response
+}

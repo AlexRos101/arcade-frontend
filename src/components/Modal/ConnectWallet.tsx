@@ -25,21 +25,20 @@ root: {
     
 
 interface Props {
-    open: boolean
-    onClose: () => void
     contents: string
 }
 
 
 const ConnectWalletModal: React.FC<Props> = (props) =>{
     const [account, setAccount] = useGlobalState('account')
+    const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
     const onConnectWalletHandler = async () => {
-        setAccount(await connect())
+        connect()
     }
       
     return (
-        <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
+        <Dialog className="card-dialog" maxWidth="sm" aria-labelledby="customized-dialog-title" open={showConnectWalletModal} PaperProps={{ style: { borderRadius: 7 } }}>
             <DialogContent className="modal-wallet-content" dividers>
                 <div {...props}>
                     <div className='mw-auto mb-5' style={{width:'fit-content'}}>
@@ -59,7 +58,7 @@ const ConnectWalletModal: React.FC<Props> = (props) =>{
                     </div>
                 </div>
             </DialogContent>
-            <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
+            <IconButton aria-label="close" className="modal-close" onClick={() => window.location.href = "/"}>
                 <CloseIcon />
             </IconButton>
         </Dialog>

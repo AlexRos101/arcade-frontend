@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Loading from 'components/loading';
+import ConnectWalletModal from 'components/Modal/ConnectWallet'
 import './assets/css/style.css';
 import './assets/css/material-ui.css';
 

@@ -14,7 +14,7 @@ interface tokenCard {
 }
 
 interface Props {
-    context: Array<tokenCard>
+    context: Array<any>
     rows: number
     onOpen: (index: number) => void
 }
@@ -62,9 +62,9 @@ const CardSlider: React.FC<Props>= (props) => {
         <div className={`market-slide-${props.rows}`}>
             <Slider {...settings}> 
             {
-                props.context.map((map, index) => {
+                props.context.map((item, index) => {
                     return (
-                        <Card index={index} color={map.color} tokenId={map.tokenId} price={map.price} onClick={props.onOpen}/>
+                        <Card index={index} tokenId={item.token_id} name={item.name} price={item.arcadedoge_price} onClick={props.onOpen}/>
                     )
                 })
             }

@@ -35,26 +35,31 @@ const StyledTableCell = withStyles((theme: Theme) =>
 
 const Thumb = styled(Card)<{
   height?: string
+  bgImage?: string
 }>`
   height: ${({ height }) => height ?? '57px' };
   border: 0px;
+  ${({bgImage}) => 'background-image: url(' + bgImage + ');background-size: 100% 100%;' ?? ''}
 `
 
-const Row = ({ data }: {
-  data: SkinProps
+const Row = ({ data, index, toggleClicked }: {
+  data: any
+  index: number
+  toggleClicked: (index: number) => any
 }) => {
-  const [row, setRow] = useState<SkinProps>(data)
+  const [row, setRow] = useState(data)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const handleToggleClick = () => {
     // eslint-disable-next-line prefer-const
-    setRow(prevRow => {
-      return {
-        ...prevRow,
-        visible: !prevRow.visible
-      }
-    })
+    // setRow(prevRow => {
+    //   return {
+    //     ...prevRow,
+    //     visible: !prevRow.visible
+    //   }
+    // })
+    toggleClicked(index)
   }
 
   const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,11 +75,11 @@ const Row = ({ data }: {
       <Hidden xsDown>
         <TableRow key={row.name}>
           <StyledTableCell component="th" scope="row">
-            <Thumb width="80px" borderRadius="3px" padding="0px" bgColor={row.item} />
+            <Thumb width="80px" height="70px" borderRadius="3px" padding="0px" bgImage={`${process.env.REACT_APP_THUMBNAIL_NODE}${row.token_id}.png`} />
           </StyledTableCell>
           <StyledTableCell>
             <Typography variant="subtitle1">
-              {row.category}
+              {row.category_name}
             </Typography>
           </StyledTableCell>
           <StyledTableCell>
@@ -87,13 +92,13 @@ const Row = ({ data }: {
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={avatar}
-                price={row.priceArc}
+                price={row.arcadedoge_price}
                 pricePerUsd={row.priceArcPerUsd}
                 />
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={bnb}
-                price={row.priceBnb}
+                price={row.arcadedoge_price}
                 pricePerUsd={row.priceBnbPerUsd}
                 />
             </Flex>
@@ -101,7 +106,7 @@ const Row = ({ data }: {
           <StyledTableCell>
             <Flex>
               <Toggle
-                checked={row.visible}
+                checked={row.is_visible}
                 onChange={handleToggleClick}
                 scale="md" />
               <IconButton
@@ -128,8 +133,8 @@ const Row = ({ data }: {
                 <MenuItem key="edit" onClick={handleCloseMenu}>
                   <Typography variant="subtitle1">Edit</Typography>
                 </MenuItem>
-                <MenuItem key="close" onClick={handleCloseMenu}>
-                  <Typography variant="subtitle1">Close</Typography>
+                <MenuItem key="delete" onClick={handleCloseMenu}>
+                  <Typography variant="subtitle1">Delete</Typography>
                 </MenuItem>
               </Menu>
             </Flex>
@@ -158,14 +163,14 @@ const Row = ({ data }: {
                   <PriceLabel
                     scales={ScaleDefaults.MD}
                     avatar={avatar}
-                    price={row.priceArc}
-                    pricePerUsd={row.priceArcPerUsd}
+                    price={row.arcadedoge_price}
+                    // pricePerUsd={row.priceArcPerUsd}
                     />
                   <PriceLabel
                     scales={ScaleDefaults.MD}
                     avatar={bnb}
-                    price={row.priceBnb}
-                    pricePerUsd={row.priceBnbPerUsd}
+                    price={row.arcadedoge_price}
+                    // pricePerUsd={row.priceBnbPerUsd}
                     />
                 </Flex>
               </Grid>
@@ -199,45 +204,17 @@ const Row = ({ data }: {
                     <MenuItem key="edit" onClick={handleCloseMenu}>
                       <Typography variant="subtitle1">Edit</Typography>
                     </MenuItem>
-                    <MenuItem key="close" onClick={handleCloseMenu}>
-                      <Typography variant="subtitle1">Close</Typography>
+                    <MenuItem key="delete" onClick={handleCloseMenu}>
+                      <Typography variant="subtitle1">DELETE</Typography>
                     </MenuItem>
                   </Menu>
                 </Flex>
               </Grid>
             </Grid>
-
-            {/* <Flex>
-              <Thumb width="80px" borderRadius="3px" padding="0px" bgColor={row.item} />
-              <Flex flexDirection="column">
-                <Typography variant="subtitle1">
-                  {row.category}
-                </Typography>
-                <Typography variant="subtitle1">
-                  {row.name}
-                </Typography>
-              </Flex>
-            </Flex>
-            <Flex>
-              <Flex flexDirection="column">
-                <PriceLabel
-                  icon={avatar}
-                  price={row.priceArc}
-                  pricePerUsd={row.priceArcPerUsd}
-                  />
-                <PriceLabel
-                  icon={bnb}
-                  price={row.priceBnb}
-                  pricePerUsd={row.priceBnbPerUsd}
-                  />
-              </Flex>
-              <Flex>
-                
-              </Flex>
-            </Flex> */}
           </StyledTableCell>
         </TableRow>
       </Hidden>
+      
     </>
   )
 }

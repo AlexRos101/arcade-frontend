@@ -102,3 +102,21 @@ export const getCurrentChainId = async () => {
 
     return null;
 }
+
+export const isConnected = async () => {
+    const address = await getCurrentWallet();
+    const provider = await getCurrentProvider();
+    let chainId = await getCurrentChainId();
+
+    if (address == null || provider == null || chainId == null) {
+        return false
+    }
+
+    chainId = Number.parseInt(chainId as string)
+
+    if (chainId != process.env.REACT_APP_CHAIN_ID) {
+        return false
+    }
+    
+    return true
+}

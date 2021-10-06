@@ -28,11 +28,17 @@ root: {
 },
 }))(MuiDialogContent);
 
+interface Item {
+    token_id: number
+    name: string
+    description: string
+    arcadedoge_price: number
+}
+
 interface Props {
     open: boolean
-    color: string
-    tokenId: string
-    price: number
+    item: Item
+    category: string
     onClose: () => void
 }
 
@@ -67,14 +73,14 @@ const CardModal: React.FC<Props> = (props) => {
     return (
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
             <DialogContent className="modal-card-content flex-row" dividers>
-                <div className="expanded-card-img" style={{ background: props.color }} />
+                <img className="expanded-card-img" src={`${process.env.REACT_APP_THUMBNAIL_NODE}${props.item.token_id}.png`} />
                 <div className="expanded-card-content">
-                    <ModalNavLabel>ArcadeDoge Skin</ModalNavLabel>
+                    <ModalNavLabel>{props.category}</ModalNavLabel>
                     <MarketModalRow>
-                        <ModalHeaderLabel>Skin #{props.tokenId}</ModalHeaderLabel>
+                        <ModalHeaderLabel>{props.item.name}</ModalHeaderLabel>
                     </MarketModalRow>
                     <MarketModalRow>
-                        <ModalContent>Cottage cheese taleggio mascarpone. Cheesy feet chalk and cheese everyone loves paneer smelly cheese jarlsberg blue castello feta. Hard cheese fromage frais port-salut camembert de normandie goat squirty cheese danish fontina red leicester. <br />Cauliflower cheese cheeseburger.</ModalContent>
+                        <ModalContent>{props.item.description}</ModalContent>
                     </MarketModalRow>
                     <MarketModalRow>
                         <PriceLayout>
@@ -82,13 +88,13 @@ const CardModal: React.FC<Props> = (props) => {
                             <div className="price-row">
                                 <div className="price-sector">
                                     <img className="mr-5 mh-auto" src={avatar} alt="avatar" style={{width: '30px', height: '30px'}}/>
-                                    <PriceLabel>{props.price}</PriceLabel>
-                                    <PriceDexLabel>(US$15.00)</PriceDexLabel>
+                                    <PriceLabel>{props.item.arcadedoge_price}</PriceLabel>
+                                    {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                                 </div>
                                 <div className="price-sector">
                                     <img className="mr-5 mh-auto" src={doge} alt="avatar" style={{width: '30px', height: '30px'}}/>
-                                    <PriceLabel>9</PriceLabel>
-                                    <PriceDexLabel>(US$15.00)</PriceDexLabel>
+                                    <PriceLabel>{props.item.arcadedoge_price}</PriceLabel>
+                                    {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                                 </div>
                             </div>
                         </PriceLayout>
@@ -118,10 +124,10 @@ const CardModal: React.FC<Props> = (props) => {
             <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
                 <CloseIcon />
             </IconButton>
-            {account === '' ?
+            {/* {account === '' ?
                 (<ConnectWalletModal onClose={handleClose} open={open} contents="Oops! You're not connected yet."/>) :
                 ''
-            }
+            } */}
             
         </Dialog>
     )

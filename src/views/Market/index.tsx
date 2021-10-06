@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react"
 import { useHistory } from "react-router"
+import {store, useGlobalState} from 'state-pool'
 import ReactDOM from 'react-dom'
 import {
     Button
@@ -25,6 +26,8 @@ import TabRow from "./components/TabRow"
 import { stringify } from "querystring"
 
 import OrderApprovalModal from "components/Modal/OrderApproval"
+import * as API from '../../hooks/api'
+import * as CONST from '../../global/const'
 
 
 const skinCards = [
@@ -135,19 +138,19 @@ const mapsCards = [
 
 const dogeTab: Array<any> = [
     {
-        categoryid: 0,
+        categoryId: 0,
         tabName: "All"
     },
     {
-        categoryid: 1,
+        categoryId: 1,
         tabName: "MarsDoge Skins"
     },
     {
-        categoryid: 2,
+        categoryId: 2,
         tabName: "MarsDoge Maps"
     },
     {
-        categoryid: 3,
+        categoryId: 3,
         tabName: "Weapons"
     },
 ]
@@ -158,24 +161,33 @@ const Market = () => {
     const [maplevel, setMapLevel] = React.useState(0)
     const [open, setOpen] = React.useState(false)
     
-    const [selectedCard, setSelectedCard] = React.useState({color: '', tokenId: '', price: 0})
+    const [selectedCard, setSelectedCard] = React.useState({token_id: 0, name: '', description: '', arcadedoge_price: 0})
 
     const [testopen, setTestOpen] = React.useState(false)
 
-    const [initialized, setInitialized] = useState(false);
+    const [initialized, setInitialized] = useState(false)
+    const [marsdogeItems, setMarsdogeItems] = useState([])
+    const [selectedCategoryName, setSelectedCategoryName] = useState('')
+
+    const [isLoading, setIsLoading] = useGlobalState('isLoading')
     
     const handleClose = () => {
         setOpen(false)
     }
 
-    const handleOpenCard = (index: number) => {
+    const handleMarsDogeOpenCard = (index: number) => {
         setOpen(true)
-        setSelectedCard(skinCards[index])
+        setSelectedCard(marsdogeItems[index])
+        setSelectedCategoryName(getMarsDogeCategoryName((marsdogeItems[index] as any).category_id))
     }
 
-    const handleOpenMaps = (index: number) => {
-        setOpen(true)
-        setSelectedCard(mapsCards[index])
+    const getMarsDogeCategoryName = (categoryId: number) => {
+        for (let i = 0; i < dogeTab.length; i++) {
+            if (dogeTab[i].categoryId == categoryId) {
+                return dogeTab[i].tabName
+            }
+        }
+        return ''
     }
 
     const handleScroll = () => {
@@ -185,17 +197,28 @@ const Market = () => {
         }
     }
 
+    const getMarketItems = async (game: number, category: number, sort: number) => {
+        const items = await API.getMarketItems(game, category, sort, 0, 15)
+        if (items.result) {
+            return items.data
+        }
+        return []
+    }
+
+    const getMarsDogeItems = async (category: number, sort: number) => {
+        const items = await getMarketItems(CONST.GAME_TYPE.MARSDOGE, category, sort)
+        setMarsdogeItems(items)
+    }
+
     useEffect(() => {
         document.addEventListener('scroll', handleScroll)
 
         if (initialized) return;
         setInitialized(true);
 
-        const getMarketItems = async () => {
-            console.log('AAA');
-        }
-
-        getMarketItems();
+        setIsLoading(true)
+        getMarsDogeItems(0, 0)
+        setIsLoading(false)
     })
 
     const onClickMarsDogAll = () => {
@@ -212,6 +235,14 @@ const Market = () => {
         setTestOpen(false)
     }
 
+    const refreshMarsDogePanel = async (category: number, sort: number) => {
+        setIsLoading(true)
+
+        getMarsDogeItems(category, sort)
+
+        setIsLoading(false)
+    }
+
     return (
         <Page id="market_page">
             <Header>
@@ -223,13 +254,13 @@ const Market = () => {
                 <RowLabel>MarsDoge</RowLabel>
             </MarketRow>
             <MarketRow>
-                <TabRow tabs={dogeTab}/>
+                <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel}/>
             </MarketRow>
             <MarketRow id="skin_slider">
-                <CardSlider context={skinCards} onOpen={handleOpenCard} rows={1} open-ri/>
+                <CardSlider context={marsdogeItems} onOpen={handleMarsDogeOpenCard} rows={1} open-ri/>
                 <ExpandButton onClick={onClickMarsDogAll}>View All MarsDoge</ExpandButton>
             </MarketRow>
-            <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/>
+            <CardModal onClose={handleClose} open={open} item={selectedCard} category={selectedCategoryName}/>
             <OrderApprovalModal onClose={handleTestClose} open={testopen} title='Skin #012345'/>
         </Page>
     )

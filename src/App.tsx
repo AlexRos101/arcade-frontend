@@ -6,11 +6,13 @@ import { store, useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 
 store.setState('account', '')
+store.setState('showConnectWalletModal', false)
 
 import theme from './styles/theme'
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
+import ConnectWalletModal from 'components/Modal/ConnectWallet'
 
 const Home = lazy(() => import('./views/Home'))
 const Market = lazy(() => import('./views/Market'))
@@ -27,6 +29,7 @@ declare let window: any
 function App() {
 
   const [account, setAccount] = useGlobalState('account')
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -50,6 +53,7 @@ function App() {
             <Footer />
           </Router>
         </StylesProvider>
+        <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet."/>
       </ThemeProvider>
     </MuiThemeProvider>
   );

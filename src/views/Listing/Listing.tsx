@@ -14,12 +14,17 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import {store, useGlobalState} from 'state-pool'
+import * as CONST from '../../global/const'
 
 import Card from 'components/Card'
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
-import { SkinProps, SkinsProps } from 'utils/constants/types'
+import * as API from '../../hooks/api'
+import * as Wallet from '../../global/wallet'
+import ListSellModal from 'components/Modal/ListSell'
+import RemoveSellModal from 'components/Modal/RemoveSell'
 
 import Row from './components/Row'
 
@@ -33,23 +38,16 @@ const useStyles = makeStyles({
   }
 })
 
-function createData(item: string, category: string, combo: string, name: string, priceArc: number, priceArcPerUsd: number, priceBnb: number, priceBnbPerUsd: number, visible: boolean): SkinProps {
-  return { item, category, combo, name, priceArc, priceArcPerUsd, priceBnb, priceBnbPerUsd, visible };
-}
-
-const initRowsData: SkinProps[] = [
-  createData('#30C5A8', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, true),
-  createData('#FB98B4', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, false),
-  createData('#FCBF4A', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, true),
-  createData('#1571FF', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, false),
-  createData('#FF6C50', 'ArcadeDoge Skin', 'ArcadeDoge', 'Skin #012345', 100, 15.0, 9, 17.0, true),
-]
-
 const Listing = () => {
   const classes = useStyles()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [rows, setRows] = useState<SkinProps[]>(initRowsData)
+  const [rows, setRows] = useState<Array<any>>([])
+  const [isLoading, setIsLoading] = useGlobalState('isLoading')
+  const [initialized, setInitialized] = useState(false)
+  const [showListModal, setShowListModal] = useState(false)
+  const [showUnlistModal, setShowUnlistModal] = useState(false)
+  const [selectedItem, setSelectedItem] = useState({name: '', token_id: 0})
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -60,32 +58,66 @@ const Listing = () => {
     setPage(0)
   }
 
+  const getMyItems = async (limit:number, cnt:number) => {
+    const address = await Wallet.getCurrentWallet()
+    if (address == null) {
+      return
+    }
+    setIsLoading(true)
+
+    const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
+    setRows(items.data)
+
+    setIsLoading(false)
+  }
+
+  const toggleVisibility = async (index: number) => {
+    if (rows[index].is_visible) {
+      setSelectedItem(rows[index])
+      setShowUnlistModal(true)
+    } else {
+      setSelectedItem(rows[index])
+      setShowListModal(true)
+    }
+  }
+
+  useEffect(() => {
+    if (initialized) return
+    setInitialized(true)
+
+    getMyItems(0, 10)
+  })
+
   return (
     <Page>
       <Header>
         <HeaderLabel>Listing</HeaderLabel>
       </Header>
       <Card>
-      <TableContainer component={Paper} className={classes.tableContainer}>
-        <Table aria-label="customized table">
-          <TableHead>
-            <Hidden smDown>
-              <TableRow>
-                <TableCell>Customized Item</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Visible</TableCell>
-              </TableRow>
-            </Hidden>
-          </TableHead>
-          <TableBody>
-            {rows.map((row: SkinProps, index: number) => (
-              <Row data={row} key={`table-row-${index}`} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <TableContainer component={Paper} className={classes.tableContainer}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <Hidden smDown>
+                <TableRow>
+                  <TableCell>Customized Item</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Visible</TableCell>
+                </TableRow>
+              </Hidden>
+            </TableHead>
+            <TableBody>
+              {
+                rows.map((row, index) => {
+                  return (
+                    <Row index={index} data={row} key={`table-row-${index}`} toggleClicked={toggleVisibility}/>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+        </TableContainer>
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
@@ -96,6 +128,16 @@ const Listing = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
+      <ListSellModal
+        item={selectedItem}
+        open={showListModal}
+        onClose={() => setShowListModal(false)}
+      />
+      <RemoveSellModal
+        item={selectedItem}
+        open={showUnlistModal}
+        onClose={() => setShowUnlistModal(false)}
+      />
     </Page>
   )
 }

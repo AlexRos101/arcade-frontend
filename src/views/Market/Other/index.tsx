@@ -223,12 +223,12 @@ const MarketOther = () => {
                 </FormControl>
             </MarketRow>
             <MarketRow>
-                <TabRow tabs={dogeTab}/>
+                {/* <TabRow tabs={dogeTab}/> */}
             </MarketRow>
             <MarketRow id="skin_slider">
                 <CardSlider context={skinCards} onOpen={handleOpenCard} rows={2} open-ri/>
             </MarketRow>
-            <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/>
+            {/* <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/> */}
         </Page>
     )
 }

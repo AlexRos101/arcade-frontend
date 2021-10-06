@@ -87,16 +87,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   }))
 
 interface TabsData {
-    tabs: Array<any>
+    tabs: Array<any>,
+    refresh: (category: number, sort: number) => any
 }
 
 const TabRow: React.FC<TabsData>= (props) => {
     const classes = useStyles()
     const [value, setValue] = React.useState(0)
-    const [maplevel, setMapLevel] = React.useState(0)
+    const [sort, setSort] = React.useState(0)
 
     const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
         setValue(newValue);
+
+        props.refresh(props.tabs[newValue].categoryId, sort)
+    }
+
+    const handleChangeSort = (event: React.ChangeEvent<{ value: unknown }>) => {
+      setSort(event.target.value as number)
+      props.refresh(props.tabs[value].categoryId, sort)
     }
 
     return (
@@ -116,7 +124,7 @@ const TabRow: React.FC<TabsData>= (props) => {
                 </div>
             </div>
             <FormControl variant="outlined" className="market-form-control tab-select r-no-display">
-                <Select value={maplevel} className="market-map-select">
+                <Select value={sort} className="market-map-select" onChange={handleChangeSort}>
                     <option value={0}>Most Recent</option>
                     <option value={1}>Price (Low to High)</option>
                     <option value={2}>Price (High to Low)</option>
