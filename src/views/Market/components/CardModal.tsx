@@ -69,6 +69,7 @@ const CardModal: React.FC<Props> = (props) => {
     const [open, setOpen] = useState(false)
     const [isLoading, setIsLoading] = useGlobalState('isLoading')
     const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+    const [rate, setRate] = useState(0.0)
 
     const handleClose = () => {
         setOpen(false)
@@ -81,42 +82,24 @@ const CardModal: React.FC<Props> = (props) => {
             setOpen(true)
     }
 
-    const buy = async () => {
-        setIsLoading(true)
-        
-        if (!await (Wallet.isConnected())) {
-            setIsLoading(false)
-            setShowConnectWalletModal(true)
-            return
-        }
-
+    const getRate = async () => {
         const provider = await Wallet.getCurrentProvider()
 
         const web3 = new Web3(provider)
         const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
-        exchange.methods.exchange(
-            props.item.contract_address, 
-            props.item.token_id,
-            props.item.owner,
-            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
-            account).send({from: account})
+        exchange.methods.getRate().call()
         .then((res: any) => {
-            const checkDBStatus = async () => {
-                const item = (await API.getItemById(props.item.id)).data
-                if (item.owner == account) {
-                    window.location.href="/listing"
-                } else {
-                    setTimeout(checkDBStatus, 500)
-                }
-            }
+            setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
-            checkDBStatus()
+            setTimeout(getRate, 1000)
         })
         .catch((err: any) => {
-            setIsLoading(false);
+            setTimeout(getRate, 500)
         })
     }
+    
+    getRate()
 
     return (
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
@@ -141,7 +124,7 @@ const CardModal: React.FC<Props> = (props) => {
                                 </div>
                                 <div className="price-sector">
                                     <img className="mr-5 mh-auto" src={doge} alt="avatar" style={{width: '30px', height: '30px'}}/>
-                                    <PriceLabel>{props.item.arcadedoge_price}</PriceLabel>
+                                    <PriceLabel>{props.item.arcadedoge_price * rate}</PriceLabel>
                                     {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                                 </div>
                             </div>
