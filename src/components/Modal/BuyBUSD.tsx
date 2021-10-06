@@ -127,7 +127,7 @@ const BuyBUSDModal: React.FC<Props> = (props) =>{
             props.item.contract_address, 
             props.item.token_id,
             props.item.owner,
-            Web3.utils.toWei((props.item.arcadedoge_price * props.rate) + '', 'ether'),
+            Web3.utils.toWei((Math.floor(props.item.arcadedoge_price * props.rate * 10 ** 12) / 10 ** 12) + '', 'ether'),
             account).send({from: account})
         .then((res: any) => {
             const checkDBStatus = async () => {

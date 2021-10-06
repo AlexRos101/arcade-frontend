@@ -479,7 +479,7 @@ const getRate = async () => {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={avatar}
-                          price={isNaN(Number.parseFloat(price))? 0: Number.parseFloat(price)}
+                          price={isNaN(Number.parseFloat(price))? 0: Number.parseFloat(price).toFixed(2)}
                           pricePerUsd={skinItem?.priceArcPerUsd}
                         />
                       </Grid>
@@ -487,7 +487,7 @@ const getRate = async () => {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={bnb}
-                          price={isNaN(Number.parseFloat(price))? 0: Number.parseFloat(price) * rate}
+                          price={isNaN(Number.parseFloat(price))? 0: (Number.parseFloat(price) * rate).toFixed(2)}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
                         />
                       </Grid>

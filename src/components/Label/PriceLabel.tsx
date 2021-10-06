@@ -50,7 +50,7 @@ const PriceWrapper = styled.div<{
 interface PriceLabelProps {
   scales: ScaleTypes,
   avatar: string, // React.FunctionComponent<SVGProps<SVGSVGElement>>,
-  price: number,
+  price: number | string,
   pricePerUsd: number,
 }
 

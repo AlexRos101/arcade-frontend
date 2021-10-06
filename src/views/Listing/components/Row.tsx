@@ -82,6 +82,10 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
     burnToken(index)
   }
 
+  useEffect(() => {
+    console.log(typeof (row.arcadedoge_price * rate))
+  })
+
   return (
     <>
       <Hidden xsDown>
@@ -104,13 +108,13 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={avatar}
-                price={row.arcadedoge_price}
+                price={row.arcadedoge_price.toFixed(2)}
                 pricePerUsd={row.priceArcPerUsd}
                 />
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={bnb}
-                price={row.arcadedoge_price * rate}
+                price={(row.arcadedoge_price * rate).toFixed(2)}
                 pricePerUsd={row.priceBnbPerUsd}
                 />
             </Flex>

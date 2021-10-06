@@ -108,12 +108,12 @@ const CardModal: React.FC<Props> = (props) => {
                             <div className="price-row">
                                 <div className="price-sector">
                                     <img className="mr-5 mh-auto" src={avatar} alt="avatar" style={{width: '30px', height: '30px'}}/>
-                                    <PriceLabel>{props.item.arcadedoge_price}</PriceLabel>
+                                    <PriceLabel>{props.item.arcadedoge_price.toFixed(2)}</PriceLabel>
                                     {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                                 </div>
                                 <div className="price-sector">
                                     <img className="mr-5 mh-auto" src={doge} alt="avatar" style={{width: '30px', height: '30px'}}/>
-                                    <PriceLabel>{props.item.arcadedoge_price * rate}</PriceLabel>
+                                    <PriceLabel>{(props.item.arcadedoge_price * rate).toFixed(2)}</PriceLabel>
                                     {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                                 </div>
                             </div>
