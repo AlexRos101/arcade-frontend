@@ -9,9 +9,11 @@ import {
 import {
   Theme,
   ThemeProvider,
-  makeStyles
+  createStyles,
+  makeStyles,
+  withStyles
 } from '@material-ui/core/styles'
-import Input from '@material-ui/core/Input'
+import InputBase from '@material-ui/core/InputBase'
 import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -27,12 +29,40 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 
+const BootstrapInput = withStyles((theme: Theme) =>
+  createStyles({
+    // root: {
+    //   'label + &': {
+    //     marginTop: theme.spacing(3)
+    //   }
+    // },
+    input: {
+      borderRadius: '7px',
+      backgroundColor: '#FDFCF8',
+      border: '1px solid #D0CCB7',
+      fontSize: '13px',
+      padding: theme.spacing(1),
+      transition: theme.transitions.create(['border-color', 'box-shadow']),
+      '&:focus': {
+        borderRadius: '7px',
+        // boxShadow: '0px 2px 2px #D0CCB7'
+      }
+    }
+  })
+)(InputBase)
+
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
     '&::placeholder': {
       textOverflow: 'ellipsis !important'
     },
-    width: '250px'
+    width: '250px',
+    // '& input': {
+    //   padding: theme.spacing(1.5)
+    // },
+    // '& textarea': {
+    //   padding: theme.spacing(1.5)
+    // }
   },
   spacing: {
     padding: theme.spacing(1, 0)
@@ -98,6 +128,7 @@ const Sell = ({ data } : {
                   value={skinItem?.category ?? ''}
                   onChange={handleClickCategory}
                   className={classes.input}
+                  input={<BootstrapInput />}
                 >
                   <MenuItem value={1}>Category1</MenuItem>
                   <MenuItem value={2}>Category2</MenuItem>
@@ -119,6 +150,7 @@ const Sell = ({ data } : {
                   fullWidth
                   placeholder="Name"
                   InputProps={{ classes: {input: classes.input} }}
+                  variant="outlined"
                 />
               </LabelComponent>
               <LabelComponent
@@ -131,6 +163,7 @@ const Sell = ({ data } : {
                   rows={4}
                   placeholder="Description"
                   InputProps={{ classes: {input: classes.input} }}
+                  variant="outlined"
                 />
               </LabelComponent>
               <Grid container
@@ -144,6 +177,7 @@ const Sell = ({ data } : {
                       fullWidth
                       placeholder="US$   00.00"
                       InputProps={{ classes: {input: classes.input} }}
+                      variant="outlined"
                     />
                   </LabelComponent>
                 </Grid>
