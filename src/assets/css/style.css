@@ -1,5 +1,6 @@
 body, html, button {
     font-family: Montserrat !important;
+    background:#FFFCED;
 }
 
 button {
@@ -1045,16 +1046,18 @@ button {
       position: fixed;
       bottom: 0;
       left: 0;
-      width: 100vw;
-      height: 10vh;
       background: #FFFDF1;
-      box-shadow: 0px -4px 13px rgba(0, 0, 0, 0.08);
       z-index: 100;
-      padding:auto !important;
+      margin: 1vh 3vw !important;
+      border-radius: 10px;
+      padding: 1vh 3vw !important;
+      width: 88vw !important;
+      box-shadow: 0px 2px 0px #B7B091 !important;
     }
 
     .market-header-action button {
       margin: auto !important;
+      width: 45% !important;
     }
 
     .market-sublabel {
@@ -1122,7 +1125,7 @@ button {
     }
 
     #footer {
-      margin-bottom: 10vh !important;
+      margin-bottom: calc(4vh + 36px) !important;
     }
 
     .menu-expand {
@@ -1195,6 +1198,21 @@ button {
     .text-param {
       width: 75vw;
       overflow-wrap: break-word;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .market-header-action {
+      height: 15vh;
+      flex-direction: column;
+    }
+
+    .market-header-action button {
+      width: 90% !important;
+    }
+
+    #footer {
+      margin-bottom: 19vh !important;
     }
   }
 
