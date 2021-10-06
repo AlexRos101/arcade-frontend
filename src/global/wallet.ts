@@ -36,6 +36,11 @@ export const connect = async () => {
         await provider.enable();
     } else {
         const accounts = await window.ethereum.send('eth_requestAccounts')
+        if (accounts.result.length > 0) {
+            ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1);
+            ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK);
+        }
+        
         document.location.reload();
     }
 }
@@ -70,7 +75,7 @@ export const getCurrentProvider = async () => {
     }
 }
 
-export const getCurrentWallet = async () => {
+export const getCurrentWallet = () => {
     const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE);
 
     if (walletType == null) return null;
@@ -88,7 +93,7 @@ export const getCurrentWallet = async () => {
     return null;
 }
 
-export const getCurrentChainId = async () => {
+export const getCurrentChainId = () => {
     const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE);
 
     if (walletType == null) return null;
@@ -104,9 +109,9 @@ export const getCurrentChainId = async () => {
 }
 
 export const isConnected = async () => {
-    const address = await getCurrentWallet();
+    const address = getCurrentWallet();
     const provider = await getCurrentProvider();
-    let chainId = await getCurrentChainId();
+    let chainId = getCurrentChainId();
 
     if (address == null || provider == null || chainId == null) {
         return false

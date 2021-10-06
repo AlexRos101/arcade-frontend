@@ -2,3 +2,6 @@ Options -MultiViews
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.html [QSA,L]
+
+RewriteCond     %{SERVER_PORT} ^80$
+RewriteRule     ^(.*)$ https://arcadedoge.games [L,R]

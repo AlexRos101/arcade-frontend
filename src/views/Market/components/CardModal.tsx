@@ -20,7 +20,12 @@ import PriceHeaderLabel from "./PriceHeaderLabel"
 import PriceLabel from "./PriceLabel"
 import PriceDexLabel from "./PriceDexLabel"
 
-import ConnectWalletModal from "components/Modal/ConnectWallet"
+import { AbiItem } from 'web3-utils'
+import * as Wallet from '../../../global/wallet'
+import EXCHANGE from '../../../contracts/EXCHANGE.json'
+import Web3 from "web3"
+import * as API from '../../../hooks/api'
+import BuyModal from "components/Modal/Buy"
 
 const DialogContent = withStyles((theme) => ({
 root: {
@@ -29,10 +34,13 @@ root: {
 }))(MuiDialogContent);
 
 interface Item {
+    id: number
     token_id: number
     name: string
     description: string
     arcadedoge_price: number
+    owner: string
+    contract_address: string
 }
 
 interface Props {
@@ -59,6 +67,8 @@ const theme = createTheme({
 const CardModal: React.FC<Props> = (props) => {
     const [account, setAccount] = useGlobalState('account')
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useGlobalState('isLoading')
+    const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
     const handleClose = () => {
         setOpen(false)
@@ -66,10 +76,49 @@ const CardModal: React.FC<Props> = (props) => {
 
     const handleOpenModal = () => {
         if (account === '')
-            setOpen(true)
-        else
             setOpen(false)
+        else
+            setOpen(true)
     }
+
+    const buy = async () => {
+        setIsLoading(true)
+        
+        if (!await (Wallet.isConnected())) {
+            setIsLoading(false)
+            setShowConnectWalletModal(true)
+            return
+        }
+
+        const provider = await Wallet.getCurrentProvider()
+        const address = await Wallet.getCurrentWallet()
+
+        const web3 = new Web3(provider)
+        const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
+
+        exchange.methods.exchange(
+            props.item.contract_address, 
+            props.item.token_id,
+            props.item.owner,
+            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
+            account).send({from: address})
+        .then((res: any) => {
+            const checkDBStatus = async () => {
+                const item = (await API.getItemById(props.item.id)).data
+                if (item.owner == account) {
+                    window.location.href="/listing"
+                } else {
+                    setTimeout(checkDBStatus, 500)
+                }
+            }
+
+            checkDBStatus()
+        })
+        .catch((err: any) => {
+            setIsLoading(false);
+        })
+    }
+
     return (
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
             <DialogContent className="modal-card-content flex-row" dividers>
@@ -105,6 +154,7 @@ const CardModal: React.FC<Props> = (props) => {
                             className="modal-buy-arcade-btn"
                             variant="contained"
                             color="primary"
+                            disabled={account == props.item.owner? true: false}
                             onClick={handleOpenModal}
                             startIcon={<img className="mh-auto" src={avatar} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in ArcadeDoge
@@ -113,6 +163,7 @@ const CardModal: React.FC<Props> = (props) => {
                             className="ml-15 modal-buy-usd-btn"
                             variant="contained"
                             color="secondary"
+                            disabled={account == props.item.owner? true: false}
                             onClick={handleOpenModal}
                             startIcon={<img className="mh-auto" src={doge} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in BUSD
@@ -124,6 +175,7 @@ const CardModal: React.FC<Props> = (props) => {
             <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
                 <CloseIcon />
             </IconButton>
+            <BuyModal item={props.item} open={open} onClose={() => {setOpen(false)}}/>
             {/* {account === '' ?
                 (<ConnectWalletModal onClose={handleClose} open={open} contents="Oops! You're not connected yet."/>) :
                 ''

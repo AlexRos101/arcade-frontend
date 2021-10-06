@@ -16,7 +16,7 @@ const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>>= ({ children
     const [account, setAccount] = useGlobalState('account')
 
     const onConnectWalletHandler = async () => {
-        setAccount(await connect())
+        connect()
     }
       
     return (

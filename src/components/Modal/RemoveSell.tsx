@@ -43,7 +43,7 @@ const RemoveSellModal: React.FC<Props> = (props) =>{
     const [selectedItem, setSelectedItem] = useState(null)
 
     const onConnectWalletHandler = async () => {
-        setAccount(await connect())
+        connect()
     }
 
     useEffect(() => {

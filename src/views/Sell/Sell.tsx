@@ -35,6 +35,13 @@ import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 import Swal from 'sweetalert'
 
+import { connect } from 'global/wallet'
+import Web3 from 'web3'
+import { AbiItem } from 'web3-utils'
+import * as Wallet from '../../global/wallet'
+import ERC721 from '../../contracts/ERC721.json'
+import EXCHANGE from '../../contracts/EXCHANGE.json'
+
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
     // root: {
@@ -114,7 +121,14 @@ const Sell = ({ data } : {
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
 
+  const [description, setDescription] = useState('')
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState('')
+
   const [anonymous, setAnonymous] = useState(false)
+
+  const [account, setAccount] = useGlobalState('account')
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const onSwitchAnonymous = () => {
       setAnonymous(!anonymous)
@@ -165,7 +179,7 @@ const Sell = ({ data } : {
       return
     }
 
-    setTokenID(Date.now())
+    const tokenTemp = Date.now()
 
     setIsLoading(true);
 
@@ -174,7 +188,7 @@ const Sell = ({ data } : {
       formData.append( 
           "myFile", 
           file, 
-          tokenID + ".rar"
+          tokenTemp + ".rar"
       ); 
       
       // Request made to the backend api 
@@ -186,6 +200,7 @@ const Sell = ({ data } : {
           setShowThumbnailWarning(true)
           return
         }
+        setTokenID(tokenTemp)
         console.log(res)
       })
       .catch((err) => {
@@ -194,6 +209,66 @@ const Sell = ({ data } : {
       })
     
     console.log(file);
+  }
+
+  const isNumeric = (str: string) => {
+    if (typeof str != "string") return false
+    return !isNaN(parseFloat(str))
+  }
+
+  const MintToken = async () => {
+    if (tokenID == 0) {
+      Swal('Please upload item file!')
+      return
+    }
+
+    if (selectedGameID == -1 || selectedCategoryID == -1) {
+      Swal('Game or Category is not selected!')
+      return
+    }
+
+    if (anonymous == false && name == '') {
+      Swal('Please input name or select anonymous mode!')
+      return
+    }
+
+    if (!isNumeric(price) || Number(price) <= 0) {
+      Swal('Please input valid price!')
+      return
+    }
+
+    setIsLoading(true);
+
+    if (!await (Wallet.isConnected())) {
+        setIsLoading(false)
+        setShowConnectWalletModal(true)
+        return
+    }
+
+    const provider = await Wallet.getCurrentProvider()
+    const address = await Wallet.getCurrentWallet()
+
+    const web3 = new Web3(provider)
+    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+
+    const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
+    const tokenInfo = {
+      game_id: selectedGameID,
+      category_id: selectedCategoryID,
+      name: name,
+      description: description,
+      arcadedoge_price: Number(price),
+      is_anonymous: (anonymous === false ? 0 : 1)
+    }
+
+    NFT.methods.mint(tokenID, metaData, JSON.stringify(tokenInfo)).send({from: address})
+    .then((res: any) => {
+      console.log(res)
+      setIsLoading(false)
+    })
+    .catch((err: any) => {
+      setIsLoading(false)
+    })
   }
   
   return (
@@ -260,6 +335,8 @@ const Sell = ({ data } : {
                     placeholder="Name"
                     InputProps={{ classes: {input: classes.input} }}
                     variant="outlined"
+                    value={name}
+                    onChange={e => setName(e.currentTarget.value)}
                   />
                 </LabelComponent>
                 <LabelComponent label="Anonymous?" className="wd-50">
@@ -284,6 +361,8 @@ const Sell = ({ data } : {
                     placeholder="Description"
                     InputProps={{ classes: {input: classes.input} }}
                     variant="outlined"
+                    value={description}
+                    onChange={e => setDescription(e.currentTarget.value)}
                   />
                 </LabelComponent>
               </Flex>
@@ -299,6 +378,8 @@ const Sell = ({ data } : {
                       placeholder="US$   00.00"
                       InputProps={{ classes: {input: classes.input} }}
                       variant="outlined"
+                      value={price}
+                      onChange={e => setPrice(e.currentTarget.value)}
                     />
                   </LabelComponent>
                 </Grid>
@@ -332,7 +413,8 @@ const Sell = ({ data } : {
                     <Box component="span" mr={1}>
                       <Button
                         variant="contained"
-                        color="primary">
+                        color="primary"
+                        onClick={MintToken}>
                         Save and Publish
                       </Button>
                     </Box>
@@ -347,9 +429,9 @@ const Sell = ({ data } : {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6}>
-          { skinItem?.item == '' ? 
+          { tokenID == 0 ? 
             (<ItemDropdown height={cardHeight} onDrop={uploadMeterial}>drop files</ItemDropdown>) :
-            (<Card bgColor={skinItem?.item} height={cardHeight} />)
+            (<img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img"/>)
           }
         </Grid>
       </Grid>

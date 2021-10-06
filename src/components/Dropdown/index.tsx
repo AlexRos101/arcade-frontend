@@ -25,7 +25,7 @@ const DropContainer = styled.div<{
     border-radius: 7px;
     border-radius: ${({ borderRadius }) => borderRadius };
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
-    background-color: ${({ bgColor }) => bgColor ?? '#FFFEFB' };
+    background-color: ${({ bgColor }) => bgColor ?? '#F8F4E1' };
 `
 
 interface Props {
@@ -41,7 +41,7 @@ const ItemDropdown: React.FC<Props> = (props) => {
                 <div style={{width:'100%', height:'100%'}}>
                     <div
                     {...getRootProps({
-                        className: 'dropzone drop-content',
+                        className: 'dropzone',
                         onDrop: event => event.stopPropagation(),
                         maxFiles: 1
                     })} 
@@ -49,7 +49,9 @@ const ItemDropdown: React.FC<Props> = (props) => {
                     >
                     <input {...getInputProps()} />
                     <div className="drop-content">
-                        <Cloud /> 
+                        <Cloud className="mw-auto" style={{marginTop: 'auto'}}/> 
+                        <p> Upload .rar or .zip file</p>
+                        <p style={{fontWeight: 600, fontSize:'12px', lineHeight:'15px', marginBottom:'auto'}}>(thumbnail must be named <a style={{color:'#308D7B'}}>‘thumbnail.png’</a>)</p>
                     </div>
                     </div>
                 </div>

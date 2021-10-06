@@ -71,7 +71,7 @@ const NavBarMenu = () => {
   const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
-    setAccount(await connect())
+    await connect()
   }
   const onPlayGameHandler = () => {
     history.push('/')
@@ -97,7 +97,7 @@ const NavBarMenu = () => {
     setInitialized(true);
     const initAddress = async () => {
       setIsLoading(true);
-      const address = await WalletUtils.getCurrentWallet();
+      const address = WalletUtils.getCurrentWallet();console.log(address)
       setAccount(address == null? '': address);
       setIsLoading(false);
     }

@@ -35,7 +35,7 @@ const OrderApprovalModal: React.FC<Props> = (props) =>{
     const [account, setAccount] = useGlobalState('account')
 
     const onConnectWalletHandler = async () => {
-        setAccount(await connect())
+        connect()
     }
       
     return (

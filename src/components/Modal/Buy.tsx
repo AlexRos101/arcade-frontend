@@ -15,7 +15,7 @@ import { connect } from 'global/wallet'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC721 from '../../contracts/ERC721.json'
+import ERC20 from '../../contracts/ERC20.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 
@@ -33,7 +33,7 @@ interface Props {
 }
 
 
-const ListSellModal: React.FC<Props> = (props) =>{
+const BuyModal: React.FC<Props> = (props) =>{
     const [account, setAccount] = useGlobalState('account')
     const [isLoading, setIsLoading] = useGlobalState('isLoading')
     const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
@@ -62,11 +62,11 @@ const ListSellModal: React.FC<Props> = (props) =>{
         const provider = await Wallet.getCurrentProvider()
 
         const web3 = new Web3(provider)
-        const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+        const ARCADEDOGE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
-        NFT.methods.getApproved(props.item.token_id).call()
+        ARCADEDOGE.methods.allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS).call()
         .then((res: any) => {
-            if (res == process.env.REACT_APP_EXCHANGE_ADDRESS) {
+            if (Number.parseFloat(web3.utils.fromWei(res)) >= props.item.arcadedoge_price) {
                 setIsLoading(false);
                 setFirstStepClassName('item-processed');
                 setSecondStepClassName('item');
@@ -96,9 +96,11 @@ const ListSellModal: React.FC<Props> = (props) =>{
         const address = await Wallet.getCurrentWallet()
 
         const web3 = new Web3(provider)
-        const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+        const ARCADEDOGE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
-        NFT.methods.approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id).send({from: address})
+        ARCADEDOGE.methods.approve(
+            process.env.REACT_APP_EXCHANGE_ADDRESS, 
+            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether')).send({from: address})
         .then((res: any) => {
             setIsLoading(false);
             setFirstStepClassName('item-processed');
@@ -111,7 +113,7 @@ const ListSellModal: React.FC<Props> = (props) =>{
         })
     }
 
-    const sellRequest = async () => {
+    const buy = async () => {
         setIsLoading(true);
 
         if (!await (Wallet.isConnected())) {
@@ -126,15 +128,17 @@ const ListSellModal: React.FC<Props> = (props) =>{
         const web3 = new Web3(provider)
         const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
-        exchange.methods.SellRequest(
+        exchange.methods.exchange(
             props.item.contract_address, 
             props.item.token_id,
-            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether')).send({from: address})
+            props.item.owner,
+            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
+            account).send({from: address})
         .then((res: any) => {
             const checkDBStatus = async () => {
                 const item = (await API.getItemById(props.item.id)).data
-                if (item.is_visible) {
-                    document.location.reload()
+                if (item.owner == account) {
+                    window.location.href="/listing"
                 } else {
                     setTimeout(checkDBStatus, 500)
                 }
@@ -151,7 +155,7 @@ const ListSellModal: React.FC<Props> = (props) =>{
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="sm" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
             <DialogContent className="modal-order-content" dividers>
                 <div {...props} style={{padding: '2vh 0'}}>
-                    <p className="approval-header" style={{textAlign: 'center', maxWidth: '300px'}}>List {props.item.name} on Market</p>
+                    <p className="approval-header" style={{textAlign: 'center', maxWidth: '300px'}}>Buy {props.item.name} on Market</p>
 
                     <div className={firstStepClassName}>
                         <div className="item-disabler" />
@@ -161,7 +165,7 @@ const ListSellModal: React.FC<Props> = (props) =>{
                             </div>
                             <div className='mr-15'>
                                 <p id="header">Approve</p>
-                                <p id="content">Approve your nft token</p>
+                                <p id="content">Approve your ArcadeDoge token</p>
                             </div>
                             <div style={{marginLeft:'auto'}}>
                                 <Button
@@ -185,16 +189,16 @@ const ListSellModal: React.FC<Props> = (props) =>{
                                 <p style={{padding: '7px 0px', width: 'fit-content'}}>2</p>
                             </div>
                             <div className='mr-15'>
-                                <p id="header">List</p>
-                                <p id="content">List on market</p>
+                                <p id="header">Buy</p>
+                                <p id="content">Buy item with Arcadedoge</p>
                             </div>
                             <div style={{marginLeft:'auto'}}>
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={sellRequest}>
+                                    onClick={buy}>
                                     <Typography variant="subtitle1">
-                                        List
+                                        Buy
                                     </Typography>
                                 </Button>
                             </div>
@@ -209,4 +213,4 @@ const ListSellModal: React.FC<Props> = (props) =>{
     )
 }
 
-export default ListSellModal
+export default BuyModal

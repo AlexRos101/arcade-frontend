@@ -161,7 +161,7 @@ const Market = () => {
     const [maplevel, setMapLevel] = React.useState(0)
     const [open, setOpen] = React.useState(false)
     
-    const [selectedCard, setSelectedCard] = React.useState({token_id: 0, name: '', description: '', arcadedoge_price: 0})
+    const [selectedCard, setSelectedCard] = React.useState({id: 0, token_id: 0, name: '', description: '', arcadedoge_price: 0, owner: '', contract_address: ''})
 
     const [testopen, setTestOpen] = React.useState(false)
 
