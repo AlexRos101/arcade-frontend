@@ -2,12 +2,7 @@ import React from "react"
 import styled from 'styled-components'
 
 import {
-    Button,
     Grid,
-    ThemeProvider,
-    TextField,
-    Typography,
-    InputAdornment
   } from '@material-ui/core'
   
 import Link from '@material-ui/core/Link'
@@ -15,6 +10,7 @@ import RocketIcon from 'assets/img/rocket.svg'
 import ChartIcon from 'assets/img/bxs-chart.svg'
 import IconLabel from 'components/Label/IconLabel'
 import DisucssionLabel from "components/Label/DiscussionLabel"
+import ReactTimeAgo from 'react-time-ago'
 
 const ItemContainer = styled.div`
   background: #FAF8F2;
@@ -56,7 +52,7 @@ const DiscussItem: React.FC<Props> = (props) => {
                   />
                   <IconLabel
                   avatar={ChartIcon}
-                  label="1230"
+                  label={discussion.comment_cnt}
                   style={{ color: '#B7B091' }}
                   />
                 </div>
@@ -66,7 +62,7 @@ const DiscussItem: React.FC<Props> = (props) => {
                   style={{ color: '#B7B091', marginRight: '1rem' }}
                   />
                   <IconLabel
-                  label="5 hrs ago"
+                  label={<ReactTimeAgo date={new Date(discussion.updated_at)} locale="en-US" />}
                   style={{ color: '#B7B091', marginRight: '1rem' }}
                   />
                 </div>

@@ -84,3 +84,13 @@ export const updateItemByID = async (id: number, gameId: number, categoryId: num
   const response = await sendPost("update_item_by_id", {id: id, game_id: gameId, category_id: categoryId, name: name, is_anonymous: isAnonymous, description: description, price: price})
   return response
 }
+
+export const setLikes = async (discussion_id: number, parent_id: number, user: string, likes: boolean) => {
+  const response = await sendPost("set_likes", {discussion_id: discussion_id, parent_id: parent_id, user: user, likes: likes})
+  return response
+}
+
+export const getLikes = async (discussion_id: number, parent_id: number, user: string) => {
+  const response = await sendPost("get_likes", {discussion_id: discussion_id, parent_id: parent_id, user: user})
+  return response
+}

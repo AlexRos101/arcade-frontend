@@ -7,7 +7,7 @@ import {
 
 interface IconLabelProps {
   avatar?: string, // React.FunctionComponent<SVGProps<SVGSVGElement>>,
-  label: string,
+  label: any,
   avatarWidth?: string,
   avatarHeight?: string,
   fontSize?: string,

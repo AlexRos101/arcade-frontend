@@ -7,6 +7,10 @@ import Loading from 'components/loading';
 import ConnectWalletModal from 'components/Modal/ConnectWallet'
 import './assets/css/style.css';
 import './assets/css/material-ui.css';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
+
+TimeAgo.addDefaultLocale(en)
 
 ReactDOM.render(
   <React.StrictMode>
