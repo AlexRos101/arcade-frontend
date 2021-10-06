@@ -116,13 +116,13 @@ export const getCurrentWallet = async () => {
 
   if (walletType == CONST.WALLET_TYPE.METAMASK) {
     const accounts = await new Web3(Web3.givenProvider).eth.getAccounts()
-    return accounts[0]
+    return Web3.utils.toChecksumAddress(accounts[0])
   } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
     const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
     if (wcData.accounts.length == 0) {
       return null
     }
-    return wcData.accounts[0]
+    return Web3.utils.toChecksumAddress(wcData.accounts[0])
   }
 
   return null
