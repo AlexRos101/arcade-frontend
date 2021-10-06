@@ -54,7 +54,7 @@ const FooterRoadmap = () => {
             <Link href="#">
               <RoadmapEntry title="How to Play" />
             </Link>
-            <Link href="#">
+            <Link href="https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c">
               <RoadmapEntry title="Buy ArcadeDoges" />
             </Link>
           </div>

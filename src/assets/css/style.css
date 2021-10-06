@@ -710,7 +710,18 @@ button {
   .modal-dialog-content {
     width: 50vw;
     max-width: 740px;
-    padding: 4vh 3vw !important;
+    padding: 0 3vw !important;
+    border: none !important;
+  }
+
+  .modal-dialog-title {
+    padding: 4vh 3vw 1vh 3vw !important;
+  }
+
+  .modal-dialog-action {
+    padding: 1vh 3vw 4vh 3vw !important;
+    display: block;
+    justify-content: flex-start;
   }
 
   .text-param {
@@ -1124,7 +1135,7 @@ button {
       padding-left: 10px !important;
     }
 
-    #footer {
+    .button-layout {
       margin-bottom: calc(4vh + 36px) !important;
     }
 
@@ -1192,12 +1203,26 @@ button {
 
     .modal-dialog-content {
       width: 90vw;
-      padding: 3vh 5vw !important;
+      padding: 0 5vw !important;
+    }
+
+    .modal-dialog-title {
+      padding-left: 5vw !important;
+    }
+
+    .modal-dialog-action {
+      padding-left: 5vw !important;
+      padding-right: 5vw !important;
+    }
+
+    .modal-btn {
+      width: 100%;
     }
 
     .text-param {
       width: 75vw;
       overflow-wrap: break-word;
+      margin-right: 0 !important;
     }
   }
 
@@ -1211,7 +1236,7 @@ button {
       width: 90% !important;
     }
 
-    #footer {
+    .button-layout {
       margin-bottom: 19vh !important;
     }
   }

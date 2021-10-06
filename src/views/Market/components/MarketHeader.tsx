@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import Storefront from '@material-ui/icons/Storefront'
@@ -7,6 +7,8 @@ import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
 import { marketTheme } from 'styles/theme'
 import { ReactComponent as Sell } from "assets/img/sell.svg"
+
+import $ from 'jquery'
 
 const useStyles = makeStyles(theme => ({
   root: {

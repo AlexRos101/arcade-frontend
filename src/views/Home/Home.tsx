@@ -34,6 +34,10 @@ const Home: React.FC = () => {
       history.push('/market')
     }
 
+    const onClickBuyArcadeDoge = () => {
+      location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+    }
+
     const onClickHowToPlay = () => {
       console.log('asdf')
     }
@@ -66,6 +70,7 @@ const Home: React.FC = () => {
               className="mg-8"
               variant="contained"
               color="secondary"
+              onClick={onClickBuyArcadeDoge}
               startIcon={<AstronautBuy />}>
               <Typography variant="subtitle1">
                 Buy ArcadeDoges
