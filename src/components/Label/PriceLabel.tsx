@@ -4,10 +4,6 @@ import {
   Typography,
   Grid
 } from '@material-ui/core'
-import {
-  makeStyles,
-  Theme
-} from '@material-ui/core/styles'
 
 import avatar from 'assets/img/avatar.svg'
 import { ScaleDefaults, ScaleTypes } from 'utils/constants/types'
@@ -29,7 +25,7 @@ const ImageWrapper = styled.img<{
   }};
 `
 
-const PriceWrapper = styled(Typography)<{
+const PriceWrapper = styled.div<{
   scales?: ScaleTypes,
   foreColor?: string
 }>`
@@ -56,12 +52,8 @@ const PriceLabelDefaults = {
   pricePerUsd: 0,
 }
 
-const PriceLabel = (props : Partial<PriceLabelProps>) => {
-  // const params = {...PriceLabelDefaults, ...props}
-  const params = Object.assign(PriceLabelDefaults, props)
-  console.log('PriceLabelDefaults=', PriceLabelDefaults)
-  console.log('props=', props)
-  console.log('PriceLabel=', params)
+const PriceLabel = (props : Partial<PriceLabelProps> = {}) => {
+  const params = {...PriceLabelDefaults, ...props}
 
   return (
     <Grid container spacing={1} alignItems="center">
@@ -75,7 +67,6 @@ const PriceLabel = (props : Partial<PriceLabelProps>) => {
       </Grid>
       <Grid item>
         <PriceWrapper foreColor="rgba(34, 48, 61, 0.5)">
-        {/* <PriceWrapper> */}
           {`(US$${params.pricePerUsd})`}
         </PriceWrapper>
       </Grid>

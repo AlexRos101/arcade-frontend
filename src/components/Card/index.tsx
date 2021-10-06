@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Paper } from '@material-ui/core'
 
-const Card = styled(Paper)<{
+const Card = styled.div<{
   width?: string
   height?: string
   padding?: string
@@ -9,10 +9,15 @@ const Card = styled(Paper)<{
   borderRadius?: string,
   bgColor?: string
 }>`
-  width: ${({ width }) => width ?? 'inherit' };
-  height: ${({ height }) => height ?? 'inherit' };
   padding: 1.25rem;
   padding: ${({ padding }) => padding };
+  width: ${({ width }) => width ?? 'inherit' };
+  height: ${({ height, padding }) => {
+    if (height) {
+      return `calc(${height} - 2 * ${padding ?? '1.25rem'})`
+    }
+    return 'inherit'
+  }};
   border: 1px solid ${({ border }) => border ?? '#EAE5CE' };
   border-radius: 7px;
   border-radius: ${({ borderRadius }) => borderRadius };

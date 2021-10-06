@@ -18,8 +18,12 @@ const FooterContact = () => {
       <Typography
         variant="body1"
         color="inherit">
-        <p> ArcadeDoge Game © 2021. </p>
-        <p> All Rights Reserved. </p>
+        ArcadeDoge Game © 2021.
+      </Typography>
+      <Typography
+        variant="body1"
+        color="inherit">
+        All Rights Reserved.
       </Typography>
     </div>
   )

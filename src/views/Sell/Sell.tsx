@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import {
   Button,
@@ -62,6 +62,13 @@ const Sell = ({ data } : {
 }) => {
   const classes = useStyles()
   const [skinItem, setSkinItem] = useState<SkinProps | undefined>(data ?? initData)
+  const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
+  const sellCardRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const cardHeight = `${sellCardRef?.current?.clientHeight}px`
+    setCardHeight(cardHeight)
+  }, [])
 
   const handleClickCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
     // eslint-disable-next-line prefer-const
@@ -79,7 +86,7 @@ const Sell = ({ data } : {
       </Header>
       <Grid container spacing={1} alignItems="flex-start">
         <Grid item xs={12} sm={6}>
-          <Card>
+          <Card ref={sellCardRef}>
             <Flex
               flexDirection="column"
               alignItems="flex-start"
@@ -186,7 +193,7 @@ const Sell = ({ data } : {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Card height="100%" bgColor={skinItem?.item} />
+          <Card bgColor={skinItem?.item} height={cardHeight} />
         </Grid>
       </Grid>
     </Page>
