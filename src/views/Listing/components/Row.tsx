@@ -75,7 +75,6 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
   }
 
   const handleEditMenu = () => {
-    console.log('asdf')
     history.push(`/item/edit/${row.token_id}`)
   }
 

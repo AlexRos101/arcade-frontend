@@ -69,6 +69,7 @@ const NavBarMenu = () => {
   const [account, setAccount] = useGlobalState('account')
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
   const [headerAccount, setHeaderAccount] = useState('')
+  const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
     await connect()
@@ -94,17 +95,31 @@ const NavBarMenu = () => {
 
   const initAddress = async () => {
     const address = await WalletUtils.getCurrentWallet()
-    console.log(address)
     if (address != account)
     setAccount(address == null? '': address)
     setHeaderAccount(address == null? '': address)
   }
-  
-  initAddress()
 
   const onClickDiscussions = () => {
     history.push('/discussion')
   }
+
+  const walletChanged = (accounts: any) => {
+    const address = accounts[0]
+    setAccount(address == null? '': address)
+    setHeaderAccount(address == null? '': address)
+  }
+
+  useEffect(() => {
+    if (initialized) return
+    setInitialized(true)
+
+    if (window.ethereum != null) {
+      window.ethereum.on('accountsChanged', walletChanged)
+    }
+
+    initAddress()
+  })
 
   return (
     <div>

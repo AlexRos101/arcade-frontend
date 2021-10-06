@@ -8,7 +8,6 @@ store.setState('isLoading', false)
 const Loading = () => {
 
     const [isLoading, setIsLoading] = useGlobalState('isLoading')
-    console.log(isLoading)
     if (isLoading === true) {
         return (
             <div id="loader-wrapper">
