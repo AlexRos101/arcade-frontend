@@ -3,7 +3,7 @@ import { styled } from '@material-ui/core/styles'
 import Container from './Container'
 
 const StyledPage = styled(Container)({
-  minHeight: 'calc(100vh - 64px)',
+  minHeight: 'calc(95vh - 254px)',
   paddingTop: 'calc(5vh + 16px)',
   paddingBottom: '16px'
 })

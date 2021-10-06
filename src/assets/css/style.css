@@ -279,7 +279,7 @@ button {
     display: none;
     position: absolute;
     background-color: #FFFEFB;
-    min-width: 200px;
+    min-width: 210px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     border-radius: 0px 0px 10px 10px;
     font-style: normal;
