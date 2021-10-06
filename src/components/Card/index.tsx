@@ -25,4 +25,9 @@ const Card = styled.div<{
   background-color: ${({ bgColor }) => bgColor ?? '#FFFEFB' };
 `
 
+export const OutlinedCard = styled(Card)`
+  background-color: transparent;
+  box-shadow: none;
+`
+
 export default Card

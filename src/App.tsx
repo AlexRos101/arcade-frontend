@@ -18,6 +18,7 @@ const MarketDoge = lazy(() => import('views/Market/Doge'))
 const MarketOther = lazy(() => import('views/Market/Other'))
 const Listing = lazy(() => import('./views/Listing'))
 const Sell = lazy(() => import('./views/Sell'))
+const Discussion = lazy(() => import('./views/Discussion'))
 
 declare let window: any
 
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/market/other" exact component={MarketOther}/>
                 <Route path="/listing" exact component={Listing}/>
                 <Route path="/sell" exact component={Sell}/>
+                <Route path="/discussion" exact component={Discussion}/>
               </Switch>
             </Suspense>
             <Footer />
