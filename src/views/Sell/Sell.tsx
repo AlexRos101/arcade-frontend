@@ -375,8 +375,8 @@ const getRate = async () => {
               <Flex 
                 flexDirection="row"
                 alignItems="flex-start"
-                className="wd-100">
-                <LabelComponent label="Game" className="wd-50">
+                className="wd-100 r-flex-column">
+                <LabelComponent label="Game" className="wd-50 r-wd-100">
                   <Select
                     fullWidth
                     value={selectedGameID}
@@ -392,7 +392,7 @@ const getRate = async () => {
                     }
                   </Select>
                 </LabelComponent>
-                <LabelComponent label="Category" className="wd-50"> 
+                <LabelComponent label="Category" className="wd-50  r-wd-100"> 
                   <Select
                     fullWidth
                     value={selectedCategoryID}
@@ -414,10 +414,10 @@ const getRate = async () => {
               <Flex 
                 flexDirection="row"
                 alignItems="flex-start"
-                className="wd-100">
+                className="wd-100 r-flex-column">
                 <LabelComponent
                   label="Name" 
-                  className="wd-50"
+                  className="wd-50  r-wd-100"
                 >
                   <TextField
                     fullWidth
@@ -428,7 +428,7 @@ const getRate = async () => {
                     onChange={e => setName(e.currentTarget.value)}
                   />
                 </LabelComponent>
-                <LabelComponent label="Anonymous?" className="wd-50">
+                <LabelComponent label="Anonymous?" className="wd-50 r-wd-100">
                   <SwitchButton 
                     value={anonymous} 
                     onChange={onSwitchAnonymous} 
@@ -438,7 +438,7 @@ const getRate = async () => {
               <Flex 
               flexDirection="row"
               alignItems="flex-start"
-              className="wd-100">
+              className="wd-100 r-flex-column">
                 <LabelComponent
                   label="Description"
                   className={classes.input}
@@ -461,10 +461,10 @@ const getRate = async () => {
                 className={classes.spacing}
               >
                 <Grid item sm={4}>
-                  <LabelComponent label="Price (in US$)">
+                  <LabelComponent label="Price in ARCADEDOGE">
                     <TextField
                       fullWidth
-                      placeholder="US$   00.00"
+                      placeholder="00.00"
                       InputProps={{ classes: {input: classes.input} }}
                       variant="outlined"
                       value={price}
@@ -497,12 +497,13 @@ const getRate = async () => {
               </Grid>
               <Flex
                 alignItems="center"
-                className={`${classes.spacing} ${classes.margin}`}>
+                className={`${classes.spacing} ${classes.margin} r-wd-100`}>
                 <ThemeProvider theme={greenTheme}>
-                    <Box component="span" mr={1}>
+                    <Box component="span" mr={1} className="r-wd-100">
                       <Button
                         variant="contained"
                         color="primary"
+                        className="r-wd-100"
                         onClick={paramIsSet == false ? MintToken : UpdateItem}>
                         {paramIsSet == false ? 'Save and Publish' : 'Update Item'}
                       </Button>

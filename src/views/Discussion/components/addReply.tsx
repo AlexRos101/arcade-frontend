@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import styled from 'styled-components'
 
 import {
@@ -59,19 +59,17 @@ const AddReply: React.FC<Props> = (props) => {
     const [user, setUser] = useState('')
     const [commentState, setCommentState] = useGlobalState('commentState')
 
-    const onSwitchAnonymous = () => {
-        console.log('asdf')
+    const onSwitchAnonymous = useCallback(() => {
         setAnonymous(!anonymous)
-    }
+    }, [anonymous])
 
-    const onAddComment = () => {
+    const onAddComment = useCallback(() => {
       addNewComment(Number(props.comment.discussion_id), Number(props.comment.id), content, (anonymous == false? 0: 1), user)
       .then(response => {
-          console.log(response)
           setCommentState(2)
           document.location.reload()
       })
-  }
+    }, [props, anonymous, content, user, commentState])
 
 
     if (props.visible == false)

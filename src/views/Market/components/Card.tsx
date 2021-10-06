@@ -24,7 +24,7 @@ const Card: React.FC<Props> = (Props) => {
             <div className="card-label">
                 <div className="card-price flex-row frame-vc">
                     <p>{Props.name}</p>
-                    <div className="card-price flex-row right">
+                    <div className="card-price flex-row right r-flex-row">
                         <img className="mr-5" src={avatar} alt="avatar" style={{width: '20px', height: '20px'}}/>
                         <p>{Props.price}</p>
                     </div>

@@ -29,11 +29,11 @@ const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>>= ({ children
       
     return (
         <div {...props}>
-            <div className='mw-auto mb-5' style={{width:'fit-content'}}>
+            <div className='mw-auto mb-5' style={{width:'fit-content', maxWidth:'max-content'}}>
                 <IframeLogo id="connectLogo" />
             </div>
             <RowLabel style={{textAlign: 'center',}}>Connect wallet to start playing!</RowLabel>
-            <div className='mw-auto mt-5' style={{width:'fit-content'}}>
+            <div className='mw-auto mt-5' style={{width:'fit-content', maxWidth:'max-content'}}>
                 <Button
                     variant="contained"
                     color="primary"

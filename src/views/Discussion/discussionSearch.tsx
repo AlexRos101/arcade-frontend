@@ -61,7 +61,7 @@ const DiscussionSearch = () => {
 
   console.log('AA')
   return (
-    <Page>
+    <Page className="styled-search">
       <Header>
         <HeaderContainer>
           <HeaderLabel>Search a Discussion</HeaderLabel>

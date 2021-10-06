@@ -136,7 +136,7 @@ const Market = () => {
     }
 
     return (
-        <Page id="market_page">
+        <Page id="market_page" className="styled-market">
             <Header>
                 <HeaderLabel>ArcadeMarket</HeaderLabel>
                 <Info className="mh-auto ml-10 market-info-tag"/>

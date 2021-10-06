@@ -1,18 +1,14 @@
-import React, {useState} from "react"
-import styled from 'styled-components'
+import React, {useState, useCallback} from "react"
 
 import {
-  Box,
   Button,
   Grid,
-  Select
 } from '@material-ui/core'
+
 import {
     Theme,
     ThemeProvider,
-    createStyles,
     makeStyles,
-    withStyles
 } from '@material-ui/core/styles'
 
 import { greenTheme } from 'styles/theme'
@@ -61,18 +57,18 @@ const AddComment: React.FC<Props> = (props) => {
     const [user, setUser] = useState('')
     const [commentState, setCommentState] = useGlobalState('commentState')
 
-    const onSwitchAnonymous = () => {
+    const onSwitchAnonymous = useCallback(() => {
         setAnonymous(!anonymous)
-    }
+    }, [anonymous])
 
 
-    const onAddComment = () => {
+    const onAddComment = useCallback(() => {
         addNewComment(Number(props.discussion.id), -1, content, (anonymous == false? 0: 1), user)
         .then(response => {
             setCommentState(2)
             props.onReset()
         })
-    }
+    }, [props, anonymous, content, user, commentState])
 
     if (props.visible == false)
         return (<div />)

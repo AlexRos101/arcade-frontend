@@ -3,10 +3,11 @@ import { Typography } from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 
-import Discord from '../../assets/img/discord.svg'
+import Reddit from '../../assets/img/reddit.svg'
 import Facebook from '../../assets/img/facebook.svg'
 import Twitter from '../../assets/img/twitter.svg'
-import Instagram from '../../assets/img/instagram.svg'
+import Telegram from '../../assets/img/telegram.svg'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,26 +41,27 @@ const FooterFollowUs = () => {
         Follow Us
       </Typography>
       <div className={classes.container}>
-        <Link href="https://www.reddit.com/r/ArcadeDoge">
-          <img
-            src={Discord}
-            alt="Discord" />
-        </Link>
         <Link href="https://www.facebook.com/ArcadeDoge/">
           <img
             src={Facebook}
             alt="Facebook" />
+        </Link>
+        <Link href="https://www.reddit.com/r/ArcadeDoge">
+          <img
+            src={Reddit}
+            alt="Reddit" />
+        </Link>
+        <Link href="https://t.me/ArcadeDoge">
+          <img
+            src={Telegram}
+            alt="Telegram" />
         </Link>
         <Link href="https://twitter.com/ArcadeDoge">
           <img
             src={Twitter}
             alt="Twitter" />
         </Link>
-        <Link href="https://t.me/ArcadeDoge">
-          <img
-            src={Instagram}
-            alt="Instagram" />
-        </Link>
+        
       </div>
     </div>
   )

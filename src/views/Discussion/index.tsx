@@ -30,9 +30,9 @@ const Discussion = () => {
     }
   })
   return (
-    <Page>
+    <Page className="styled-search">
       <Header>
-        <HeaderLabel>Community Discussiona</HeaderLabel>
+        <HeaderLabel>Community Discussion</HeaderLabel>
       </Header>
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>    

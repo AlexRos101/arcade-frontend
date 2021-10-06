@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react'
 import { styled } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Container from './Container'
 import $ from 'jquery'
 
 const StyledPage = styled(Container)({
   paddingTop: '5vh',
   paddingBottom: 'calc(5vh + 160px)',
+  "@media (max-width: 1080px)" : {
+    paddingBottom: 'calc(5vh + 450px)',
+  }
 })
 
 const Page: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {

@@ -1,21 +1,15 @@
-import React, { useState } from "react"
+import React, { useCallback } from "react"
 import { useHistory } from 'react-router-dom'
-import {store, useGlobalState} from 'state-pool'
+import {useGlobalState} from 'state-pool'
 
 import {
-    Button,
-    Grid,
-    ThemeProvider,
-    TextField,
     Typography,
-    InputAdornment
 } from '@material-ui/core'
 
 import {
     makeStyles
 } from '@material-ui/core/styles'
 
-import SearchIcon from '@material-ui/icons/Search'
 import { OutlinedCard } from 'components/Card'
 import DiscussionRule from "components/Modal/DiscussionRule"
 
@@ -29,18 +23,17 @@ const useStyles = makeStyles({
   })
 
 const AddNote = () => {
-    const history = useHistory()
     const classes = useStyles()
 
     const [openRule, setOpenRule] = useGlobalState('openDiscussionRule')
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setOpenRule(false)
-    }
+    }, [openRule])
 
-    const handleOpenRules = () => {
+    const handleOpenRules = useCallback(() => {
         setOpenRule(true)
-    }
+    }, [openRule])
 
     return (
         <OutlinedCard className="outlined-card">

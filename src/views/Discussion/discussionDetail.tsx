@@ -84,7 +84,7 @@ const DiscussionDetail = () => {
   }
 
   return (
-    <Page>
+    <Page className="styled-search">
       <Header>
         <DiscussionHeaderLabel>{staff.title}</DiscussionHeaderLabel>
       </Header>

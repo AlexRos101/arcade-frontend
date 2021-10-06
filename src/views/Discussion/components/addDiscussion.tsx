@@ -1,19 +1,14 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import { useHistory } from "react-router-dom"
-import styled from 'styled-components'
 
 import {
-  Box,
   Button,
   Grid,
-  Select
 } from '@material-ui/core'
 import {
     Theme,
     ThemeProvider,
-    createStyles,
     makeStyles,
-    withStyles
 } from '@material-ui/core/styles'
 
 import { greenTheme } from 'styles/theme'
@@ -22,7 +17,6 @@ import Flex from 'components/Layout/Flex'
 import LabelComponent from 'components/Label/LabelComponent'
 import TextField from '@material-ui/core/TextField'
 import SwitchButton from 'components/Button/SwitchButton'
-import { store, useGlobalState } from 'state-pool'
 
 import { addNewDiscussion } from "hooks/api"
 
@@ -60,21 +54,23 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
     const [user, setUser] = useState('')
     const [tag, setTag] = useState('')
 
-    const onSwitchAnonymous = () => {
-        console.log('asdf')
+    const onSwitchAnonymous = useCallback(() => {
         setAnonymous(!anonymous)
-    }
+    }, [anonymous])
 
-    const onAddDiscussion = () => {
+    const onAddDiscussion = useCallback(() => {
       addNewDiscussion(Number(props.stuff.id), content, (anonymous == false? 0: 1), user)
       .then(response => {
         history.push(`/discussion/stuff/${props.stuff.id}`)
         document.location.reload()
       })
-    }
+    }, [props, content, anonymous, user])
 
     return (
-        <Grid container spacing={1} alignItems="flex-start" style={{marginTop: '1vh', marginBottom: '1vh'}}>
+        <Grid 
+          container spacing={1} 
+          alignItems="flex-start" 
+          style={{marginTop: '1vh', marginBottom: '1vh'}}>
             <Grid item xs={12} sm={12}>
             <Flex
               flexDirection="column"

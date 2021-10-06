@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import {
-    Button,
     Grid,
-    ThemeProvider,
-    TextField,
-    Typography,
-    InputAdornment
   } from '@material-ui/core'
 
 import Link from '@material-ui/core/Link'
@@ -16,10 +11,9 @@ import RocketIcon from 'assets/img/rocket.svg'
 import ReplyIcon from 'assets/img/reply.svg'
 import IconLabel from 'components/Label/IconLabel'
 
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 
 import AddReply from './addReply'
-import { Add } from "@material-ui/icons"
 
 interface Props {
     comment: any
@@ -40,13 +34,13 @@ const CommentContent: React.FC<Props> = (props) => {
                 setCommentState(0)
             }
         }
-    })
+    }, [commentState, replyOn, showAddReply])
 
-    const onAddReply = () => {
+    const onAddReply = useCallback(() => {
         setCommentState(2)
         setReplyOn(true)
         setShowAddReply(true)
-    }
+    }, [commentState, replyOn, showAddReply])
 
     return  (
         <div style={{flexGrow: 1}}>
