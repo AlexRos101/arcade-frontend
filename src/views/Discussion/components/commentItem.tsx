@@ -21,8 +21,8 @@ const CommentItem: React.FC<Props> = (props) => {
     <ItemContainer style={{ maxWidth: '100vw-32px' }}>
       <Card>
         <CommentContent comment={comment} />
-        {reply.map((replyItem: any) => {
-          return <ReplyItem comment={replyItem} depth={0} />
+        {reply.map((replyItem: any, index: number) => {
+          return <ReplyItem key={index} comment={replyItem} depth={0} />
         })}
       </Card>
     </ItemContainer>

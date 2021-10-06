@@ -22,8 +22,8 @@ const ReplyItem: React.FC<Props> = (props) => {
         <DepthStick />
         <CommentContent comment={props.comment} />
       </div>
-      {reply.map((replyItem: any) => {
-        return <ReplyItem comment={replyItem} depth={props.depth + 1} />
+      {reply.map((replyItem: any, index: number) => {
+        return <ReplyItem key={index} comment={replyItem} depth={props.depth + 1} />
       })}
     </div>
   )

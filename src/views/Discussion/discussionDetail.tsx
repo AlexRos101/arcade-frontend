@@ -98,8 +98,8 @@ const DiscussionDetail = () => {
           ) : (
             ''
           )}
-          {comments.map((comment: any) => {
-            return <CommentItem comment={comment} />
+          {comments.map((comment: any, index: number) => {
+            return <CommentItem key={index} comment={comment} />
           })}
         </Grid>
         <Grid item sm={12} md={4}>

@@ -165,6 +165,7 @@ const MarketDoge = () => {
         {marsdogeItems.map((item: any, index) => {
           return (
             <Card
+              key={index}
               index={index}
               tokenId={item.token_id}
               name={item.name}

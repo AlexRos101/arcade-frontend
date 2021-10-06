@@ -110,8 +110,8 @@ const TabRow: React.FC<TabsData> = (props) => {
       <div className={classes.root}>
         <div className={classes.demo1}>
           <AntTabs value={value} aria-label="ant example" onChange={handleChange}>
-            {props.tabs.map((tab) => {
-              return <AntTab label={tab.tabName} />
+            {props.tabs.map((tab, index) => {
+              return <AntTab key={index} label={tab.tabName} />
             })}
           </AntTabs>
           <Typography className={classes.padding} />

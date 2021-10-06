@@ -371,7 +371,11 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
                     input={<BootstrapInput>Select Game</BootstrapInput>}
                   >
                     {games.map((game: any, index: number) => {
-                      return <MenuItem value={game.id}>{game.name}</MenuItem>
+                      return (
+                        <MenuItem key={index} value={game.id}>
+                          {game.name}
+                        </MenuItem>
+                      )
                     })}
                   </Select>
                 </LabelComponent>

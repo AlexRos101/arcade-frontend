@@ -64,7 +64,7 @@ const Staff: React.FC<Props> = (props) => {
           </Grid>
         </Grid>
         {discussions.map((discussion, index) => {
-          return <DiscussItem content={discussion} />
+          return <DiscussItem key={index} content={discussion} />
         })}
       </Card>
       {props.link == false ? (

@@ -44,7 +44,7 @@
     "build": "react-scripts build HTTPS=true",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .js --ext .ts --ext .tsx --quiet --fix"
+    "lint": "eslint . --ext .js --ext .ts --ext .tsx --fix"
   },
   "eslintConfig": {
     "extends": [

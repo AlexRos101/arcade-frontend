@@ -62,6 +62,7 @@ const CardSlider: React.FC<Props> = (props) => {
         {props.context.map((item, index) => {
           return (
             <Card
+              key={index}
               index={index}
               tokenId={item.token_id}
               name={item.name}

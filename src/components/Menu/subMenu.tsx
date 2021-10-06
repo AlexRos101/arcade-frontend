@@ -23,7 +23,7 @@ const SubMenu: React.FC<Props> = (props) => {
       <div className="dropdown-content">
         {props.menuData.map((menu, index) => {
           return (
-            <a href={menu.href} className="flex-row r-flex-row">
+            <a key={index} href={menu.href} className="flex-row r-flex-row">
               {menu.content}
               {menu.label === '' ? '' : <Badge type="danger" content={menu.label} />}
             </a>

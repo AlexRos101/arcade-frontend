@@ -54,7 +54,7 @@ const StaffSelect: React.FC<Props> = (props) => {
         if (discussions.length == 0) {
           return ''
         }
-        return <StaffSelectItem title={staff.title} index={index} checked={true} onChange={onChange} />
+        return <StaffSelectItem key={index} title={staff.title} index={index} checked={true} onChange={onChange} />
       })}
     </OutlinedCard>
   )
