@@ -54,7 +54,7 @@ const OrderApprovalModal: React.FC<Props> = (props) =>{
 
                     <div className="item-processed">
                         <div className="item-disabler" />
-                        <div className='flex-row r-flex-row mt-5 step-item mw-auto' style={{width:'fit-content'}}>
+                        <div className='flex-row r-flex-row mt-5 step-item mw-auto'>
                             <div className='circle-number mr-15'>
                                 <p style={{padding: '7px 0px', width: 'fit-content'}}>1</p>
                             </div>

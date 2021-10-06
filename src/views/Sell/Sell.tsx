@@ -32,6 +32,7 @@ import Page from 'components/Layout/Page'
 import Relative from 'components/Layout/Relative'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
+import ErrorLabel from 'components/Label/ErrorLabel'
 import SwitchButton from 'components/Button/SwitchButton'
 import HoverButton from 'components/Button/HoverButton'
 import ItemDropdown from 'components/Dropdown'
@@ -214,6 +215,7 @@ const Sell = ({ data } : {
   }
 
   const uploadMeterial = async (files: any) => {
+    setShowThumbnailWarning(false)
     const file = files[0]
     if (file.name.slice(file.name.length - 4, file.name.length) != '.rar') {
       Swal('Please select *.rar file.')
@@ -312,6 +314,7 @@ const Sell = ({ data } : {
           const item = (await API.getItemByTokenID(tokenID)).data as any
           if (item != undefined && item != null) {
               setIsLoading(false)
+              history.push('/listing')
               document.location.reload()
           } else {
               setTimeout(checkDBStatus, 500)
@@ -504,11 +507,8 @@ const getRate = async () => {
                         {paramIsSet == false ? 'Save and Publish' : 'Update Item'}
                       </Button>
                     </Box>
-                    {/* <Button
-                      variant="outlined"
-                      color="primary">
-                      Save for Later
-                    </Button> */}
+                    {showThumbnailWarning == true ? (<ErrorLabel>Upload file must have ‘thumbnail.png’</ErrorLabel>) : ''}
+                    
                 </ThemeProvider>
               </Flex>
             </Flex>

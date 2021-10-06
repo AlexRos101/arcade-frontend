@@ -22,7 +22,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
-    background: `${theme.palette.text.primary}`
+    background: `${theme.palette.text.primary}`,
+    position: 'absolute',
+    bottom: 0,
   },
   container: {
     display: 'flex',

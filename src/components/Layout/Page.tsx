@@ -4,9 +4,8 @@ import Container from './Container'
 import $ from 'jquery'
 
 const StyledPage = styled(Container)({
-  minHeight: 'calc(90vh - 222px)',
   paddingTop: '5vh',
-  paddingBottom: '5vh'
+  paddingBottom: 'calc(5vh + 160px)',
 })
 
 const Page: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {

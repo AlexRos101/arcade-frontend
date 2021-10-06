@@ -50,11 +50,6 @@ const marketMenu = [
     href: '/market/doge',
     label: 'Hot Releases'
   },
-  {
-    content: 'Another Game',
-    href: '/market/other',
-    label: ''
-  }
 ]
 
 declare let window: any
