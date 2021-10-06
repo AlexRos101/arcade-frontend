@@ -9,6 +9,16 @@ export const greenTheme = responsiveFontSizes(createTheme({
       main: '#30C5A8',
       contrastText: '#FFFEFB'
     }
+  },
+  overrides: {
+    MuiButton: {
+      outlined: {
+        boxShadow: '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
+        // '&:hover': {
+        //   backgroundColor: 'rgba(0,0,0,0.1) !important'
+        // }
+      }
+    }
   }
 }))
 

@@ -23,7 +23,7 @@ import Flex from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
-import { marketTheme } from 'styles/theme'
+import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -174,19 +174,21 @@ const Sell = ({ data } : {
                 alignItems="center"
                 className={classes.spacing}
               >
-                <ThemeProvider theme={marketTheme}>
-                  <Button
-                    className="mg-8 market-customizing-btn"
-                    variant="contained"
-                    color="secondary">
-                    Save and Publish
-                  </Button>
-                  <Button
-                    className="mg-8 market-listing-btn"
-                    variant="contained"
-                    color="primary">
-                    Save for Later
-                  </Button>
+                <ThemeProvider theme={greenTheme}>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Button
+                      variant="contained"
+                      color="primary">
+                      Save and Publish
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Button
+                      variant="outlined"
+                      color="primary">
+                      Save for Later
+                    </Button>
+                  </Grid>
                 </ThemeProvider>
               </Grid>
             </Flex>
