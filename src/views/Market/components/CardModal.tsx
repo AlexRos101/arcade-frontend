@@ -91,7 +91,6 @@ const CardModal: React.FC<Props> = (props) => {
         }
 
         const provider = await Wallet.getCurrentProvider()
-        const address = await Wallet.getCurrentWallet()
 
         const web3 = new Web3(provider)
         const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
@@ -101,7 +100,7 @@ const CardModal: React.FC<Props> = (props) => {
             props.item.token_id,
             props.item.owner,
             Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
-            account).send({from: address})
+            account).send({from: account})
         .then((res: any) => {
             const checkDBStatus = async () => {
                 const item = (await API.getItemById(props.item.id)).data

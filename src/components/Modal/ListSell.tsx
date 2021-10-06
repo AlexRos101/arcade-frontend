@@ -93,12 +93,11 @@ const ListSellModal: React.FC<Props> = (props) =>{
         }
 
         const provider = await Wallet.getCurrentProvider()
-        const address = await Wallet.getCurrentWallet()
 
         const web3 = new Web3(provider)
         const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
 
-        NFT.methods.approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id).send({from: address})
+        NFT.methods.approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id).send({from: account})
         .then((res: any) => {
             setIsLoading(false);
             setFirstStepClassName('item-processed');
@@ -121,7 +120,6 @@ const ListSellModal: React.FC<Props> = (props) =>{
         }
 
         const provider = await Wallet.getCurrentProvider()
-        const address = await Wallet.getCurrentWallet()
 
         const web3 = new Web3(provider)
         const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
@@ -129,7 +127,7 @@ const ListSellModal: React.FC<Props> = (props) =>{
         exchange.methods.SellRequest(
             props.item.contract_address, 
             props.item.token_id,
-            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether')).send({from: address})
+            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether')).send({from: account})
         .then((res: any) => {
             const checkDBStatus = async () => {
                 const item = (await API.getItemById(props.item.id)).data

@@ -67,12 +67,11 @@ const RemoveSellModal: React.FC<Props> = (props) =>{
         }
 
         const provider = await Wallet.getCurrentProvider()
-        const address = await Wallet.getCurrentWallet()
 
         const web3 = new Web3(provider)
         const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
 
-        NFT.methods.freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id).send({from: address})
+        NFT.methods.freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id).send({from: account})
         .then((res: any) => {
             document.location.reload()
         })
@@ -91,14 +90,13 @@ const RemoveSellModal: React.FC<Props> = (props) =>{
         }
 
         const provider = await Wallet.getCurrentProvider()
-        const address = await Wallet.getCurrentWallet()
 
         const web3 = new Web3(provider)
         const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
         exchange.methods.CancelSellRequest(
             props.item.contract_address, 
-            props.item.token_id).send({from: address})
+            props.item.token_id).send({from: account})
         .then((res: any) => {
             const checkDBStatus = async () => {
                 const item = (await API.getItemById(props.item.id)).data

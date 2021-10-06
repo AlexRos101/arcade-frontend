@@ -111,7 +111,7 @@ export const getCurrentChainId = () => {
 }
 
 export const isConnected = async () => {
-    const address = getCurrentWallet();
+    const address = await getCurrentWallet();
     const provider = await getCurrentProvider();
     let chainId = getCurrentChainId();
 
