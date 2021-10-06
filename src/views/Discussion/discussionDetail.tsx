@@ -91,7 +91,7 @@ const DiscussionDetail = () => {
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>    
           <DiscussionContent discussion={discussion}/>
-          <AddComment visible={showAddComments} discussion={discussion}/>
+          <AddComment visible={showAddComments} discussion={discussion} onReset={() => setDscIsSet(false)}/>
           {showAddComments == false ? 
             (<ThemeProvider theme={greenTheme}>
               <Button

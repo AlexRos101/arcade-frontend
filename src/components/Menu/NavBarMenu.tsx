@@ -90,17 +90,15 @@ const NavBarMenu = () => {
 
   const initAddress = async () => {
     const address = await WalletUtils.getCurrentWallet()
-    if (address != account)
-    setAccount(address == null? '': address)
+    if (await WalletUtils.isConnected()) {
+      setAccount(address == null? '': address)
+    } else {
+      setAccount('')
+    }
   }
 
   const onClickDiscussions = () => {
     history.push('/discussion')
-  }
-
-  const walletChanged = (accounts: any) => {
-    const address = accounts[0]
-    setAccount(address == null? '': address)
   }
 
   useEffect(() => {
@@ -110,7 +108,8 @@ const NavBarMenu = () => {
     initAddress()
 
     if (window.ethereum != null) {
-      window.ethereum.on('accountsChanged', walletChanged)
+      window.ethereum.on('accountsChanged', initAddress)
+      window.ethereum.on('chainChanged', initAddress)
     }
   })
 

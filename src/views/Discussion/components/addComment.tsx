@@ -50,7 +50,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
     discussion: any,
-    visible: boolean
+    visible: boolean,
+    onReset: () => any
 }
 
 const AddComment: React.FC<Props> = (props) => {
@@ -68,9 +69,8 @@ const AddComment: React.FC<Props> = (props) => {
     const onAddComment = () => {
         addNewComment(Number(props.discussion.id), -1, content, (anonymous == false? 0: 1), user)
         .then(response => {
-            console.log(response)
             setCommentState(2)
-            document.location.reload()
+            props.onReset()
         })
     }
 
