@@ -155,7 +155,7 @@ const Listing: React.FC = () => {
       .then((res: string) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
-        setTimeout(getRate, 1000)
+        setTimeout(getRate, 30000)
       })
       .catch(() => {
         setTimeout(getRate, 500)
