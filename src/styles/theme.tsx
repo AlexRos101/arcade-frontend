@@ -152,6 +152,7 @@ const theme = responsiveFontSizes(createTheme({
       'Ubuntu',
       'Cantarell',
       'Fira Sans',
+      'Tovari Sans Bold',
       'Droid Sans',
       'Helvetica Neue'
     ].join(','),
@@ -163,10 +164,28 @@ const theme = responsiveFontSizes(createTheme({
       fontSize: 14
     },
     h1: {
+      fontFamily: 'Tovari Sans Bold',
       fontSize: 56
     },
+    h2: {
+      fontFamily: 'Tovari Sans Bold',
+      fontSize: 48
+    },
+    h3: {
+      fontFamily: 'Tovari Sans Bold',
+      fontSize: 32
+    },
     h4: {
+      fontFamily: 'Tovari Sans Bold',
       fontSize: 28
+    },
+    h5: {
+      fontFamily: 'Tovari Sans Bold',
+      fontSize: 24
+    },
+    h6: {
+      fontFamily: 'Tovari Sans Bold',
+      fontSize: 16
     }
   }
 }))
