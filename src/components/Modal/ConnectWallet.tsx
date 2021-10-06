@@ -16,6 +16,7 @@ import {
 
 import { store, useGlobalState } from 'state-pool'
 import { connect } from 'global/wallet'
+import * as WalletUtils from '../../global/wallet'
 
 const DialogContent = withStyles((theme) => ({
 root: {
@@ -34,8 +35,15 @@ const ConnectWalletModal: React.FC<Props> = (props) =>{
     const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
     const onConnectWalletHandler = async () => {
-        connect()
+        await connect()
+        initAddress()
     }
+
+    const initAddress = async () => {
+        const address = await WalletUtils.getCurrentWallet()
+        if (address != account)
+        setAccount(address == null? '': address)
+      }
       
     return (
         <Dialog className="card-dialog" maxWidth="sm" aria-labelledby="customized-dialog-title" open={showConnectWalletModal} PaperProps={{ style: { borderRadius: 7 } }}>

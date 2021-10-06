@@ -16,6 +16,7 @@ import {
 
 import { store, useGlobalState } from 'state-pool'
 import { connect } from 'global/wallet'
+import * as WalletUtils from '../../global/wallet'
 
 const DialogContent = withStyles((theme) => ({
 root: {
@@ -36,6 +37,13 @@ const OrderApprovalModal: React.FC<Props> = (props) =>{
 
     const onConnectWalletHandler = async () => {
         connect()
+        initAddress()
+    }
+
+    const initAddress = async () => {
+        const address = await WalletUtils.getCurrentWallet()
+        if (address != account)
+        setAccount(address == null? '': address)
     }
       
     return (

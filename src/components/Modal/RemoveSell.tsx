@@ -42,10 +42,6 @@ const RemoveSellModal: React.FC<Props> = (props) =>{
     const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
     const [selectedItem, setSelectedItem] = useState(null)
 
-    const onConnectWalletHandler = async () => {
-        connect()
-    }
-
     useEffect(() => {
         if (props.item == selectedItem) return
         setSelectedItem(props.item)
