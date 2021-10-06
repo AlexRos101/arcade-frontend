@@ -292,7 +292,7 @@ button {
   
   .dropdown-content a {
     color: #22303D;
-    padding: 8px 16px;
+    padding: 8px 18px;
     text-decoration: none;
     display: block;
   }
@@ -490,6 +490,8 @@ button {
 
     color: #FF6C50;
     text-shadow: 0px 1px 0px #B53C2C;
+    
+    margin: auto 0px !important;
   }
 
   .market-info-tag {
@@ -753,11 +755,12 @@ button {
     display: none !important;
     position: absolute !important;
     right: 1vw;
-    top: 2vh;
+    top: 1vh;
     color: #CAC197 !important;
     width: 26px;
     height: 26px;
     border: none !important;
+    padding: 0px !important;
   }
 
   @media screen and (max-width: 600px) {
@@ -819,6 +822,97 @@ button {
     .row {
       margin-top: 10px ;
       padding-bottom: 10px;
+    }
+
+    .market-label {
+      font-size: 32px;
+      line-height: 27px;
+  
+    }
+
+    .r-no-padding {
+      padding-top: 0px !important;
+    }
+
+    .market-listing-btn {
+      display: none !important;
+    }
+
+    .market-info-tag {
+      display: none !important;
+    }
+
+    .market-header-action {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 10vh;
+      background: #FFFDF1;
+      box-shadow: 0px -4px 13px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      padding:auto !important;
+    }
+
+    .market-header-action button {
+      margin: auto !important;
+    }
+
+    .market-sublabel {
+      font-size: 26px;
+      line-height: 22px;
+    }
+
+    .market-slide {
+      width: 960px;
+    }
+
+    .card .flex-row {
+      flex-direction: row;
+    }
+
+    .market-expand {
+      margin-left: 0px !important;
+    }
+
+    .market-expand a{
+      flex-direction: row;
+      width: fit-content;
+      height: auto;
+      position: relative;
+      height: 20px;
+    }
+
+    .market-expand p{
+      margin: auto 0px !important;
+      position: relative;
+    }
+
+    .market-expand svg {
+      position: absolute;
+      right: -1.5rem;
+    }
+    
+    .r-flex-row {
+      flex-direction: row;
+    }
+
+    #arcade_map {
+      flex-direction: row;
+    }
+
+    #skin_slider {
+      padding-top: 0 !important;
+    } 
+
+    #map_slider {
+      padding-top: 0 !important;
+    }
+
+    .dropdown-content a {
+      margin-left: 10px !important;
+      margin-right: 10px !important;
+      padding-left: 10px !important;
     }
   }
 

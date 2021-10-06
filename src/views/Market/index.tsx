@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react"
-
+import ReactDOM from 'react-dom'
 import {
     Button
   } from '@material-ui/core'
 import Page from 'components/Layout/Page'
-
+import $ from 'jquery'
 
 import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
@@ -123,8 +123,19 @@ const Market = () => {
         setSelectedCard(mapsCards[index])
     }
 
+    const handleScroll = () => {
+        if ($('#footer') != null && $(window) != undefined) {
+            const offset = $('#footer').offset()
+            const windows = $(window)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('scroll', handleScroll)
+    })
+
     return (
-        <Page>
+        <Page id="market_page">
             <Header>
                 <HeaderLabel>ArcadeMarket</HeaderLabel>
                 <Info className="mh-auto ml-10 market-info-tag"/>
@@ -133,11 +144,11 @@ const Market = () => {
             <MarketRow>
                 <RowLabel>ArcadeDoge Skins</RowLabel>
             </MarketRow>
-            <MarketRow style={{flexDirection: 'row'}}>
+            <MarketRow id="skin_slider">
                 <CardSlider context={skinCards} onOpen={handleOpenCard} open-ri/>
                 <ExpandButton>View All Skins</ExpandButton>
             </MarketRow>
-            <MarketRow>
+            <MarketRow id="arcade_map">
                 <RowLabel> Arcade Maps</RowLabel>
                 <FormControl variant="outlined" className="market-form-control">
                     <Select value={maplevel} className="market-map-select">
@@ -149,7 +160,7 @@ const Market = () => {
                     </Select>
                 </FormControl>
             </MarketRow>
-            <MarketRow style={{flexDirection: 'row'}}>
+            <MarketRow id="map_slider">
                 <CardSlider context={mapsCards} onOpen={handleOpenMaps} open-ri/>
                 <ExpandButton>View All Maps</ExpandButton>
             </MarketRow>

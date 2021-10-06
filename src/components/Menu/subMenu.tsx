@@ -13,7 +13,7 @@ const SubMenu: React.FC<Props> = (props) => {
             <div className="dropdown-content">
                 <a href="#">ArcadeDoge Skins</a>
                 <a href="#">Arcade Maps</a>
-                <a href="#" className="flex-row">Weapons <Badge type="danger" content="Hot Releases"/></a>
+                <a href="#" className="flex-row r-flex-row">Weapons <Badge type="danger" content="Hot Releases"/></a>
             </div>
         </div>
     )

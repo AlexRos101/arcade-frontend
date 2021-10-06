@@ -24,7 +24,7 @@ const MarketHeader = () => {
   return (
     <div className="right">
       <ThemeProvider theme={marketTheme}>
-        <div className={classes.root}>
+        <div className={`${classes.root} market-header-action`}>
           <Button
             className="mg-8 market-listing-btn"
             variant="contained"

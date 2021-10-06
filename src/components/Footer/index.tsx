@@ -37,7 +37,8 @@ const Footer = () => {
   return (
     <AppBar
       position="static"
-      className={classes.root}>
+      className={classes.root}
+      id="footer">
 
       <Grid
         container
