@@ -10,20 +10,16 @@ import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
 import Info from '@material-ui/icons/Info'
 
-import Dialog from '@material-ui/core/Dialog'
-import MuiDialogTitle from '@material-ui/core/DialogTitle'
-import MuiDialogContent from '@material-ui/core/DialogContent'
-import MuiDialogActions from '@material-ui/core/DialogActions'
-
-
 import MarketHeader from './components/MarketHeader'
 import MarketRow from './components/MarketRow'
 import CardSlider from './components/CardSlider'
+import CardModal from './components/CardModal'
 
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
 import ExpandButton from "components/Button/ExpandButton"
+import { stringify } from "querystring"
 
 
 const skinCards = [
@@ -109,8 +105,23 @@ const mapsCards = [
 ]
 
 const Market = () => {
-    const [maplevel, setMapLevel] = React.useState(0);
+    const [maplevel, setMapLevel] = React.useState(0)
+    const [open, setOpen] = React.useState(false)
+    const [selectedCard, setSelectedCard] = React.useState({color: '', tokenId: '', price: 0})
     
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleOpenCard = (index: number) => {
+        setOpen(true)
+        setSelectedCard(skinCards[index])
+    }
+
+    const handleOpenMaps = (index: number) => {
+        setOpen(true)
+        setSelectedCard(mapsCards[index])
+    }
 
     return (
         <Page>
@@ -123,7 +134,7 @@ const Market = () => {
                 <RowLabel>ArcadeDoge Skins</RowLabel>
             </MarketRow>
             <MarketRow style={{flexDirection: 'row'}}>
-                <CardSlider context={skinCards} />
+                <CardSlider context={skinCards} onOpen={handleOpenCard} open-ri/>
                 <ExpandButton>View All Skins</ExpandButton>
             </MarketRow>
             <MarketRow>
@@ -139,9 +150,10 @@ const Market = () => {
                 </FormControl>
             </MarketRow>
             <MarketRow style={{flexDirection: 'row'}}>
-                <CardSlider context={mapsCards} />
+                <CardSlider context={mapsCards} onOpen={handleOpenMaps} open-ri/>
                 <ExpandButton>View All Maps</ExpandButton>
             </MarketRow>
+            <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/>
         </Page>
     )
 }

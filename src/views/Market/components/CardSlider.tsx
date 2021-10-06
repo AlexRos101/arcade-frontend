@@ -3,7 +3,7 @@ import React from "react"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-
+import Link from '@material-ui/core/Link';
 import Card from './Card'
 
 
@@ -15,6 +15,7 @@ interface tokenCard {
 
 interface Props {
     context: Array<tokenCard>
+    onOpen: (index: number) => void
 }
 
 
@@ -23,8 +24,10 @@ const CardSlider: React.FC<Props>= (props) => {
         <div className="market-slide">
             <Slider slidesToShow={5} swipeToSlide={true} draggable={true} arrows={false}> 
             {
-                props.context.map(map => {
-                    return ( <Card color={map.color} tokenId={map.tokenId} price={map.price} />)
+                props.context.map((map, index) => {
+                    return (
+                        <Card index={index} color={map.color} tokenId={map.tokenId} price={map.price} onClick={props.onOpen}/>
+                    )
                 })
             }
             </Slider>

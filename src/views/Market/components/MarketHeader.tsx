@@ -1,50 +1,46 @@
 import React from "react"
-
-
+import styled from 'styled-components'
 import Storefront from '@material-ui/icons/Storefront'
+import { Button } from '@material-ui/core'
+import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
-import {
-    Button
-  } from '@material-ui/core'
-
-  
-import { createTheme, ThemeProvider  } from '@material-ui/core/styles'
+import { greenTheme } from 'styles/theme'
 import { ReactComponent as Sell } from "assets/img/sell.svg"
 
-const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#FFFCED',
-        contrastText: '#308D7B',
-      },
-      secondary: {
-        main: '#30C5A8',
-        contrastText: '#FFFCED',
-      },
-    },
-  });
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    '& > *': {
+      margin: theme.spacing(1)
+    }
+  }
+}))
 
 const MarketHeader = () => {
-    return (
-        <div className="right">
-            <ThemeProvider theme={theme}>
-                <Button
-                    className="mg-8 market-listing-btn"
-                    variant="contained"
-                    color="primary"
-                    startIcon={<Storefront />}>
-                    View Your Listings
-                </Button>
-                <Button
-                    className="mg-8 market-customizing-btn"
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<Sell />}>
-                    Sell Customized Item
-                </Button>
-            </ThemeProvider>
+  const classes = useStyles()
+
+  return (
+    <div className="right">
+      <ThemeProvider theme={greenTheme}>
+        <div className={classes.root}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Storefront />}>
+            View Your Listings
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<Sell />}>
+            Sell Customized Item
+          </Button>
         </div>
-    )
+      </ThemeProvider>
+    </div>
+  )
 }
 
 export default MarketHeader

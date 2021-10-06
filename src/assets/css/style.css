@@ -153,7 +153,7 @@ button {
   }
   
   .ml-15 {
-    margin-left: 15px;
+    margin-left: 15px !important;
   }
   
   .mr-10 {
@@ -607,6 +607,144 @@ button {
     line-height: 13px;
     padding: 5px 10px;
   }
+
+  .card-dialog {
+    border: 1px solid #D9D2B5;
+    box-shadow: 0px 6px 9px rgba(0, 0, 0, 0.08);
+    
+  }
+  
+  .modal-card-content {
+    padding: 0px !important;
+    width: 70vw !important;
+    height: 35vw !important;
+    max-width: 992px !important;
+    max-height: 482px !important;
+    border: 0px !important;
+  }
+
+  .expanded-card-img {
+    height: 100%;
+    width: 50%;
+    border-radius: 0px 0px 0px 0px;
+  }
+
+  .expanded-card-content {
+    width: calc(50% - 52px);
+    padding: 52px 36px;
+  }
+
+  .modal-nav-label {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+    color: #9D9468;
+  }
+
+  .market-modal-row {
+    padding: 20px 0px 0px 0px;
+  }
+
+  .modal-header-label {
+    font-family: 'Tovari Sans Bold';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 56px;
+    line-height: 47px;
+    color: #FF6C50;
+    text-shadow: 0px 1px 0px #B53C2C;
+  }
+
+  .modal-content {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 17px;
+
+    /* Black */
+    color: #22303D;
+  }
+
+  .price-layout {
+    background: #FFFEFB;
+    border: 1px solid #EAE5CE;
+    border-radius: 7px;
+    padding: 13px 19px;
+  }
+
+  .price-header-label {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+    /* Black */
+    color: #22303D;
+  }
+
+  .price-row {
+    display: flex;
+    flex-direction: row;
+    padding: 19px 0px;
+  }
+
+  .price-sector {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .price-label {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 34px;
+
+    /* Black */
+    color: #22303D;
+    margin-left: 5px;
+  }
+
+  .price-dex-label {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+
+    color: rgba(34, 48, 61, 0.5);
+    margin-top: 15px;
+  }
+
+  .modal-buy-arcade-btn {
+    border: 1px solid #FCBF4A !important;
+    width: calc(50% - 8px);
+  }
+
+  .modal-buy-usd-btn {
+    border: 1px solid #AF7923 !important;
+    width: calc(50% - 8px);
+  }
+
+  .modal-close {
+    position: absolute !important;
+    right: 1vw;
+    top: 2vh;
+    color: #CAC197 !important;
+    width: 26px;
+    height: 26px;
+    border: solid 1px #CAC197 !important;
+    border-radius: 15px !important;
+  }
+  
 
   
   
