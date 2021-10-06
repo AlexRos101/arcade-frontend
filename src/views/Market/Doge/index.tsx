@@ -44,7 +44,7 @@ const dogeTab: Array<CategoryTab> = [
 const MarketDoge: React.FC = () => {
   const [maplevel] = React.useState(0)
   const [open, setOpen] = React.useState(false)
-  const [selectedCard, setSelectedCard] = React.useState({
+  const [selectedCard, setSelectedCard] = React.useState<GameItem>({
     id: 0,
     token_id: 0,
     name: '',
@@ -53,7 +53,7 @@ const MarketDoge: React.FC = () => {
     owner: '',
     contract_address: '',
   })
-  const [marsdogeItems, setMarsdogeItems] = useState([])
+  const [marsdogeItems, setMarsdogeItems] = useState<Array<GameItem>>([])
 
   const [initialized, setInitialized] = useState(false)
 
@@ -99,7 +99,7 @@ const MarketDoge: React.FC = () => {
       setSelectedCard(marsdogeItems[index])
       setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
     },
-    [open, selectedCategoryName, selectedCard],
+    [open, selectedCategoryName, selectedCard, marsdogeItems],
   )
 
   const getMarsDogeCategoryName = useCallback(

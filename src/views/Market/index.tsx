@@ -76,7 +76,7 @@ const Market: React.FC = () => {
       setSelectedCard(marsdogeItems[index])
       setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
     },
-    [open, selectedCard, selectedCategoryName],
+    [open, selectedCard, selectedCategoryName, marsdogeItems],
   )
 
   const getMarsDogeCategoryName = useCallback(
