@@ -4,7 +4,7 @@ import Container from './Container'
 
 const StyledPage = styled(Container)({
   minHeight: 'calc(100vh - 64px)',
-  paddingTop: '16px',
+  paddingTop: 'calc(5vh + 16px)',
   paddingBottom: '16px'
 })
 

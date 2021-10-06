@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
 
 const Home = lazy(() => import('./views/Home'))
+const Market = lazy(() => import('./views/Market'))
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           <Switch>
             <Route path="/" exact>
               <Home />
+            </Route>
+            <Route path="/market" exact>
+              <Market />
             </Route>
           </Switch>
         </Suspense>

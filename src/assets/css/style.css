@@ -163,6 +163,10 @@ button {
   .mr-15 {
     margin-right: 15px;
   }
+
+  .mr-5 {
+    margin-right: 5px;
+  }
   
   .flex-row {
     display: flex !important;
@@ -336,9 +340,9 @@ button {
   
   iframe {
     width: 70vw;
-    max-width: 1200px;
+    max-width: 1040px;
     height: calc(70vh - 16px);
-    max-height: 590px;
+    max-height: 510px;
     border: 0;
     background: #F8F4E1;
     margin:auto;
@@ -438,6 +442,19 @@ button {
   .mg-8 {
     margin: 8px !important;
   }
+
+  .mg-10 {
+    margin: 10px !important;
+  }
+
+  .mg-0 {
+    margin: 0px;
+  }
+
+  .mh-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
   
   .iframe-template {
     position: relative;
@@ -445,4 +462,153 @@ button {
     margin-left: auto;
     margin-right: auto;
   }
+
+  @font-face {
+    font-family: 'Tovari Sans Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tovari Sans Bold'), url('TovariSans.woff') format('woff');
+    }
+
+  .market-label {
+    font-family: 'Tovari Sans Bold';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 56px;
+    line-height: 47px;
+
+    color: #1571FF;
+    text-shadow: 0px 2px 0px #0045AE;
+  }
+
+  .market-sublabel {
+    font-family: 'Tovari Sans Bold';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 27px;
+
+    color: #FF6C50;
+    text-shadow: 0px 1px 0px #B53C2C;
+  }
+
+  .market-info-tag {
+    color: #DBD6BF;
+  }
+
+  .market-listing-btn {
+    border: 1px solid #308D7B !important;
+  }
+
+  .market-customizing-btn {
+    border: 1px solid #30C5A8 !important;
+  }
+
+  .right {
+    position:absolute;
+    right: 0;
+  }
+
+  .market-row {
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+  }
+
+  .market-title {
+    position:relative;
+    border-bottom: 1px solid #EFECDC;
+  }
+
+  .market-slide {
+    width: 90%;
+  }
+
+  .market-expand {
+    margin: auto;
+  }
+  .market-expand-link {
+    margin: auto 1vh  !important;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    color: #B7B091 !important;
+    display: flex;
+    flex-direction: column;
+    width: 54px;
+    height: 100px;
+  }
+
+  .slick-issue {
+    min-width:0;
+    max-height:0;
+  }
+
+  .card {
+    width: 177px;
+    background: #FFFEFB;
+    border: 1px solid #EAE5CE;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
+    border-radius: 7px;
+
+    margin: 10px 20px 10px 0px !important;
+  }
+
+  .card p {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    margin: auto 0px;
+  }
+
+  .card-img {
+    width: 177px;
+    height: 154px;
+    border-radius: 7px 7px 0px 0px;
+  }
+
+  .card-label {
+    height: 20px;
+    padding: 7px 15px;
+  }
+
+  .card-price {
+    margin: auto 0px !important;
+    height: 20px;
+  }
+
+  .market-form-control {
+    margin-left: 10px !important;
+  }
+  .market-map-select {
+    background: #FFFCED !important;
+    box-sizing: border-box !important;
+    border-radius: 7px !important;
+
+    font-family: Montserrat !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+    line-height: 13px !important;
+
+    color: #9D9468 !important;
+    height: 29px;
+  }
+
+  .MuiMenu-list option {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    padding: 5px 10px;
+  }
+
+  
+  
+  
     

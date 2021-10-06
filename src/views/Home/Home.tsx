@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Button
 } from '@material-ui/core'
-import Page from '../../components/Layout/Page'
+import Page from 'components/Layout/Page'
 
 import { makeStyles } from '@material-ui/core'
 import {ReactComponent as AstronautBuy} from 'assets/img/astronautbuy.svg'
@@ -17,15 +18,19 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Home: React.FC = () => {
-    const classes = useStyles()
+    const history = useHistory()
 
     const onClickButton = () => {
         console.log("asdf")
     }
 
+    const onClickBuyArcadeDoges = () => {
+      history.push('/market')
+    }
+
     return (
       <Page>
-        <div className="iframe-template mt-10">
+        <div className="iframe-template">
           <iframe />
           <div className="rect rect-1" />
           <div className="rect rect-2" />
@@ -45,6 +50,7 @@ const Home: React.FC = () => {
             className="mg-8"
             variant="contained"
             color="secondary"
+            onClick={onClickBuyArcadeDoges}
             startIcon={<AstronautBuy />}>
             Buy ArcadeDoges
             </Button>
