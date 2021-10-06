@@ -3,7 +3,14 @@ import {
   Button,
   Hidden
 } from '@material-ui/core'
+
+import MenuItem from './menuItem'
+import SubMenu from './subMenu'
+
 import { makeStyles } from '@material-ui/core'
+import { ReactComponent as Astronaut } from 'assets/img/astronaut.svg'
+import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const NavBarMenu = () => {
+
   const classes = useStyles()
 
   const onConnectWalletHandler = () => {
@@ -29,19 +37,23 @@ const NavBarMenu = () => {
   return (
     <Hidden smDown>
       <div className={classes.root}>
-        <Button>How to Play</Button>
-        <Button>Community</Button>
-        <Button>ArcadeMarket</Button>
+        <div className = "menu">
+            <MenuItem text="How to Play" />
+            <MenuItem text="Community" />
+            <SubMenu text="ArcadeMarket" />
+        </div>
         <Button
           variant="contained"
           color="primary"
-          onClick={onConnectWalletHandler}>
+          onClick={onConnectWalletHandler}
+          startIcon={<Wallet />}>
           Connect Wallet
         </Button>
         <Button
           variant="contained"
           color="secondary"
-          onClick={onPlayGameHandler}>
+          onClick={onPlayGameHandler}
+          startIcon={<Astronaut />}>
           Play Game
         </Button>
       </div>

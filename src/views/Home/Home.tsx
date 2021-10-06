@@ -1,13 +1,76 @@
 import React, { useState, useEffect } from 'react'
-
+import {
+  Button
+} from '@material-ui/core'
 import Page from '../../components/Layout/Page'
 
-const Home = () => {
-  return (
-    <Page>
-      Hello World
-    </Page>
-  )
+import { makeStyles } from '@material-ui/core'
+import {ReactComponent as AstronautBuy} from 'assets/img/astronautbuy.svg'
+import ShoppingCart from '@material-ui/icons/ShoppingCart'
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}))
+
+const Home: React.FC = () => {
+    const classes = useStyles()
+
+    const onClickButton = () => {
+        console.log("asdf")
+    }
+
+    return (
+      <Page>
+        <div className="iframe-template mt-10">
+          <iframe />
+          <div className="rect rect-1" />
+          <div className="rect rect-2" />
+          <div className="rect rect-3" />
+          <div className="rect rect-4" />
+          <div className="rect rect-5" />
+          <div className="rect rect-6" />
+          <div className="rect rect-7" />
+          <div className="rect rect-8" />
+          <div className="rect rect-9" />
+          <div className="rect rect-10" />
+          <div className="rect rect-11" />
+          <div className="rect rect-12" />
+        </div>
+        <div className="flex-row row">
+          <Button
+            className="mg-8"
+            variant="contained"
+            color="secondary"
+            startIcon={<AstronautBuy />}>
+            Buy ArcadeDoges
+            </Button>
+          <Button
+            className="mg-8"
+            variant="contained"
+            color="primary"
+            startIcon={<ShoppingCart />}>
+            Vend at ArcadeMarket
+            </Button>
+        </div>
+          
+      </Page>
+    )
+    /* <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<AstronautBuy />}>
+            Buy ArcadeDoges
+            </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<ShoppingCart />}>
+            Vend at ArcadeMarket
+            </Button> */
 }
 
 export default Home
