@@ -68,7 +68,6 @@ const NavBarMenu = () => {
 
   const [account, setAccount] = useGlobalState('account')
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
-  const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
     await connect()
@@ -93,13 +92,10 @@ const NavBarMenu = () => {
   }
 
   useEffect(() => {
-    if (initialized) return;
-    setInitialized(true);
     const initAddress = async () => {
-      setIsLoading(true);
-      const address = WalletUtils.getCurrentWallet();console.log(address)
-      setAccount(address == null? '': address);
-      setIsLoading(false);
+      const address = await WalletUtils.getCurrentWallet()
+      if (address != account)
+      setAccount(address == null? '': address)
     }
     
     initAddress()
