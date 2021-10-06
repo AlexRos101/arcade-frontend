@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, Suspense, lazy, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Typography,
@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core'
 
 import {store, useGlobalState} from 'state-pool'
+import * as WalletUtils from '../../global/wallet'
 
 import MenuItem from './menuItem'
 import SubMenu from './subMenu'
@@ -66,6 +67,8 @@ const NavBarMenu = () => {
   const classes = useStyles()
 
   const [account, setAccount] = useGlobalState('account')
+  const [isLoading, setIsLoading] = useGlobalState('isLoading')
+  const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
     setAccount(await connect())
@@ -88,6 +91,19 @@ const NavBarMenu = () => {
     
     return '********' + source.substring(source.length - 6, source.length)
   }
+
+  useEffect(() => {
+    if (initialized) return;
+    setInitialized(true);
+    const initAddress = async () => {
+      setIsLoading(true);
+      const address = await WalletUtils.getCurrentWallet();
+      setAccount(address == null? '': address);
+      setIsLoading(false);
+    }
+    
+    initAddress()
+  })
 
   return (
     <div>

@@ -86,11 +86,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   }))
 
-interface TabData {
-    tabName : string
-}
 interface TabsData {
-    tabs: Array<TabData>
+    tabs: Array<any>
 }
 
 const TabRow: React.FC<TabsData>= (props) => {
@@ -110,7 +107,7 @@ const TabRow: React.FC<TabsData>= (props) => {
                     {
                         props.tabs.map((tab) => {
                             return (
-                                <AntTab label={tab.tabName} />
+                                <AntTab label={tab.tabName}/>
                             )
                         })
                     }

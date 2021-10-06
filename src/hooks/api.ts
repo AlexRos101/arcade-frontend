@@ -34,3 +34,18 @@ export const getDiscussion = async(id: number) => {
   const response = await sendPost("discussion", {id: id})
   return response.data
 }
+
+export const getGames = async () => {
+  const response = await sendPost("get_games", {})
+  return response
+}
+
+export const getCategories = async () => {
+  const response = await sendPost('get_categories', {})
+  return response
+}
+
+export const getMarketItems = async(game_id: number, category_id: number, sort_type: number, limit: number, cnt: number) => {
+  const response = await sendPost("get_market_items", {game: game_id, category: category_id, sort: sort_type, limit: limit, cnt: cnt})
+  return response
+}

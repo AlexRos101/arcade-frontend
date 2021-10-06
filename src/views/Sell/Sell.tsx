@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
+import * as API from '../../hooks/api'
+import axios from 'axios';
+import {store, useGlobalState} from 'state-pool'
 import styled from 'styled-components'
 import {
   Box,
@@ -30,6 +33,7 @@ import SwitchButton from 'components/Button/SwitchButton'
 import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
+import Swal from 'sweetalert'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -101,19 +105,89 @@ const Sell = ({ data } : {
   const [skinItem, setSkinItem] = useState<SkinProps | undefined>(data ?? initData)
   const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
   const sellCardRef = useRef<HTMLDivElement>(null)
+  const [games, setGames] = useState([])
+  const [categories, setCategories] = useState([])
+  const [initialized, setInitialized] = useState(false)
+  const [isLoading, setIsLoading] = useGlobalState('isLoading')
+  const [selectedGameID, setSelectedGameID] = useState(-1)
+  const [selectedCategoryID, setSelectedCategoryID] = useState(-1)
+  const [tokenID, setTokenID] = useState(0)
+  const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
 
   useEffect(() => {
     const cardHeight = `${sellCardRef?.current?.clientHeight}px`
     setCardHeight(cardHeight)
+
+    if (initialized) return
+    setInitialized(true)
+    
+    const getGamesAndCategories = async () => {
+      setIsLoading(true);
+      let response = await API.getGames();
+      if (response.result) {
+        setGames(response.data)
+      } else {
+        setIsLoading(false);
+        return;
+      }
+
+      response = await API.getCategories();
+      if (response.result) {
+        setCategories(response.data)
+      }
+
+      setIsLoading(false)
+    }
+
+    getGamesAndCategories()
   }, [])
 
-  const handleClickCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
-    // eslint-disable-next-line prefer-const
-    let prevData = skinItem
-    if (prevData) {
-      prevData.category = event.target.value as string
+  const handleSelectGame = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const value = event.target.value as number
+    setSelectedGameID(value)
+  }
+
+  const handleSelectCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const value = event.target.value as number
+    setSelectedCategoryID(value)
+  }
+
+  const uploadMeterial = async (files: any) => {
+    const file = files[0]
+    if (file.name.slice(file.name.length - 4, file.name.length) != '.rar') {
+      Swal('Please select *.rar file.')
+      return
     }
-    setSkinItem(prevData)
+
+    setTokenID(Date.now())
+
+    setIsLoading(true);
+
+    const formData = new FormData(); 
+      // Update the formData object 
+      formData.append( 
+          "myFile", 
+          file, 
+          tokenID + ".rar"
+      ); 
+      
+      // Request made to the backend api 
+      // Send formData object 
+      axios.post(process.env.REACT_APP_API_NODE + "upload_material", formData)
+      .then((res) => {
+        setIsLoading(false);
+        if (res.data.code == -1) {
+          setShowThumbnailWarning(true)
+          return
+        }
+        console.log(res)
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      })
+    
+    console.log(file);
   }
   
   return (
@@ -135,43 +209,35 @@ const Sell = ({ data } : {
                 <LabelComponent label="Game" className="wd-50">
                   <Select
                     fullWidth
-                    value={skinItem?.category ?? ''}
-                    onChange={handleClickCategory}
+                    value={selectedGameID}
+                    onChange={handleSelectGame}
                     className={classes.input}
-                    label="Select Category"
-                    input={<BootstrapInput >Select Category</BootstrapInput>}
+                    label="Select Game"
+                    input={<BootstrapInput >Select Game</BootstrapInput>}
                   >
-                    <MenuItem value={1}>Category1</MenuItem>
-                    <MenuItem value={2}>Category2</MenuItem>
-                    <MenuItem value={3}>Category3</MenuItem>
-                    <MenuItem value={4}>Category4</MenuItem>
-
-                    {/* {
-                      Category.map((item, index) => {
-                        return <MenuItem value={index} key={`category-key-${item}`}>{item}</MenuItem>
+                    {
+                      games.map((game: any, index: number) => {
+                        return <MenuItem value={game.id}>{game.name}</MenuItem>
                       })
-                    } */}
+                    }
                   </Select>
                 </LabelComponent>
-                <LabelComponent label="Combo Type" className="wd-50"> 
+                <LabelComponent label="Category" className="wd-50"> 
                   <Select
                     fullWidth
-                    value={skinItem?.combo ?? ''}
-                    onChange={handleClickCategory}
+                    value={selectedCategoryID}
+                    onChange={handleSelectCategory}
                     className={classes.input}
-                    placeholder="Select Combo"
+                    placeholder="Select Category"
                     input={<BootstrapInput />}
                   >
-                    <MenuItem value={1}>Category1</MenuItem>
-                    <MenuItem value={2}>Category2</MenuItem>
-                    <MenuItem value={3}>Category3</MenuItem>
-                    <MenuItem value={4}>Category4</MenuItem>
-
-                    {/* {
-                      Category.map((item, index) => {
-                        return <MenuItem value={index} key={`category-key-${item}`}>{item}</MenuItem>
+                    {
+                      categories.map((category: any, index: number) => {
+                        if (category.game_id == selectedGameID) {
+                          return <MenuItem value={category.id}>{category.name}</MenuItem>
+                        }
                       })
-                    } */}
+                    }
                   </Select>
                 </LabelComponent>
               </Flex>
@@ -273,7 +339,7 @@ const Sell = ({ data } : {
         </Grid>
         <Grid item xs={12} sm={6}>
           { skinItem?.item == '' ? 
-            (<ItemDropdown height={cardHeight}>drop files</ItemDropdown>) :
+            (<ItemDropdown height={cardHeight} onDrop={uploadMeterial}>drop files</ItemDropdown>) :
             (<Card bgColor={skinItem?.item} height={cardHeight} />)
           }
         </Grid>

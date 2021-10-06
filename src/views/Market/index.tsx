@@ -133,33 +133,22 @@ const mapsCards = [
     },
 ]
 
-const dogeTab = [
+const dogeTab: Array<any> = [
     {
+        categoryid: 0,
         tabName: "All"
     },
     {
+        categoryid: 1,
         tabName: "MarsDoge Skins"
     },
     {
+        categoryid: 2,
         tabName: "MarsDoge Maps"
     },
     {
+        categoryid: 3,
         tabName: "Weapons"
-    },
-]
-
-const anotherTab = [
-    {
-        tabName: "All"
-    },
-    {
-        tabName: "Category 1"
-    },
-    {
-        tabName: "Category 2"
-    },
-    {
-        tabName: "Category 3"
     },
 ]
 
@@ -171,8 +160,9 @@ const Market = () => {
     
     const [selectedCard, setSelectedCard] = React.useState({color: '', tokenId: '', price: 0})
 
-
     const [testopen, setTestOpen] = React.useState(false)
+
+    const [initialized, setInitialized] = useState(false);
     
     const handleClose = () => {
         setOpen(false)
@@ -197,6 +187,15 @@ const Market = () => {
 
     useEffect(() => {
         document.addEventListener('scroll', handleScroll)
+
+        if (initialized) return;
+        setInitialized(true);
+
+        const getMarketItems = async () => {
+            console.log('AAA');
+        }
+
+        getMarketItems();
     })
 
     const onClickMarsDogAll = () => {
@@ -222,14 +221,6 @@ const Market = () => {
             </Header>
             <MarketRow id="arcade_map">
                 <RowLabel>MarsDoge</RowLabel>
-                <FormControl variant="outlined" className="market-form-control tab-select no-display">
-                    <Select value={maplevel} className="market-map-select">
-                        <option value={0}>Most Recent</option>
-                        <option value={1}>Price (Low to High)</option>
-                        <option value={2}>Price (High to Low)</option>
-                        <option value={3}>Popular</option>
-                    </Select>
-                </FormControl>
             </MarketRow>
             <MarketRow>
                 <TabRow tabs={dogeTab}/>
@@ -237,25 +228,6 @@ const Market = () => {
             <MarketRow id="skin_slider">
                 <CardSlider context={skinCards} onOpen={handleOpenCard} rows={1} open-ri/>
                 <ExpandButton onClick={onClickMarsDogAll}>View All MarsDoge</ExpandButton>
-            </MarketRow>
-            <MarketRow className="mt-10"/>
-            <MarketRow id="arcade_map">
-                <RowLabel>Another Game</RowLabel>
-                <FormControl variant="outlined" className="market-form-control tab-select no-display">
-                    <Select value={maplevel} className="market-map-select">
-                        <option value={0}>Most Recent</option>
-                        <option value={1}>Price (Low to High)</option>
-                        <option value={2}>Price (High to Low)</option>
-                        <option value={3}>Popular</option>
-                    </Select>
-                </FormControl>
-            </MarketRow>
-            <MarketRow>
-                <TabRow tabs={anotherTab}/>
-            </MarketRow>
-            <MarketRow id="map_slider">
-                <CardSlider context={mapsCards} onOpen={handleOpenMaps} rows={1} open-ri/>
-                <ExpandButton onClick={onClickOtherAll}>View All Another Game</ExpandButton>
             </MarketRow>
             <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/>
             <OrderApprovalModal onClose={handleTestClose} open={testopen} title='Skin #012345'/>

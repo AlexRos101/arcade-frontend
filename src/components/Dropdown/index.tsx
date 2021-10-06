@@ -1,6 +1,7 @@
 import React from "react"
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
+import {useDropzone} from 'react-dropzone'
 import {ReactComponent as Cloud} from 'assets/img/cloud.svg'
 
 const DropContainer = styled.div<{
@@ -29,19 +30,20 @@ const DropContainer = styled.div<{
 
 interface Props {
     height?: string
-    onDrop?: (files: []) => void
+    onDrop: (files: any) => void
 }
 
 const ItemDropdown: React.FC<Props> = (props) => {
     return (
         <DropContainer height={props.height}>
-            <Dropzone onDrop={files => console.log(files)} >
+            <Dropzone onDrop={(files) => props.onDrop(files)} maxFiles={1} multiple={false}>
                 {({getRootProps, getInputProps}) => (
                 <div style={{width:'100%', height:'100%'}}>
                     <div
                     {...getRootProps({
                         className: 'dropzone drop-content',
-                        onDrop: event => event.stopPropagation()
+                        onDrop: event => event.stopPropagation(),
+                        maxFiles: 1
                     })} 
                     style={{width:'100%', height:'100%'}}
                     >
