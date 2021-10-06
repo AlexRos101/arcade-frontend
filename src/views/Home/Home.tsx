@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
-const Home: React.FC = () => {
-    return (
-        <div> 
-            asdf
-        </div>
-    )
+import Page from '../../components/Layout/Page'
+
+const Home = () => {
+  return (
+    <Page>
+      Hello World
+    </Page>
+  )
 }
 
 export default Home

@@ -1,5 +1,8 @@
 import React, { memo } from 'react'
-import { Typography } from '@material-ui/core'
+import {
+  Grid,
+  Typography
+} from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -28,58 +31,68 @@ const FooterRoadmap = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.block}>
-        <Typography
-          variant="subtitle1"
-          className={classes.title}>
-          Play Game
-        </Typography>
-        <Link href="#">
-          <RoadmapEntry title="How to Play" />
-        </Link>
-        <Link href="#">
-          <RoadmapEntry title="Buy ArcadeDoges" />
-        </Link>
-      </div>
-      <div className={classes.block}>
-        <Typography
-          variant="subtitle1"
-          className={classes.title}>
-          ArcadeMarket
-        </Typography>
-        <Link href="#">
-          <RoadmapEntry title="Sell Customized Item" />
-        </Link>
-        <Link href="#">
-          <RoadmapEntry title="View Your Listings" />
-        </Link>
-      </div>
-      <div className={classes.block}>
-        <Typography
-          variant="subtitle1"
-          className={classes.title}>
-          Community
-        </Typography>
-        <Link href="#">
-          <RoadmapEntry title="Join the Official" />
-        </Link>
-        <Link href="#">
-          <RoadmapEntry title="Discord Server!" />
-        </Link>
-      </div>
-      <div className={classes.block}>
-        <Typography
-          variant="subtitle1"
-          className={classes.title}>
-          Company
-        </Typography>
-        <Link href="#">
-          <RoadmapEntry title="Term of Use" />
-        </Link>
-        <Link href="#">
-          <RoadmapEntry title="Privacy Policy" />
-        </Link>
-      </div>
+      <Grid container>
+        <Grid item>
+          <div className={classes.block}>
+            <Typography
+              variant="subtitle1"
+              className={classes.title}>
+              Play Game
+            </Typography>
+            <Link href="#">
+              <RoadmapEntry title="How to Play" />
+            </Link>
+            <Link href="#">
+              <RoadmapEntry title="Buy ArcadeDoges" />
+            </Link>
+          </div>
+        </Grid>
+        <Grid item>
+          <div className={classes.block}>
+            <Typography
+              variant="subtitle1"
+              className={classes.title}>
+              ArcadeMarket
+            </Typography>
+            <Link href="#">
+              <RoadmapEntry title="Sell Customized Item" />
+            </Link>
+            <Link href="#">
+              <RoadmapEntry title="View Your Listings" />
+            </Link>
+          </div>
+        </Grid>
+        <Grid item>
+          <div className={classes.block}>
+            <Typography
+              variant="subtitle1"
+              className={classes.title}>
+              Community
+            </Typography>
+            <Link href="#">
+              <RoadmapEntry title="Join the Official" />
+            </Link>
+            <Link href="#">
+              <RoadmapEntry title="Discord Server!" />
+            </Link>
+          </div>
+        </Grid>
+        <Grid item>
+          <div className={classes.block}>
+            <Typography
+              variant="subtitle1"
+              className={classes.title}>
+              Company
+            </Typography>
+            <Link href="#">
+              <RoadmapEntry title="Term of Use" />
+            </Link>
+            <Link href="#">
+              <RoadmapEntry title="Privacy Policy" />
+            </Link>
+          </div>
+        </Grid>
+      </Grid>
     </div>
   )
 }

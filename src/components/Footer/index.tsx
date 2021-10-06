@@ -46,33 +46,10 @@ const Footer = () => {
           <FooterContact />
         </Grid>
         <Grid container item md={8} style={{ justifyContent: 'space-between' }} >
-          {/* <Grid item md={9}> */}
-            <FooterRoadmap />
-          {/* </Grid> */}
-          {/* <Grid item md={3}> */}
-            <FooterFollowUs />
-          {/* </Grid> */}
+          <FooterRoadmap />
+          <FooterFollowUs />
         </Grid>
       </Grid>
-
-
-      {/* <Grid
-        container
-        className={clsx(classes.container, commonClasses.containerWidth)}>
-        <Grid item sm={12} md={4}>
-          <FooterContact />
-        </Grid>
-        <Grid item sm={12} md={4}>
-          <FooterRoadmap />
-        </Grid>
-        <Grid item sm={12} md={4}>
-          <Grid container>
-            <Grid item md={12}>
-              <FooterFollowUs />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid> */}
     </AppBar>
   )
 }
