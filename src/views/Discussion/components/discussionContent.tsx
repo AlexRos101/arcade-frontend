@@ -21,6 +21,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
   const [discussion, setDiscussion] = useState(props.discussion)
   const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
+  const [dscIsSet, setDscIsSet] = useState(false)
 
   useEffect(() => {
     if (isLike != 0) return
@@ -36,11 +37,18 @@ const DiscussionContent: React.FC<Props> = (props) => {
         setIsLike(2)
       }
     })
-    console.log(discussion)
+  }, [props, isLike, account])
+
+  useEffect(() => {
+    if (dscIsSet == true) return
+    if (props.discussion.id == -1 || props.discussion.id == undefined) return
+
+    setDscIsSet(true)
+
     getDiscussion(props.discussion.id).then((response) => {
       setDiscussion(response)
     })
-  }, [props, isLike, account])
+  }, [props, discussion, dscIsSet])
 
   const onHandleLikes = useCallback(() => {
     if (account != '') {
@@ -68,7 +76,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
       <Grid container alignItems="center" justifyContent="space-between" direction="row" className="mt-5">
         <div className="flex-row r-flex-row r-comment-count-row r-wd-100">
           <a href="#" onClick={onHandleLikes} style={{ textDecoration: 'none' }}>
-            {isLike == 2 ? (
+            {isLike == 2 && account != '' ? (
               <IconLabel
                 avatar={RocketBlueIcon}
                 label={discussion.likes}

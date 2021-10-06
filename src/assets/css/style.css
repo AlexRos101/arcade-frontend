@@ -1247,6 +1247,26 @@ a {
     padding-bottom: calc(5vh + 160px);
   }
 
+  .search-input .MuiInputBase-root{
+    background: #F9F6E8;
+    border: 1px solid #D0CCB7;
+    border-radius: 7px;
+  }
+  
+  .search-input input {
+    font-size: 14px;
+    font-weight: 600;
+    color: #433F2F;
+  }
+
+  .search-input input::placeholder {
+    color: #433F2F;
+  }
+  
+  .search-input fieldset {
+    border: none;
+  }
+
 
 /*************************************************************************************/
 /*************************************************************************************/

@@ -98,7 +98,7 @@ const CommentContent: React.FC<Props> = (props) => {
             onClick={onHandleLikes}
             style={{ height: 'fit-content', marginTop: 'auto', marginBottom: 'auto' }}
           >
-            {isLike == 2 ? (
+            {isLike == 2 && account != '' ? (
               <IconLabel
                 avatar={RocketBlueIcon}
                 label={comment.likes}

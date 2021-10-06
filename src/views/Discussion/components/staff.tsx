@@ -124,6 +124,7 @@ const Staff: React.FC<Props> = (props) => {
           href={`/discussion/stuff/${staff.id}`}
           content={`View All ${staff.title} Discussions`}
           type={`forward`}
+          style={{ marginLeft: '20px' }}
         ></DetailLink>
       )}
     </div>

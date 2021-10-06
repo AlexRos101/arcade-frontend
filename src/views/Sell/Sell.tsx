@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       textOverflow: 'ellipsis !important',
     },
     width: '100%',
+    fontSize: '13px',
     // '& input': {
     //   padding: theme.spacing(1.5)
     // },
@@ -387,7 +388,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                   >
                     {games.map((game: Game, index: number) => {
                       return (
-                        <MenuItem key={index} value={game.id}>
+                        <MenuItem key={index} value={game.id} style={{ fontSize: '13px' }}>
                           {game.name}
                         </MenuItem>
                       )
@@ -406,7 +407,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                     {categories.map((category: Category, index: number) => {
                       if (category.game_id == selectedGameID) {
                         return (
-                          <MenuItem key={index} value={category.id}>
+                          <MenuItem key={index} value={category.id} style={{ fontSize: '13px' }}>
                             {category.name}
                           </MenuItem>
                         )

@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       textOverflow: 'ellipsis !important',
     },
     width: '100%',
+    fontSize: '13px',
     // '& input': {
     //   padding: theme.spacing(1.5)
     // },

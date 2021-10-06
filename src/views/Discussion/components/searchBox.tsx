@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { TextField, Typography, InputAdornment } from '@material-ui/core'
@@ -24,12 +24,12 @@ const SearchBox: React.FC = () => {
 
   const [keyword, setKeyword] = useState('')
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && keyword != '') {
       history.push(`/discussion/search/${keyword}`)
       document.location.reload()
     }
-  }, [])
+  }
 
   return (
     <OutlinedCard className="outlined-card">
@@ -46,6 +46,7 @@ const SearchBox: React.FC = () => {
       </Typography>
       <TextField
         fullWidth
+        className="search-input"
         placeholder="Search for Discussion"
         InputProps={{
           startAdornment: (
