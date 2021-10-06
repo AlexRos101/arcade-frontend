@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
+  Typography,
   Button
 } from '@material-ui/core'
 import Page from 'components/Layout/Page'
@@ -52,15 +53,19 @@ const Home: React.FC = () => {
             color="secondary"
             onClick={onClickBuyArcadeDoges}
             startIcon={<AstronautBuy />}>
-            Buy ArcadeDoges
-            </Button>
+            <Typography variant="subtitle1">
+              Buy ArcadeDoges
+            </Typography>
+          </Button>
           <Button
             className="mg-8"
             variant="contained"
             color="primary"
             startIcon={<ShoppingCart />}>
-            Vend at ArcadeMarket
-            </Button>
+            <Typography variant="subtitle1">
+              Vend at ArcadeMarket
+            </Typography>
+          </Button>
         </div>
           
       </Page>

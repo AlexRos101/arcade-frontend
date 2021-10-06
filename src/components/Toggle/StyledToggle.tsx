@@ -3,6 +3,7 @@ import { ToggleProps, HandleProps, InputProps, ScaleKeys, scales } from "./types
 
 const scaleKeyValues = {
   sm: {
+    handleBorderRadius: "50%",
     handleHeight: "16px",
     handleWidth: "16px",
     handleLeft: "2px",
@@ -12,21 +13,23 @@ const scaleKeyValues = {
     toggleWidth: "36px",
   },
   md: {
-    handleHeight: "26px",
-    handleWidth: "26px",
+    handleBorderRadius: "14.5px",
+    handleHeight: "21px",
+    handleWidth: "29px",
     handleLeft: "3px",
     handleTop: "3px",
     checkedLeft: "calc(100% - 30px)",
-    toggleHeight: "32px",
-    toggleWidth: "56px",
+    toggleHeight: "27px",
+    toggleWidth: "66px",
   },
   lg: {
-    handleHeight: "32px",
+    handleBorderRadius: "16px",
+    handleHeight: "26px",
     handleWidth: "32px",
     handleLeft: "4px",
     handleTop: "4px",
     checkedLeft: "calc(100% - 36px)",
-    toggleHeight: "40px",
+    toggleHeight: "32px",
     toggleWidth: "72px",
   },
 };
@@ -39,7 +42,7 @@ const getScale =
 
 export const Handle = styled.div<HandleProps>`
   background-color: ${({ checked }) => checked ? 'rgba(36, 182, 153, 1)' : 'rgba(191, 191, 191, 1)'};
-  border-radius: 50%;
+  border-radius: ${getScale("handleBorderRadius")};
   cursor: pointer;
   height: ${getScale("handleHeight")};
   left: ${getScale("handleLeft")};

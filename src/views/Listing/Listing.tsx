@@ -179,7 +179,8 @@ const Listing = () => {
                   <Flex>
                     <Toggle
                       checked={row.visible}
-                      onChange={() => setVisible(!visible)} />
+                      onChange={() => setVisible(!visible)}
+                      scale="md" />
                     <IconButton
                       aria-label="more"
                       aria-controls="long-menu"

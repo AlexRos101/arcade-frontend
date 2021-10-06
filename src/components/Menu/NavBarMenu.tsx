@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react'
 import {
+  Typography,
   Button,
   Hidden
 } from '@material-ui/core'
@@ -69,7 +70,9 @@ const NavBarMenu = () => {
           onClick={onConnectWalletHandler}
           className="menu-btn"
           startIcon={<Wallet />}>
-          Connect Wallet
+          <Typography variant="subtitle1">
+            Connect Wallet
+          </Typography>
         </Button>
         <Button
           variant="contained"
@@ -77,7 +80,9 @@ const NavBarMenu = () => {
           onClick={onPlayGameHandler}
           className="menu-btn"
           startIcon={<Astronaut />}>
-          Play Game
+          <Typography variant="subtitle1">
+            Play Game
+          </Typography>
         </Button>
         <IconButton aria-label="close" className="menu-close" onClick={onCloseMenu}>
             <CloseIcon />

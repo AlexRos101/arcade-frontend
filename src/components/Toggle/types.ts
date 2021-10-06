@@ -27,6 +27,7 @@ export interface InputProps {
 }
 
 export const scaleKeys = {
+  handleBorderRadius: "handleBorderRadius",
   handleHeight: "handleHeight",
   handleWidth: "handleWidth",
   handleLeft: "handleLeft",
