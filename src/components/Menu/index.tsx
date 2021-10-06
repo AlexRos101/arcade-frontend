@@ -9,6 +9,9 @@ import clsx from 'clsx'
 import Logo from '../Logo'
 import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
+import {store, useGlobalState} from 'state-pool'
+import * as WalletUtils from '../../global/wallet'
+import { connect } from 'global/wallet'
 
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
@@ -34,6 +37,21 @@ const useStyles = makeStyles((theme) => ({
 const Menu = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
+  const [account, setAccount] = useGlobalState('account')
+
+  const onConnectWalletHandler = async () => {
+    await connect()
+    initAddress()
+  }
+
+  const initAddress = async () => {
+    const address = await WalletUtils.getCurrentWallet()
+    if (await WalletUtils.isConnected()) {
+      setAccount(address == null? '': address)
+    } else {
+      setAccount('')
+    }
+  }
 
   return (
     <AppBar
@@ -41,7 +59,7 @@ const Menu = () => {
       className={classes.appBar}
     >
       <Toolbar className={clsx(classes.toolbar, commonClasses.containerWidth)}>
-        <Wallet className="wallet-cage"/>
+        <Wallet className="wallet-cage" onClick={onConnectWalletHandler}/>
         <div className={classes.container}>
           <Logo />
         </div>

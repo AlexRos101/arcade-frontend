@@ -43,7 +43,7 @@ const ConnectWalletModal: React.FC<Props> = (props) =>{
         const address = await WalletUtils.getCurrentWallet()
         if (address != account)
         setAccount(address == null? '': address)
-      }
+    }
       
     return (
         <Dialog className="card-dialog" maxWidth="sm" aria-labelledby="customized-dialog-title" open={showConnectWalletModal} PaperProps={{ style: { borderRadius: 7 } }}>
