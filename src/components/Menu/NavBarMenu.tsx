@@ -6,6 +6,8 @@ import {
   Hidden
 } from '@material-ui/core'
 
+import {store, useGlobalState} from 'state-pool'
+
 import MenuItem from './menuItem'
 import SubMenu from './subMenu'
 
@@ -17,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RowLabel from 'components/Label/RowLabel'
 import CloseIcon from '@material-ui/icons/Close'
 
+import { connect } from 'global/wallet'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -58,6 +61,8 @@ const marketMenu = [
   }
 ]
 
+declare let window: any
+
 const NavBarMenu = () => {
 
   const history = useHistory()
@@ -65,8 +70,10 @@ const NavBarMenu = () => {
   const [hiddenMenu, setHiddenMenu] = useState('hidden-menu')
   const classes = useStyles()
 
-  const onConnectWalletHandler = () => {
-    console.log('Connect Wallet')
+  const [account, setAccount] = useGlobalState('account')
+
+  const onConnectWalletHandler = async () => {
+    setAccount(await connect())
   }
   const onPlayGameHandler = () => {
     history.push('/')
@@ -80,6 +87,13 @@ const NavBarMenu = () => {
     setHiddenMenu('hidden-menu')
   }
 
+  const shortenString = (source: string) => {
+    if (source.length <= 12)
+      return source
+    
+    return '********' + source.substring(source.length - 6, source.length)
+  }
+
   return (
     <div>
       <IconButton edge="start" className="menu-expand" color="inherit" aria-label="menu" onClick={onPressMenu}>
@@ -91,16 +105,28 @@ const NavBarMenu = () => {
             <MenuItem text="Community" />
             <SubMenu text="ArcadeMarket" menuData={gameMenu}/>
         </div>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onConnectWalletHandler}
-          className="menu-btn"
-          startIcon={<Wallet />}>
-          <Typography variant="subtitle1">
-            Connect Wallet
-          </Typography>
-        </Button>
+        { account === '' ?
+          (<Button
+            variant="contained"
+            color="primary"
+            onClick={onConnectWalletHandler}
+            className="menu-btn"
+            startIcon={<Wallet />}>
+            <Typography variant="subtitle1">
+              Connect Wallet
+            </Typography>
+          </Button>) :
+          (<Button
+            variant="outlined"
+            color="primary"
+            onClick={onConnectWalletHandler}
+            className="menu-btn btn-note"
+            startIcon={<Wallet />}>
+            <Typography variant="subtitle1">
+              {shortenString(account)}
+            </Typography>
+          </Button>)
+        }
         <Button
           variant="contained"
           color="secondary"

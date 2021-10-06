@@ -136,6 +136,12 @@ button {
       opacity:1;
       background-color: #AF7923;
   }
+
+  .btn-note {
+    background: #EAE5CE;
+    color: #513603;
+    border: 1px solid #EAE5CE;
+  }
   
   
   
@@ -936,6 +942,10 @@ button {
   @media screen and (max-width: 1080px) {
     .r-no-display {
       display: none !important;
+    }
+
+    .r-wd-50 {
+      width: 50%;
     }
 
     .no-display {

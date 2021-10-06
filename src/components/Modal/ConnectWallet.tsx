@@ -14,6 +14,9 @@ import {
     Hidden
   } from '@material-ui/core'
 
+import { store, useGlobalState } from 'state-pool'
+import { connect } from 'global/wallet'
+
 const DialogContent = withStyles((theme) => ({
 root: {
     padding: theme.spacing(2),
@@ -29,9 +32,11 @@ interface Props {
 
 
 const ConnectWalletModal: React.FC<Props> = (props) =>{
-    const onConnectWalletHandler = () => {
-        console.log('Connect Wallet')
-      }
+    const [account, setAccount] = useGlobalState('account')
+
+    const onConnectWalletHandler = async () => {
+        setAccount(await connect())
+    }
       
     return (
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>

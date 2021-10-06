@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import {store, useGlobalState} from 'state-pool'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import { createTheme, ThemeProvider  } from '@material-ui/core/styles'
@@ -50,6 +51,7 @@ const theme = createTheme({
   
 
 const CardModal: React.FC<Props> = (props) => {
+    const [account, setAccount] = useGlobalState('account')
     const [open, setOpen] = useState(false)
 
     const handleClose = () => {
@@ -57,8 +59,10 @@ const CardModal: React.FC<Props> = (props) => {
       }
 
     const handleOpenModal = () => {
-        console.log('asdf')
-        setOpen(true)
+        if (account === '')
+            setOpen(true)
+        else
+            setOpen(false)
     }
     return (
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
@@ -114,7 +118,11 @@ const CardModal: React.FC<Props> = (props) => {
             <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
                 <CloseIcon />
             </IconButton>
-            <ConnectWalletModal onClose={handleClose} open={open} contents="Oops! You're not connected yet."/>
+            {account === '' ?
+                (<ConnectWalletModal onClose={handleClose} open={open} contents="Oops! You're not connected yet."/>) :
+                ''
+            }
+            
         </Dialog>
     )
 }

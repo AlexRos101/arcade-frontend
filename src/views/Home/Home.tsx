@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
+import {store, useGlobalState} from 'state-pool'
+
 import {
   Typography,
   Button
@@ -25,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home: React.FC = () => {
     const history = useHistory()
+    const [account, setAccount] = useGlobalState('account')
 
     const onClickButton = () => {
         console.log("asdf")
@@ -59,7 +62,8 @@ const Home: React.FC = () => {
           <div className="rect rect-11" />
           <div className="rect rect-12" />
           <div className="rect rect-13" />
-          <ConnectWallet className="iframe-connect"/>
+          {account === '' ? (<ConnectWallet className="iframe-connect"/>) : ''}
+          
         </div>
         <div className="flex-row row iframe-row">
           <div className="flex-row row col-2">

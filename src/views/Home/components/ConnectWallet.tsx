@@ -3,6 +3,9 @@ import RowLabel from 'components/Label/RowLabel'
 import {ReactComponent as IframeLogo} from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
+import {store, useGlobalState} from 'state-pool'
+import { connect } from 'global/wallet'
+
 import {
     Typography,
     Button,
@@ -10,9 +13,11 @@ import {
   } from '@material-ui/core'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>>= ({ children, ...props }) =>{
-    const onConnectWalletHandler = () => {
-        console.log('Connect Wallet')
-      }
+    const [account, setAccount] = useGlobalState('account')
+
+    const onConnectWalletHandler = async () => {
+        setAccount(await connect())
+    }
       
     return (
         <div {...props}>

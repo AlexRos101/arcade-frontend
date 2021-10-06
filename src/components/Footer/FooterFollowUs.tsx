@@ -14,11 +14,18 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     margin: theme.spacing(0.5, 0),
     marginBottom: theme.spacing(2),
+    marginLeft: 'auto',
+    width: 'fit-content',
   },
   container: {
     flexDirection: 'row',
     '& > *': {
       margin: theme.spacing(0, 1, 0, 0)
+    }
+  },
+  "@media (max-width: 1080px)" : {
+    root: {
+      marginLeft: '0',
     }
   }
 }))

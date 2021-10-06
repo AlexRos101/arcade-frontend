@@ -61,11 +61,13 @@ const Footer = () => {
       <Grid
         container
         className={clsx(classes.container, commonClasses.containerWidth)}>
-        <Grid item md={4}>
+        <Grid item md={3}>
           <FooterContact />
         </Grid>
-        <Grid container item md={8} style={{ justifyContent: 'space-between' }} >
+        <Grid container item md={6} style={{ justifyContent: 'space-between' }} >
           <FooterRoadmap />
+        </Grid>
+        <Grid item md={3}>
           <FooterFollowUs />
         </Grid>
       </Grid>

@@ -14,17 +14,27 @@ import RoadmapEntry from './RoadmapEntry'
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    margin: theme.spacing(0.5, 0)
+    margin: theme.spacing(0.5, 0),
+    width: '100%',
   },
   block: {
     display: 'flex',
     flexDirection: 'column',
-    margin: theme.spacing(0, 1.5)
+    margin: theme.spacing(0, 1.5),
+    width: 'fit-content',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   title: {
     fontWeight: 'bold',
     color: theme.palette.text.secondary,
     marginBottom: theme.spacing(1.5)
+  },
+  "@media (max-width: 1080px)": {
+    block: {
+      marginLeft: '0',
+      marginBottom: '5vh',
+    }
   }
 }))
 
@@ -44,7 +54,7 @@ const FooterRoadmap = () => {
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item>
+        <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
             <Typography
               variant="subtitle1"
@@ -59,7 +69,7 @@ const FooterRoadmap = () => {
             </Link>
           </div>
         </Grid>
-        <Grid item>
+        <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
             <Typography
               variant="subtitle1"
@@ -74,7 +84,7 @@ const FooterRoadmap = () => {
             </Link>
           </div>
         </Grid>
-        <Grid item>
+        <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
             <Typography
               variant="subtitle1"
@@ -89,7 +99,7 @@ const FooterRoadmap = () => {
             </Link>
           </div>
         </Grid>
-        <Grid item>
+        <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
             <Typography
               variant="subtitle1"
