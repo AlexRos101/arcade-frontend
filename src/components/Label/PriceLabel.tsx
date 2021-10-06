@@ -75,7 +75,7 @@ const PriceLabel = (props : Partial<PriceLabelProps> = {}) => {
         </PriceWrapper>
       </Grid>
       <Grid item>
-        <PriceWrapper foreColor="rgba(34, 48, 61, 0.5)">
+        <PriceWrapper scales={ScaleDefaults.SM} foreColor="rgba(34, 48, 61, 0.5)">
           {`(US$${params.pricePerUsd})`}
         </PriceWrapper>
       </Grid>

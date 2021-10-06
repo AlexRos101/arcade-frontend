@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import {
+  Box,
   Button,
   Grid,
   Select
@@ -151,7 +152,7 @@ const Sell = ({ data } : {
                     <Grid container spacing={2}>
                       <Grid item>
                         <PriceLabel
-                          scales={ScaleDefaults.MD}
+                          scales={ScaleDefaults.LG}
                           avatar={avatar}
                           price={skinItem?.priceArc}
                           pricePerUsd={skinItem?.priceArcPerUsd}
@@ -159,7 +160,7 @@ const Sell = ({ data } : {
                       </Grid>
                       <Grid item>
                         <PriceLabel
-                          scales={ScaleDefaults.MD}
+                          scales={ScaleDefaults.LG}
                           avatar={bnb}
                           price={skinItem?.priceBnb}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
@@ -169,28 +170,24 @@ const Sell = ({ data } : {
                   </LabelComponent>
                 </Grid>
               </Grid>
-              <Grid container
-                spacing={2}
+              <Flex
                 alignItems="center"
-                className={classes.spacing}
-              >
+                className={classes.spacing}>
                 <ThemeProvider theme={greenTheme}>
-                  <Grid item xs={12} sm={12} md={6}>
+                  <Box component="span" mr={1}>
                     <Button
                       variant="contained"
                       color="primary">
                       Save and Publish
                     </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6}>
-                    <Button
-                      variant="outlined"
-                      color="primary">
-                      Save for Later
-                    </Button>
-                  </Grid>
+                  </Box>
+                  <Button
+                    variant="outlined"
+                    color="primary">
+                    Save for Later
+                  </Button>
                 </ThemeProvider>
-              </Grid>
+              </Flex>
             </Flex>
           </Card>
         </Grid>

@@ -16,14 +16,14 @@ import MenuItem from '@material-ui/core/MenuItem'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import avatar from 'assets/img/avatar.png'
 import bnb from 'assets/img/bnb.svg'
+import PriceLabel from 'components/Label/PriceLabel'
 import Card from 'components/Card'
 import { Toggle } from 'components/Toggle'
 import Flex from 'components/Layout/Flex'
-import { SkinProps } from 'utils/constants/types'
+import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -39,32 +39,6 @@ const Thumb = styled(Card)<{
   height: ${({ height }) => height ?? '57px' };
   border: 0px;
 `
-
-const PriceLabel = ({ icon, price, pricePerUsd}: {
-  icon: string,
-  price: number,
-  pricePerUsd: number
-}) => {
-  return (
-    <Grid container spacing={3} alignItems="center">
-      <Grid item>
-        <img
-          src={icon}
-          style={{ width: '20px', height: '20px' }} />
-      </Grid>
-      <Grid item>
-        <Typography variant="subtitle1">
-          {price}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography variant="subtitle1" style={{ color: 'rgba(34, 48, 61, 0.5)' }}>
-          {`(US$${pricePerUsd})`}
-        </Typography>
-      </Grid>
-    </Grid>
-  )
-}
 
 const Row = ({ data }: {
   data: SkinProps
@@ -111,12 +85,14 @@ const Row = ({ data }: {
           <StyledTableCell>
             <Flex>
               <PriceLabel
-                icon={avatar}
+                scales={ScaleDefaults.MD}
+                avatar={avatar}
                 price={row.priceArc}
                 pricePerUsd={row.priceArcPerUsd}
                 />
               <PriceLabel
-                icon={bnb}
+                scales={ScaleDefaults.MD}
+                avatar={bnb}
                 price={row.priceBnb}
                 pricePerUsd={row.priceBnbPerUsd}
                 />
@@ -163,7 +139,7 @@ const Row = ({ data }: {
       <Hidden smUp>
         <TableRow key={row.name}>
           <StyledTableCell component="th" scope="row">
-            <Grid container spacing={1}>
+            <Grid container spacing={1} justifyContent="space-between" alignItems="center">
               <Grid item xs={6}>
                 <Thumb width="80px" borderRadius="3px" padding="0px" bgColor={row.item} />
               </Grid>
@@ -180,19 +156,21 @@ const Row = ({ data }: {
               <Grid item xs={8}>
                 <Flex flexDirection="column">
                   <PriceLabel
-                    icon={avatar}
+                    scales={ScaleDefaults.MD}
+                    avatar={avatar}
                     price={row.priceArc}
                     pricePerUsd={row.priceArcPerUsd}
                     />
                   <PriceLabel
-                    icon={bnb}
+                    scales={ScaleDefaults.MD}
+                    avatar={bnb}
                     price={row.priceBnb}
                     pricePerUsd={row.priceBnbPerUsd}
                     />
                 </Flex>
               </Grid>
               <Grid item xs={4}>
-                <Flex flexDirection="row">
+                <Flex flexDirection="row" justifyContent="flex-end">
                   <Toggle
                     checked={row.visible}
                     onChange={handleToggleClick}

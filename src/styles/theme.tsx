@@ -72,6 +72,9 @@ const theme = responsiveFontSizes(createTheme({
       'Helvetica Neue'
     ].join(','),
     fontSize: 11,
+    body1: {
+      fontSize: 11,
+    },
     subtitle1: {
       fontSize: 14
     },
