@@ -1,29 +1,22 @@
 import { InputHTMLAttributes } from "react";
+import { ScaleTypes } from 'utils/constants/types'
 
 export type ToggleTheme = {
   handleBackground: string;
 };
 
-export const scales = {
-  SM: "sm",
-  MD: "md",
-  LG: "lg",
-} as const;
-
-export type Scales = typeof scales[keyof typeof scales];
-
 export interface ToggleProps extends InputHTMLAttributes<HTMLInputElement> {
-  scale?: Scales;
+  scale?: ScaleTypes;
   checked?: boolean;
 }
 
 export interface HandleProps {
-  scale: Scales;
+  scale: ScaleTypes;
   checked?: boolean;
 }
 
 export interface InputProps {
-  scale: Scales;
+  scale: ScaleTypes;
 }
 
 export const scaleKeys = {

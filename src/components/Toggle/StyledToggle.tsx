@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { ToggleProps, HandleProps, InputProps, ScaleKeys, scales } from "./types";
+import { ScaleDefaults } from 'utils/constants/types'
+import { ToggleProps, HandleProps, InputProps, ScaleKeys } from "./types";
 
 const scaleKeyValues = {
   sm: {
@@ -36,7 +37,7 @@ const scaleKeyValues = {
 
 const getScale =
   (property: ScaleKeys) =>
-  ({ scale = scales.LG }: ToggleProps) => {
+  ({ scale = ScaleDefaults.LG }: ToggleProps) => {
     return scaleKeyValues[scale][property];
   };
 

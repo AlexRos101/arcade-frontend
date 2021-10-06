@@ -64,6 +64,12 @@ const theme = responsiveFontSizes(createTheme({
     fontSize: 11,
     subtitle1: {
       fontSize: 14
+    },
+    h1: {
+      fontSize: 56
+    },
+    h4: {
+      fontSize: 28
     }
   }
 }))

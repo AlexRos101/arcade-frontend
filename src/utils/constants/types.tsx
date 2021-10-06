@@ -1,3 +1,11 @@
+export const ScaleDefaults = {
+  SM: "sm",
+  MD: "md",
+  LG: "lg",
+} as const;
+
+export type ScaleTypes = typeof ScaleDefaults[keyof typeof ScaleDefaults];
+
 export interface SkinProps {
   item: string // current is background color
   category: string

@@ -18,13 +18,12 @@ import TableRow from '@material-ui/core/TableRow'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 
+import avatar from 'assets/img/avatar.png'
+import bnb from 'assets/img/bnb.svg'
 import Card from 'components/Card'
 import { Toggle } from 'components/Toggle'
 import Flex from 'components/Layout/Flex'
 import { SkinProps } from 'utils/constants/types'
-
-import avatar from 'assets/img/avatar.png'
-import bnb from 'assets/img/bnb.svg'
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({

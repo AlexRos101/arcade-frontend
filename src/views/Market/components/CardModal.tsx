@@ -10,13 +10,14 @@ import avatar from 'assets/img/avatar.png'
 import doge from 'assets/img/doge.svg'
 
 import MarketModalRow from "./MarketModalRow"
-import ModalNavLabel from 'components/Label/ModalnavLabel'
-import ModalHeaderLabel from "components/Label/ModalHeaderLabel"
-import ModalContent from "components/Label/ModalContent"
+import ModalNavLabel from 'views/Market/components/ModalnavLabel'
+import ModalHeaderLabel from "views/Market/components/ModalHeaderLabel"
+import ModalContent from "views/Market/components/ModalContent"
 import PriceLayout from "components/Layout/PriceLayout"
-import PriceHeaderLabel from "components/Label/PriceHeaderLabel"
-import PriceLabel from "components/Label/PriceLabel"
-import PriceDexLabel from "components/Label/PriceDexLabel"
+
+import PriceHeaderLabel from "./PriceHeaderLabel"
+import PriceLabel from "./PriceLabel"
+import PriceDexLabel from "./PriceDexLabel"
 
 const DialogContent = withStyles((theme) => ({
 root: {

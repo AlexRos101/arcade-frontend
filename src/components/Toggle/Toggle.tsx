@@ -1,8 +1,9 @@
 import React from "react";
+import { ScaleDefaults } from 'utils/constants/types'
 import StyledToggle, { Input, Handle } from "./StyledToggle";
-import { ToggleProps, scales } from "./types";
+import { ToggleProps } from "./types";
 
-const Toggle: React.FC<ToggleProps> = ({ checked, scale = scales.LG, ...props }) => {
+const Toggle: React.FC<ToggleProps> = ({ checked, scale = ScaleDefaults.LG, ...props }) => {
   const isChecked = !!checked;
 
   return (
