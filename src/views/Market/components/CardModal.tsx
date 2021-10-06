@@ -69,8 +69,6 @@ const CardModal: React.FC<Props> = (props) => {
     const [account, setAccount] = useGlobalState('account')
     const [showBuyDlg, setShowBuyDlg] = useState(false)
     const [showBuyBUSDDlg, setShowBuyBUSDDlg] = useState(false)
-    const [isLoading, setIsLoading] = useGlobalState('isLoading')
-    const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
     const [rate, setRate] = useState(0.0)
 
     const getRate = async () => {

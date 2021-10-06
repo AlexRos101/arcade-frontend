@@ -48,7 +48,7 @@ const BuyModal: React.FC<Props> = (props) =>{
     })
 
     const refresh = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         if (!await (Wallet.isConnected())) {
             setIsLoading(false)
@@ -63,17 +63,17 @@ const BuyModal: React.FC<Props> = (props) =>{
         ARCADEDOGE.methods.allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS).call()
         .then((res: any) => {
             if (Number.parseFloat(web3.utils.fromWei(res)) >= props.item.arcadedoge_price) {
-                setIsLoading(false);
+                // setIsLoading(false);
                 setFirstStepClassName('item-processed');
                 setSecondStepClassName('item');
             } else {
-                setIsLoading(false);
+                // setIsLoading(false);
                 setFirstStepClassName('item');
                 setSecondStepClassName('item-disabled');
             }
         })
         .catch((err: any) => {
-            setIsLoading(false);
+            // setIsLoading(false);
             setFirstStepClassName('item');
             setSecondStepClassName('item-disabled');
         })
