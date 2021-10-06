@@ -4,16 +4,17 @@ import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import { Typography, Button, Hidden } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 
-import { store, useGlobalState } from 'state-pool'
-import { connect } from 'global/wallet'
+import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
+
+import { GameItem } from 'global/interface'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -22,18 +23,18 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent)
 
 interface Props {
-  item: any
+  item: GameItem
   open: boolean
   onClose: () => void
 }
 
 const ListSellModal: React.FC<Props> = (props) => {
-  const [account, setAccount] = useGlobalState('account')
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [account] = useGlobalState('account')
+  const [, setIsLoading] = useGlobalState('isLoading')
+  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
   useEffect(() => {
     if (props.item == selectedItem) return
@@ -57,7 +58,7 @@ const ListSellModal: React.FC<Props> = (props) => {
     NFT.methods
       .getApproved(props.item.token_id)
       .call()
-      .then((res: any) => {
+      .then((res: string) => {
         if (res == process.env.REACT_APP_EXCHANGE_ADDRESS) {
           setIsLoading(false)
           setFirstStepClassName('item-processed')
@@ -68,7 +69,7 @@ const ListSellModal: React.FC<Props> = (props) => {
           setSecondStepClassName('item-disabled')
         }
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -92,12 +93,12 @@ const ListSellModal: React.FC<Props> = (props) => {
     NFT.methods
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
       .send({ from: account })
-      .then((res: any) => {
+      .then(() => {
         setIsLoading(false)
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -125,7 +126,7 @@ const ListSellModal: React.FC<Props> = (props) => {
         Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
       )
       .send({ from: account })
-      .then((res: any) => {
+      .then(() => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
           if (item.is_visible) {
@@ -137,7 +138,7 @@ const ListSellModal: React.FC<Props> = (props) => {
 
         checkDBStatus()
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
       })
   }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -11,12 +10,14 @@ import NewDiscussion from './components/newDiscussion'
 import AddNote from './components/addNote'
 import { getStuff } from 'hooks/api'
 
+import { Stuff } from 'global/interface'
+
 interface ParamTypes {
   stuffId: string
 }
 
-const DiscussionAdd = () => {
-  const [staff, setStaff] = useState<any>({})
+const DiscussionAdd: React.FC = () => {
+  const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)
   const { stuffId } = useParams<ParamTypes>()
 

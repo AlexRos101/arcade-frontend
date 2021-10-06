@@ -1,32 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Button, Grid, ThemeProvider } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
-import HeaderLabel from 'components/Label/HeaderLabel'
 import DiscussionHeaderLabel from 'components/Label/DiscussionHeaderLabel'
 import CommentItem from './components/commentItem'
 
 import DiscussionContent from './components/discussionContent'
 import SearchBox from './components/searchBox'
 import AddComment from './components/addComment'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 import { getStuff, getDiscussion } from 'hooks/api'
 
 import { greenTheme } from 'styles/theme'
+
+import { Discussion, Comment, Stuff } from 'global/interface'
 
 interface ParamTypes {
   staffId: string
   discussionId: string
 }
 
-const DiscussionDetail = () => {
-  const [staff, setStaff] = useState<any>({})
+const DiscussionDetail: React.FC = () => {
+  const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)
 
-  const [discussion, setDiscussion] = useState<any>({})
+  const [discussion, setDiscussion] = useState<Discussion>({
+    id: -1,
+    likes: 0,
+    stuff_id: -1,
+    user: '',
+    user_type: -1,
+    content: '',
+  })
   const [dscIsSet, setDscIsSet] = useState(false)
 
   const [comments, setComments] = useState([])
@@ -98,7 +105,7 @@ const DiscussionDetail = () => {
           ) : (
             ''
           )}
-          {comments.map((comment: any, index: number) => {
+          {comments.map((comment: Comment, index: number) => {
             return <CommentItem key={index} comment={comment} />
           })}
         </Grid>

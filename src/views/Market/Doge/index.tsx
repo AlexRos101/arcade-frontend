@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react'
-import ReactDOM from 'react-dom'
-import { store, useGlobalState } from 'state-pool'
-import { Button, Grid, TablePagination } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { useGlobalState } from 'state-pool'
+import { TablePagination } from '@material-ui/core'
 import Page from 'components/Layout/Page'
-import $ from 'jquery'
 
 import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
@@ -12,23 +10,19 @@ import Info from '@material-ui/icons/Info'
 
 import MarketHeader from '../components/MarketHeader'
 import MarketRow from '../components/MarketRow'
-import CardSlider from '../components/CardSlider'
 import CardModal from '../components/CardModal'
-import TabRow from '../components/TabRow'
-import Container from 'components/Layout/Container'
 import Card from '../components/Card'
 
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
-import ExpandButton from 'components/Button/ExpandButton'
 
-import { stringify } from 'querystring'
+import { GameItem, CategoryTab } from 'global/interface'
 
 import * as API from 'hooks/api'
 import * as CONST from 'global/const'
 
-const dogeTab: Array<any> = [
+const dogeTab: Array<CategoryTab> = [
   {
     categoryId: 0,
     tabName: 'All',
@@ -47,27 +41,32 @@ const dogeTab: Array<any> = [
   },
 ]
 
-const MarketDoge = () => {
-  const [maplevel, setMapLevel] = React.useState(0)
+const MarketDoge: React.FC = () => {
+  const [maplevel] = React.useState(0)
   const [open, setOpen] = React.useState(false)
   const [selectedCard, setSelectedCard] = React.useState({
     id: 0,
     token_id: 0,
     name: '',
     description: '',
-    arcadedoge_price: 0,
+    arcadedoge_price: '0.0',
     owner: '',
     contract_address: '',
   })
   const [marsdogeItems, setMarsdogeItems] = useState([])
 
   const [initialized, setInitialized] = useState(false)
+
+  /* eslint-disable */
+
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
+
+  /* eslint-enable */
+
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [rows, setRows] = useState<Array<any>>([])
   const [count, setCount] = useState(0)
 
   const getMarketItems = async (game: number, category: number, sort: number, limit: number, count: number) => {
@@ -75,7 +74,7 @@ const MarketDoge = () => {
     const items = await API.getMarketItems(game, category, sort, limit, count)
     setIsLoading(false)
     if (items.result) {
-      setCount(items.total)
+      setCount(Number(items.total))
       return items.data
     }
     return []
@@ -94,7 +93,7 @@ const MarketDoge = () => {
   const handleOpenCard = (index: number) => {
     setOpen(true)
     setSelectedCard(marsdogeItems[index])
-    setSelectedCategoryName(getMarsDogeCategoryName((marsdogeItems[index] as any).category_id))
+    setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
   }
 
   const getMarsDogeCategoryName = (categoryId: number) => {
@@ -104,18 +103,6 @@ const MarketDoge = () => {
       }
     }
     return ''
-  }
-
-  const handleOpenMaps = (index: number) => {
-    setOpen(true)
-    setSelectedCard(marsdogeItems[index])
-  }
-
-  const handleScroll = () => {
-    if ($('#footer') != null && $(window) != undefined) {
-      const offset = $('#footer').offset()
-      const windows = $(window)
-    }
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -134,8 +121,6 @@ const MarketDoge = () => {
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
-
-    document.addEventListener('scroll', handleScroll)
 
     setIsLoading(true)
     getMarsDogeItems(0, 0, 0, 10)
@@ -162,14 +147,14 @@ const MarketDoge = () => {
       </MarketRow>
       <MarketRow>{/* <TabRow tabs={dogeTab}/> */}</MarketRow>
       <MarketRow id="skin_slider" style={{ flexWrap: 'wrap' }}>
-        {marsdogeItems.map((item: any, index) => {
+        {marsdogeItems.map((item: GameItem, index) => {
           return (
             <Card
               key={index}
               index={index}
-              tokenId={item.token_id}
-              name={item.name}
-              price={item.arcadedoge_price}
+              tokenId={Number(item.token_id)}
+              name={String(item.name)}
+              price={Number(item.arcadedoge_price)}
               onClick={handleOpenCard}
             />
           )

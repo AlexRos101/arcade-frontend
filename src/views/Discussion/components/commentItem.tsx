@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import Card from 'components/Card'
 import CommentContent from './commentContent'
 import ReplyItem from './replyItem'
 
+import { Comment } from 'global/interface'
+
 interface Props {
-  comment: any
+  comment: Comment
 }
 
 const ItemContainer = styled.div`
@@ -21,7 +23,7 @@ const CommentItem: React.FC<Props> = (props) => {
     <ItemContainer style={{ maxWidth: '100vw-32px' }}>
       <Card>
         <CommentContent comment={comment} />
-        {reply.map((replyItem: any, index: number) => {
+        {reply.map((replyItem: Comment, index: number) => {
           return <ReplyItem key={index} comment={replyItem} depth={0} />
         })}
       </Card>

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { styled } from '@material-ui/core/styles'
-import { makeStyles } from '@material-ui/core/styles'
 import Container from './Container'
 import $ from 'jquery'
 

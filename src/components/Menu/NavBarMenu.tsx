@@ -1,8 +1,8 @@
-import React, { memo, useState, Suspense, lazy, useEffect } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Typography, Button, Hidden } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 import * as WalletUtils from '../../global/wallet'
 
 import MenuItem from './menuItem'
@@ -13,7 +13,6 @@ import { ReactComponent as Astronaut } from 'assets/img/astronaut.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import MenuIcon from '@material-ui/icons/Menu'
 import IconButton from '@material-ui/core/IconButton'
-import RowLabel from 'components/Label/RowLabel'
 import CloseIcon from '@material-ui/icons/Close'
 
 import { connect } from 'global/wallet'
@@ -46,7 +45,11 @@ const marketMenu = [
   },
 ]
 
+/* eslint-disable */
+
 declare let window: any
+
+/* eslint-enable */
 
 const NavBarMenu = () => {
   const history = useHistory()
@@ -55,7 +58,6 @@ const NavBarMenu = () => {
   const classes = useStyles()
 
   const [account, setAccount] = useGlobalState('account')
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
   const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {

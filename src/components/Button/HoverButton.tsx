@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Link from '@material-ui/core/Link'
 import AutorenewIcon from '@material-ui/icons/Autorenew'
 
 const HoverContainer = styled.div`

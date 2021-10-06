@@ -4,7 +4,7 @@ import { FormControlLabel } from '@material-ui/core'
 
 import { styled } from '@material-ui/core/styles'
 
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 
 const BpIcon = styled('span')(({ theme }) => ({
   borderRadius: 3,
@@ -34,13 +34,13 @@ const BpCheckedIcon = styled(BpIcon)({
 interface Props {
   title: string
   index: number
-  onChange?: any
+  onChange: (checked: boolean, index: number) => unknown
   checked: boolean
 }
 
 const StaffSelectItem: React.FC<Props> = (props) => {
   const [checked, setChecked] = useState(props.checked)
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
     props.onChange(event.target.checked, props.index)
   }

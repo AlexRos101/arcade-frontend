@@ -1,4 +1,4 @@
-export const LOCAL_STORAGE_KEY: any = {
+export const LOCAL_STORAGE_KEY = {
   KEY_WALLET_TYPE: 'wallet_type',
   KEY_WALLET: 'wallet',
   KEY_CONNECTED: 'connected',

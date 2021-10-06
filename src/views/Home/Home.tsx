@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 
 import { Typography, Button } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 
-import { ThemeProvider, makeStyles } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/core'
 import { ReactComponent as AstronautBuy } from 'assets/img/astronautbuy.svg'
 import Info from '@material-ui/icons/Info'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
@@ -15,22 +15,10 @@ import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-}))
-
 const Home: React.FC = () => {
   const history = useHistory()
-  const [account, setAccount] = useGlobalState('account')
+  const [account] = useGlobalState('account')
   const [showHowToPlay, setShowHowToPlay] = useState(false)
-
-  const onClickButton = () => {
-    console.log('asdf')
-  }
 
   const onClickArcadeMarket = () => {
     history.push('/market')

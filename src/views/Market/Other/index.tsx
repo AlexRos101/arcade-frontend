@@ -1,8 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react'
-import ReactDOM from 'react-dom'
-import { Button } from '@material-ui/core'
+import React from 'react'
 import Page from 'components/Layout/Page'
-import $ from 'jquery'
 
 import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
@@ -12,192 +9,151 @@ import Info from '@material-ui/icons/Info'
 import MarketHeader from '../components/MarketHeader'
 import MarketRow from '../components/MarketRow'
 import CardSlider from '../components/CardSlider'
-import CardModal from '../components/CardModal'
-import TabRow from '../components/TabRow'
 
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
-import ExpandButton from 'components/Button/ExpandButton'
 
-import { stringify } from 'querystring'
+import { GameItem } from 'global/interface'
 
 const skinCards = [
   {
+    id: 0,
     color: '#30C5A8',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 1,
     color: '#FB98B4',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 2,
     color: '#FCBF4A',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 3,
     color: '#1571FF',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 4,
     color: '#FF6C50',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 5,
     color: '#30C5A8',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 6,
     color: '#FB98B4',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 7,
     color: '#FCBF4A',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 8,
     color: '#1571FF',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 9,
     color: '#FF6C50',
     tokenId: '012345',
     price: 100,
   },
 
   {
+    id: 10,
     color: '#1571FF',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#FF6C50',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#FB98B4',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#FCBF4A',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#30C5A8',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#1571FF',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#FF6C50',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#FB98B4',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#FCBF4A',
     tokenId: '012345',
     price: 100,
   },
   {
+    id: 0,
     color: '#30C5A8',
     tokenId: '012345',
     price: 100,
   },
 ]
 
-const mapsCards = [
-  {
-    color: '#1571FF',
-    tokenId: '012345',
-    price: 100,
-  },
-  {
-    color: '#FF6C50',
-    tokenId: '012345',
-    price: 100,
-  },
-  {
-    color: '#FB98B4',
-    tokenId: '012345',
-    price: 100,
-  },
-  {
-    color: '#FCBF4A',
-    tokenId: '012345',
-    price: 100,
-  },
-  {
-    color: '#30C5A8',
-    tokenId: '012345',
-    price: 100,
-  },
-]
+const MarketOther: React.FC = () => {
+  const maplevel = 0
 
-const dogeTab = [
-  {
-    tabName: 'All',
-  },
-  {
-    tabName: 'MarsDoge Skins',
-  },
-  {
-    tabName: 'MarsDoge Maps',
-  },
-  {
-    tabName: 'Weapons',
-  },
-]
+  /* eslint-disable */
 
-const MarketOther = () => {
-  const [maplevel, setMapLevel] = React.useState(0)
   const [open, setOpen] = React.useState(false)
   const [selectedCard, setSelectedCard] = React.useState({ color: '', tokenId: '', price: 0 })
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  /* eslint-enable */
 
   const handleOpenCard = (index: number) => {
     setOpen(true)
     setSelectedCard(skinCards[index])
   }
-
-  const handleOpenMaps = (index: number) => {
-    setOpen(true)
-    setSelectedCard(mapsCards[index])
-  }
-
-  const handleScroll = () => {
-    if ($('#footer') != null && $(window) != undefined) {
-      const offset = $('#footer').offset()
-      const windows = $(window)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('scroll', handleScroll)
-  })
 
   return (
     <Page id="market_page" className="styled-market">
@@ -219,7 +175,7 @@ const MarketOther = () => {
       </MarketRow>
       <MarketRow>{/* <TabRow tabs={dogeTab}/> */}</MarketRow>
       <MarketRow id="skin_slider">
-        <CardSlider context={skinCards} onOpen={handleOpenCard} rows={2} open-ri />
+        <CardSlider context={skinCards as Array<GameItem>} onOpen={handleOpenCard} rows={2} open-ri />
       </MarketRow>
       {/* <CardModal onClose={handleClose} open={open} color={selectedCard.color} tokenId={selectedCard.tokenId} price={selectedCard.price}/> */}
     </Page>

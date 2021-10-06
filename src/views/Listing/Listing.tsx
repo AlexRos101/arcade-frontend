@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
 import { Hidden, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -9,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
 
 import Card from 'components/Card'
@@ -26,6 +25,7 @@ import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 
 import Row from './components/Row'
+import { GameItem } from 'global/interface'
 
 const useStyles = makeStyles({
   tableContainer: {
@@ -37,19 +37,24 @@ const useStyles = makeStyles({
   },
 })
 
-const Listing = () => {
+const Listing: React.FC = () => {
   const classes = useStyles()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [rows, setRows] = useState<Array<any>>([])
+  const [rows, setRows] = useState<Array<GameItem>>([])
   const [count, setCount] = useState(0)
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
   const [initialized, setInitialized] = useState(false)
   const [showListModal, setShowListModal] = useState(false)
   const [showUnlistModal, setShowUnlistModal] = useState(false)
-  const [selectedItem, setSelectedItem] = useState({ name: '', token_id: 0 })
+  const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
+
+  /* eslint-disable */
+
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-  const [account, setAccount] = useGlobalState('account')
+  const [isLoading, setIsLoading] = useGlobalState('isLoading')
+
+  /* eslint-enable */
+
   const [rate, setRate] = useState(0.0)
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -74,7 +79,7 @@ const Listing = () => {
 
     setRows([])
     const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
-    setCount(items.total)
+    setCount(Number(items.total))
     setRows(items.data)
 
     setIsLoading(false)
@@ -108,7 +113,7 @@ const Listing = () => {
     NFT.methods
       .burn(rows[index].token_id)
       .send({ from: address })
-      .then((res: any) => {
+      .then(() => {
         const checkItemStatus = async () => {
           const item = (await API.getItemById(rows[index].id)).data
           if (item.is_burnt) {
@@ -120,7 +125,7 @@ const Listing = () => {
 
         checkItemStatus()
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
       })
   }
@@ -141,12 +146,12 @@ const Listing = () => {
     exchange.methods
       .getRate()
       .call()
-      .then((res: any) => {
+      .then((res: string) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
         setTimeout(getRate, 1000)
       })
-      .catch((err: any) => {
+      .catch(() => {
         setTimeout(getRate, 500)
       })
   }

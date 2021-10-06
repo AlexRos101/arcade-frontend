@@ -3,17 +3,11 @@ import React from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import Link from '@material-ui/core/Link'
 import Card from './Card'
-
-interface tokenCard {
-  color: string
-  tokenId: string
-  price: number
-}
+import { GameItem } from 'global/interface'
 
 interface Props {
-  context: Array<any>
+  context: Array<GameItem>
   rows: number
   onOpen: (index: number) => void
 }
@@ -64,9 +58,9 @@ const CardSlider: React.FC<Props> = (props) => {
             <Card
               key={index}
               index={index}
-              tokenId={item.token_id}
-              name={item.name}
-              price={item.arcadedoge_price}
+              tokenId={Number(item.token_id)}
+              name={String(item.name)}
+              price={Number(item.arcadedoge_price)}
               onClick={props.onOpen}
             />
           )

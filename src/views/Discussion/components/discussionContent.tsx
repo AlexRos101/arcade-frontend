@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import { Grid } from '@material-ui/core'
 
 import Card from 'components/Card'
 import RocketIcon from 'assets/img/rocket.svg'
@@ -10,18 +10,20 @@ import { useGlobalState } from 'state-pool'
 import { setLikes, getLikes, getDiscussion } from 'hooks/api'
 import ReactTimeAgo from 'react-time-ago'
 
+import { Discussion } from 'global/interface'
+
 interface Props {
-  discussion: any
+  discussion: Discussion
 }
 
 const DiscussionContent: React.FC<Props> = (props) => {
   const [discussion, setDiscussion] = useState(props.discussion)
-  const [account, setAccount] = useGlobalState('account')
+  const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
 
   useEffect(() => {
     if (isLike != 0) return
-    if (props.discussion.id == undefined) return
+    if (props.discussion.id == -1 || props.discussion.id == undefined) return
     if (account == '') return
 
     setIsLike(3)

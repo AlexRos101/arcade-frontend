@@ -5,12 +5,11 @@ import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import { Typography, Button, Hidden } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 import { connect } from 'global/wallet'
 import * as WalletUtils from '../../global/wallet'
 
@@ -26,7 +25,7 @@ interface Props {
 
 const ConnectWalletModal: React.FC<Props> = (props) => {
   const [account, setAccount] = useGlobalState('account')
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [showConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const onConnectWalletHandler = async () => {
     await connect()

@@ -1,43 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import React from 'react'
+import { Grid, Typography } from '@material-ui/core'
 
 import AvatarIcon from 'assets/img/avatar.svg'
 import Card from 'components/Card'
 import DetailLink from './detailLink'
-import { getAllDiscussion } from 'hooks/api'
 import AddDiscussionForm from './addDiscussion'
 
-import { greenTheme } from 'styles/theme'
+import { Stuff } from 'global/interface'
 
 interface Props {
-  staff: any
+  staff: Stuff
   link?: boolean
 }
 
 const NewDiscussion: React.FC<Props> = (props) => {
-  const history = useHistory()
   const staff = props.staff
-  const [discussions, setDiscussions] = useState<any[]>([])
-  const [dscIsSet, setDscIsSet] = useState(false)
-
-  useEffect(() => {
-    if (dscIsSet == false) {
-      setDscIsSet(true)
-      const data = staff.discussions as any
-      if (data && data.length > 0) {
-        setDiscussions(data)
-      } else {
-        getAllDiscussion(staff.id, 0, 3).then((res) => {
-          setDiscussions(res)
-        })
-      }
-    }
-  })
-
-  const onAddNewThread = () => {
-    history.push(`/discussion/new/${staff.id}`)
-  }
 
   return (
     <div style={{ marginBottom: '2rem' }}>

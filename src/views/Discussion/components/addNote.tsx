@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useGlobalState } from 'state-pool'
 
 import { Typography } from '@material-ui/core'
@@ -18,7 +17,7 @@ const useStyles = makeStyles({
   },
 })
 
-const AddNote = () => {
+const AddNote: React.FC = () => {
   const classes = useStyles()
 
   const [openRule, setOpenRule] = useGlobalState('openDiscussionRule')

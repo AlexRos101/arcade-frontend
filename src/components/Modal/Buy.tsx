@@ -4,16 +4,17 @@ import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import { Typography, Button, Hidden } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 
-import { store, useGlobalState } from 'state-pool'
-import { connect } from 'global/wallet'
+import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC20 from '../../contracts/ERC20.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
+
+import { GameItem } from 'global/interface'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -22,18 +23,24 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent)
 
 interface Props {
-  item: any
+  item: GameItem
   open: boolean
   onClose: () => void
 }
 
 const BuyModal: React.FC<Props> = (props) => {
-  const [account, setAccount] = useGlobalState('account')
+  const [account] = useGlobalState('account')
+
+  /* eslint-disable */
+  
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+
+  /* eslint-enable */
+
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
   useEffect(() => {
     if (props.item == selectedItem) return
@@ -57,8 +64,8 @@ const BuyModal: React.FC<Props> = (props) => {
     ARCADEDOGE.methods
       .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
       .call()
-      .then((res: any) => {
-        if (Number.parseFloat(web3.utils.fromWei(res)) >= props.item.arcadedoge_price) {
+      .then((res: string) => {
+        if (Number.parseFloat(web3.utils.fromWei(res)) >= Number(props.item.arcadedoge_price)) {
           // setIsLoading(false);
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
@@ -68,7 +75,7 @@ const BuyModal: React.FC<Props> = (props) => {
           setSecondStepClassName('item-disabled')
         }
       })
-      .catch((err: any) => {
+      .catch(() => {
         // setIsLoading(false);
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -92,12 +99,12 @@ const BuyModal: React.FC<Props> = (props) => {
     ARCADEDOGE.methods
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
       .send({ from: account })
-      .then((res: any) => {
+      .then(() => {
         setIsLoading(false)
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -127,7 +134,7 @@ const BuyModal: React.FC<Props> = (props) => {
         account,
       )
       .send({ from: account })
-      .then((res: any) => {
+      .then(() => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
           if (item.owner == Web3.utils.toChecksumAddress(account)) {
@@ -139,7 +146,7 @@ const BuyModal: React.FC<Props> = (props) => {
 
         checkDBStatus()
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
       })
   }

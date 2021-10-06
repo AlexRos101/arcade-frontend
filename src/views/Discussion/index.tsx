@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -10,7 +9,9 @@ import Staff from './components/staff'
 import SearchBox from './components/searchBox'
 import { getAllStuff } from 'hooks/api'
 
-const Discussion = () => {
+import { Stuff } from 'global/interface'
+
+const Discussion: React.FC = () => {
   const [staffs, setStaffs] = useState([])
   const [staffIsSet, setStaffIsSet] = useState(false)
   useEffect(() => {
@@ -28,7 +29,7 @@ const Discussion = () => {
       </Header>
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>
-          {staffs.map((staff: any) => {
+          {staffs.map((staff: Stuff) => {
             return <Staff key={staff.title} staff={staff} />
           })}
         </Grid>

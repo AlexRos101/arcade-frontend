@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import CommentContent from './commentContent'
 
+import { Comment } from 'global/interface'
+
 interface Props {
-  comment: any
+  comment: Comment
   depth: number
 }
 
@@ -22,7 +24,7 @@ const ReplyItem: React.FC<Props> = (props) => {
         <DepthStick />
         <CommentContent comment={props.comment} />
       </div>
-      {reply.map((replyItem: any, index: number) => {
+      {reply.map((replyItem: Comment, index: number) => {
         return <ReplyItem key={index} comment={replyItem} depth={props.depth + 1} />
       })}
     </div>

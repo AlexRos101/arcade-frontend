@@ -1,6 +1,5 @@
 import React, { memo } from 'react'
 import { Typography } from '@material-ui/core'
-import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 
 interface Props {

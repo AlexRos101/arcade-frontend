@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
-import { useDropzone } from 'react-dropzone'
 import { ReactComponent as Cloud } from 'assets/img/cloud.svg'
 
 const DropContainer = styled.div<{
@@ -30,7 +29,7 @@ const DropContainer = styled.div<{
 
 interface Props {
   height?: string
-  onDrop: (files: any) => void
+  onDrop: (files: Array<File>) => void
 }
 
 const ItemDropdown: React.FC<Props> = (props) => {

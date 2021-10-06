@@ -3,6 +3,8 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import * as ls from 'local-storage'
 import * as CONST from './const'
 
+/* eslint-disable */
+
 declare let window: any
 
 const providerParam: any = {
@@ -89,7 +91,7 @@ export const getCurrentProvider = async () => {
   } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
     const provider = new WalletConnectProvider(providerParam)
 
-    provider.on('disconnect', (code: number, reason: string) => {
+    provider.on('disconnect', () => {
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 0)
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.NONE)
       document.location.reload()
@@ -141,7 +143,7 @@ export const getCurrentChainId = () => {
   return null
 }
 
-export const isConnected = async () => {
+export const isConnected = async (): Promise<boolean> => {
   const address = await getCurrentWallet()
   const provider = await getCurrentProvider()
   let chainId = getCurrentChainId()
@@ -158,3 +160,5 @@ export const isConnected = async () => {
 
   return true
 }
+
+/* eslint-enable */

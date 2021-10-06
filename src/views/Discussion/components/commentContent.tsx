@@ -12,13 +12,13 @@ import IconLabel from 'components/Label/IconLabel'
 import ReactTimeAgo from 'react-time-ago'
 
 import { setLikes, getLikes } from 'hooks/api'
-
 import { useGlobalState } from 'state-pool'
+import { Comment } from 'global/interface'
 
 import AddReply from './addReply'
 
 interface Props {
-  comment: any
+  comment: Comment
 }
 
 const CommentContent: React.FC<Props> = (props) => {
@@ -27,7 +27,7 @@ const CommentContent: React.FC<Props> = (props) => {
   const [commentState, setCommentState] = useGlobalState('commentState')
   const [replyOn, setReplyOn] = useState(false)
 
-  const [account, setAccount] = useGlobalState('account')
+  const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const CommentContent: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (isLike != 0) return
-    if (props.comment.id == undefined) return
+    if (props.comment.id == undefined || props.comment.id == -1) return
     if (account == '') return
 
     setIsLike(3)
@@ -119,7 +119,7 @@ const CommentContent: React.FC<Props> = (props) => {
             style={{ color: '#B7B091', marginRight: '1rem' }}
           />
           <IconLabel
-            label={<ReactTimeAgo date={new Date(comment.updated_at)} locale="en-US" />}
+            label={<ReactTimeAgo date={new Date(String(comment.updated_at))} locale="en-US" />}
             style={{ color: '#B7B091', marginRight: '1rem' }}
           />
         </div>

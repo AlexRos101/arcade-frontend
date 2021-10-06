@@ -10,6 +10,8 @@ import IconLabel from 'components/Label/IconLabel'
 import DisucssionLabel from 'components/Label/DiscussionLabel'
 import ReactTimeAgo from 'react-time-ago'
 
+import { Discussion } from 'global/interface'
+
 const ItemContainer = styled.div`
   background: #faf8f2;
   padding: 1rem;
@@ -18,7 +20,7 @@ const ItemContainer = styled.div`
 
 interface Props {
   badge?: string
-  content: any
+  content: Discussion
 }
 
 const DiscussItem: React.FC<Props> = (props) => {
@@ -40,7 +42,7 @@ const DiscussItem: React.FC<Props> = (props) => {
               style={{ color: '#B7B091', marginRight: '1rem' }}
             />
             <IconLabel
-              label={<ReactTimeAgo date={new Date(discussion.updated_at)} locale="en-US" />}
+              label={<ReactTimeAgo date={new Date(String(discussion.updated_at))} locale="en-US" />}
               style={{ color: '#B7B091', marginRight: '1rem' }}
             />
           </div>

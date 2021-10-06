@@ -1,6 +1,6 @@
-import React, { SVGProps } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { Typography, Grid } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import avatar from 'assets/img/avatar.svg'
 import { ScaleDefaults, ScaleTypes } from 'utils/constants/types'
@@ -58,11 +58,11 @@ const PriceLabelDefaults = {
   pricePerUsd: 0,
 }
 
-const PriceLabel = (props: Partial<PriceLabelProps> = {}) => {
+const PriceLabel: React.FC<Partial<PriceLabelProps>> = (props = {}) => {
   const params = { ...PriceLabelDefaults, ...props }
 
   return (
-    <Grid container spacing={1} alignItems="center">
+    <Grid container spacing={1} alignItems="center" {...props}>
       <Grid item>
         <ImageWrapper scales={params.scales} src={params.avatar} />
       </Grid>

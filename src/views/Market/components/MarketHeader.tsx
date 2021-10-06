@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
-import styled from 'styled-components'
 import Storefront from '@material-ui/icons/Storefront'
 import { Button } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
 import { marketTheme } from 'styles/theme'
 import { ReactComponent as Sell } from 'assets/img/sell.svg'
-
-import $ from 'jquery'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MarketHeader = () => {
+const MarketHeader: React.FC = () => {
   const history = useHistory()
   const classes = useStyles()
 

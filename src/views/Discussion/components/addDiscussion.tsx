@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField'
 import SwitchButton from 'components/Button/SwitchButton'
 
 import { addNewDiscussion } from 'hooks/api'
+import { Stuff } from 'global/interface'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  stuff: any
+  stuff: Stuff
 }
 
 const AddDiscussionForm: React.FC<Props> = (props) => {
@@ -51,7 +52,7 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
   }, [anonymous])
 
   const onAddDiscussion = useCallback(() => {
-    addNewDiscussion(Number(props.stuff.id), content, anonymous == false ? 0 : 1, user).then((response) => {
+    addNewDiscussion(Number(props.stuff.id), content, anonymous == false ? 0 : 1, user).then(() => {
       history.push(`/discussion/stuff/${props.stuff.id}`)
       document.location.reload()
     })

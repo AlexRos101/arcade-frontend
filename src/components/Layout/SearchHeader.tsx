@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { TextField, InputAdornment } from '@material-ui/core'
 
 import SearchIcon from '@material-ui/icons/Search'
 
@@ -13,7 +13,7 @@ const SearchHeader: React.FC<Props> = (props) => {
   const history = useHistory()
   const [keyword, setKeyword] = useState('')
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && keyword != '') {
       history.push(`/discussion/search/${keyword}`)
       document.location.reload()

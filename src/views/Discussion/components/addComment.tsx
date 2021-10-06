@@ -10,9 +10,10 @@ import Flex from 'components/Layout/Flex'
 import LabelComponent from 'components/Label/LabelComponent'
 import TextField from '@material-ui/core/TextField'
 import SwitchButton from 'components/Button/SwitchButton'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 
 import { addNewComment } from 'hooks/api'
+import { Discussion } from 'global/interface'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -36,9 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  discussion: any
+  discussion: Discussion
   visible: boolean
-  onReset: () => any
+  onReset: () => unknown
 }
 
 const AddComment: React.FC<Props> = (props) => {
@@ -53,7 +54,7 @@ const AddComment: React.FC<Props> = (props) => {
   }, [anonymous])
 
   const onAddComment = useCallback(() => {
-    addNewComment(Number(props.discussion.id), -1, content, anonymous == false ? 0 : 1, user).then((response) => {
+    addNewComment(Number(props.discussion.id), -1, content, anonymous == false ? 0 : 1, user).then(() => {
       setCommentState(2)
       props.onReset()
     })

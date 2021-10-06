@@ -1,11 +1,10 @@
 import React, { memo } from 'react'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 
 import { Grid, Typography } from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { DEFAULT_FOOTER_ROADMAP } from '../../../utils/constants/footer-roadmap'
 import RoadmapEntry from './RoadmapEntry'
 
 const useStyles = makeStyles((theme) => ({
@@ -37,8 +36,13 @@ const useStyles = makeStyles((theme) => ({
 
 const FooterRoadmap = () => {
   const classes = useStyles()
+
+  /* eslint-disable */
+
   const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
   const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
+
+  /* eslint-enable */
 
   const onClickTermOfUse = () => {
     setOpenTerm(true)

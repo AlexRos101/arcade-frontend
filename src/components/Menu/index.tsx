@@ -6,13 +6,13 @@ import clsx from 'clsx'
 import Logo from '../Logo'
 import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 import * as WalletUtils from '../../global/wallet'
 import { connect } from 'global/wallet'
 
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     display: 'flex',
     flexDirection: 'row',
@@ -34,7 +34,12 @@ const useStyles = makeStyles((theme) => ({
 const Menu = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
+
+  /* eslint-disable */
+
   const [account, setAccount] = useGlobalState('account')
+
+  /* eslint-enable */
 
   const onConnectWalletHandler = async () => {
     await connect()

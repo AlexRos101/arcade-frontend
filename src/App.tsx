@@ -1,10 +1,9 @@
-import React, { Suspense, lazy, useEffect } from 'react'
+import React, { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { ThemeProvider as MuiThemeProvider, StylesProvider } from '@material-ui/core/styles'
 
-import Web3 from 'web3'
-import { store, useGlobalState } from 'state-pool'
+import { store } from 'state-pool'
 
 store.setState('account', '')
 store.setState('showConnectWalletModal', false)
@@ -29,12 +28,7 @@ const DiscussionDetail = lazy(() => import('./views/Discussion/discussionDetail'
 const DiscussionSearch = lazy(() => import('./views/Discussion/discussionSearch'))
 const DiscussionAdd = lazy(() => import('./views/Discussion/discussionAdd'))
 
-declare let window: any
-
-function App() {
-  const [account, setAccount] = useGlobalState('account')
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-
+const App: React.FunctionComponent = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>

@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react'
-import styled from 'styled-components'
 
-import { Box, Button, Grid, Select } from '@material-ui/core'
-import { Theme, ThemeProvider, createStyles, makeStyles, withStyles } from '@material-ui/core/styles'
+import { Button, Grid } from '@material-ui/core'
+import { Theme, ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
 import { greenTheme } from 'styles/theme'
 
@@ -10,9 +9,10 @@ import Flex from 'components/Layout/Flex'
 import LabelComponent from 'components/Label/LabelComponent'
 import TextField from '@material-ui/core/TextField'
 import SwitchButton from 'components/Button/SwitchButton'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 
 import { addNewComment } from 'hooks/api'
+import { Comment } from 'global/interface'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  comment: any
+  comment: Comment
   visible: boolean
 }
 
@@ -58,7 +58,7 @@ const AddReply: React.FC<Props> = (props) => {
       content,
       anonymous == false ? 0 : 1,
       user,
-    ).then((response) => {
+    ).then(() => {
       setCommentState(2)
       document.location.reload()
     })

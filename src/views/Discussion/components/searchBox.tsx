@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { TextField, Typography, InputAdornment } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -18,13 +18,13 @@ const useStyles = makeStyles({
   },
 })
 
-const SearchBox = () => {
+const SearchBox: React.FC = () => {
   const history = useHistory()
   const classes = useStyles()
 
   const [keyword, setKeyword] = useState('')
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && keyword != '') {
       history.push(`/discussion/search/${keyword}`)
       document.location.reload()

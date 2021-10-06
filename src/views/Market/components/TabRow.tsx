@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
 import { makeStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { CategoryTab } from 'global/interface'
 
 interface StyledTabsProps {
   value: number
@@ -85,8 +86,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface TabsData {
-  tabs: Array<any>
-  refresh: (category: number, sort: number) => any
+  tabs: Array<CategoryTab>
+  refresh: (category: number, sort: number) => unknown
 }
 
 const TabRow: React.FC<TabsData> = (props) => {

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
 
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
 
 import StaffSelectItem from './staffSelectItem'
 import { OutlinedCard } from 'components/Card'
+
+import { Stuff, Discussion } from 'global/interface'
 
 const useStyles = makeStyles({
   searchCardTitle: {
@@ -18,17 +19,16 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  staffs: any
-  checkArray: any
-  setCheckArray: any
+  staffs: Array<Stuff>
+  checkArray: Array<boolean>
+  setCheckArray: (checkArray: Array<boolean>) => unknown
 }
 
 const StaffSelect: React.FC<Props> = (props) => {
-  const history = useHistory()
   const classes = useStyles()
 
-  const checkArray = [] as Array<any>
-  props.checkArray.forEach((check: any) => {
+  const checkArray = [] as Array<boolean>
+  props.checkArray.forEach((check: boolean) => {
     checkArray.push(check)
   })
 
@@ -49,8 +49,8 @@ const StaffSelect: React.FC<Props> = (props) => {
       <Typography gutterBottom variant="h3" component="div" className={classes.searchCardTitle}>
         Filter by Category:
       </Typography>
-      {props.staffs.map((staff: any, index: number) => {
-        const discussions = staff.discussions as any
+      {props.staffs.map((staff: Stuff, index: number) => {
+        const discussions = staff.discussions as Array<Discussion>
         if (discussions.length == 0) {
           return ''
         }

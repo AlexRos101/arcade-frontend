@@ -2,7 +2,7 @@ import React from 'react'
 
 interface Props {
   text: string
-  onClick: any
+  onClick: () => unknown
 }
 
 const MenuItem: React.FC<Props> = (props) => {

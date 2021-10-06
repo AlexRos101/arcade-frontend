@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Button, Grid, ThemeProvider, Typography } from '@material-ui/core'
 
 import AvatarIcon from 'assets/img/avatar.svg'
 import Card from 'components/Card'
@@ -10,21 +10,23 @@ import { getAllDiscussion } from 'hooks/api'
 
 import { greenTheme } from 'styles/theme'
 
+import { Stuff, Discussion } from 'global/interface'
+
 interface Props {
-  staff: any
+  staff: Stuff
   link?: boolean
 }
 
 const Staff: React.FC<Props> = (props) => {
   const history = useHistory()
   const staff = props.staff
-  const [discussions, setDiscussions] = useState<any[]>([])
+  const [discussions, setDiscussions] = useState<Array<Discussion>>([])
   const [dscIsSet, setDscIsSet] = useState(false)
 
   useEffect(() => {
     if (dscIsSet == false) {
       setDscIsSet(true)
-      const data = staff.discussions as any
+      const data = staff.discussions as Array<Discussion>
       if (data && data.length > 0) {
         setDiscussions(data)
       } else {

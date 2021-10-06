@@ -53,7 +53,7 @@ const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVis
 )
 interface Props {
   value: boolean
-  onChange: any
+  onChange: () => unknown
   text: string
 }
 

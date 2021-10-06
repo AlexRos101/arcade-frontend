@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import { Button, Grid, ThemeProvider, TextField, Typography, InputAdornment } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -14,20 +13,21 @@ import SearchHeader from 'components/Layout/SearchHeader'
 import HeaderContainer from 'components/Layout/HeaderContainer'
 import { getSearch } from 'hooks/api'
 
+import { Stuff, Discussion } from 'global/interface'
+
 interface ParamTypes {
   keyword: string
 }
 
-const DiscussionSearch = () => {
+const DiscussionSearch: React.FC = () => {
   const [staffs, setStaffs] = useState([])
   const [staffIsSet, setStaffIsSet] = useState(false)
   const [totalSearch, setTotalSearch] = useState(0)
 
   const { keyword } = useParams<ParamTypes>()
-  const [checkArray, setCheckArray] = useState<Array<any>>([])
+  const [checkArray, setCheckArray] = useState<Array<boolean>>([])
 
-  const updateCheckArray = (param: any) => {
-    console.log(checkArray)
+  const updateCheckArray = (param: Array<boolean>) => {
     setCheckArray(param)
   }
 
@@ -38,7 +38,7 @@ const DiscussionSearch = () => {
         setStaffs(data)
         let cnt = 0
         for (let i = 0; i < data.length; i++) {
-          const discussions = data[i].discussions as any
+          const discussions = data[i].discussions as Array<Discussion>
           cnt += discussions.length
           if (discussions.length == 0) checkArray.push(false)
           else checkArray.push(true)
@@ -49,7 +49,6 @@ const DiscussionSearch = () => {
     }
   })
 
-  console.log('AA')
   return (
     <Page className="styled-search">
       <Header>
@@ -60,9 +59,8 @@ const DiscussionSearch = () => {
       </Header>
       <Grid container spacing={1}>
         <Grid item sm={12} md={8}>
-          {checkArray.map((check: any, index: number) => {
-            const staff = staffs[index] as any
-            console.log(check)
+          {checkArray.map((check: boolean, index: number) => {
+            const staff = staffs[index] as Stuff
             if (check == false) return ''
             return <Staff key={staff.title} staff={staff} />
           })}

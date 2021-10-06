@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
 import axios from 'axios'
-import { store, useGlobalState } from 'state-pool'
-import styled from 'styled-components'
+import { useGlobalState } from 'state-pool'
 import { Box, Button, Grid, Select } from '@material-ui/core'
 import { Theme, ThemeProvider, createStyles, makeStyles, withStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
@@ -28,14 +27,13 @@ import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 import Swal from 'sweetalert'
-
-import { connect } from 'global/wallet'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
-import SelectInput from '@material-ui/core/Select/SelectInput'
+
+import { Response, GameItem } from 'global/interface'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -100,36 +98,47 @@ const initData: SkinProps = {
   visible: true,
 }
 
+interface Category {
+  id: number
+  game_id: number
+  name: string
+}
+
+interface Game {
+  id: number
+  name: string
+}
+
 interface ParamTypes {
   itemTokenId: string
 }
 
-const Sell = ({ data }: { data?: SkinProps | undefined }) => {
+const Sell: React.FC<SkinProps> = (data) => {
   const classes = useStyles()
-  const [skinItem, setSkinItem] = useState<SkinProps | undefined>(data ?? initData)
+  const skinItem = data ?? initData
   const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
   const sellCardRef = useRef<HTMLDivElement>(null)
   const [games, setGames] = useState([])
   const [categories, setCategories] = useState([])
   const [initialized, setInitialized] = useState(false)
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-  const [selectedGameID, setSelectedGameID] = useState(-1)
-  const [selectedCategoryID, setSelectedCategoryID] = useState(-1)
+  const [selectedGameID, setSelectedGameID] = useState(1)
+  const [selectedCategoryID, setSelectedCategoryID] = useState(1)
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
   const [rate, setRate] = useState(0.0)
-
   const [description, setDescription] = useState('')
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
-
   const [anonymous, setAnonymous] = useState(false)
-
-  const [account, setAccount] = useGlobalState('account')
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-
   const [paramIsSet, setParamIsSet] = useState(false)
   const [itemId, setItemId] = useState(-1)
+
+  /* eslint-disable */
+
+  const [isLoading, setIsLoading] = useGlobalState('isLoading')
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+
+  /* eslint-enable */
 
   const history = useHistory()
 
@@ -144,15 +153,15 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
       setTokenID(Number(itemTokenId))
       setParamIsSet(true)
 
-      API.getItemByTokenID(Number(itemTokenId)).then((response: any) => {
+      API.getItemByTokenID(Number(itemTokenId)).then((response: Response) => {
         if (response.result == true) {
-          const data = response.data as any
-          setSelectedGameID(data.game_id)
-          setSelectedCategoryID(data.category_id)
-          setName(data.name)
+          const data = response.data as GameItem
+          setSelectedGameID(Number(data.game_id))
+          setSelectedCategoryID(Number(data.category_id))
+          setName(String(data.name))
           setAnonymous(data.is_anonymous == 1)
-          setDescription(data.description)
-          setPrice(data.arcadedoge_price)
+          setDescription(String(data.description))
+          setPrice(String(data.arcadedoge_price))
           setItemId(data.id)
         }
       })
@@ -197,7 +206,7 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
     setSelectedCategoryID(value)
   }
 
-  const uploadMeterial = async (files: any) => {
+  const uploadMeterial = async (files: Array<File>) => {
     setShowThumbnailWarning(false)
     const file = files[0]
     if (file.name.slice(file.name.length - 4, file.name.length) != '.rar') {
@@ -218,7 +227,8 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
     axios
       .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
       .then((res) => {
-        setIsLoading(false);
+        console.log(res)
+        setIsLoading(false)
         if (res.data.code == -1) {
           setShowThumbnailWarning(true)
           return
@@ -226,18 +236,14 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
         setTokenID(tokenTemp)
       })
       .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
+        setIsLoading(false)
+        console.log(err)
       })
   }
 
   const isNumeric = (str: string) => {
     if (typeof str != 'string') return false
     return !isNaN(parseFloat(str))
-  }
-
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   const MintToken = async () => {
@@ -288,12 +294,9 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
     NFT.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
       .send({ from: address })
-      .then(async (res: any) => {
-        console.log(res)
-        // await sleep(3000)
-
+      .then(async () => {
         const checkDBStatus = async () => {
-          const item = (await API.getItemByTokenID(tokenID)).data as any
+          const item = (await API.getItemByTokenID(tokenID)).data as unknown
           if (item != undefined && item != null) {
             setIsLoading(false)
             history.push('/listing')
@@ -305,7 +308,7 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
 
         checkDBStatus()
       })
-      .catch((err: any) => {
+      .catch(() => {
         setIsLoading(false)
       })
   }
@@ -336,12 +339,12 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
     exchange.methods
       .getRate()
       .call()
-      .then((res: any) => {
+      .then((res: string) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
         setTimeout(getRate, 1000)
       })
-      .catch((err: any) => {
+      .catch(() => {
         setTimeout(getRate, 500)
       })
   }
@@ -370,7 +373,7 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
                     label="Select Game"
                     input={<BootstrapInput>Select Game</BootstrapInput>}
                   >
-                    {games.map((game: any, index: number) => {
+                    {games.map((game: Game, index: number) => {
                       return (
                         <MenuItem key={index} value={game.id}>
                           {game.name}
@@ -388,9 +391,13 @@ const Sell = ({ data }: { data?: SkinProps | undefined }) => {
                     placeholder="Select Category"
                     input={<BootstrapInput />}
                   >
-                    {categories.map((category: any, index: number) => {
+                    {categories.map((category: Category, index: number) => {
                       if (category.game_id == selectedGameID) {
-                        return <MenuItem value={category.id}>{category.name}</MenuItem>
+                        return (
+                          <MenuItem key={index} value={category.id}>
+                            {category.name}
+                          </MenuItem>
+                        )
                       }
                     })}
                   </Select>

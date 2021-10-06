@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { store, useGlobalState } from 'state-pool'
+import { useGlobalState } from 'state-pool'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -18,15 +18,15 @@ import PriceLayout from 'components/Layout/PriceLayout'
 
 import PriceHeaderLabel from './PriceHeaderLabel'
 import PriceLabel from './PriceLabel'
-import PriceDexLabel from './PriceDexLabel'
 
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../../global/wallet'
 import EXCHANGE from '../../../contracts/EXCHANGE.json'
 import Web3 from 'web3'
-import * as API from '../../../hooks/api'
 import BuyModal from 'components/Modal/Buy'
 import BuyBUSDModal from 'components/Modal/BuyBUSD'
+
+import { GameItem } from 'global/interface'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -34,19 +34,9 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent)
 
-interface Item {
-  id: number
-  token_id: number
-  name: string
-  description: string
-  arcadedoge_price: number
-  owner: string
-  contract_address: string
-}
-
 interface Props {
   open: boolean
-  item: Item
+  item: GameItem
   category: string
   onClose: () => void
 }
@@ -65,7 +55,7 @@ const theme = createTheme({
 })
 
 const CardModal: React.FC<Props> = (props) => {
-  const [account, setAccount] = useGlobalState('account')
+  const [account] = useGlobalState('account')
   const [showBuyDlg, setShowBuyDlg] = useState(false)
   const [showBuyBUSDDlg, setShowBuyBUSDDlg] = useState(false)
   const [rate, setRate] = useState(0.0)
@@ -79,12 +69,12 @@ const CardModal: React.FC<Props> = (props) => {
     exchange.methods
       .getRate()
       .call()
-      .then((res: any) => {
+      .then((res: string) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
         setTimeout(getRate, 1000)
       })
-      .catch((err: any) => {
+      .catch(() => {
         setTimeout(getRate, 500)
       })
   }
@@ -116,12 +106,12 @@ const CardModal: React.FC<Props> = (props) => {
               <div className="price-row">
                 <div className="price-sector">
                   <img className="mr-5 mh-auto" src={avatar} alt="avatar" style={{ width: '30px', height: '30px' }} />
-                  <PriceLabel>{props.item.arcadedoge_price.toFixed(2)}</PriceLabel>
+                  <PriceLabel>{Number(props.item.arcadedoge_price).toFixed(2)}</PriceLabel>
                   {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                 </div>
                 <div className="price-sector">
                   <img className="mr-5 mh-auto" src={doge} alt="avatar" style={{ width: '30px', height: '30px' }} />
-                  <PriceLabel>{(props.item.arcadedoge_price * rate).toFixed(2)}</PriceLabel>
+                  <PriceLabel>{(Number(props.item.arcadedoge_price) * rate).toFixed(2)}</PriceLabel>
                   {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                 </div>
               </div>

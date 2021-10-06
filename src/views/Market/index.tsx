@@ -1,13 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { store, useGlobalState } from 'state-pool'
-import ReactDOM from 'react-dom'
-import { Button } from '@material-ui/core'
+import { useGlobalState } from 'state-pool'
 import Page from 'components/Layout/Page'
-import $ from 'jquery'
-
-import Select from '@material-ui/core/Select'
-import FormControl from '@material-ui/core/FormControl'
 
 import Info from '@material-ui/icons/Info'
 
@@ -21,13 +15,14 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
 import ExpandButton from 'components/Button/ExpandButton'
 import TabRow from './components/TabRow'
-import { stringify } from 'querystring'
+import { GameItem } from 'global/interface'
 
 import OrderApprovalModal from 'components/Modal/OrderApproval'
 import * as API from '../../hooks/api'
 import * as CONST from '../../global/const'
+import { CategoryTab } from 'global/interface'
 
-const dogeTab: Array<any> = [
+const dogeTab: Array<CategoryTab> = [
   {
     categoryId: 0,
     tabName: 'All',
@@ -46,18 +41,15 @@ const dogeTab: Array<any> = [
   },
 ]
 
-const Market = () => {
+const Market: React.FC = () => {
   const history = useHistory()
-
-  const [maplevel, setMapLevel] = React.useState(0)
   const [open, setOpen] = React.useState(false)
-
   const [selectedCard, setSelectedCard] = React.useState({
     id: 0,
     token_id: 0,
     name: '',
     description: '',
-    arcadedoge_price: 0,
+    arcadedoge_price: '0.0',
     owner: '',
     contract_address: '',
   })
@@ -68,7 +60,11 @@ const Market = () => {
   const [marsdogeItems, setMarsdogeItems] = useState([])
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
 
+  /* eslint-disable */
+
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
+
+  /* eslint-enable */
 
   const handleClose = () => {
     setOpen(false)
@@ -77,7 +73,7 @@ const Market = () => {
   const handleMarsDogeOpenCard = (index: number) => {
     setOpen(true)
     setSelectedCard(marsdogeItems[index])
-    setSelectedCategoryName(getMarsDogeCategoryName((marsdogeItems[index] as any).category_id))
+    setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
   }
 
   const getMarsDogeCategoryName = (categoryId: number) => {
@@ -87,13 +83,6 @@ const Market = () => {
       }
     }
     return ''
-  }
-
-  const handleScroll = () => {
-    if ($('#footer') != null && $(window) != undefined) {
-      const offset = $('#footer').offset()
-      const windows = $(window)
-    }
   }
 
   const getMarketItems = async (game: number, category: number, sort: number) => {
@@ -110,8 +99,6 @@ const Market = () => {
   }
 
   useEffect(() => {
-    document.addEventListener('scroll', handleScroll)
-
     if (initialized) return
     setInitialized(true)
 
@@ -123,10 +110,6 @@ const Market = () => {
   const onClickMarsDogAll = () => {
     history.push('/market/doge')
     //setTestOpen(true)
-  }
-
-  const onClickOtherAll = () => {
-    history.push('/market/other')
   }
 
   const handleTestClose = () => {
