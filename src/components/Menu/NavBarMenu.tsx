@@ -38,19 +38,14 @@ const useStyles = makeStyles(theme => ({
 const gameMenu = [
   {
     content: 'MargsDoge',
-    href: '/market/doge',
+    href: '/',
     label: 'Hot Releases'
   },
-  {
-    content: 'Another Game',
-    href: '/market/other',
-    label: ''
-  }
 ]
 
 const marketMenu = [
   {
-    content: 'ArcadeDoge Skins',
+    content: 'MargsDoge',
     href: '/market/doge',
     label: 'Hot Releases'
   },
@@ -101,9 +96,9 @@ const NavBarMenu = () => {
       </IconButton>
       <div className={`${classes.root} menu-inspect ${hiddenMenu}`}>
         <div className = "menu">
-            <MenuItem text="How to Play" />
+            <SubMenu text="Games" menuData={gameMenu}/>
             <MenuItem text="Discussions" />
-            <SubMenu text="ArcadeMarket" menuData={gameMenu}/>
+            <SubMenu text="ArcadeMarket" menuData={marketMenu}/>
         </div>
         { account === '' ?
           (<Button
