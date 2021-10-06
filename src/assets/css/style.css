@@ -914,6 +914,10 @@ button {
       margin-right: 10px !important;
       padding-left: 10px !important;
     }
+
+    #footer {
+      margin-bottom: 10vh !important;
+    }
   }
 
   .menu-expand {
