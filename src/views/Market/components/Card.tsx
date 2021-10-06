@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import avatar from 'assets/img/avatar.png'
 
 interface Props {
@@ -12,11 +12,12 @@ interface Props {
 const Card: React.FC<Props> = (Props) => {
   const [mouseMoved, setMouseMoved] = useState(false)
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (mouseMoved === false) {
       Props.onClick(Props.index)
     }
-  }
+  }, [mouseMoved, Props])
+
   return (
     <div
       className="card"

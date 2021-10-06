@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo, useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Typography, Button } from '@material-ui/core'
 
@@ -64,36 +64,36 @@ const NavBarMenu = () => {
     await connect()
     initAddress()
   }
-  const onPlayGameHandler = () => {
+  const onPlayGameHandler = useCallback(() => {
     history.push('/')
-  }
+  }, [])
 
-  const onPressMenu = () => {
+  const onPressMenu = useCallback(() => {
     setHiddenMenu('')
-  }
+  }, [hiddenMenu])
 
-  const onCloseMenu = () => {
+  const onCloseMenu = useCallback(() => {
     setHiddenMenu('hidden-menu')
-  }
+  }, [hiddenMenu])
 
-  const shortenString = (source: string) => {
+  const shortenString = useCallback((source: string) => {
     if (source.length <= 12) return source
 
     return '********' + source.substring(source.length - 6, source.length)
-  }
+  }, [])
 
-  const initAddress = async () => {
+  const initAddress = useCallback(async () => {
     const address = await WalletUtils.getCurrentWallet()
     if (await WalletUtils.isConnected()) {
       setAccount(address == null ? '' : address)
     } else {
       setAccount('')
     }
-  }
+  }, [account])
 
-  const onClickDiscussions = () => {
+  const onClickDiscussions = useCallback(() => {
     history.push('/discussion')
-  }
+  }, [])
 
   useEffect(() => {
     if (initialized) return

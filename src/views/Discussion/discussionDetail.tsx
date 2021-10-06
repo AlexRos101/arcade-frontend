@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Grid, ThemeProvider } from '@material-ui/core'
 
@@ -75,11 +75,11 @@ const DiscussionDetail: React.FC = () => {
     }
   })
 
-  const onAddComment = () => {
+  const onAddComment = useCallback(() => {
     setCommentState(2)
     setShowAddComments(true)
     setCommentOn(true)
-  }
+  }, [])
 
   return (
     <Page className="styled-search">

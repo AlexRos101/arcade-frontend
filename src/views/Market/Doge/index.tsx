@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useGlobalState } from 'state-pool'
 import { TablePagination } from '@material-ui/core'
 import Page from 'components/Layout/Page'
@@ -80,43 +80,58 @@ const MarketDoge: React.FC = () => {
     return []
   }
 
-  const getMarsDogeItems = async (category: number, sort: number, limit: number, cnt: number) => {
-    const items = await getMarketItems(CONST.GAME_TYPE.MARSDOGE, category, sort, limit, cnt)
+  const getMarsDogeItems = useCallback(
+    async (category: number, sort: number, limit: number, cnt: number) => {
+      const items = await getMarketItems(CONST.GAME_TYPE.MARSDOGE, category, sort, limit, cnt)
 
-    setMarsdogeItems(items)
-  }
+      setMarsdogeItems(items)
+    },
+    [marsdogeItems],
+  )
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false)
-  }
+  }, [open])
 
-  const handleOpenCard = (index: number) => {
-    setOpen(true)
-    setSelectedCard(marsdogeItems[index])
-    setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
-  }
+  const handleOpenCard = useCallback(
+    (index: number) => {
+      setOpen(true)
+      setSelectedCard(marsdogeItems[index])
+      setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
+    },
+    [open, selectedCategoryName, selectedCard],
+  )
 
-  const getMarsDogeCategoryName = (categoryId: number) => {
-    for (let i = 0; i < dogeTab.length; i++) {
-      if (dogeTab[i].categoryId == categoryId) {
-        return dogeTab[i].tabName
+  const getMarsDogeCategoryName = useCallback(
+    (categoryId: number) => {
+      for (let i = 0; i < dogeTab.length; i++) {
+        if (dogeTab[i].categoryId == categoryId) {
+          return dogeTab[i].tabName
+        }
       }
-    }
-    return ''
-  }
+      return ''
+    },
+    [dogeTab],
+  )
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
+  const handleChangePage = useCallback(
+    (event: unknown, newPage: number) => {
+      setPage(newPage)
 
-    getMarsDogeItems(0, 0, newPage * rowsPerPage, rowsPerPage)
-  }
+      getMarsDogeItems(0, 0, newPage * rowsPerPage, rowsPerPage)
+    },
+    [page],
+  )
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value)
-    setPage(0)
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(+event.target.value)
+      setPage(0)
 
-    getMarsDogeItems(0, 0, 0, +event.target.value)
-  }
+      getMarsDogeItems(0, 0, 0, +event.target.value)
+    },
+    [rowsPerPage, page],
+  )
 
   useEffect(() => {
     if (initialized) return

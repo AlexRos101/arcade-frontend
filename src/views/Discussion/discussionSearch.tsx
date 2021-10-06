@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Grid } from '@material-ui/core'
 
@@ -27,9 +27,9 @@ const DiscussionSearch: React.FC = () => {
   const { keyword } = useParams<ParamTypes>()
   const [checkArray, setCheckArray] = useState<Array<boolean>>([])
 
-  const updateCheckArray = (param: Array<boolean>) => {
+  const updateCheckArray = useCallback((param: Array<boolean>) => {
     setCheckArray(param)
-  }
+  }, [])
 
   useEffect(() => {
     if (staffIsSet == false) {

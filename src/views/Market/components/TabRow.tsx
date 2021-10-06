@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
@@ -95,16 +95,22 @@ const TabRow: React.FC<TabsData> = (props) => {
   const [value, setValue] = React.useState(0)
   const [sort, setSort] = React.useState(0)
 
-  const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
-    setValue(newValue)
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<unknown>, newValue: number) => {
+      setValue(newValue)
 
-    props.refresh(props.tabs[newValue].categoryId, sort)
-  }
+      props.refresh(props.tabs[newValue].categoryId, sort)
+    },
+    [value, props],
+  )
 
-  const handleChangeSort = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSort(event.target.value as number)
-    props.refresh(props.tabs[value].categoryId, sort)
-  }
+  const handleChangeSort = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setSort(event.target.value as number)
+      props.refresh(props.tabs[value].categoryId, sort)
+    },
+    [sort, props],
+  )
 
   return (
     <div className="flex-row tab-row">

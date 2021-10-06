@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useGlobalState } from 'state-pool'
 
@@ -20,13 +20,13 @@ const Home: React.FC = () => {
   const [account] = useGlobalState('account')
   const [showHowToPlay, setShowHowToPlay] = useState(false)
 
-  const onClickArcadeMarket = () => {
+  const onClickArcadeMarket = useCallback(() => {
     history.push('/market')
-  }
+  }, [])
 
-  const onClickBuyArcadeDoge = () => {
+  const onClickBuyArcadeDoge = useCallback(() => {
     location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-  }
+  }, [])
 
   return (
     <Page className="no-width-limit">

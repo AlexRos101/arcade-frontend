@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 
 import { Typography } from '@material-ui/core'
 
@@ -38,11 +38,14 @@ const StaffSelect: React.FC<Props> = (props) => {
     setInitialized(true)
   }
 
-  const onChange = (checked: boolean, index: number) => {
-    checkArray[index] = checked
-    props.setCheckArray(checkArray)
-    setInitialized(true)
-  }
+  const onChange = useCallback(
+    (checked: boolean, index: number) => {
+      checkArray[index] = checked
+      props.setCheckArray(checkArray)
+      setInitialized(true)
+    },
+    [initialized, props, checkArray],
+  )
 
   return (
     <OutlinedCard>

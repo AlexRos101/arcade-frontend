@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Hidden, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -57,18 +57,24 @@ const Listing: React.FC = () => {
 
   const [rate, setRate] = useState(0.0)
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
+  const handleChangePage = useCallback(
+    (event: unknown, newPage: number) => {
+      setPage(newPage)
 
-    getMyItems(newPage * rowsPerPage, rowsPerPage)
-  }
+      getMyItems(newPage * rowsPerPage, rowsPerPage)
+    },
+    [page, rowsPerPage],
+  )
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value)
-    setPage(0)
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(+event.target.value)
+      setPage(0)
 
-    getMyItems(0, +event.target.value)
-  }
+      getMyItems(0, +event.target.value)
+    },
+    [page, rowsPerPage],
+  )
 
   const getMyItems = async (limit: number, cnt: number) => {
     const address = await Wallet.getCurrentWallet()

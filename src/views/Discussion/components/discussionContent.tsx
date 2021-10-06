@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Grid } from '@material-ui/core'
 
 import Card from 'components/Card'
@@ -41,7 +41,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
     })
   }, [props, isLike, account])
 
-  const onHandleLikes = () => {
+  const onHandleLikes = useCallback(() => {
     if (account != '') {
       if (isLike == 1) {
         setLikes(discussion.id, -1, account, true)
@@ -50,7 +50,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
       }
       setIsLike(0)
     }
-  }
+  }, [isLike, account])
 
   return (
     <Card>

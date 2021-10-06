@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { Hidden, Typography, Grid } from '@material-ui/core'
@@ -50,7 +50,7 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-  const handleToggleClick = () => {
+  const handleToggleClick = useCallback(() => {
     // eslint-disable-next-line prefer-const
     // setRow(prevRow => {
     //   return {
@@ -59,23 +59,23 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
     //   }
     // })
     toggleClicked(index)
-  }
+  }, [])
 
-  const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClickMenu = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
-  }
+  }, [])
 
-  const handleCloseMenu = () => {
+  const handleCloseMenu = useCallback(() => {
     setAnchorEl(null)
-  }
+  }, [])
 
-  const handleEditMenu = () => {
+  const handleEditMenu = useCallback(() => {
     history.push(`/item/edit/${row.token_id}`)
-  }
+  }, [])
 
-  const handleBurn = () => {
+  const handleBurn = useCallback(() => {
     burnToken(index)
-  }
+  }, [])
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
@@ -142,9 +142,9 @@ const Sell: React.FC<SkinProps> = (data) => {
 
   const history = useHistory()
 
-  const onSwitchAnonymous = () => {
+  const onSwitchAnonymous = useCallback(() => {
     setAnonymous(!anonymous)
-  }
+  }, [anonymous])
 
   const { itemTokenId } = useParams<ParamTypes>()
 
@@ -196,57 +196,66 @@ const Sell: React.FC<SkinProps> = (data) => {
     getGamesAndCategories()
   }, [])
 
-  const handleSelectGame = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const value = event.target.value as number
-    setSelectedGameID(value)
-  }
+  const handleSelectGame = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      const value = event.target.value as number
+      setSelectedGameID(value)
+    },
+    [selectedGameID],
+  )
 
-  const handleSelectCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const value = event.target.value as number
-    setSelectedCategoryID(value)
-  }
+  const handleSelectCategory = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      const value = event.target.value as number
+      setSelectedCategoryID(value)
+    },
+    [selectedCategoryID],
+  )
 
-  const uploadMeterial = async (files: Array<File>) => {
-    setShowThumbnailWarning(false)
-    const file = files[0]
-    if (file.name.slice(file.name.length - 4, file.name.length) != '.rar') {
-      Swal('Please select *.rar file.')
-      return
-    }
+  const uploadMeterial = useCallback(
+    async (files: Array<File>) => {
+      setShowThumbnailWarning(false)
+      const file = files[0]
+      if (file.name.slice(file.name.length - 4, file.name.length) != '.rar') {
+        Swal('Please select *.rar file.')
+        return
+      }
 
-    const tokenTemp = Date.now()
+      const tokenTemp = Date.now()
 
-    setIsLoading(true)
+      setIsLoading(true)
 
-    const formData = new FormData()
-    // Update the formData object
-    formData.append('myFile', file, tokenTemp + '.rar')
+      const formData = new FormData()
+      // Update the formData object
+      formData.append('myFile', file, tokenTemp + '.rar')
 
-    // Request made to the backend api
-    // Send formData object
-    axios
-      .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
-      .then((res) => {
-        console.log(res)
-        setIsLoading(false)
-        if (res.data.code == -1) {
-          setShowThumbnailWarning(true)
-          return
-        }
-        setTokenID(tokenTemp)
-      })
-      .catch((err) => {
-        setIsLoading(false)
-        console.log(err)
-      })
-  }
+      // Request made to the backend api
+      // Send formData object
+      axios
+        .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
+        .then((res) => {
+          console.log(res)
+          setIsLoading(false)
+          if (res.data.code == -1) {
+            setShowThumbnailWarning(true)
+            return
+          }
+          setTokenID(tokenTemp)
+        })
+        .catch((err) => {
+          setIsLoading(false)
+          console.log(err)
+        })
+    },
+    [isLoading, showThumbnailWarning, tokenID],
+  )
 
-  const isNumeric = (str: string) => {
+  const isNumeric = useCallback((str: string) => {
     if (typeof str != 'string') return false
     return !isNaN(parseFloat(str))
-  }
+  }, [])
 
-  const MintToken = async () => {
+  const MintToken = useCallback(async () => {
     if (tokenID == 0) {
       Swal('Please upload item file!')
       return
@@ -311,9 +320,9 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setIsLoading(false)
       })
-  }
+  }, [isLoading, tokenID])
 
-  const UpdateItem = () => {
+  const UpdateItem = useCallback(() => {
     API.updateItemByID(
       itemId,
       selectedGameID,
@@ -329,8 +338,8 @@ const Sell: React.FC<SkinProps> = (data) => {
         document.location.reload()
       }
     })
-  }
-  const getRate = async () => {
+  }, [])
+  const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
@@ -347,11 +356,11 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }
+  }, [])
 
-  const onHandleResetFile = () => {
+  const onHandleResetFile = useCallback(() => {
     setTokenID(0)
-  }
+  }, [tokenID])
 
   getRate()
   return (

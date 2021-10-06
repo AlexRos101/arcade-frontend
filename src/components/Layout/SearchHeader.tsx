@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { TextField, InputAdornment } from '@material-ui/core'
@@ -13,12 +13,12 @@ const SearchHeader: React.FC<Props> = (props) => {
   const history = useHistory()
   const [keyword, setKeyword] = useState('')
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && keyword != '') {
       history.push(`/discussion/search/${keyword}`)
       document.location.reload()
     }
-  }
+  }, [])
 
   return (
     <div className="flex-row wd-100">

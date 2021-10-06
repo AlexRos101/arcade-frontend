@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useCallback } from 'react'
 import { AppBar } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
@@ -46,13 +46,13 @@ const Footer = () => {
   const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
   const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpenTerm(false)
-  }
+  }, [openTerm])
 
-  const handleClosePrivacy = () => {
+  const handleClosePrivacy = useCallback(() => {
     setOpenPrivacyPolicy(false)
-  }
+  }, [openPrivacyPolicy])
 
   return (
     <AppBar position="static" className={classes.root} id="footer">

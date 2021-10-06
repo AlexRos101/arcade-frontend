@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useHistory } from 'react-router'
 import { useGlobalState } from 'state-pool'
 import Page from 'components/Layout/Page'
@@ -66,24 +66,30 @@ const Market: React.FC = () => {
 
   /* eslint-enable */
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false)
-  }
+  }, [open])
 
-  const handleMarsDogeOpenCard = (index: number) => {
-    setOpen(true)
-    setSelectedCard(marsdogeItems[index])
-    setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
-  }
+  const handleMarsDogeOpenCard = useCallback(
+    (index: number) => {
+      setOpen(true)
+      setSelectedCard(marsdogeItems[index])
+      setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
+    },
+    [open, selectedCard, selectedCategoryName],
+  )
 
-  const getMarsDogeCategoryName = (categoryId: number) => {
-    for (let i = 0; i < dogeTab.length; i++) {
-      if (dogeTab[i].categoryId == categoryId) {
-        return dogeTab[i].tabName
+  const getMarsDogeCategoryName = useCallback(
+    (categoryId: number) => {
+      for (let i = 0; i < dogeTab.length; i++) {
+        if (dogeTab[i].categoryId == categoryId) {
+          return dogeTab[i].tabName
+        }
       }
-    }
-    return ''
-  }
+      return ''
+    },
+    [dogeTab],
+  )
 
   const getMarketItems = async (game: number, category: number, sort: number) => {
     const items = await API.getMarketItems(game, category, sort, 0, 15)
@@ -107,22 +113,22 @@ const Market: React.FC = () => {
     setIsLoading(false)
   })
 
-  const onClickMarsDogAll = () => {
+  const onClickMarsDogAll = useCallback(() => {
     history.push('/market/doge')
     //setTestOpen(true)
-  }
+  }, [])
 
-  const handleTestClose = () => {
+  const handleTestClose = useCallback(() => {
     setTestOpen(false)
-  }
+  }, [])
 
-  const refreshMarsDogePanel = async (category: number, sort: number) => {
+  const refreshMarsDogePanel = useCallback(async (category: number, sort: number) => {
     setIsLoading(true)
 
     getMarsDogeItems(category, sort)
 
     setIsLoading(false)
-  }
+  }, [])
 
   return (
     <Page id="market_page" className="styled-market">

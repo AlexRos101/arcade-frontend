@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import Storefront from '@material-ui/icons/Storefront'
 import { Button } from '@material-ui/core'
@@ -22,13 +22,13 @@ const MarketHeader: React.FC = () => {
   const history = useHistory()
   const classes = useStyles()
 
-  const onClickViewListing = () => {
+  const onClickViewListing = useCallback(() => {
     history.push('/listing')
-  }
+  }, [])
 
-  const onClickSellItem = () => {
+  const onClickSellItem = useCallback(() => {
     history.push('/sell')
-  }
+  }, [])
 
   return (
     <div className="right">

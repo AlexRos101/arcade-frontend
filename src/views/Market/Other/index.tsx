@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Page from 'components/Layout/Page'
 
 import Select from '@material-ui/core/Select'
@@ -150,10 +150,13 @@ const MarketOther: React.FC = () => {
 
   /* eslint-enable */
 
-  const handleOpenCard = (index: number) => {
-    setOpen(true)
-    setSelectedCard(skinCards[index])
-  }
+  const handleOpenCard = useCallback(
+    (index: number) => {
+      setOpen(true)
+      setSelectedCard(skinCards[index])
+    },
+    [open, selectedCard, skinCards],
+  )
 
   return (
     <Page id="market_page" className="styled-market">
