@@ -102,7 +102,7 @@ const NavBarMenu = () => {
       <div className={`${classes.root} menu-inspect ${hiddenMenu}`}>
         <div className = "menu">
             <MenuItem text="How to Play" />
-            <MenuItem text="Community" />
+            <MenuItem text="Discussions" />
             <SubMenu text="ArcadeMarket" menuData={gameMenu}/>
         </div>
         { account === '' ?

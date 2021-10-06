@@ -61,11 +61,8 @@ const FooterRoadmap = () => {
               className={classes.title}>
               Play Game
             </Typography>
-            <Link href="#">
-              <RoadmapEntry title="How to Play" />
-            </Link>
-            <Link href="https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c">
-              <RoadmapEntry title="Buy ArcadeDoges" />
+            <Link href="/">
+              <RoadmapEntry title="MarsDoge" />
             </Link>
           </div>
         </Grid>
@@ -92,10 +89,10 @@ const FooterRoadmap = () => {
               Community
             </Typography>
             <Link href="#">
-              <RoadmapEntry title="Join the Official" />
+              <RoadmapEntry title="Discussions" />
             </Link>
-            <Link href="#">
-              <RoadmapEntry title="Discord Server!" />
+            <Link href="https://t.me/ArcadeDoge">
+              <RoadmapEntry title="Telegram Chat" />
             </Link>
           </div>
         </Grid>
