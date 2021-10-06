@@ -769,7 +769,19 @@ button {
     padding: 0px !important;
   }
 
-  @media screen and (max-width: 600px) {
+  .r-no-padding {
+    padding-top: 0px !important;
+  }
+
+  .menu-expand {
+    margin: 0px !important;
+    margin-left: auto !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    display: none !important;
+  }
+
+  @media screen and (max-width: 1080px) {
     .wallet-cage {
       display: block;
     }
@@ -836,9 +848,7 @@ button {
   
     }
 
-    .r-no-padding {
-      padding-top: 0px !important;
-    }
+   
 
     .market-listing-btn {
       display: none !important;
@@ -898,6 +908,13 @@ button {
       position: absolute;
       right: -1.5rem;
     }
+
+    
+
+    .market-modal-row {
+      display: flex;
+      flex-direction: column;
+    }
     
     .r-flex-row {
       flex-direction: row;
@@ -924,14 +941,13 @@ button {
     #footer {
       margin-bottom: 10vh !important;
     }
+
+    .menu-expand {
+      display: block !important;
+    }
   }
 
-  .menu-expand {
-    margin: 0px !important;
-    margin-left: auto !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-  }
+  
   
   
   

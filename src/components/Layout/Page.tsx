@@ -3,9 +3,9 @@ import { styled } from '@material-ui/core/styles'
 import Container from './Container'
 
 const StyledPage = styled(Container)({
-  minHeight: 'calc(95vh - 254px)',
-  paddingTop: 'calc(5vh + 16px)',
-  paddingBottom: '16px'
+  minHeight: 'calc(90vh - 222px)',
+  paddingTop: '5vh',
+  paddingBottom: '5vh'
 })
 
 const Page: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {

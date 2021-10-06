@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
   logo: {
     display: 'flex'
   },
-  "@media (max-width: 600px)": {
+  "@media (max-width: 1080px)": {
     logo: {
       height: '35px',
     },

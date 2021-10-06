@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1)
     }
   },
-  "@media (max-width: 600px)": {
+  "@media (max-width: 1080px)": {
     
   }
 }))
@@ -56,11 +56,9 @@ const NavBarMenu = () => {
 
   return (
     <div>
-      <Hidden smUp>
-        <IconButton edge="start" className="menu-expand" color="inherit" aria-label="menu" onClick={onPressMenu}>
-          <MenuIcon />
-        </IconButton>
-      </Hidden>
+      <IconButton edge="start" className="menu-expand" color="inherit" aria-label="menu" onClick={onPressMenu}>
+        <MenuIcon />
+      </IconButton>
       <div className={`${classes.root} menu-inspect ${hiddenMenu}`}>
         <div className = "menu">
             <MenuItem text="How to Play" />

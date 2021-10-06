@@ -36,15 +36,14 @@ const MarketHeader = () => {
       <ThemeProvider theme={marketTheme}>
         <div className={`${classes.root} market-header-action`}>
           <Button
-            className="mg-8 market-listing-btn"
-            variant="contained"
+            className="market-listing-btn"
+            variant="outlined"
             color="primary"
             onClick={onClickViewListing}
             startIcon={<Storefront />}>
             View Your Listings
           </Button>
           <Button
-            className="mg-8 market-customizing-btn"
             variant="contained"
             color="secondary"
             onClick={onClickSellItem}
