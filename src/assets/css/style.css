@@ -604,8 +604,14 @@ button {
     margin-bottom: 2vh;
   }
 
-  .market-slide {
+  .market-slide-1 {
     width: 90%;
+    height: 210px;
+  }
+
+  .market-slide-2 {
+    width: 90%;
+    height: 410px;
   }
 
   .market-expand {
@@ -1076,8 +1082,12 @@ button {
       line-height: 22px;
     }
 
-    .market-slide {
-      width: 960px;
+    .market-slide-1 {
+      width: calc(100vw - 16px);
+    }
+
+    .market-slide-2 {
+      width: calc(100vw - 16px);
     }
 
     .card .flex-row {
