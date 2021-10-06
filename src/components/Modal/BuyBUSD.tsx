@@ -29,11 +29,12 @@ root: {
 interface Props {
     item: any
     open: boolean
+    rate: number
     onClose: () => void
 }
 
 
-const BuyModal: React.FC<Props> = (props) =>{
+const BuyBUSDModal: React.FC<Props> = (props) =>{
     const [account, setAccount] = useGlobalState('account')
     const [isLoading, setIsLoading] = useGlobalState('isLoading')
     const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
@@ -62,11 +63,11 @@ const BuyModal: React.FC<Props> = (props) =>{
         const provider = await Wallet.getCurrentProvider()
 
         const web3 = new Web3(provider)
-        const ARCADEDOGE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
+        const BUSD = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
 
-        ARCADEDOGE.methods.allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS).call()
+        BUSD.methods.allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS).call()
         .then((res: any) => {
-            if (Number.parseFloat(web3.utils.fromWei(res)) >= props.item.arcadedoge_price) {
+            if (Number.parseFloat(web3.utils.fromWei(res)) >= props.item.arcadedoge_price * props.rate) {
                 setIsLoading(false);
                 setFirstStepClassName('item-processed');
                 setSecondStepClassName('item');
@@ -95,11 +96,11 @@ const BuyModal: React.FC<Props> = (props) =>{
         const provider = await Wallet.getCurrentProvider()
 
         const web3 = new Web3(provider)
-        const ARCADEDOGE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
+        const BUSD = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
 
-        ARCADEDOGE.methods.approve(
+        BUSD.methods.approve(
             process.env.REACT_APP_EXCHANGE_ADDRESS, 
-            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether')).send({from: account})
+            Web3.utils.toWei((props.item.arcadedoge_price * props.rate) + '', 'ether')).send({from: account})
         .then((res: any) => {
             setIsLoading(false);
             setFirstStepClassName('item-processed');
@@ -126,15 +127,16 @@ const BuyModal: React.FC<Props> = (props) =>{
         const web3 = new Web3(provider)
         const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
-        exchange.methods.exchange(
+        exchange.methods.exchangeBUSD(
             props.item.contract_address, 
             props.item.token_id,
             props.item.owner,
-            Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
+            Web3.utils.toWei((props.item.arcadedoge_price * props.rate) + '', 'ether'),
             account).send({from: account})
         .then((res: any) => {
             const checkDBStatus = async () => {
                 const item = (await API.getItemById(props.item.id)).data
+                console.log('owner: ' + item.owner + ', account: ' + account)
                 if (item.owner == Web3.utils.toChecksumAddress(account)) {
                     window.location.href="/listing"
                 } else {
@@ -163,7 +165,7 @@ const BuyModal: React.FC<Props> = (props) =>{
                             </div>
                             <div className='mr-15'>
                                 <p id="header">Approve</p>
-                                <p id="content">Approve your ArcadeDoge token</p>
+                                <p id="content">Approve your BUSD token</p>
                             </div>
                             <div style={{marginLeft:'auto'}}>
                                 <Button
@@ -188,7 +190,7 @@ const BuyModal: React.FC<Props> = (props) =>{
                             </div>
                             <div className='mr-15'>
                                 <p id="header">Buy</p>
-                                <p id="content">Buy item with Arcadedoge</p>
+                                <p id="content">Buy item with BUSD</p>
                             </div>
                             <div style={{marginLeft:'auto'}}>
                                 <Button
@@ -211,4 +213,4 @@ const BuyModal: React.FC<Props> = (props) =>{
     )
 }
 
-export default BuyModal
+export default BuyBUSDModal

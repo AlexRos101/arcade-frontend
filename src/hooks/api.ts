@@ -64,3 +64,23 @@ export const addNewDiscussion = async(stuff_id: number, content: string, user_ty
   const response = await sendPost("discussion/new", {stuff_id: stuff_id, content: content, user_type: user_type, user: user})
   return response
 }
+
+export const getItemsByAddress = async(address: string, sort_type: number, limit: number, cnt: number) => {
+  const response = await sendPost("get_items_by_address", {address: address, sort: sort_type, limit: limit, cnt: cnt})
+  return response
+}
+
+export const getItemById = async(id: number) => {
+  const response = await sendPost("get_item_by_id", {id: id})
+  return response
+}
+
+export const getItemByTokenID = async(tokenID: number) => {
+  const response = await sendPost("get_item_by_tokenid", {token_id: tokenID})
+  return response
+}
+
+export const updateItemByID = async (id: number, gameId: number, categoryId: number, description: string, name: string, isAnonymous: number, price: number) => {
+  const response = await sendPost("update_item_by_id", {id: id, game_id: gameId, category_id: categoryId, name: name, is_anonymous: isAnonymous, description: description, price: price})
+  return response
+}

@@ -26,6 +26,7 @@ import EXCHANGE from '../../../contracts/EXCHANGE.json'
 import Web3 from "web3"
 import * as API from '../../../hooks/api'
 import BuyModal from "components/Modal/Buy"
+import BuyBUSDModal from "components/Modal/BuyBUSD"
 
 const DialogContent = withStyles((theme) => ({
 root: {
@@ -66,21 +67,11 @@ const theme = createTheme({
 
 const CardModal: React.FC<Props> = (props) => {
     const [account, setAccount] = useGlobalState('account')
-    const [open, setOpen] = useState(false)
+    const [showBuyDlg, setShowBuyDlg] = useState(false)
+    const [showBuyBUSDDlg, setShowBuyBUSDDlg] = useState(false)
     const [isLoading, setIsLoading] = useGlobalState('isLoading')
     const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
     const [rate, setRate] = useState(0.0)
-
-    const handleClose = () => {
-        setOpen(false)
-      }
-
-    const handleOpenModal = () => {
-        if (account === '')
-            setOpen(false)
-        else
-            setOpen(true)
-    }
 
     const getRate = async () => {
         const provider = await Wallet.getCurrentProvider()
@@ -137,7 +128,7 @@ const CardModal: React.FC<Props> = (props) => {
                             variant="contained"
                             color="primary"
                             disabled={account == props.item.owner? true: false}
-                            onClick={handleOpenModal}
+                            onClick={() => setShowBuyDlg(true)}
                             startIcon={<img className="mh-auto" src={avatar} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in ArcadeDoge
                         </Button>
@@ -146,7 +137,7 @@ const CardModal: React.FC<Props> = (props) => {
                             variant="contained"
                             color="secondary"
                             disabled={account == props.item.owner? true: false}
-                            onClick={handleOpenModal}
+                            onClick={() => setShowBuyBUSDDlg(true)}
                             startIcon={<img className="mh-auto" src={doge} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in BUSD
                         </Button>
@@ -157,7 +148,8 @@ const CardModal: React.FC<Props> = (props) => {
             <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
                 <CloseIcon />
             </IconButton>
-            <BuyModal item={props.item} open={open} onClose={() => {setOpen(false)}}/>
+            <BuyModal item={props.item} open={showBuyDlg} onClose={() => {setShowBuyDlg(false)}}/>
+            <BuyBUSDModal item={props.item} open={showBuyBUSDDlg} rate={rate} onClose={() => {setShowBuyBUSDDlg(false)}}/>
             {/* {account === '' ?
                 (<ConnectWalletModal onClose={handleClose} open={open} contents="Oops! You're not connected yet."/>) :
                 ''

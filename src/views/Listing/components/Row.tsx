@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import {
   Hidden,
@@ -50,6 +51,7 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
   burnToken: (index: number) => any
 }) => {
   const [row, setRow] = useState(data)
+  const history = useHistory()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -70,6 +72,11 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
 
   const handleCloseMenu = () => {
     setAnchorEl(null)
+  }
+
+  const handleEditMenu = () => {
+    console.log('asdf')
+    history.push(`/item/edit/${row.token_id}`)
   }
 
   const handleBurn = () => {
@@ -136,7 +143,7 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
                   }
                 }}
               >
-                <MenuItem key="edit" onClick={handleCloseMenu}>
+                <MenuItem key="edit" onClick={handleEditMenu}>
                   <Typography variant="subtitle1">Edit</Typography>
                 </MenuItem>
                 <MenuItem key="delete" onClick={handleBurn}>
@@ -207,7 +214,7 @@ const Row = ({ data, index, toggleClicked, burnToken, rate }: {
                       }
                     }}
                   >
-                    <MenuItem key="edit" onClick={handleCloseMenu}>
+                    <MenuItem key="edit" onClick={handleEditMenu}>
                       <Typography variant="subtitle1">Edit</Typography>
                     </MenuItem>
                     <MenuItem key="delete" onClick={handleBurn}>

@@ -149,7 +149,7 @@ const ListSellModal: React.FC<Props> = (props) =>{
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="sm" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
             <DialogContent className="modal-order-content" dividers>
                 <div {...props} style={{padding: '2vh 0'}}>
-                    <p className="approval-header" style={{textAlign: 'center', maxWidth: '300px'}}>List {props.item.name} on Market</p>
+                    <p className="approval-header" style={{}}>List {props.item.name} on Market</p>
 
                     <div className={firstStepClassName}>
                         <div className="item-disabler" />

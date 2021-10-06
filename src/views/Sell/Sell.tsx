@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useParams } from "react-router-dom"
+import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
 import axios from 'axios';
 import {store, useGlobalState} from 'state-pool'
@@ -41,6 +43,7 @@ import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -105,6 +108,10 @@ const initData: SkinProps = {
   visible: true,
 }
 
+interface ParamTypes {
+  itemTokenId: string
+}
+
 const Sell = ({ data } : {
   data?: SkinProps | undefined
 }) => {
@@ -120,7 +127,6 @@ const Sell = ({ data } : {
   const [selectedCategoryID, setSelectedCategoryID] = useState(-1)
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
-  const [rate, setRate] = useState(0.0)
 
   const [description, setDescription] = useState('')
   const [name, setName] = useState('')
@@ -131,9 +137,38 @@ const Sell = ({ data } : {
   const [account, setAccount] = useGlobalState('account')
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
+  const [paramIsSet, setParamIsSet] = useState(false)
+  const [itemId, setItemId] = useState(-1)
+
+  const history = useHistory()
+
   const onSwitchAnonymous = () => {
       setAnonymous(!anonymous)
   }
+
+  const { itemTokenId } = useParams<ParamTypes>()
+
+  useEffect(() => {
+    if (paramIsSet == false && window.location.pathname.indexOf('/item/edit') >= 0) {
+      
+      setTokenID(Number(itemTokenId))
+      setParamIsSet(true)
+  
+      API.getItemByTokenID(Number(itemTokenId))
+      .then((response:any) => {
+        if (response.result == true) {
+          const data = response.data as any
+          setSelectedGameID(data.game_id)
+          setSelectedCategoryID(data.category_id)
+          setName(data.name)
+          setAnonymous(data.is_anonymous == 1)
+          setDescription(data.description)
+          setPrice(data.arcadedoge_price)
+          setItemId(data.id)
+        }
+      })
+    }
+  })
 
   useEffect(() => {
     const cardHeight = `${sellCardRef?.current?.clientHeight}px`
@@ -217,6 +252,10 @@ const Sell = ({ data } : {
     return !isNaN(parseFloat(str))
   }
 
+  function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   const MintToken = async () => {
     if (tokenID == 0) {
       Swal('Please upload item file!')
@@ -263,38 +302,42 @@ const Sell = ({ data } : {
     }
 
     NFT.methods.mint(tokenID, metaData, JSON.stringify(tokenInfo)).send({from: address})
-    .then((res: any) => {
+    .then(async (res: any) => {
       console.log(res)
-      setIsLoading(false)
+      // await sleep(3000)
+
+      const checkDBStatus = async () => {
+          const item = (await API.getItemByTokenID(tokenID)).data as any
+          if (item != undefined && item != null) {
+              setIsLoading(false)
+              document.location.reload()
+          } else {
+              setTimeout(checkDBStatus, 500)
+          }
+      }
+
+      checkDBStatus()
     })
     .catch((err: any) => {
       setIsLoading(false)
     })
   }
 
-  const getRate = async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods.getRate().call()
-    .then((res: any) => {
-        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
-
-        setTimeout(getRate, 1000)
-    })
-    .catch((err: any) => {
-        setTimeout(getRate, 500)
+  const UpdateItem = () => {
+    API.updateItemByID(itemId, selectedGameID, selectedCategoryID, description, name, (anonymous == false? 0 : 1), Number(price))
+    .then(data => {
+      if (data.data == true) {
+        Swal("Item updated successfully!")
+        history.push('/listing')
+        document.location.reload()
+      }
     })
   }
-
-  getRate()
   
   return (
     <Page>
       <Header>
-        <HeaderLabel>Sell Customized Item</HeaderLabel>
+        <HeaderLabel>{paramIsSet == true?'Edit Item':'Sell Customized Item'}</HeaderLabel>
       </Header>
       <Grid container spacing={1} alignItems="flex-start">
         <Grid item xs={12} sm={6}>
@@ -410,7 +453,7 @@ const Sell = ({ data } : {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={avatar}
-                          price={Number.parseFloat(price)}
+                          price={skinItem?.priceArc}
                           pricePerUsd={skinItem?.priceArcPerUsd}
                         />
                       </Grid>
@@ -418,7 +461,7 @@ const Sell = ({ data } : {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={bnb}
-                          price={Number.parseFloat(price) * rate}
+                          price={skinItem?.priceBnb}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
                         />
                       </Grid>
@@ -434,8 +477,8 @@ const Sell = ({ data } : {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={MintToken}>
-                        Save and Publish
+                        onClick={paramIsSet == false ? MintToken : UpdateItem}>
+                        {paramIsSet == false ? 'Save and Publish' : 'Update Item'}
                       </Button>
                     </Box>
                     {/* <Button

@@ -47,6 +47,7 @@ const Listing = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [rows, setRows] = useState<Array<any>>([])
+  const [count, setCount] = useState(0)
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
   const [initialized, setInitialized] = useState(false)
   const [showListModal, setShowListModal] = useState(false)
@@ -57,11 +58,15 @@ const Listing = () => {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
+
+    getMyItems(newPage * rowsPerPage, rowsPerPage)
   }
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
+
+    getMyItems(0, (+event.target.value))
   }
 
   const getMyItems = async (limit:number, cnt:number) => {
@@ -71,7 +76,9 @@ const Listing = () => {
     }
     setIsLoading(true)
 
+    setRows([])
     const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
+    setCount(items.total)
     setRows(items.data)
 
     setIsLoading(false)
@@ -179,7 +186,7 @@ const Listing = () => {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={rows.length}
+          count={count}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

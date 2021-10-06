@@ -91,15 +91,14 @@ const NavBarMenu = () => {
     return '********' + source.substring(source.length - 6, source.length)
   }
 
-  useEffect(() => {
-    const initAddress = async () => {
-      const address = await WalletUtils.getCurrentWallet()
-      if (address != account)
-      setAccount(address == null? '': address)
-    }
-    
-    initAddress()
-  })
+  const initAddress = async () => {
+    const address = await WalletUtils.getCurrentWallet()
+    if (address != account)
+    setAccount(address == null? '': address)
+  }
+  
+  initAddress()
+  
 
   const onClickDiscussions = () => {
     history.push('/discussion')

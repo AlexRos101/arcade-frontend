@@ -6,12 +6,15 @@ import { ThemeProvider as MuiThemeProvider, StylesProvider } from '@material-ui/
 import Web3 from 'web3'
 import { store, useGlobalState } from 'state-pool'
 
+store.setState('account', '')
+store.setState('showConnectWalletModal', false)
+
 import theme from './styles/theme'
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
 import { InitializeGlobalVar } from 'global/gloalVar'
-
+import ConnectWalletModal from 'components/Modal/ConnectWallet'
 InitializeGlobalVar()
 
 const Home = lazy(() => import('./views/Home'))
@@ -31,26 +34,8 @@ declare let window: any
 function App() {
 
   const [account, setAccount] = useGlobalState('account')
-
-  const checkConnection = async () => {
-    let web3: any;
-    if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-    } else if (window.web3) {
-        web3 = new Web3(window.web3.currentProvider);
-    };
-
-    // Check if User is already connected by retrieving the accounts
-    const accounts = await web3.eth.getAccounts()
-    if (accounts.length > 0) {
-      setAccount(accounts[0])
-    }
-  }
-
-  useEffect(() => {
-    checkConnection()
-  })
-
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>
@@ -65,6 +50,7 @@ function App() {
                 <Route path="/market/other" exact component={MarketOther}/>
                 <Route path="/listing" exact component={Listing}/>
                 <Route path="/sell" exact component={Sell}/>
+                <Route path="/item/edit/:itemTokenId" exact component={Sell}/>
                 <Route path="/discussion" exact component={Discussion}/>
                 <Route path="/discussion/new/:stuffId" exact component={DiscussionAdd} />
                 <Route path="/discussion/stuff/:staffId" exact component={DiscussionStaff}/>
@@ -75,6 +61,7 @@ function App() {
             <Footer />
           </Router>
         </StylesProvider>
+        <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet."/>
       </ThemeProvider>
     </MuiThemeProvider>
   );
