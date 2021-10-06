@@ -15,6 +15,7 @@ interface tokenCard {
 
 interface Props {
     context: Array<tokenCard>
+    rows: number
     onOpen: (index: number) => void
 }
 
@@ -22,7 +23,7 @@ interface Props {
 const CardSlider: React.FC<Props>= (props) => {
     return (
         <div className="market-slide">
-            <Slider slidesToShow={5} swipeToSlide={true} draggable={true} arrows={false}> 
+            <Slider slidesToShow={5} swipeToSlide={true} draggable={true} arrows={false} rows={props.rows}> 
             {
                 props.context.map((map, index) => {
                     return (

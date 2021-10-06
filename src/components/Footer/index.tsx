@@ -7,7 +7,14 @@ import clsx from 'clsx'
 import FooterContact from './FooterContact'
 import FooterRoadmap from './FooterRoadmap'
 import FooterFollowUs from './FooterFollowUs'
+import TermOfUse from 'components/Modal/TermOfUse'
+import PrivacyPolicy from 'components/Modal/PrivacyPolicy'
 import { useCommonStyles } from '../../styles/use-styles'
+
+import {store, useGlobalState} from 'state-pool'
+
+store.setState('openTermOfUse', false)
+store.setState('openPrivacyPolicy', false)
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,6 +41,17 @@ const Footer = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
 
+  const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
+  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
+
+  const handleClose = () => {
+    setOpenTerm(false)
+  }
+
+  const handleClosePrivacy = () => {
+    setOpenPrivacyPolicy(false)
+  }
+
   return (
     <AppBar
       position="static"
@@ -51,6 +69,8 @@ const Footer = () => {
           <FooterFollowUs />
         </Grid>
       </Grid>
+      <TermOfUse onClose={handleClose} open={openTerm} />
+      <PrivacyPolicy onClose={handleClosePrivacy} open={openPrivacyPolicy}/>
     </AppBar>
   )
 }

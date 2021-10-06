@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import { createTheme, ThemeProvider  } from '@material-ui/core/styles'
@@ -18,6 +18,8 @@ import PriceLayout from "components/Layout/PriceLayout"
 import PriceHeaderLabel from "./PriceHeaderLabel"
 import PriceLabel from "./PriceLabel"
 import PriceDexLabel from "./PriceDexLabel"
+
+import ConnectWalletModal from "components/Modal/ConnectWallet"
 
 const DialogContent = withStyles((theme) => ({
 root: {
@@ -48,6 +50,16 @@ const theme = createTheme({
   
 
 const CardModal: React.FC<Props> = (props) => {
+    const [open, setOpen] = useState(false)
+
+    const handleClose = () => {
+        setOpen(false)
+      }
+
+    const handleOpenModal = () => {
+        console.log('asdf')
+        setOpen(true)
+    }
     return (
         <Dialog className="card-dialog" onClose={props.onClose} maxWidth="lg" aria-labelledby="customized-dialog-title" open={props.open} PaperProps={{ style: { borderRadius: 7 } }}>
             <DialogContent className="modal-card-content flex-row" dividers>
@@ -83,6 +95,7 @@ const CardModal: React.FC<Props> = (props) => {
                             className="modal-buy-arcade-btn"
                             variant="contained"
                             color="primary"
+                            onClick={handleOpenModal}
                             startIcon={<img className="mh-auto" src={avatar} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in ArcadeDoge
                         </Button>
@@ -90,6 +103,7 @@ const CardModal: React.FC<Props> = (props) => {
                             className="ml-15 modal-buy-usd-btn"
                             variant="contained"
                             color="secondary"
+                            onClick={handleOpenModal}
                             startIcon={<img className="mh-auto" src={doge} alt="avatar" style={{width: '20px', height: '20px'}} />}>
                             Buy in BUSD
                         </Button>
@@ -100,6 +114,7 @@ const CardModal: React.FC<Props> = (props) => {
             <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
                 <CloseIcon />
             </IconButton>
+            <ConnectWalletModal onClose={handleClose} open={open} contents="Oops! You're not connected yet."/>
         </Dialog>
     )
 }

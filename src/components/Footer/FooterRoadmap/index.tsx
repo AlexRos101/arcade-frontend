@@ -1,4 +1,6 @@
 import React, { memo } from 'react'
+import {store, useGlobalState} from 'state-pool'
+
 import {
   Grid,
   Typography
@@ -28,6 +30,16 @@ const useStyles = makeStyles((theme) => ({
 
 const FooterRoadmap = () => {
   const classes = useStyles()
+  const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
+  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
+
+  const onClickTermOfUse = () => {
+    setOpenTerm(true)
+  }
+  
+  const onClickPrivacyPolicy = () => {
+    setOpenPrivacyPolicy(true)
+  }
 
   return (
     <div className={classes.root}>
@@ -84,10 +96,10 @@ const FooterRoadmap = () => {
               className={classes.title}>
               Company
             </Typography>
-            <Link href="#">
+            <Link href="#" onClick={onClickTermOfUse}>
               <RoadmapEntry title="Term of Use" />
             </Link>
-            <Link href="#">
+            <Link href="#" onClick={onClickPrivacyPolicy}>
               <RoadmapEntry title="Privacy Policy" />
             </Link>
           </div>

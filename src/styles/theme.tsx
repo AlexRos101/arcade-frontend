@@ -45,6 +45,80 @@ export const marketTheme = responsiveFontSizes(createTheme({
   }
 }))
 
+export const homeTheme = responsiveFontSizes(createTheme({
+  palette: {
+    primary: {
+      main: '#F5F1DD',
+      contrastText: '#717171',
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'Montserrat',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      'Oxygen',
+      'Ubuntu',
+      'Cantarell',
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue'
+    ].join(','),
+    fontSize: 11,
+    body1: {
+      fontSize: 11,
+    },
+    subtitle1: {
+      fontSize: 14
+    },
+    h1: {
+      fontSize: 56
+    },
+    h4: {
+      fontSize: 28
+    }
+  }
+}))
+
+export const dialogTheme = responsiveFontSizes(createTheme({
+  palette: {
+    primary: {
+      main: '#1571FF',
+      contrastText: '#FFFEFB',
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'Montserrat',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      'Oxygen',
+      'Ubuntu',
+      'Cantarell',
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue'
+    ].join(','),
+    fontSize: 11,
+    body1: {
+      fontSize: 11,
+    },
+    subtitle1: {
+      fontSize: 14
+    },
+    h1: {
+      fontSize: 56
+    },
+    h4: {
+      fontSize: 28
+    }
+  }
+}))
+
 const theme = responsiveFontSizes(createTheme({
   palette: {
     primary: {

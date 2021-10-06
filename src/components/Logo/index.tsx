@@ -8,9 +8,16 @@ const useStyles = makeStyles(() => ({
   logo: {
     display: 'flex'
   },
+  image: {
+
+  },
   "@media (max-width: 1080px)": {
+    image: {
+      width: 'auto', height: '35px'
+    },
     logo: {
       height: '35px',
+      width: 'auto',
     },
   }
 }))
@@ -23,10 +30,12 @@ const Logo = () => {
       <div className={classes.logo}>
         <img
           src={avatar}
-          alt="avatar" />
+          alt="avatar" 
+          className={classes.image}/>
         <img
           src={logo}
-          alt="logo" />
+          alt="logo" 
+          className={classes.image}/>
       </div>
     </Link>
   )

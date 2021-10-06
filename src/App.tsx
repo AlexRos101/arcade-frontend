@@ -10,6 +10,8 @@ import PageLoader from './components/Loader/PageLoader'
 
 const Home = lazy(() => import('./views/Home'))
 const Market = lazy(() => import('./views/Market'))
+const MarketDoge = lazy(() => import('views/Market/Doge'))
+const MarketOther = lazy(() => import('views/Market/Other'))
 const Listing = lazy(() => import('./views/Listing'))
 const Sell = lazy(() => import('./views/Sell'))
 
@@ -22,18 +24,12 @@ function App() {
             <Menu />
             <Suspense fallback={<PageLoader />}>
               <Switch>
-                <Route path="/" exact>
-                  <Home />
-                </Route>
-                <Route path="/market" exact>
-                  <Market />
-                </Route>
-                <Route path="/listing" exact>
-                  <Listing />
-                </Route>
-                <Route path="/sell" exact>
-                  <Sell />
-                </Route>
+                <Route path="/" exact component={Home}/>
+                <Route path="/market" exact component={Market}/>
+                <Route path="/market/doge" exact component={MarketDoge}/>
+                <Route path="/market/other" exact component={MarketOther}/>
+                <Route path="/listing" exact component={Listing}/>
+                <Route path="/sell" exact component={Sell}/>
               </Switch>
             </Suspense>
             <Footer />

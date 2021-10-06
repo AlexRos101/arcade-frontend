@@ -2,6 +2,7 @@
   "name": "arcade-doge",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://54.255.235.202",
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
@@ -24,13 +25,14 @@
     "react-scripts": "4.0.3",
     "react-slick": "^0.28.1",
     "slick-carousel": "^1.8.1",
+    "state-pool": "^0.6.0",
     "styled-components": "^5.3.1",
     "typescript": "^4.4.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts start HTTPS=true HOST='arcadedoge.games'",
+    "build": "react-scripts build HTTPS=true",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

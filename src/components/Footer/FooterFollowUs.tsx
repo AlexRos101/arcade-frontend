@@ -33,22 +33,22 @@ const FooterFollowUs = () => {
         Follow Us
       </Typography>
       <div className={classes.container}>
-        <Link href="#">
+        <Link href="https://www.reddit.com/r/ArcadeDoge">
           <img
             src={Discord}
             alt="Discord" />
         </Link>
-        <Link href="#">
+        <Link href="https://www.facebook.com/ArcadeDoge/">
           <img
             src={Facebook}
             alt="Facebook" />
         </Link>
-        <Link href="#">
+        <Link href="https://twitter.com/ArcadeDoge">
           <img
             src={Twitter}
             alt="Twitter" />
         </Link>
-        <Link href="#">
+        <Link href="https://t.me/ArcadeDoge">
           <img
             src={Instagram}
             alt="Instagram" />

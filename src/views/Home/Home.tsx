@@ -6,9 +6,14 @@ import {
 } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 
-import { makeStyles } from '@material-ui/core'
+import { ThemeProvider, makeStyles } from '@material-ui/core'
 import {ReactComponent as AstronautBuy} from 'assets/img/astronautbuy.svg'
+import Info from '@material-ui/icons/Info'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
+
+import HeaderLabel from 'components/Label/HeaderLabel'
+import ConnectWallet from './components/ConnectWallet'
+import { homeTheme } from 'styles/theme'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,8 +34,12 @@ const Home: React.FC = () => {
       history.push('/market')
     }
 
+    const onClickHowToPlay = () => {
+      console.log('asdf')
+    }
+
     return (
-      <Page>
+      <Page className="no-width-limit">
         <div className="iframe-template">
           <iframe />
           <div className="rect rect-1" />
@@ -45,27 +54,48 @@ const Home: React.FC = () => {
           <div className="rect rect-10" />
           <div className="rect rect-11" />
           <div className="rect rect-12" />
+          <div className="rect rect-13" />
+          <ConnectWallet className="iframe-connect"/>
         </div>
-        <div className="flex-row row">
-          <Button
-            className="mg-8"
-            variant="contained"
-            color="secondary"
-            startIcon={<AstronautBuy />}>
-            <Typography variant="subtitle1">
-              Buy ArcadeDoges
-            </Typography>
-          </Button>
-          <Button
-            className="mg-8"
-            variant="contained"
-            color="primary"
-            onClick={onClickArcadeMarket}
-            startIcon={<ShoppingCart />}>
-            <Typography variant="subtitle1">
-              Vend at ArcadeMarket
-            </Typography>
-          </Button>
+        <div className="flex-row row iframe-row">
+          <div className="flex-row row col-2">
+            <HeaderLabel>MarsDoge</HeaderLabel>
+          </div>
+          <div className="flex-row row col-6">
+            <Button
+              className="mg-8"
+              variant="contained"
+              color="secondary"
+              startIcon={<AstronautBuy />}>
+              <Typography variant="subtitle1">
+                Buy ArcadeDoges
+              </Typography>
+            </Button>
+            <Button
+              className="mg-8"
+              variant="contained"
+              color="primary"
+              onClick={onClickArcadeMarket}
+              startIcon={<ShoppingCart />}>
+              <Typography variant="subtitle1">
+                Vend at ArcadeMarket
+              </Typography>
+            </Button>
+          </div>
+          <div className="flex-row row col-2">
+            <ThemeProvider theme={homeTheme}>
+              <Button
+                className="mg-8"
+                variant="contained"
+                color="primary"
+                onClick={onClickHowToPlay}
+                startIcon={<Info />}>
+                <Typography variant="subtitle1">
+                  How to Play
+                </Typography>
+              </Button>
+            </ThemeProvider>
+          </div>
         </div>
           
       </Page>

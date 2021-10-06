@@ -32,6 +32,32 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+const gameMenu = [
+  {
+    content: 'MargsDoge',
+    href: '/market/doge',
+    label: 'Hot Releases'
+  },
+  {
+    content: 'Another Game',
+    href: '/market/other',
+    label: ''
+  }
+]
+
+const marketMenu = [
+  {
+    content: 'ArcadeDoge Skins',
+    href: '/market/doge',
+    label: 'Hot Releases'
+  },
+  {
+    content: 'Another Game',
+    href: '/market/other',
+    label: ''
+  }
+]
+
 const NavBarMenu = () => {
 
   const history = useHistory()
@@ -63,7 +89,7 @@ const NavBarMenu = () => {
         <div className = "menu">
             <MenuItem text="How to Play" />
             <MenuItem text="Community" />
-            <SubMenu text="ArcadeMarket" />
+            <SubMenu text="ArcadeMarket" menuData={gameMenu}/>
         </div>
         <Button
           variant="contained"
