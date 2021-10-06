@@ -15,10 +15,16 @@ const ImageWrapper = styled.img<{
     if (!scales || scales === ScaleDefaults.SM) {
       return '18px'
     }
+    if (scales === ScaleDefaults.MD) {
+      return '18px'
+    }
     return '30px'
   }};
   height: ${({ scales }) => {
     if (!scales || scales === ScaleDefaults.SM) {
+      return '18px'
+    }
+    if (scales === ScaleDefaults.MD) {
       return '18px'
     }
     return '30px'
@@ -32,9 +38,12 @@ const PriceWrapper = styled.div<{
   color: ${({ theme, foreColor }) => foreColor ?? theme.palette.text.primary };
   font-size: ${({ theme, scales }) => {
     if (!scales || scales === ScaleDefaults.SM) {
-      return theme.typography.body1.fontSize
+      return `${theme.typography.body1.fontSize}px`
     }
-    return theme.typography.h4.fontSize
+    if (scales === ScaleDefaults.MD) {
+      return `${theme.typography.subtitle1.fontSize}px`
+    }
+    return `${theme.typography.h4.fontSize}px`
   }};
 `
 
