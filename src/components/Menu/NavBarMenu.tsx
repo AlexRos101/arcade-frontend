@@ -14,6 +14,7 @@ import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import MenuIcon from '@material-ui/icons/Menu'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import SelectWalletModal from 'components/Modal/SelectWallet'
 
 import { connect } from 'global/wallet'
 
@@ -119,15 +120,18 @@ const NavBarMenu = () => {
           <SubMenu text="ArcadeMarket" menuData={marketMenu} />
         </div>
         {account === '' ? (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onConnectWalletHandler}
-            className="menu-btn"
-            startIcon={<Wallet />}
-          >
-            <Typography variant="subtitle1">Connect Wallet</Typography>
-          </Button>
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onConnectWalletHandler}
+              className="menu-btn"
+              startIcon={<Wallet />}
+            >
+              <Typography variant="subtitle1">Connect Wallet</Typography>
+            </Button>
+            {/*<SelectWalletModal open={true} /> */}
+          </div>
         ) : (
           <Button
             variant="outlined"
