@@ -16,7 +16,7 @@ const providerParam: any = {
 }
 
 export const connect = async () => {
-  if (window.ethereum === undefined) {
+  if (window.ethereum == undefined) {
     const provider = new WalletConnectProvider(providerParam)
 
     provider.onConnect(async () => {
@@ -39,7 +39,7 @@ export const connect = async () => {
   } else {
     const accounts = await window.ethereum.send('eth_requestAccounts')
     if (accounts.result.length > 0) {
-      if ((await getCurrentChainId()) !== process.env.REACT_APP_CHAIN_ID) {
+      if ((await getCurrentChainId()) != process.env.REACT_APP_CHAIN_ID) {
         const web3: any = new Web3(Web3.givenProvider)
         try {
           await web3.currentProvider.request({
@@ -49,7 +49,7 @@ export const connect = async () => {
           ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
           ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK)
         } catch (error) {
-          if ((error as any).code === 4902) {
+          if ((error as any).code == 4902) {
             try {
               await web3.currentProvider.request({
                 method: 'wallet_addEthereumChain',
@@ -80,15 +80,15 @@ export const connect = async () => {
 export const getCurrentProvider = async () => {
   const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
 
-  if (walletType === null) return null
+  if (walletType == null) return null
 
-  if (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === null || ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === 0) {
+  if (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) == null || ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) == 0) {
     return null
   }
 
-  if (walletType === CONST.WALLET_TYPE.METAMASK) {
+  if (walletType == CONST.WALLET_TYPE.METAMASK) {
     return Web3.givenProvider
-  } else if (walletType === CONST.WALLET_TYPE.WALLETCONNECT) {
+  } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
     const provider = new WalletConnectProvider(providerParam)
 
     provider.on('disconnect', () => {
@@ -111,15 +111,15 @@ export const getCurrentWallet = async () => {
   const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
   const connected = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED)
 
-  if (walletType === null) return null
-  if (connected === null || connected === 0) return null
+  if (walletType == null) return null
+  if (connected == null || connected == 0) return null
 
-  if (walletType === CONST.WALLET_TYPE.METAMASK) {
+  if (walletType == CONST.WALLET_TYPE.METAMASK) {
     const accounts = await new Web3(Web3.givenProvider).eth.getAccounts()
     return Web3.utils.toChecksumAddress(accounts[0])
-  } else if (walletType === CONST.WALLET_TYPE.WALLETCONNECT) {
+  } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
     const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
-    if (wcData.accounts.length === 0) {
+    if (wcData.accounts.length == 0) {
       return null
     }
     return Web3.utils.toChecksumAddress(wcData.accounts[0])
@@ -131,11 +131,11 @@ export const getCurrentWallet = async () => {
 export const getCurrentChainId = () => {
   const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
 
-  if (walletType === null) return null
+  if (walletType == null) return null
 
-  if (walletType === CONST.WALLET_TYPE.METAMASK) {
+  if (walletType == CONST.WALLET_TYPE.METAMASK) {
     return Web3.givenProvider.chainId
-  } else if (walletType === CONST.WALLET_TYPE.WALLETCONNECT) {
+  } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
     const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
     return wcData.chainId
   }
@@ -148,13 +148,13 @@ export const isConnected = async (): Promise<boolean> => {
   const provider = await getCurrentProvider()
   let chainId = getCurrentChainId()
 
-  if (address === null || address === '' || provider === null || chainId === null) {
+  if (address == null || address == '' || provider == null || chainId == null) {
     return false
   }
 
   chainId = Number.parseInt(chainId as string)
 
-  if (chainId !== process.env.REACT_APP_CHAIN_ID) {
+  if (chainId != process.env.REACT_APP_CHAIN_ID) {
     return false
   }
 

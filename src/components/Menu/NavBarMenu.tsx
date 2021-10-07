@@ -102,7 +102,7 @@ const NavBarMenu = () => {
 
     initAddress()
 
-    if (window.ethereum !== null) {
+    if (window.ethereum !== undefined) {
       window.ethereum.on('accountsChanged', initAddress)
       window.ethereum.on('chainChanged', initAddress)
     }
