@@ -2,9 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { TablePagination } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 
-import Select from '@material-ui/core/Select'
-import FormControl from '@material-ui/core/FormControl'
-
 import Info from '@material-ui/icons/Info'
 
 import MarketHeader from '../components/MarketHeader'
@@ -15,6 +12,7 @@ import Card from '../components/Card'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
+import TabRow from '../components/TabRow'
 import MainLoading from '../../../components/mainLoading'
 
 import { GameItem, CategoryTab } from 'global/interface'
@@ -42,7 +40,6 @@ const dogeTab: Array<CategoryTab> = [
 ]
 
 const MarketDoge: React.FC = () => {
-  const [maplevel] = React.useState(0)
   const [open, setOpen] = React.useState(false)
   const [selectedCard, setSelectedCard] = React.useState<GameItem>({
     id: 0,
@@ -128,6 +125,14 @@ const MarketDoge: React.FC = () => {
     [rowsPerPage, page],
   )
 
+  const refreshMarsDogePanel = useCallback(async (category: number, sort: number) => {
+    setShowLoading(true)
+
+    getMarsDogeItems(category, sort, page * rowsPerPage, rowsPerPage)
+
+    setShowLoading(false)
+  }, [])
+
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
@@ -147,17 +152,15 @@ const MarketDoge: React.FC = () => {
       </Header>
       <MarketRow id="arcade_map">
         <RowLabel>MarsDoge</RowLabel>
-        <FormControl variant="outlined" className="market-form-control tab-select no-display">
-          <Select value={maplevel} className="market-map-select">
-            <option value={0}>Most Recent</option>
-            <option value={1}>Price (Low to High)</option>
-            <option value={2}>Price (High to Low)</option>
-            <option value={3}>Popular</option>
-          </Select>
-        </FormControl>
       </MarketRow>
-      <MarketRow>{/* <TabRow tabs={dogeTab}/> */}</MarketRow>
-      <MarketRow id="skin_slider" style={{ flexWrap: 'wrap' }}>
+      <MarketRow>
+        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} />
+      </MarketRow>
+      <MarketRow
+        id="skin_slider"
+        className="flex-row r-flex-row"
+        style={{ flexWrap: 'wrap', justifyContent: 'center' }}
+      >
         {marsdogeItems.map((item: GameItem, index) => {
           return (
             <Card

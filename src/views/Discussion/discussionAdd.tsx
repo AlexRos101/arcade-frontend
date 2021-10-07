@@ -30,12 +30,12 @@ const DiscussionAdd: React.FC = () => {
     }
   })
   return (
-    <Page>
+    <Page className="styled-rule">
       <Header>
         <HeaderLabel>Add a Discussion Thread</HeaderLabel>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>
+        <Grid item sm={12} md={8} className="r-wd-100 r-no-grid-flex">
           <NewDiscussion key={staff.title} staff={staff} link={false} />
         </Grid>
         <Grid item sm={12} md={4}>

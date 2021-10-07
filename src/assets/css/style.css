@@ -1302,6 +1302,11 @@ a {
       width: 100% !important;
     }
 
+    .r-no-grid-flex {
+      max-width: none !important;
+      flex-basis: auto !important;
+    }
+
     .no-display {
       display: block !important;
     }
@@ -1375,8 +1380,10 @@ a {
     
 
     .modal-card-content {
-      width: 45vh !important;
-      height: 90vh !important;
+      width: calc(50vh - 32px) !important;
+      height: calc(100vh - 64px) !important;
+      max-width: calc(100vw - 64px) !important;
+      max-height: calc(200vw - 128px) !important;
     }
 
     .modal-header-label {
@@ -1390,12 +1397,14 @@ a {
     }
 
     .expanded-card-img {
-      min-width: 45vh;
-      min-height: 45vh;
+      width: 100%;
+      max-width: calc(50vh - 32px);
+      max-height: calc(50vh - 32px);
     }
 
     .expanded-card-content {
-      width: calc(45vh - 72px);
+      width: calc(100% - 72px);
+      max-width: calc(100vw - 64px);
     }
 
     .modal-buy-arcade-btn {
@@ -1695,6 +1704,10 @@ a {
 
     .styled-search {
       padding-bottom: calc(9vh + 525px);
+    }
+
+    .styled-rule {
+      padding-bottom: calc(9vh + 565px);
     }
 
     .r-flex-column {
