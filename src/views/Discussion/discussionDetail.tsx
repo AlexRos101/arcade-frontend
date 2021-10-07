@@ -69,7 +69,7 @@ const DiscussionDetail: React.FC = () => {
     setDscIsSet(true)
 
     getDiscussion(Number(discussionId), account, page * 4, 4).then((res) => {
-      const data = res.data
+      const {data} = res
       setDiscussion(data)
 
       if (res.total > 0) {

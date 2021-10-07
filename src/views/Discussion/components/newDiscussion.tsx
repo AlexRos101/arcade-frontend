@@ -14,7 +14,7 @@ interface Props {
 }
 
 const NewDiscussion: React.FC<Props> = (props) => {
-  const staff = props.staff
+  const {staff} = props
 
   return (
     <div style={{ marginBottom: '2rem' }}>
