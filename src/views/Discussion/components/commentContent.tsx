@@ -10,8 +10,8 @@ import RocketBlueIcon from 'assets/img/rocket-blue.svg'
 import ReplyIcon from 'assets/img/reply.svg'
 import IconLabel from 'components/Label/IconLabel'
 import ReactTimeAgo from 'react-time-ago'
-
-import { setLikes, getLikes } from 'hooks/api'
+import * as Wallet from 'global/wallet'
+import { setLikes, getComment } from 'hooks/api'
 import { useGlobalState } from 'state-pool'
 import { Comment } from 'global/interface'
 import Badge from 'components/badge'
@@ -24,7 +24,8 @@ interface Props {
 }
 
 const CommentContent: React.FC<Props> = (props) => {
-  const comment = props.comment
+  const [comment, setComment] = useState(props.comment)
+  const [cmtIsSet, setCmtIsSet] = useState(true)
   const [showAddReply, setShowAddReply] = useState(false)
   const [commentState, setCommentState] = useGlobalState('commentState')
   const [replyOn, setReplyOn] = useState(false)
@@ -49,20 +50,22 @@ const CommentContent: React.FC<Props> = (props) => {
     }
   }, [commentState, replyOn, showAddReply])
 
-  useEffect(() => {
+  const refreshLikeStatus = async () => {
     if (isLike != 0) return
     if (props.comment.id == undefined || props.comment.id == -1) return
-    if (account == '') return
+    if (!(await Wallet.isConnected())) return
 
-    setIsLike(3)
-
-    getLikes(comment.discussion_id, comment.id, account).then((response) => {
-      if (response.data.length == 0) {
-        setIsLike(1)
-      } else {
+    if (props.comment.user_like != undefined) {
+      if (props.comment.user_like.length > 0) {
         setIsLike(2)
+      } else {
+        setIsLike(1)
       }
-    })
+    }
+  }
+
+  useEffect(() => {
+    refreshLikeStatus()
   }, [props, isLike, account])
 
   const onAddReply = useCallback(() => {
@@ -74,16 +77,33 @@ const CommentContent: React.FC<Props> = (props) => {
   const onHandleLikes = useCallback(() => {
     if (account != '') {
       if (isLike == 1) {
-        setLikes(comment.discussion_id, comment.id, account, true)
+        setLikes(comment.discussion_id, comment.id, account, true).then((response) => {
+          if (response.data == true) {
+            setIsLike(2)
+            setCmtIsSet(false)
+          }
+        })
       } else if (isLike == 2) {
-        setLikes(comment.discussion_id, comment.id, account, false)
+        setLikes(comment.discussion_id, comment.id, account, false).then((response) => {
+          if (response.data == true) {
+            setIsLike(1)
+            setCmtIsSet(false)
+          }
+        })
       }
-      /* setIsLike(0) */
-      document.location.reload()
     } else {
       setShowConnectWalletModal(true)
     }
   }, [isLike, account, comment])
+
+  useEffect(() => {
+    if (cmtIsSet == false) {
+      setCmtIsSet(true)
+      getComment(props.comment.id).then((response) => {
+        setComment(response.data)
+      })
+    }
+  }, [cmtIsSet, comment])
 
   return (
     <div style={{ flexGrow: 1 }}>
@@ -94,8 +114,12 @@ const CommentContent: React.FC<Props> = (props) => {
         direction="row"
         style={{ display: 'inline-block', wordBreak: 'break-word' }}
       >
-        <CommentLabel style={{ display: 'flex' }}>
-          {props.badge == undefined ? '' : <Badge type="note" content={String(props.badge)} />}
+        <CommentLabel style={{ display: 'flex', marginTop: 0 }}>
+          {props.badge == undefined ? (
+            ''
+          ) : (
+            <Badge type="note" content={String(props.badge)} style={{ marginLeft: 0 }} />
+          )}
           {comment.content}
         </CommentLabel>
       </Grid>
@@ -129,11 +153,11 @@ const CommentContent: React.FC<Props> = (props) => {
         <div className="flex-row r-flex-row">
           <IconLabel
             label={comment.user_type == 1 ? 'anonymous' : comment.user}
-            style={{ color: '#B7B091', marginRight: '1rem' }}
+            style={{ color: '#B7B091', marginLeft: '1rem' }}
           />
           <IconLabel
             label={<ReactTimeAgo date={new Date(String(comment.updated_at))} locale="en-US" />}
-            style={{ color: '#B7B091', marginRight: '1rem' }}
+            style={{ color: '#B7B091', marginLeft: '1rem' }}
           />
         </div>
       </Grid>

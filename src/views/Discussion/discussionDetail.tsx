@@ -10,11 +10,10 @@ import CommentItem from './components/commentItem'
 import DiscussionContent from './components/discussionContent'
 import SearchBox from './components/searchBox'
 import AddComment from './components/addComment'
+import * as Wallet from 'global/wallet'
 import { useGlobalState } from 'state-pool'
 import { getStuff, getDiscussion } from 'hooks/api'
-
 import { greenTheme } from 'styles/theme'
-
 import { Discussion, Comment, Stuff } from 'global/interface'
 
 interface ParamTypes {
@@ -44,6 +43,7 @@ const DiscussionDetail: React.FC = () => {
   const [showAddComments, setShowAddComments] = useState(false)
 
   const [commentState, setCommentState] = useGlobalState('commentState')
+  const [account] = useGlobalState('account')
   const [commentOn, setCommentOn] = useState(false)
 
   useEffect(() => {
@@ -55,28 +55,35 @@ const DiscussionDetail: React.FC = () => {
     }
   })
 
+  const refresh = async () => {
+    if ((await Wallet.isConnected()) && (account == '' || account == undefined)) {
+      return
+    }
+
+    setDscIsSet(true)
+
+    getDiscussion(Number(discussionId), account).then((data) => {
+      setDiscussion(data)
+      let hotValue = -1
+      let hotItem = null
+
+      for (let i = 0; i < data.comments.length; i++) {
+        const tempComment = data.comments[i] as Comment
+        if (tempComment.likes > hotValue) {
+          hotValue = tempComment.likes
+          hotItem = tempComment
+        }
+      }
+      if (hotItem != null) {
+        data.comments.unshift(hotItem)
+      }
+
+      setComments(data.comments)
+    })
+  }
   useEffect(() => {
     if (dscIsSet == false) {
-      setDscIsSet(true)
-      getDiscussion(Number(discussionId)).then((data) => {
-        setDiscussion(data)
-
-        let hotValue = -1
-        let hotItem = null
-
-        for (let i = 0; i < data.comments.length; i++) {
-          const tempComment = data.comments[i] as Comment
-          if (tempComment.likes > hotValue) {
-            hotValue = tempComment.likes
-            hotItem = tempComment
-          }
-        }
-        if (hotItem != null) {
-          data.comments.unshift(hotItem)
-        }
-
-        setComments(data.comments)
-      })
+      refresh()
     }
   })
 

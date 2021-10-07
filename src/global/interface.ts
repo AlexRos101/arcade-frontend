@@ -38,6 +38,7 @@ export interface Comment {
   content: string
   updated_at?: string
   reply?: Array<Comment>
+  user_like?: Array<unknown>
 }
 
 export interface Discussion {

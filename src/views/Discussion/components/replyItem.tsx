@@ -20,7 +20,7 @@ const ReplyItem: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <div className="flex-row r-flex-row" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+      <div className="flex-row r-flex-row" style={{ marginTop: '1rem' }}>
         <DepthStick />
         <CommentContent comment={props.comment} />
       </div>

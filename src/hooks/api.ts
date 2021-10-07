@@ -31,8 +31,8 @@ export const getSearch = async (keyword: string): Promise<any> => {
   return response.data
 }
 
-export const getDiscussion = async (id: number): Promise<any> => {
-  const response = await sendPost('discussion', { id: id })
+export const getDiscussion = async (id: number, account: string): Promise<any> => {
+  const response = await sendPost('discussion', { id: id, account: account })
   return response.data
 }
 
@@ -153,6 +153,11 @@ export const setLikes = async (
 
 export const getLikes = async (discussion_id: number, parent_id: number, user: string): Promise<Response> => {
   const response = await sendPost('get_likes', { discussion_id: discussion_id, parent_id: parent_id, user: user })
+  return response
+}
+
+export const getComment = async (id: number) => {
+  const response = await sendPost('comment', { id: id })
   return response
 }
 

@@ -51,7 +51,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
 
     setDscIsSet(true)
 
-    getDiscussion(props.discussion.id).then((response) => {
+    getDiscussion(props.discussion.id, account).then((response) => {
       setDiscussion(response)
     })
   }, [props, discussion, dscIsSet])
@@ -59,20 +59,30 @@ const DiscussionContent: React.FC<Props> = (props) => {
   const onHandleLikes = useCallback(() => {
     if (account != '') {
       if (isLike == 1) {
-        setLikes(discussion.id, -1, account, true)
+        setLikes(discussion.id, -1, account, true).then((response) => {
+          if (response.data == true) {
+            setIsLike(2)
+            setDscIsSet(false)
+          }
+        })
       } else if (isLike == 2) {
-        setLikes(discussion.id, -1, account, false)
+        console.log(discussion)
+        setLikes(discussion.id, -1, account, false).then((response) => {
+          if (response.data == true) {
+            setIsLike(1)
+            setDscIsSet(false)
+          }
+        })
       }
-      setIsLike(0)
     } else {
       setShowConnectWalletModal(true)
     }
-  }, [isLike, account])
+  }, [isLike, account, discussion])
 
   return (
     <Card>
       <Grid container alignItems="center" justifyContent="space-between" direction="row" className="dsc-content-header">
-        <p>
+        <p style={{ marginTop: 0 }}>
           {discussion.is_hot == undefined || discussion.is_hot == false ? (
             ''
           ) : (

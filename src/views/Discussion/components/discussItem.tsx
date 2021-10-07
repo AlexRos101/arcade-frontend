@@ -31,7 +31,11 @@ const DiscussItem: React.FC<Props> = (props) => {
       <ItemContainer>
         <Grid container alignItems="center" justifyContent="space-between" direction="row">
           <DisucssionLabel style={{ display: 'flex' }}>
-            {props.badge != undefined ? <Badge type="danger" content={String(props.badge)} /> : ''}
+            {props.badge != undefined ? (
+              <Badge type="danger" content={String(props.badge)} style={{ marginLeft: 0 }} />
+            ) : (
+              ''
+            )}
             {discussion.content}
           </DisucssionLabel>
         </Grid>
@@ -43,11 +47,11 @@ const DiscussItem: React.FC<Props> = (props) => {
           <div className="flex-row r-flex-row">
             <IconLabel
               label={discussion.user_type == 1 ? 'anonymous' : discussion.user}
-              style={{ color: '#B7B091', marginRight: '1rem' }}
+              style={{ color: '#B7B091', marginLeft: '1rem' }}
             />
             <IconLabel
               label={<ReactTimeAgo date={new Date(String(discussion.updated_at))} locale="en-US" />}
-              style={{ color: '#B7B091', marginRight: '1rem' }}
+              style={{ color: '#B7B091', marginLeft: '1rem' }}
             />
           </div>
         </Grid>

@@ -4,7 +4,7 @@ export const greenTheme = responsiveFontSizes(
   createTheme({
     palette: {
       primary: {
-        main: '#30C5A8',
+        main: '#308D7B',
         contrastText: '#FFFEFB',
       },
     },
