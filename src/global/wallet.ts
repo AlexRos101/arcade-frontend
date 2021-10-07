@@ -23,7 +23,7 @@ export const connect = async () => {
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.WALLETCONNECT)
 
-      // document.location.reload()
+      document.location.reload()
     })
 
     provider.on('disconnect', (code: number, reason: string) => {
