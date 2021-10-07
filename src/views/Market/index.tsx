@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useHistory } from 'react-router'
-import { useGlobalState } from 'state-pool'
 import Page from 'components/Layout/Page'
+import '../../assets/css/loading.css'
 
 import Info from '@material-ui/icons/Info'
 
@@ -16,6 +16,7 @@ import RowLabel from 'components/Label/RowLabel'
 import ExpandButton from 'components/Button/ExpandButton'
 import TabRow from './components/TabRow'
 import { GameItem } from 'global/interface'
+import MainLoading from 'components/mainLoading'
 
 import OrderApprovalModal from 'components/Modal/OrderApproval'
 import * as API from '../../hooks/api'
@@ -59,12 +60,7 @@ const Market: React.FC = () => {
   const [initialized, setInitialized] = useState(false)
   const [marsdogeItems, setMarsdogeItems] = useState([])
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
-
-  /* eslint-disable */
-
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-
-  /* eslint-enable */
+  const [showLoading, setShowLoading] = useState(true)
 
   const handleClose = useCallback(() => {
     setOpen(false)
@@ -108,9 +104,9 @@ const Market: React.FC = () => {
     if (initialized) return
     setInitialized(true)
 
-    setIsLoading(true)
+    setShowLoading(true)
     getMarsDogeItems(0, 0)
-    setIsLoading(false)
+    setShowLoading(false)
   })
 
   const onClickMarsDogAll = useCallback(() => {
@@ -123,15 +119,16 @@ const Market: React.FC = () => {
   }, [])
 
   const refreshMarsDogePanel = useCallback(async (category: number, sort: number) => {
-    setIsLoading(true)
+    setShowLoading(true)
 
     getMarsDogeItems(category, sort)
 
-    setIsLoading(false)
+    setShowLoading(false)
   }, [])
 
   return (
     <Page id="market_page" className="styled-market">
+      <MainLoading show={showLoading} />
       <Header>
         <HeaderLabel>ArcadeMarket</HeaderLabel>
         <Info className="mh-auto ml-10 market-info-tag" />
@@ -143,10 +140,14 @@ const Market: React.FC = () => {
       <MarketRow>
         <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} />
       </MarketRow>
-      <MarketRow id="skin_slider">
-        <CardSlider context={marsdogeItems} onOpen={handleMarsDogeOpenCard} rows={1} open-ri />
-        <ExpandButton onClick={onClickMarsDogAll}>View All MarsDoge</ExpandButton>
-      </MarketRow>
+      {showLoading ? (
+        ''
+      ) : (
+        <MarketRow id="skin_slider">
+          <CardSlider context={marsdogeItems} onOpen={handleMarsDogeOpenCard} rows={1} open-ri />
+          <ExpandButton onClick={onClickMarsDogAll}>View All MarsDoge</ExpandButton>
+        </MarketRow>
+      )}
       <CardModal onClose={handleClose} open={open} item={selectedCard} category={selectedCategoryName} />
       <OrderApprovalModal onClose={handleTestClose} open={testopen} title="Skin #012345" />
     </Page>

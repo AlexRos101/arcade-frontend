@@ -148,7 +148,7 @@ export const isConnected = async (): Promise<boolean> => {
   const provider = await getCurrentProvider()
   let chainId = getCurrentChainId()
 
-  if (address == null || provider == null || chainId == null) {
+  if (address == null || address == '' || provider == null || chainId == null) {
     return false
   }
 
