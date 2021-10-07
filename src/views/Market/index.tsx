@@ -140,14 +140,10 @@ const Market: React.FC = () => {
       <MarketRow>
         <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} />
       </MarketRow>
-      {showLoading ? (
-        ''
-      ) : (
-        <MarketRow id="skin_slider">
-          <CardSlider context={marsdogeItems} onOpen={handleMarsDogeOpenCard} rows={1} open-ri />
-          <ExpandButton onClick={onClickMarsDogAll}>View All MarsDoge</ExpandButton>
-        </MarketRow>
-      )}
+      <MarketRow id="skin_slider">
+        <CardSlider context={marsdogeItems} onOpen={handleMarsDogeOpenCard} rows={1} open-ri />
+        <ExpandButton onClick={onClickMarsDogAll}>View All MarsDoge</ExpandButton>
+      </MarketRow>
       <CardModal onClose={handleClose} open={open} item={selectedCard} category={selectedCategoryName} />
       <OrderApprovalModal onClose={handleTestClose} open={testopen} title="Skin #012345" />
     </Page>

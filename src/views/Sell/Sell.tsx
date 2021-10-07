@@ -135,6 +135,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   const [paramIsSet, setParamIsSet] = useState(false)
   const [itemId, setItemId] = useState(-1)
   const [showLoading, setShowLoading] = useState(true)
+  const [isUploading, setIsUploading] = useState(false)
 
   /* eslint-disable */
 
@@ -229,7 +230,7 @@ const Sell: React.FC<SkinProps> = (data) => {
 
       const tokenTemp = Date.now()
 
-      setShowLoading(true)
+      setIsUploading(true)
 
       const formData = new FormData()
       // Update the formData object
@@ -241,7 +242,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
         .then((res) => {
           console.log(res)
-          setShowLoading(false)
+          setIsUploading(false)
           if (res.data.code == -1) {
             setShowThumbnailWarning(true)
             return
@@ -249,7 +250,7 @@ const Sell: React.FC<SkinProps> = (data) => {
           setTokenID(tokenTemp)
         })
         .catch((err) => {
-          setShowLoading(false)
+          setIsUploading(false)
           console.log(err)
         })
     },
@@ -508,7 +509,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           {tokenID == 0 ? (
-            <ItemDropdown height={cardHeight} onDrop={uploadMaterial}>
+            <ItemDropdown height={cardHeight} showLoading={isUploading} onDrop={uploadMaterial}>
               drop files
             </ItemDropdown>
           ) : (
