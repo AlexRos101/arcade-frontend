@@ -23,6 +23,12 @@ const DiscussionContent: React.FC<Props> = (props) => {
   const [isLike, setIsLike] = useState(0)
   const [dscIsSet, setDscIsSet] = useState(false)
 
+  /* eslint-disable */
+
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+
+  /* eslint-enable */
+
   useEffect(() => {
     if (isLike != 0) return
     if (props.discussion.id == -1 || props.discussion.id == undefined) return
@@ -58,6 +64,8 @@ const DiscussionContent: React.FC<Props> = (props) => {
         setLikes(discussion.id, -1, account, false)
       }
       setIsLike(0)
+    } else {
+      setShowConnectWalletModal(true)
     }
   }, [isLike, account])
 

@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     width: '100%',
     fontSize: '13px',
+    background: '#FDFCF8',
     // '& input': {
     //   padding: theme.spacing(1.5)
     // },

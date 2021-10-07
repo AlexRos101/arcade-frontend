@@ -32,6 +32,12 @@ const CommentContent: React.FC<Props> = (props) => {
   const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
 
+  /* eslint-disable */
+
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+
+  /* eslint-enable */
+
   useEffect(() => {
     if (commentState == 2) {
       if (replyOn == false) {
@@ -74,6 +80,8 @@ const CommentContent: React.FC<Props> = (props) => {
       }
       /* setIsLike(0) */
       document.location.reload()
+    } else {
+      setShowConnectWalletModal(true)
     }
   }, [isLike, account, comment])
 
