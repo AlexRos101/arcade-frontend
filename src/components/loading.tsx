@@ -1,6 +1,7 @@
 import React from 'react'
 import 'assets/css/loading.css'
 import { store, useGlobalState } from 'state-pool'
+// import MainLoading from 'components/mainLoading'
 
 store.setState('isLoading', false)
 
@@ -10,6 +11,7 @@ const Loading: React.FC = () => {
     return (
       <div id="loader-wrapper">
         <div className="loader-section" />
+        {/* <MainLoading show={isLoading} /> */}
         <div id="loader">
           <div id="content" />
         </div>

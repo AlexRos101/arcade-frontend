@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useGlobalState } from 'state-pool'
 import { TablePagination } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 
@@ -14,6 +13,7 @@ import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
 import TabRow from '../components/TabRow'
+import MainLoading from '../../../components/mainLoading'
 
 import { GameItem, CategoryTab } from 'global/interface'
 
@@ -54,22 +54,17 @@ const MarketDoge: React.FC = () => {
 
   const [initialized, setInitialized] = useState(false)
 
-  /* eslint-disable */
-
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-
-  /* eslint-enable */
-
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [count, setCount] = useState(0)
+  const [showLoading, setShowLoading] = useState(true)
 
   const getMarketItems = async (game: number, category: number, sort: number, limit: number, count: number) => {
-    setIsLoading(true)
+    setShowLoading(true)
     const items = await API.getMarketItems(game, category, sort, limit, count)
-    setIsLoading(false)
+    setShowLoading(false)
     if (items.result) {
       setCount(Number(items.total))
       return items.data
@@ -131,24 +126,25 @@ const MarketDoge: React.FC = () => {
   )
 
   const refreshMarsDogePanel = useCallback(async (category: number, sort: number) => {
-    setIsLoading(true)
+    setShowLoading(true)
 
     getMarsDogeItems(category, sort, page * rowsPerPage, rowsPerPage)
 
-    setIsLoading(false)
+    setShowLoading(false)
   }, [])
 
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
 
-    setIsLoading(true)
+    setShowLoading(true)
     getMarsDogeItems(0, 0, 0, 10)
-    setIsLoading(false)
+    setShowLoading(false)
   })
 
   return (
     <Page id="market_page" className="styled-market ">
+      <MainLoading show={showLoading} />
       <Header>
         <HeaderLabel>ArcadeMarket</HeaderLabel>
         <Info className="mh-auto ml-10 market-info-tag" />

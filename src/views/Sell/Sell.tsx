@@ -34,6 +34,7 @@ import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 
 import { Response, GameItem } from 'global/interface'
+import MainLoading from 'components/mainLoading'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -133,6 +134,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   const [anonymous, setAnonymous] = useState(false)
   const [paramIsSet, setParamIsSet] = useState(false)
   const [itemId, setItemId] = useState(-1)
+  const [showLoading, setShowLoading] = useState(true)
 
   /* eslint-disable */
 
@@ -177,12 +179,12 @@ const Sell: React.FC<SkinProps> = (data) => {
     setInitialized(true)
 
     const getGamesAndCategories = async () => {
-      setIsLoading(true)
+      setShowLoading(true)
       let response = await API.getGames()
       if (response.result) {
         setGames(response.data)
       } else {
-        setIsLoading(false)
+        setShowLoading(false)
         return
       }
 
@@ -191,7 +193,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         setCategories(response.data)
       }
 
-      setIsLoading(false)
+      setShowLoading(false)
     }
 
     getGamesAndCategories()
@@ -213,7 +215,7 @@ const Sell: React.FC<SkinProps> = (data) => {
     [selectedCategoryID],
   )
 
-  const uploadMeterial = useCallback(
+  const uploadMaterial = useCallback(
     async (files: Array<File>) => {
       setShowThumbnailWarning(false)
       const file = files[0]
@@ -227,7 +229,7 @@ const Sell: React.FC<SkinProps> = (data) => {
 
       const tokenTemp = Date.now()
 
-      setIsLoading(true)
+      setShowLoading(true)
 
       const formData = new FormData()
       // Update the formData object
@@ -239,7 +241,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
         .then((res) => {
           console.log(res)
-          setIsLoading(false)
+          setShowLoading(false)
           if (res.data.code == -1) {
             setShowThumbnailWarning(true)
             return
@@ -247,7 +249,7 @@ const Sell: React.FC<SkinProps> = (data) => {
           setTokenID(tokenTemp)
         })
         .catch((err) => {
-          setIsLoading(false)
+          setShowLoading(false)
           console.log(err)
         })
     },
@@ -324,7 +326,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setIsLoading(false)
       })
-  }, [isLoading, tokenID])
+  }, [isLoading, tokenID, selectedGameID, anonymous, price, selectedCategoryID, description])
 
   const UpdateItem = useCallback(() => {
     API.updateItemByID(
@@ -369,6 +371,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   getRate()
   return (
     <Page>
+      <MainLoading show={showLoading} />
       <Header>
         <HeaderLabel>{paramIsSet == true ? 'Edit Item' : 'Sell Customized Item'}</HeaderLabel>
       </Header>
@@ -505,7 +508,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           {tokenID == 0 ? (
-            <ItemDropdown height={cardHeight} onDrop={uploadMeterial}>
+            <ItemDropdown height={cardHeight} onDrop={uploadMaterial}>
               drop files
             </ItemDropdown>
           ) : (
