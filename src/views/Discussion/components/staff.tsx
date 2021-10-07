@@ -8,7 +8,7 @@ import DiscussItem from './discussItem'
 import DetailLink from './detailLink'
 import { getAllDiscussion } from 'hooks/api'
 
-import Pagination from 'components/Pagination'
+import Pagination from 'components/Pagination/Pagination'
 import { greenTheme } from 'styles/theme'
 
 import { Stuff, Discussion } from 'global/interface'

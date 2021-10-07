@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
-import Flex from './Layout/Flex'
+import Flex from '../Layout/Flex'
 import ArrowForwardIos from '@material-ui/icons/ArrowForwardIos'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 

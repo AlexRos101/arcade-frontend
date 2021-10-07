@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { TablePagination } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 
 import Info from '@material-ui/icons/Info'
@@ -14,6 +13,7 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
 import TabRow from '../components/TabRow'
 import MainLoading from '../../../components/mainLoading'
+import RedPagination from 'components/Pagination/RedPagination'
 
 import { GameItem, CategoryTab } from 'global/interface'
 
@@ -57,7 +57,7 @@ const MarketDoge: React.FC = () => {
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
 
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage] = useState(10)
   const [count, setCount] = useState(0)
   const [showLoading, setShowLoading] = useState(true)
 
@@ -107,22 +107,12 @@ const MarketDoge: React.FC = () => {
   )
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
 
       getMarsDogeItems(0, 0, newPage * rowsPerPage, rowsPerPage)
     },
     [page],
-  )
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value)
-      setPage(0)
-
-      getMarsDogeItems(0, 0, 0, +event.target.value)
-    },
-    [rowsPerPage, page],
   )
 
   const refreshMarsDogePanel = useCallback(async (category: number, sort: number) => {
@@ -175,17 +165,8 @@ const MarketDoge: React.FC = () => {
         })}
         {/* <CardSlider context={marsdogeItems} onOpen={handleOpenCard} rows={2} open-ri/> */}
       </MarketRow>
-      <MarketRow style={{ borderTop: '1px solid #EFECDC' }}>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={count}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          style={{ marginLeft: 'auto' }}
-        />
+      <MarketRow>
+        <RedPagination totalPage={count} rowsPerPage={rowsPerPage} onChange={handleChangePage} />
       </MarketRow>
       <CardModal onClose={handleClose} open={open} item={selectedCard} category={selectedCategoryName} />
     </Page>

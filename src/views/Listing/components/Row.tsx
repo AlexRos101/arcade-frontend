@@ -115,7 +115,13 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
           <StyledTableCell>
             <Flex>
               <Toggle checked={row.is_visible} onChange={handleToggleClick} scale="md" />
-              <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClickMenu}>
+              <IconButton
+                aria-label="more"
+                aria-controls="long-menu"
+                aria-haspopup="true"
+                onClick={handleClickMenu}
+                style={{ marginLeft: 'auto' }}
+              >
                 <MoreVertIcon />
               </IconButton>
               <Menu

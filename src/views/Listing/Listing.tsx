@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Hidden, TablePagination } from '@material-ui/core'
+import { Hidden } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -24,6 +24,7 @@ import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
+import RedPagination from 'components/Pagination/RedPagination'
 
 import Row from './components/Row'
 import { GameItem } from 'global/interface'
@@ -41,7 +42,7 @@ const useStyles = makeStyles({
 const Listing: React.FC = () => {
   const classes = useStyles()
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage] = useState(10)
   const [rows, setRows] = useState<Array<GameItem>>([])
   const [count, setCount] = useState(0)
   const [initialized, setInitialized] = useState(false)
@@ -60,20 +61,9 @@ const Listing: React.FC = () => {
   const [rate, setRate] = useState(0.0)
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
-
       getMyItems(newPage * rowsPerPage, rowsPerPage)
-    },
-    [page, rowsPerPage],
-  )
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value)
-      setPage(0)
-
-      getMyItems(0, +event.target.value)
     },
     [page, rowsPerPage],
   )
@@ -206,16 +196,8 @@ const Listing: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100, 2]}
-          component="div"
-          count={count}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Card>
+      <RedPagination rowsPerPage={10} totalPage={count} onChange={handleChangePage} />
       <ListSellModal item={selectedItem} open={showListModal} onClose={() => setShowListModal(false)} />
       <RemoveSellModal item={selectedItem} open={showUnlistModal} onClose={() => setShowUnlistModal(false)} />
     </Page>
