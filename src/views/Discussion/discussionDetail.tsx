@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Grid, ThemeProvider } from '@material-ui/core'
-
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import DiscussionHeaderLabel from 'components/Label/DiscussionHeaderLabel'
@@ -22,6 +21,12 @@ interface ParamTypes {
 }
 
 const DiscussionDetail: React.FC = () => {
+  const option = {
+    root: null,
+    rootMargin: '20px',
+    threshold: 0,
+  }
+
   const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)
 
@@ -35,16 +40,15 @@ const DiscussionDetail: React.FC = () => {
     is_hot: false,
   })
   const [dscIsSet, setDscIsSet] = useState(false)
-
-  const [comments, setComments] = useState([])
-
+  const [comments, setComments] = useState<Comment[]>([])
   const { staffId, discussionId } = useParams<ParamTypes>()
-
   const [showAddComments, setShowAddComments] = useState(false)
-
   const [commentState, setCommentState] = useGlobalState('commentState')
   const [account] = useGlobalState('account')
   const [commentOn, setCommentOn] = useState(false)
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState(-1)
+  const loader = useRef(null)
 
   useEffect(() => {
     if (staffIsSet == false) {
@@ -59,26 +63,41 @@ const DiscussionDetail: React.FC = () => {
     if ((await Wallet.isConnected()) && (account == '' || account == undefined)) {
       return
     }
+    if (dscIsSet == true) return
+    if (total != -1 && page * 4 >= total) return
 
     setDscIsSet(true)
 
-    getDiscussion(Number(discussionId), account).then((data) => {
+    getDiscussion(Number(discussionId), account, page * 4, 4).then((res) => {
+      const data = res.data
       setDiscussion(data)
-      let hotValue = -1
-      let hotItem = null
 
-      for (let i = 0; i < data.comments.length; i++) {
-        const tempComment = data.comments[i] as Comment
-        if (tempComment.likes > hotValue) {
-          hotValue = tempComment.likes
-          hotItem = tempComment
+      if (res.total > 0) {
+        setTotal(res.total)
+      }
+
+      if (page == 0) {
+        let hotValue = -1
+        let hotItem = null
+
+        for (let i = 0; i < data.comments.length; i++) {
+          const tempComment = data.comments[i] as Comment
+          if (tempComment.likes > hotValue) {
+            hotValue = tempComment.likes
+            hotItem = tempComment
+          }
+        }
+        if (hotItem != null) {
+          data.comments.unshift(hotItem)
         }
       }
-      if (hotItem != null) {
-        data.comments.unshift(hotItem)
+      setPage(page + 1)
+      if (page * 4 >= total && loader.current) {
+        const elem = loader.current
+        observer.unobserve(elem)
       }
 
-      setComments(data.comments)
+      setComments([...comments, ...data.comments])
     })
   }
   useEffect(() => {
@@ -97,6 +116,22 @@ const DiscussionDetail: React.FC = () => {
       }
     }
   })
+
+  useEffect(() => {
+    if (loader.current) observer.observe(loader.current)
+  })
+
+  const handleObserver = useCallback(
+    (entries) => {
+      const target = entries[0]
+      if (target.isIntersecting) {
+        setDscIsSet(false)
+      }
+    },
+    [page, setPage, total],
+  )
+
+  const [observer] = useState<IntersectionObserver>(new IntersectionObserver(handleObserver, option))
 
   const onAddComment = useCallback(() => {
     setCommentState(2)
@@ -135,6 +170,7 @@ const DiscussionDetail: React.FC = () => {
               return <CommentItem key={index} comment={comment} />
             }
           })}
+          <div ref={loader} />
         </Grid>
         <Grid item sm={12} md={4}>
           <SearchBox />

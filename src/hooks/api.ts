@@ -31,9 +31,9 @@ export const getSearch = async (keyword: string): Promise<any> => {
   return response.data
 }
 
-export const getDiscussion = async (id: number, account: string): Promise<any> => {
-  const response = await sendPost('discussion', { id: id, account: account })
-  return response.data
+export const getDiscussion = async (id: number, account: string, limit: number = 0, cnt: number = 2): Promise<any> => {
+  const response = await sendPost('discussion', { id: id, account: account, limit: limit, cnt: cnt })
+  return response
 }
 
 export const getGames = async (): Promise<Response> => {
