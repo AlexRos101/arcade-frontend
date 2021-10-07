@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import MainLoading from 'components/mainLoading'
 import Paper from '@material-ui/core/Paper'
 import { useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
@@ -47,6 +48,7 @@ const Listing: React.FC = () => {
   const [showListModal, setShowListModal] = useState(false)
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
+  const [showLoading, setShowLoading] = useState(true)
 
   /* eslint-disable */
 
@@ -76,20 +78,24 @@ const Listing: React.FC = () => {
     [page, rowsPerPage],
   )
 
-  const getMyItems = async (limit: number, cnt: number) => {
-    const address = await Wallet.getCurrentWallet()
-    if (address == null) {
-      return
-    }
-    setIsLoading(true)
+  const getMyItems = useCallback(
+    async (limit: number, cnt: number) => {
+      const address = await Wallet.getCurrentWallet()
+      if (address == null) {
+        return
+      }
+      setShowLoading(true)
 
-    setRows([])
-    const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
-    setCount(Number(items.total))
-    setRows(items.data)
+      // setRows([])
+      const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
+      setCount(Number(items.total))
+      setRows(items.data)
+      console.log(items.data)
 
-    setIsLoading(false)
-  }
+      setShowLoading(false)
+    },
+    [rows, count, showLoading],
+  )
 
   const toggleVisibility = async (index: number) => {
     if (rows[index].is_visible) {
@@ -166,6 +172,7 @@ const Listing: React.FC = () => {
 
   return (
     <Page>
+      <MainLoading show={showLoading} />
       <Header>
         <HeaderLabel>Listing</HeaderLabel>
       </Header>
@@ -189,7 +196,7 @@ const Listing: React.FC = () => {
                   <Row
                     index={index}
                     data={row}
-                    key={`table-row-${index}`}
+                    key={row.id}
                     toggleClicked={toggleVisibility}
                     burnToken={burnToken}
                     rate={rate}
@@ -200,7 +207,7 @@ const Listing: React.FC = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[10, 25, 100, 2]}
           component="div"
           count={count}
           rowsPerPage={rowsPerPage}

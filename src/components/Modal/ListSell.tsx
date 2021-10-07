@@ -15,6 +15,7 @@ import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
+import MainLoading from 'components/mainLoading'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -35,6 +36,7 @@ const ListSellModal: React.FC<Props> = (props) => {
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
+  const [showLoading, setShowLoading] = useState(false)
 
   useEffect(() => {
     if (props.item == selectedItem) return
@@ -43,10 +45,10 @@ const ListSellModal: React.FC<Props> = (props) => {
   })
 
   const refresh = async () => {
-    setIsLoading(true)
+    if (props.open) setShowLoading(true)
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
+      setShowLoading(false)
       return
     }
 
@@ -60,17 +62,17 @@ const ListSellModal: React.FC<Props> = (props) => {
       .call()
       .then((res: string) => {
         if (res == process.env.REACT_APP_EXCHANGE_ADDRESS) {
-          setIsLoading(false)
+          setShowLoading(false)
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
         } else {
-          setIsLoading(false)
+          setShowLoading(false)
           setFirstStepClassName('item')
           setSecondStepClassName('item-disabled')
         }
       })
       .catch(() => {
-        setIsLoading(false)
+        setShowLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
@@ -152,6 +154,7 @@ const ListSellModal: React.FC<Props> = (props) => {
       open={props.open}
       PaperProps={{ style: { borderRadius: 7 } }}
     >
+      <MainLoading show={showLoading} />
       <DialogContent className="modal-order-content" dividers>
         <div {...props} style={{ padding: '2vh 0' }}>
           <p className="approval-header" style={{}}>
