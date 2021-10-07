@@ -20,7 +20,7 @@ interface Props {
 
 const Staff: React.FC<Props> = (props) => {
   const history = useHistory()
-  const staff = props.staff
+  const {staff} = props
   const [discussions, setDiscussions] = useState<Array<Discussion>>([])
   const [dscIsSet, setDscIsSet] = useState(false)
   const [total, setTotal] = useState(0)

@@ -17,7 +17,7 @@ const ItemContainer = styled.div`
 `
 
 const CommentItem: React.FC<Props> = (props) => {
-  const comment = props.comment
+  const {comment} = props
   const reply = comment.reply ? comment.reply : []
 
   return (
