@@ -32,7 +32,7 @@ const Discussion: React.FC = () => {
         <HeaderLabel>Community Discussion</HeaderLabel>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>
+        <Grid item sm={12} md={8} style={{ position: 'relative' }}>
           <MainLoading show={showLoading} />
           {staffs.map((staff: Stuff) => {
             return <Staff key={staff.title} staff={staff} />
