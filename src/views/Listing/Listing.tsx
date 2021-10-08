@@ -11,6 +11,7 @@ import MainLoading from 'components/mainLoading'
 import Paper from '@material-ui/core/Paper'
 import { useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
+import * as WalletUtils from '../../global/wallet'
 
 import Card from 'components/Card'
 import Page from 'components/Layout/Page'
@@ -45,7 +46,6 @@ const Listing: React.FC = () => {
   const [rowsPerPage] = useState(10)
   const [rows, setRows] = useState<Array<GameItem>>([])
   const [count, setCount] = useState(0)
-  const [initialized, setInitialized] = useState(false)
   const [showListModal, setShowListModal] = useState(false)
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
@@ -133,17 +133,19 @@ const Listing: React.FC = () => {
       })
   }
 
-  useEffect(() => {
-    if (initialized) return
-    setInitialized(true)
-
-    if (account === '') {
-      setShowConnectWalletModal(true)
-      return
+  const init = async () => {
+    if (!(await WalletUtils.isConnected())) {
+      setShowConnectWalletModal(true);
+      return;
     }
 
     getMyItems(0, 10)
-  })
+    getRate()
+  }
+
+  useEffect(() => {
+    init()
+  }, [account])
 
   const getRate = async () => {
     const provider = await Wallet.getCurrentProvider()
@@ -163,8 +165,6 @@ const Listing: React.FC = () => {
         setTimeout(getRate, 500)
       })
   }
-
-  getRate()
 
   return (
     <Page>

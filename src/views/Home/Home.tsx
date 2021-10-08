@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useGlobalState } from 'state-pool'
 
@@ -14,11 +14,13 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
+import * as WalletUtils from 'global/wallet'
 
 const Home: React.FC = () => {
   const history = useHistory()
   const [account] = useGlobalState('account')
   const [showHowToPlay, setShowHowToPlay] = useState(false)
+  const [showConnectWallet, setShowConnectWallet] = useState(false)
 
   const onClickArcadeMarket = useCallback(() => {
     history.push('/market')
@@ -27,6 +29,18 @@ const Home: React.FC = () => {
   const onClickBuyArcadeDoge = useCallback(() => {
     window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
   }, [])
+
+  const init = async () => {
+    if (await WalletUtils.isConnected()) {
+      setShowConnectWallet(false);
+    } else {
+      setShowConnectWallet(true);
+    }
+  }
+
+  useEffect(() => {
+    init()
+  }, [account])
 
   return (
     <Page className="no-width-limit">
@@ -45,7 +59,7 @@ const Home: React.FC = () => {
         <div className="rect rect-11" />
         <div className="rect rect-12" />
         <div className="rect rect-13" />
-        {account === '' ? <ConnectWallet className="iframe-connect" /> : ''}
+        {showConnectWallet ? <ConnectWallet className="iframe-connect" /> : ''}
       </div>
       <div className="flex-row row iframe-row" style={{ paddingBottom: '0px' }}>
         <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>
@@ -89,18 +103,6 @@ const Home: React.FC = () => {
       <HowToPlay open={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
     </Page>
   )
-  /* <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<AstronautBuy />}>
-            Buy ArcadeDoges
-            </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<ShoppingCart />}>
-            Vend at ArcadeMarket
-            </Button> */
 }
 
 export default Home
