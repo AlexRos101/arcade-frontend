@@ -347,7 +347,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       }
     })
   }, [])
-  
+
   const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
 
@@ -460,7 +460,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                   <LabelComponent label="Price in ARCADEDOGE">
                     <TextField
                       fullWidth
-                      placeholder="00.00"
+                      placeholder="0.0"
                       InputProps={{ classes: { input: classes.input } }}
                       variant="outlined"
                       value={price}
