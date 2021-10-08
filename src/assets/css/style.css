@@ -695,6 +695,8 @@ a {
 
     margin: 10px 20px 10px 0px !important;
     height: fit-content;
+
+    cursor: pointer;
   }
 
   .card-wrap {
