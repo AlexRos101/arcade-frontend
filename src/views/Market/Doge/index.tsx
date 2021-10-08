@@ -144,12 +144,12 @@ const MarketDoge: React.FC = () => {
         <RowLabel>MarsDoge</RowLabel>
       </MarketRow>
       <MarketRow>
-        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} />
+        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} style={{ width: 'calc(100% - 20px)' }}/>
       </MarketRow>
       <MarketRow
         id="skin_slider"
-        className="flex-row r-flex-row"
-        style={{ flexWrap: 'wrap', justifyContent: 'center' }}
+        className="flex-row r-flex-row r-justify-center"
+        style={{ flexWrap: 'wrap' }}
       >
         {marsdogeItems.map((item: GameItem, index) => {
           return (
@@ -160,6 +160,7 @@ const MarketDoge: React.FC = () => {
               name={String(item.name)}
               price={Number(item.arcadedoge_price)}
               onClick={handleOpenCard}
+              className='card-wrap'
             />
           )
         })}

@@ -689,6 +689,11 @@ a {
     height: fit-content;
   }
 
+  .card-wrap {
+    margin-left: 14px !important;
+    margin-right: 14px !important;
+  }
+
   .card:hover {
     border: 1px solid #D9D2B5;
     box-shadow: 0px 6px 9px rgba(0, 0, 0, 0.08);
@@ -917,13 +922,14 @@ a {
 
   .modal-close {
     position: absolute !important;
-    right: 1vw;
+    right: 2vh;
     top: 2vh;
     color: #CAC197 !important;
     width: 26px;
     height: 26px;
     border: solid 1px #CAC197 !important;
     border-radius: 15px !important;
+    padding:0 !important;
   }
   
   .wallet-cage {
@@ -1179,7 +1185,7 @@ a {
     font-size: 12px;
     line-height: 15px;
     /* identical to box height */
-
+    word-break: break-all;
     color: #9D9468;
     margin: 0 !important;
   }
@@ -1364,6 +1370,11 @@ a {
     border: 2px solid #1571FF;
   }
 
+  .red-paginator {
+    margin-left: 14px;
+    margin-right: 20px;
+  }
+
 
 /*************************************************************************************/
 /*************************************************************************************/
@@ -1383,10 +1394,38 @@ a {
 /*************************************************************************************/
 /*************************************************************************************/
 
-
+  @media screen and (max-width: 1260px) {
+    .modal-card-content {
+      width: 80vw !important;
+      height: 40vw !important;
+    }
+  }
 
 
   @media screen and (max-width: 1080px) {
+    .red-paginator {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+
+    iframe {
+      width: calc(100vw - 48px);
+      height: calc(80vh - 16px);
+    }
+
+    .r-mw-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .r-justify-center {
+      justify-content: center;
+    }
+
+    .r-mt-5 {
+      margin-top: 0.5rem;
+    }
+
     .r-no-display {
       display: none !important;
     }
@@ -1438,6 +1477,14 @@ a {
       border: none !important;
     }
 
+    .tab-row {
+      width: 100%;
+    }
+  
+    .MuiTabs-scrollable {
+      overflow-y: hidden !important;
+    }
+
     .menu-item {
       text-align: left;
     }
@@ -1473,8 +1520,6 @@ a {
       line-height: 27px;
   
     }
-
-    
 
     .modal-card-content {
       width: calc(50vh - 32px) !important;
@@ -1788,7 +1833,7 @@ a {
     }
 
     .item-connect {
-      margin-left: calc(5% + 2vw);
+      margin-left: calc(10% + 2vw);
     }
 
     .circle-number {

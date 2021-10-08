@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
 import { makeStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { CategoryTab } from 'global/interface'
+import { CSSProperties } from 'styled-components'
 
 interface StyledTabsProps {
   value: number
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface TabsData {
   tabs: Array<CategoryTab>
   refresh: (category: number, sort: number) => unknown
+  style?: CSSProperties
 }
 
 const TabRow: React.FC<TabsData> = (props) => {
@@ -113,7 +115,7 @@ const TabRow: React.FC<TabsData> = (props) => {
   )
 
   return (
-    <div className="flex-row tab-row">
+    <div className="flex-row tab-row" style={props.style}>
       <div className={classes.root}>
         <div className={classes.demo1}>
           <AntTabs value={value} aria-label="ant example" onChange={handleChange}>

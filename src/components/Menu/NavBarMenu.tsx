@@ -130,7 +130,7 @@ const NavBarMenu = () => {
             >
               <Typography variant="subtitle1">Connect Wallet</Typography>
             </Button>
-            <SelectWalletModal open={true} />   
+            <SelectWalletModal open={false} />   
           </div>
         ) : (
           <Button

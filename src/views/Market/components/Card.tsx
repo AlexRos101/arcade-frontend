@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import avatar from 'assets/img/avatar.png'
+import { CSSProperties } from 'styled-components'
 
 interface Props {
   index: number
@@ -7,6 +8,8 @@ interface Props {
   name: string
   price: number
   onClick: (index: number) => void
+  className?: string
+  style?: CSSProperties
 }
 
 const Card: React.FC<Props> = (Props) => {
@@ -20,7 +23,7 @@ const Card: React.FC<Props> = (Props) => {
 
   return (
     <div
-      className="card"
+      className={`card ${Props.className}`}
       onMouseMove={() => setMouseMoved(true)}
       onMouseDown={() => setMouseMoved(false)}
       onMouseUp={handleClick}
