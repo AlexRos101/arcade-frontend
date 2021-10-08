@@ -10,6 +10,7 @@ import { Comment } from 'global/interface'
 interface Props {
   comment: Comment
   badge?: string
+  onReset: () => unknown
 }
 
 const ItemContainer = styled.div`
@@ -24,12 +25,12 @@ const CommentItem: React.FC<Props> = (props) => {
     <ItemContainer style={{ maxWidth: '100vw-32px' }}>
       <Card>
         {props.badge === undefined ? (
-          <CommentContent comment={comment} />
+          <CommentContent comment={comment} onReset={props.onReset}/>
         ) : (
-          <CommentContent comment={comment} badge={props.badge} />
+          <CommentContent comment={comment} badge={props.badge} onReset={props.onReset}/>
         )}
         {reply.map((replyItem: Comment, index: number) => {
-          return <ReplyItem key={index} comment={replyItem} depth={0} />
+          return <ReplyItem key={index} comment={replyItem} depth={0} onReset={props.onReset}/>
         })}
       </Card>
     </ItemContainer>

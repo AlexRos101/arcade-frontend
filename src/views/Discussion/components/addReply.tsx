@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   comment: Comment
   visible: boolean
+  onReset: () => unknown
 }
 
 const AddReply: React.FC<Props> = (props) => {
@@ -62,6 +63,7 @@ const AddReply: React.FC<Props> = (props) => {
       user,
     ).then(() => {
       setCommentState(2)
+      // props.onReset()
       document.location.reload()
     })
   }, [props, anonymous, content, user, commentState])

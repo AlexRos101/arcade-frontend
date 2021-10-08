@@ -10,6 +10,7 @@ import Menu from './components/Menu'
 import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
 import { InitializeGlobalVar } from 'global/gloalVar'
+import { useGlobalState } from 'state-pool'
 import ConnectWalletModal from 'components/Modal/ConnectWallet'
 import * as CONST from './global/const'
 
@@ -32,6 +33,9 @@ const DiscussionSearch = lazy(() => import('./views/Discussion/discussionSearch'
 const DiscussionAdd = lazy(() => import('./views/Discussion/discussionAdd'))
 
 const App: React.FunctionComponent = () => {
+  const [dscIsSet, setDscIsSet] = useGlobalState('dscUpdate')
+  setDscIsSet(false)
+  
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>

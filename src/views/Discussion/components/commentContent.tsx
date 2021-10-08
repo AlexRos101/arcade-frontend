@@ -21,11 +21,12 @@ import AddReply from './addReply'
 interface Props {
   comment: Comment
   badge?: string
+  onReset: () => unknown
 }
 
 const CommentContent: React.FC<Props> = (props) => {
   const [comment, setComment] = useState(props.comment)
-  const [cmtIsSet, setCmtIsSet] = useState(true)
+  const [cmtIsSet, setCmtIsSet] = useState(0)
   const [showAddReply, setShowAddReply] = useState(false)
   const [commentState, setCommentState] = useGlobalState('commentState')
   const [replyOn, setReplyOn] = useState(false)
@@ -76,31 +77,34 @@ const CommentContent: React.FC<Props> = (props) => {
 
   const onHandleLikes = useCallback(() => {
     if (account !== '') {
+      if (cmtIsSet !== 2) return
+      setCmtIsSet(1)
       if (isLike === 1) {
         setLikes(comment.discussion_id, comment.id, account, true).then((response) => {
           if (response.data === true) {
             setIsLike(2)
-            setCmtIsSet(false)
+            setCmtIsSet(0)
           }
         })
       } else if (isLike === 2) {
         setLikes(comment.discussion_id, comment.id, account, false).then((response) => {
           if (response.data === true) {
             setIsLike(1)
-            setCmtIsSet(false)
+            setCmtIsSet(0)
           }
         })
       }
     } else {
       setShowConnectWalletModal(true)
     }
-  }, [isLike, account, comment])
+  }, [isLike, account, comment, cmtIsSet])
 
   useEffect(() => {
-    if (cmtIsSet === false) {
-      setCmtIsSet(true)
+    if (cmtIsSet === 0) {
+      setCmtIsSet(1)
       getComment(props.comment.id).then((response) => {
         setComment(response.data)
+        setCmtIsSet(2)
       })
     }
   }, [cmtIsSet, comment])
@@ -126,7 +130,6 @@ const CommentContent: React.FC<Props> = (props) => {
       <Grid container alignItems="center" justifyContent="space-between" direction="row">
         <div className="flex-row r-flex-row r-comment-count-row r-wd-100">
           <Link
-            href="#"
             onClick={onHandleLikes}
             style={{ height: 'fit-content', marginTop: 'auto', marginBottom: 'auto' }}
           >
@@ -166,7 +169,7 @@ const CommentContent: React.FC<Props> = (props) => {
           />
         </div>
       </Grid>
-      <AddReply visible={showAddReply} comment={comment} />
+      <AddReply visible={showAddReply} comment={comment} onReset={props.onReset} />
     </div>
   )
 }
