@@ -21,7 +21,7 @@ const Pagination: React.FC<Props> = (props) => {
   }, [pageNum, props])
 
   const onHandleNext = useCallback(() => {
-    if (pageNum < props.totalPage / 8 && props.onChange !== undefined) {
+    if ((pageNum + 1) * 8 < props.totalPage && props.onChange !== undefined) {
       setPageNum(pageNum + 1)
       props.onChange(pageNum + 1)
     }
