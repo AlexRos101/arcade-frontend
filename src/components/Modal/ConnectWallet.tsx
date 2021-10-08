@@ -48,6 +48,7 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
     <Dialog
       className="card-dialog"
       maxWidth="sm"
+      onClose={() => setShowConnectWalletModal(false)}
       aria-labelledby="customized-dialog-title"
       open={showConnectWalletModal}
       PaperProps={{ style: { borderRadius: 7 } }}
