@@ -331,6 +331,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   }, [isLoading, tokenID, selectedGameID, anonymous, price, selectedCategoryID, description])
 
   const UpdateItem = useCallback(() => {
+    setShowLoading(true)
     API.updateItemByID(
       itemId,
       selectedGameID,
@@ -340,13 +341,15 @@ const Sell: React.FC<SkinProps> = (data) => {
       anonymous === false ? 0 : 1,
       Number(price),
     ).then((data) => {
-      if (data.data === true) {
-        Swal('Item updated successfully!')
+      if (data.data) {
         history.push('/listing')
         document.location.reload()
+      } else {
+        Swal('An error occured!')
+        setShowLoading(false)
       }
     })
-  }, [])
+  }, [itemId, selectedGameID, selectedCategoryID, description, name, anonymous, price])
 
   const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
@@ -442,7 +445,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                 </LabelComponent>
               </Flex>
               <Flex flexDirection="row" alignItems="flex-start" className="wd-100 r-flex-column">
-                <LabelComponent label="Description" className={classes.input}>
+                <LabelComponent label="Description" className={`${classes.input} r-wd-100`}>
                   <TextField
                     fullWidth
                     multiline
@@ -491,13 +494,13 @@ const Sell: React.FC<SkinProps> = (data) => {
                   </LabelComponent>
                 </Grid>
               </Grid>
-              <Flex alignItems="center" className={`${classes.spacing} ${classes.margin} r-wd-100`}>
+              <Flex alignItems="center" className={`${classes.spacing} ${classes.margin} wd-100`}>
                 <ThemeProvider theme={greenTheme}>
                   <Box component="span" mr={1} className="r-wd-100">
                     <Button
                       variant="contained"
                       color="primary"
-                      className="r-wd-100"
+                      className="wd-100"
                       onClick={paramIsSet === false ? MintToken : UpdateItem}
                     >
                       {paramIsSet === false ? 'Save and Publish' : 'Update Item'}
