@@ -132,7 +132,8 @@ const NavBarMenu = () => {
             >
               <Typography variant="subtitle1">Connect Wallet</Typography>
             </Button>
-            <SelectWalletModal open={openConnectWalletMenu} />             </div>
+            <SelectWalletModal open={openConnectWalletMenu} />            
+          </div>
         ) : (
           <Button
             variant="outlined"

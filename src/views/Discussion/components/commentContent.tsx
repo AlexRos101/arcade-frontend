@@ -146,18 +146,23 @@ const CommentContent: React.FC<Props> = (props) => {
               />
             )}
           </Link>
-          <Link onClick={onAddReply}>
-            <IconLabel avatar={ReplyIcon} label="Send a reply" style={{ color: '#B7B091' }} />
+          <Link onClick={onAddReply} className="r-ml-auto">
+            <IconLabel 
+              avatar={ReplyIcon}
+              label="Send a reply"
+              style={{ color: '#B7B091' }}
+            />
           </Link>
         </div>
-        <div className="flex-row r-flex-row">
+        <div className="flex-row r-flex-row r-wd-100">
           <IconLabel
             label={comment.user_type === 1 ? 'anonymous' : comment.user}
-            style={{ color: '#B7B091', marginLeft: '1rem' }}
+            style={{ color: '#B7B091', }}
           />
           <IconLabel
             label={<ReactTimeAgo date={new Date(String(comment.updated_at))} locale="en-US" />}
             style={{ color: '#B7B091', marginLeft: '1rem' }}
+            className="r-ml-auto"
           />
         </div>
       </Grid>

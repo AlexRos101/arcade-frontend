@@ -1382,6 +1382,11 @@ a {
     margin-right: 20px;
   }
 
+  .mw-none {
+    margin-left: 0;
+     margin-right: 0;
+  }
+
 
 /*************************************************************************************/
 /*************************************************************************************/
@@ -1423,6 +1428,10 @@ a {
     .r-mw-auto {
       margin-left: auto;
       margin-right: auto;
+    }
+
+    .r-ml-auto {
+      margin-left: auto !important;
     }
 
     .r-justify-center {

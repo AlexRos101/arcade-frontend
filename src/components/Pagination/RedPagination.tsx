@@ -8,28 +8,36 @@ interface Props {
   totalPage: number
   rowsPerPage: number
   onChange?: (pageNum: number) => unknown
+  className?: string
 }
 
 const RedPagination: React.FC<Props> = (props) => {
   const [pageNum, setPageNum] = useState(0)
   const [prevDisabled, setPrevDisabled] = useState(true)
-  const [nextDisabled, setNextDisabled] = useState(pageNum + 1 > props.totalPage / props.rowsPerPage? true: false)
+  const [nextDisabled, setNextDisabled] = useState(true)
 
-  useEffect(() => {
-    if (props.totalPage === 0 || props.rowsPerPage === undefined || props.rowsPerPage <= 0) return
+  const refresh = () => {
+    if (props.totalPage === 0 || props.rowsPerPage === undefined || props.rowsPerPage <= 0) {
+      setTimeout(refresh, 200)
+      return
+    }
     if (pageNum === 0) {
       setPrevDisabled(true)
     } else {
       setPrevDisabled(false)
     }
 
-    if (pageNum + 1 > props.totalPage / props.rowsPerPage) {
+    if (pageNum + 1 >= props.totalPage / props.rowsPerPage) {
       console.log(props.totalPage / props.rowsPerPage)
       setNextDisabled(true)
     } else {
       setNextDisabled(false)
     }
-  }, [pageNum])
+  }
+
+  useEffect(() => {
+    refresh()
+  }, [pageNum, props])
 
   const onHandlePrev = useCallback(() => {
     if (pageNum > 0 && props.onChange !== undefined) {
@@ -46,7 +54,7 @@ const RedPagination: React.FC<Props> = (props) => {
   }, [pageNum, props])
 
   return (
-    <Flex flexDirection="row" style={{ width: '100%', marginTop: '0.5rem', }} className="red-paginator">
+    <Flex flexDirection="row" style={{ width: '100%', marginTop: '0.5rem', }} className={`red-paginator ${props.className}`}>
       <Button
         variant="contained"
         color="secondary"
@@ -59,7 +67,7 @@ const RedPagination: React.FC<Props> = (props) => {
         <Typography variant="subtitle1">Previous</Typography>
       </Button>
       <Typography className="discuss-detail-link">
-        Showing {pageNum * props.rowsPerPage + 1} ~{' '}
+        Showing { props.totalPage == 0 ? 0 : pageNum * props.rowsPerPage + 1 } ~{' '}
         {Math.min(pageNum * props.rowsPerPage + props.rowsPerPage, props.totalPage)} of {props.totalPage}
       </Typography>
       <Button

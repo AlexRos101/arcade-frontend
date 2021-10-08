@@ -5,7 +5,7 @@ import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import DiscussionHeaderLabel from 'components/Label/DiscussionHeaderLabel'
 import CommentItem from './components/commentItem'
-
+import MainLoading from 'components/mainLoading'
 import DiscussionContent from './components/discussionContent'
 import SearchBox from './components/searchBox'
 import AddComment from './components/addComment'
@@ -29,6 +29,7 @@ const DiscussionDetail: React.FC = () => {
 
   const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)
+  const [showLoading, setShowLoading] = useState(true)
 
   const [discussion, setDiscussion] = useState<Discussion>({
     id: -1,
@@ -98,6 +99,7 @@ const DiscussionDetail: React.FC = () => {
       }
 
       setComments([...comments, ...data.comments])
+      setShowLoading(false)
     })
   }
   useEffect(() => {
@@ -145,7 +147,8 @@ const DiscussionDetail: React.FC = () => {
         <DiscussionHeaderLabel>{staff.title}</DiscussionHeaderLabel>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>
+        <Grid item sm={12} md={8} style={{ position: 'relative' }}>
+          <MainLoading show={showLoading} />
           <DiscussionContent discussion={discussion} />
           <AddComment visible={showAddComments} discussion={discussion} onReset={() => setDscIsSet(false)} />
           {showAddComments === false ? (

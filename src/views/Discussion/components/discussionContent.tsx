@@ -121,9 +121,10 @@ const DiscussionContent: React.FC<Props> = (props) => {
             avatarHeight="25"
             fontSize="16px"
             style={{ color: '#B7B091' }}
+            className="r-ml-auto"
           />
         </div>
-        <div className="flex-row r-flex-row">
+        <div className="flex-row r-flex-row r-wd-100">
           <IconLabel
             label={discussion.user_type === 1 ? 'anonymous' : discussion.user}
             fontSize="16px"
@@ -134,6 +135,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
               label={<ReactTimeAgo date={new Date(discussion.updated_at)} locale="en-US" />}
               fontSize="16px"
               style={{ color: '#B7B091' }}
+              className="r-ml-auto"
             />
           ) : (
             ''

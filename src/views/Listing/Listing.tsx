@@ -197,7 +197,7 @@ const Listing: React.FC = () => {
           </Table>
         </TableContainer>
       </Card>
-      <RedPagination rowsPerPage={rowsPerPage} totalPage={count} onChange={handleChangePage} />
+      <RedPagination rowsPerPage={rowsPerPage} totalPage={count} onChange={handleChangePage} className="mw-none"/>
       <ListSellModal item={selectedItem} open={showListModal} onClose={() => setShowListModal(false)} />
       <RemoveSellModal item={selectedItem} open={showUnlistModal} onClose={() => setShowUnlistModal(false)} />
     </Page>

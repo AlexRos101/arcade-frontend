@@ -48,6 +48,7 @@ const DiscussItem: React.FC<Props> = (props) => {
             <IconLabel
               label={discussion.user_type === 1 ? 'anonymous' : discussion.user}
               style={{ color: '#B7B091', marginLeft: '1rem' }}
+              className="r-no-display"
             />
             <IconLabel
               label={<ReactTimeAgo date={new Date(String(discussion.updated_at))} locale="en-US" />}

@@ -5,7 +5,7 @@ import { Grid } from '@material-ui/core'
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
-
+import MainLoading from 'components/mainLoading'
 import Staff from './components/staff'
 import StaffSelect from './components/staffSelect'
 import SearchBox from './components/searchBox'
@@ -23,7 +23,7 @@ const DiscussionSearch: React.FC = () => {
   const [staffs, setStaffs] = useState([])
   const [staffIsSet, setStaffIsSet] = useState(false)
   const [totalSearch, setTotalSearch] = useState(0)
-
+  const [showLoading, setShowLoading] = useState(true)
   const { keyword } = useParams<ParamTypes>()
   const [checkArray, setCheckArray] = useState<Array<boolean>>([])
 
@@ -45,6 +45,7 @@ const DiscussionSearch: React.FC = () => {
           setCheckArray(checkArray)
         }
         setTotalSearch(cnt)
+        setShowLoading(false)
       })
     }
   })
@@ -58,7 +59,8 @@ const DiscussionSearch: React.FC = () => {
         </HeaderContainer>
       </Header>
       <Grid container spacing={1}>
-        <Grid item sm={12} md={8}>
+        <Grid item sm={12} md={8} style={{ position: 'relative' }}>
+          <MainLoading show={showLoading} />
           {checkArray.map((check: boolean, index: number) => {
             const staff = staffs[index] as Stuff
             if (check === false) return ''
