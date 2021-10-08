@@ -54,11 +54,11 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
     >
       <DialogContent className="modal-wallet-content" dividers>
         <div {...props}>
-          <div className="mw-auto mb-5" style={{ width: 'fit-content' }}>
+          <div className="mw-auto mb-5" style={{ width: 'fit-content', maxWidth: 'max-content' }}>
             <IframeLogo id="connectLogo" />
           </div>
           <RowLabel style={{ textAlign: 'center' }}>{props.contents}</RowLabel>
-          <div className="mw-auto mt-5" style={{ width: 'fit-content' }}>
+          <div className="mw-auto mt-5" style={{ width: 'fit-content', maxWidth: 'max-content' }}>
             <Hidden xsDown>
               <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
                 <Typography variant="subtitle1">Connect Wallet</Typography>

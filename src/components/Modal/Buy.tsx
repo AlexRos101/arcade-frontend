@@ -168,15 +168,17 @@ const BuyModal: React.FC<Props> = (props) => {
 
           <div className={firstStepClassName}>
             <div className="item-disabler" />
-            <div className="flex-row r-flex-row mt-5 step-item mw-auto" style={{ width: 'fit-content' }}>
-              <div className="circle-number mr-15">
-                <p style={{ padding: '7px 0px', width: 'fit-content' }}>1</p>
+            <div className="flex-row mt-5 step-item mw-auto" style={{ width: 'fit-content' }}>
+              <div className="flex-row r-flex-row">
+                <div className="circle-number mr-15">
+                  <p style={{ padding: '7px 0px', width: 'fit-content' }}>1</p>
+                </div>
+                <div className="mr-15">
+                  <p id="header">Approve</p>
+                  <p id="content">Approve your ArcadeDoge token</p>
+                </div>
               </div>
-              <div className="mr-15">
-                <p id="header">Approve</p>
-                <p id="content">Approve your ArcadeDoge token</p>
-              </div>
-              <div style={{ marginLeft: 'auto' }}>
+              <div style={{ marginLeft: 'auto' }} className="r-mw-auto r-mt-5">
                 <Button
                   variant="contained"
                   color="primary"
@@ -192,15 +194,17 @@ const BuyModal: React.FC<Props> = (props) => {
           <div className={secondStepClassName}>
             <div className="item-disabler" />
             <div className="item-connect" />
-            <div className="flex-row r-flex-row step-item mw-auto" style={{ width: 'fit-content' }}>
-              <div className="circle-number mr-15">
-                <p style={{ padding: '7px 0px', width: 'fit-content' }}>2</p>
+            <div className="flex-row step-item mw-auto" style={{ width: 'fit-content' }}>
+              <div className="flex-row r-flex-row">
+                <div className="circle-number mr-15">
+                  <p style={{ padding: '7px 0px', width: 'fit-content' }}>2</p>
+                </div>
+                <div className="mr-15">
+                  <p id="header">Buy</p>
+                  <p id="content">Buy item with Arcadedoge</p>
+                </div>
               </div>
-              <div className="mr-15">
-                <p id="header">Buy</p>
-                <p id="content">Buy item with Arcadedoge</p>
-              </div>
-              <div style={{ marginLeft: 'auto' }}>
+              <div style={{ marginLeft: 'auto' }} className="r-mw-auto r-mt-5">
                 <Button variant="contained" color="primary" onClick={buy}>
                   <Typography variant="subtitle1">Buy</Typography>
                 </Button>

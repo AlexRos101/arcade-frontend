@@ -46,7 +46,7 @@ const RedPagination: React.FC<Props> = (props) => {
   }, [pageNum, props])
 
   return (
-    <Flex flexDirection="row" style={{ width: '100%', marginTop: '0.5rem' }}>
+    <Flex flexDirection="row" style={{ width: '100%', marginTop: '0.5rem', }} className="red-paginator">
       <Button
         variant="contained"
         color="secondary"

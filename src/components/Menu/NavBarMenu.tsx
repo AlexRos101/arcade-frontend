@@ -17,6 +17,8 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import SelectWalletModal from 'components/Modal/SelectWallet'
 
+import { connect } from 'global/wallet'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -160,7 +162,7 @@ const NavBarMenu = () => {
               >
                 <Typography variant="subtitle1">Connect Wallet</Typography>
               </Button>
-            </Hidden>
+            </Hidden> 
           </div>
         ) : (
           <div style={{ position: 'relative' }}>
