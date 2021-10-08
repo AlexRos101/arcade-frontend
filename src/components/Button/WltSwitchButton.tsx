@@ -4,8 +4,8 @@ import Switch from '@material-ui/core/Switch'
 
 const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />)(
   ({ theme }) => ({
-    width: 66,
-    height: 27,
+    width: 43,
+    height: 18,
     padding: 2,
     '& .MuiSwitch-switchBase': {
       padding: 0,
@@ -13,11 +13,11 @@ const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVis
       transitionDuration: '300ms',
       color: '#A5A5A5',
       '&.Mui-checked': {
-        transform: 'translateX(27px)',
-        color: '#30C5A8',
+        transform: 'translateX(18px)',
+        color: '#1571FF',
         '& + .MuiSwitch-track': {
-          backgroundColor: '#FDFCF8',
-          border: '1px solid #30C5A8',
+          backgroundColor: '#C5DAF9',
+          border: '1px solid #8FB4EC',
           opacity: 1,
         },
         '&.Mui-disabled + .MuiSwitch-track': {
@@ -35,8 +35,8 @@ const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVis
     },
     '& .MuiSwitch-thumb': {
       boxSizing: 'border-box',
-      width: 31,
-      height: 20,
+      width: 17,
+      height: 11,
       margin: 2,
       borderRadius: 11,
     },
@@ -54,10 +54,9 @@ const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVis
 interface Props {
   value: boolean
   onChange?: () => unknown
-  text?: string
 }
 
-const SwitchButton: React.FC<Props> = (props) => {
+const WltSwitchButton: React.FC<Props> = (props) => {
   return (
     <div
       style={{
@@ -66,22 +65,8 @@ const SwitchButton: React.FC<Props> = (props) => {
       }}
     >
       <IOSSwitch sx={{ m: 0 }} value={props.value} onChange={props.onChange} />
-      <p
-        style={{
-          fontFamily: 'Montserrat',
-          fontStyle: 'normal',
-          fontWeight: 600,
-          fontSize: '13px',
-          lineHeight: '16px',
-          color: '#B7B091',
-          whiteSpace: 'nowrap',
-          margin: '6px 12px',
-        }}
-      >
-        {props.text}
-      </p>
     </div>
   )
 }
 
-export default SwitchButton
+export default WltSwitchButton

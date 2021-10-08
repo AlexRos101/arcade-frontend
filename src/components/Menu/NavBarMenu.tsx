@@ -102,7 +102,7 @@ const NavBarMenu = () => {
 
     initAddress()
 
-    if (window.ethereum !== undefined) {
+    if (window.ethereum !== null) {
       window.ethereum.on('accountsChanged', initAddress)
       window.ethereum.on('chainChanged', initAddress)
     }
@@ -120,7 +120,7 @@ const NavBarMenu = () => {
           <SubMenu text="ArcadeMarket" menuData={marketMenu} />
         </div>
         {account === '' ? (
-          <div>
+          <div style={{ position: 'relative' }}>
             <Button
               variant="contained"
               color="primary"
@@ -130,7 +130,7 @@ const NavBarMenu = () => {
             >
               <Typography variant="subtitle1">Connect Wallet</Typography>
             </Button>
-            {/*<SelectWalletModal open={true} /> */}
+            <SelectWalletModal open={false} />   
           </div>
         ) : (
           <Button
