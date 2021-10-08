@@ -92,7 +92,7 @@ const AddComment: React.FC<Props> = (props) => {
             </LabelComponent>
           </Flex>
           <Flex flexDirection="row" alignItems="flex-start" className="wd-100">
-            <LabelComponent label="Message" className={classes.input}>
+            <LabelComponent label="Message" className="wd-100">
               <TextField
                 fullWidth
                 multiline

@@ -695,6 +695,8 @@ a {
 
     margin: 10px 20px 10px 0px !important;
     height: fit-content;
+
+    cursor: pointer;
   }
 
   .card-wrap {
@@ -1458,6 +1460,10 @@ a {
 
     .r-wd-100 {
       width: 100% !important;
+    }
+
+    .r-wd-100-mg-8 {
+      width: calc(100% - 16px) !important;
     }
 
     .r-no-grid-flex {
