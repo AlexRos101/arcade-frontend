@@ -1,4 +1,5 @@
 import React from 'react'
+import { useGlobalState } from 'state-pool'
 import { ReactComponent as Arrow } from 'assets/img/arrow.svg'
 import Badge from '../badge'
 
@@ -14,6 +15,12 @@ interface Props {
 }
 
 const SubMenu: React.FC<Props> = (props) => {
+  const [hiddenMenu, setHiddenMenu] = useGlobalState('hiddenMenu')
+
+  const onClickMenu = () => {
+    setHiddenMenu('hidden-menu')
+  }
+
   return (
     <div className="dropdown">
       <button type="button" className="menu-item hd-100">
@@ -23,8 +30,10 @@ const SubMenu: React.FC<Props> = (props) => {
       <div className="dropdown-content">
         {props.menuData.map((menu, index) => {
           return (
-            <a key={index} href={menu.href} className="flex-row r-flex-row">
-              {menu.content}
+            <a key={index} href={menu.href} onClick={onClickMenu} className="flex-row r-flex-row">
+              <p style={{ marginTop: 'auto', marginBottom: 'auto' }}> 
+                {menu.content} 
+              </p>
               {menu.label === '' ? '' : <Badge type="danger" content={menu.label} />}
             </a>
           )

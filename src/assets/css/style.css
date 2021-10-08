@@ -339,7 +339,7 @@ a {
     justify-content: center;
     align-items: center;
     padding: 2px 10px;
-    margin: 2px 10px 0px 10px;
+    margin: 2px 10px 2px 10px;
     white-space: nowrap;
   }
   
@@ -1027,7 +1027,7 @@ a {
     font-size: 13px;
     line-height: 16px;
     /* identical to box height */
-    text-align: center;
+    text-align: left;
 
     color: #B7B091;
     margin-top: 1rem;
@@ -1472,6 +1472,7 @@ a {
       position: fixed !important;
       height: 100vh;
       width: 70vw;
+      max-width: 400px;
       top: 0;
       right: 0;
       flex-direction: column !important;      
@@ -1603,7 +1604,7 @@ a {
       bottom: 0;
       left: 0;
       background: #FFFDF1;
-      z-index: 1200;
+      z-index: 1000;
       margin: 1vh 3vw !important;
       border-radius: 10px;
       padding: 1vh 3vw !important;
@@ -1733,8 +1734,11 @@ a {
       line-height: 47px;
     }
   
-    .col-2 button {
-      margin-left: 8px !important;
+    .btn-wd-limit {
+      max-width: 300px;
+      min-width: 250px;
+      margin-left: auto !important;
+      margin-right: auto !important;
     }
 
     .iframe-connect {
@@ -1770,6 +1774,7 @@ a {
 
     .text-param {
       width: 75vw;
+      max-width: 730px;
       overflow-wrap: break-word;
       margin-right: 0 !important;
     }
@@ -1779,7 +1784,7 @@ a {
       bottom: 0;
       left: 0;
       background: #FFFDF1 !important;
-      z-index: 1200;
+      z-index: 1000;
       margin: 1vh 3vw !important;
       border-radius: 10px;
       padding: 1vh 3vw !important;

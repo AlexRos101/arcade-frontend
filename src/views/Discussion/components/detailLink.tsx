@@ -15,7 +15,8 @@ const DetailLink: React.FC<Props> = (props) => {
   if (props.type === 'forward') {
     return (
       <Link className="discuss-detail-link flex-row r-flex-row" href={props.href} style={props.style}>
-        {props.content} <ArrowForwardIos fontSize="small" style={{ marginLeft: '0.5rem' }} />
+        <p style={{ marginTop: 0, marginBottom: 0, wordBreak: 'break-all' }}>{props.content} </p>
+        <ArrowForwardIos fontSize="small" style={{ marginLeft: '0.5rem' }} />
       </Link>
     )
   } else {

@@ -347,6 +347,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       }
     })
   }, [])
+
   const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
 
@@ -359,7 +360,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .then((res: string) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
-        setTimeout(getRate, 30000)
+        setTimeout(getRate, 300000)
       })
       .catch(() => {
         setTimeout(getRate, 500)
@@ -459,7 +460,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                   <LabelComponent label="Price in ARCADEDOGE">
                     <TextField
                       fullWidth
-                      placeholder="00.00"
+                      placeholder="0.0"
                       InputProps={{ classes: { input: classes.input } }}
                       variant="outlined"
                       value={price}

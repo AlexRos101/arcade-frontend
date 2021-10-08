@@ -1,9 +1,10 @@
 import React, { memo, useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Typography, Button } from '@material-ui/core'
+import { Typography, Button, Hidden } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
 import * as WalletUtils from '../../global/wallet'
+import * as CONST from '../../global/const'
 
 import MenuItem from './menuItem'
 import SubMenu from './subMenu'
@@ -55,11 +56,12 @@ declare let window: any
 const NavBarMenu = () => {
   const history = useHistory()
 
-  const [hiddenMenu, setHiddenMenu] = useState('hidden-menu')
+  const [hiddenMenu, setHiddenMenu] = useGlobalState('hiddenMenu')
   const classes = useStyles()
 
   const [account, setAccount] = useGlobalState('account')
   const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+  const [connectedWalletType, setConnectedWalletType] = useGlobalState('connectedWalletType')
   const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
@@ -67,7 +69,19 @@ const NavBarMenu = () => {
     // initAddress()
     setOpenConnectWalletMenu(true)
   }
+
+  const onWalletConnctHandler = async () => {
+    await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
+    initAddress()
+  }
+
+  const onDisconnectHandler = () => {
+    WalletUtils.disconnect()
+    initAddress()
+  }
+
   const onPlayGameHandler = useCallback(() => {
+    setHiddenMenu('hidden-menu')
     history.push('/')
   }, [])
 
@@ -89,12 +103,17 @@ const NavBarMenu = () => {
     const address = await WalletUtils.getCurrentWallet()
     if (await WalletUtils.isConnected()) {
       setAccount(address === null ? '' : address)
+
+      const walletType = WalletUtils.getWalletType()
+      setConnectedWalletType(walletType)
     } else {
       setAccount('')
+      setConnectedWalletType(CONST.WALLET_TYPE.NONE)
     }
-  }, [account])
+  }, [account, connectedWalletType])
 
   const onClickDiscussions = useCallback(() => {
+    setHiddenMenu('hidden-menu')
     history.push('/discussion')
   }, [])
 
@@ -108,7 +127,7 @@ const NavBarMenu = () => {
       window.ethereum.on('accountsChanged', initAddress)
       window.ethereum.on('chainChanged', initAddress)
     }
-  })
+  }, [account, connectedWalletType])
 
   return (
     <div>
@@ -122,28 +141,56 @@ const NavBarMenu = () => {
           <SubMenu text="ArcadeMarket" menuData={marketMenu} />
         </div>
         {account === '' ? (
-          <div style={{ position: 'relative' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onConnectWalletHandler}
-              className="menu-btn"
-              startIcon={<Wallet />}
-            >
-              <Typography variant="subtitle1">Connect Wallet</Typography>
-            </Button>
-            <SelectWalletModal open={openConnectWalletMenu} />            
+          <div style={{ position: 'relative', }} className="r-wd-100">
+            <Hidden xsDown>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onConnectWalletHandler}
+                className="menu-btn"
+                startIcon={<Wallet />}
+              >
+                <Typography variant="subtitle1">Connect Wallet</Typography>
+              </Button>
+              <SelectWalletModal open={openConnectWalletMenu} connectedWallet={Number(connectedWalletType)}/>
+            </Hidden>
+            <Hidden smUp>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onWalletConnctHandler}
+                className="menu-btn"
+                startIcon={<Wallet />}
+              >
+                <Typography variant="subtitle1">Connect Wallet</Typography>
+              </Button>
+            </Hidden> 
+          </div> ) : (
+          <div style={{ position: 'relative' }} className="r-wd-100">
+            <Hidden xsDown>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={onConnectWalletHandler}
+                className="menu-btn btn-note"
+                startIcon={<Wallet />}
+              >
+                <Typography variant="subtitle1">{shortenString(account)}</Typography>
+              </Button>
+              <SelectWalletModal open={openConnectWalletMenu} connectedWallet={connectedWalletType}/>
+            </Hidden>
+            <Hidden smUp>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={onDisconnectHandler}
+                className="menu-btn btn-note"
+                startIcon={<Wallet />}
+              >
+                <Typography variant="subtitle1">{shortenString(account)}</Typography>
+              </Button>
+            </Hidden>
           </div>
-        ) : (
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={onConnectWalletHandler}
-            className="menu-btn btn-note"
-            startIcon={<Wallet />}
-          >
-            <Typography variant="subtitle1">{shortenString(account)}</Typography>
-          </Button>
         )}
         <Button
           variant="contained"

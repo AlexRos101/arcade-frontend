@@ -54,7 +54,7 @@ const DiscussionSearch: React.FC = () => {
     <Page className="styled-search">
       <Header>
         <HeaderContainer>
-          <HeaderLabel>Search a Discussion</HeaderLabel>
+          <HeaderLabel>Search for Discussion</HeaderLabel>
           <SearchHeader content={`You are currently searching for “${keyword}”. Showing ${totalSearch} results.`} />
         </HeaderContainer>
       </Header>

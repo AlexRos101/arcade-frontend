@@ -51,9 +51,9 @@ const Home: React.FC = () => {
         <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>
           <HeaderLabel>MarsDoge</HeaderLabel>
         </div>
-        <div className="flex-row row col-6" style={{ paddingBottom: '0px' }}>
+        <div className="flex-row row col-6" style={{ paddingBottom: '0px', position: 'relative' }}>
           <Button
-            className="mg-8"
+            className="mg-8 btn-wd-limit"
             variant="contained"
             color="secondary"
             onClick={onClickBuyArcadeDoge}
@@ -62,7 +62,7 @@ const Home: React.FC = () => {
             <Typography variant="subtitle1">Buy ArcadeDoges</Typography>
           </Button>
           <Button
-            className="mg-8"
+            className="mg-8 btn-wd-limit"
             variant="contained"
             color="primary"
             onClick={onClickArcadeMarket}
@@ -71,10 +71,10 @@ const Home: React.FC = () => {
             <Typography variant="subtitle1">Vend at ArcadeMarket</Typography>
           </Button>
         </div>
-        <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>
+        <div className="flex-row row col-2" style={{ paddingBottom: '0px', position: 'relative' }}>
           <ThemeProvider theme={homeTheme}>
             <Button
-              className="mg-8"
+              className="mg-8 btn-wd-limit"
               variant="contained"
               color="primary"
               onClick={() => setShowHowToPlay(true)}

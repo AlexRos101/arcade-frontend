@@ -7,11 +7,12 @@ import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import { Typography, Button } from '@material-ui/core'
+import { Typography, Button, Hidden } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
 import { connect } from 'global/wallet'
 import * as WalletUtils from '../../global/wallet'
+import * as CONST from 'global/const'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -25,10 +26,16 @@ interface Props {
 
 const ConnectWalletModal: React.FC<Props> = (props) => {
   const [account, setAccount] = useGlobalState('account')
-  const [showConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const onConnectWalletHandler = async () => {
-    await connect()
+    setShowConnectWalletModal(false)
+    setOpenConnectWalletMenu(true)
+  }
+
+  const onWalletConnectHandler = async () => {
+    await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
     initAddress()
   }
 
@@ -41,6 +48,7 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
     <Dialog
       className="card-dialog"
       maxWidth="sm"
+      onClose={() => setShowConnectWalletModal(false)}
       aria-labelledby="customized-dialog-title"
       open={showConnectWalletModal}
       PaperProps={{ style: { borderRadius: 7 } }}
@@ -52,13 +60,21 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
           </div>
           <RowLabel style={{ textAlign: 'center' }}>{props.contents}</RowLabel>
           <div className="mw-auto mt-5" style={{ width: 'fit-content', maxWidth: 'max-content' }}>
-            <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
-              <Typography variant="subtitle1">Connect Wallet</Typography>
-            </Button>
+            <Hidden xsDown>
+              <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
+                <Typography variant="subtitle1">Connect Wallet</Typography>
+              </Button>
+            </Hidden>
+            <Hidden smUp>
+              <Button variant="contained" color="primary" onClick={onWalletConnectHandler} startIcon={<Wallet />}>
+                <Typography variant="subtitle1">Connect Wallet</Typography>
+              </Button>
+            </Hidden>
+            
           </div>
         </div>
       </DialogContent>
-      <IconButton aria-label="close" className="modal-close" onClick={() => (window.location.href = '/')}>
+      <IconButton aria-label="close" className="modal-close" onClick={() => setShowConnectWalletModal(false)}>
         <CloseIcon />
       </IconButton>
     </Dialog>

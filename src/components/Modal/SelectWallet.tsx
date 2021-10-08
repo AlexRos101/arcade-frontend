@@ -4,9 +4,11 @@ import Triangle from 'assets/img/triangle.svg'
 import Metamask from 'assets/img/metamask.svg'
 import Walletconnect from 'assets/img/walletconnect.svg'
 import WalletItem from 'components/Menu/WalletItem'
+import * as CONST from '../../global/const'
 
 interface Props {
   open: boolean
+  connectedWallet: number
 }
 
 const SelectWalletModal: React.FC<Props> = (props) => {
@@ -22,10 +24,14 @@ const SelectWalletModal: React.FC<Props> = (props) => {
             <p id='title'>Choose a Wallet</p>
             <WalletItem 
               image={<img src={Metamask} alt='' />}
-              text={`Metamask`}/>
+              text={`Metamask`}
+              connected={props.connectedWallet === CONST.WALLET_TYPE.METAMASK}
+              walletType={CONST.WALLET_TYPE.METAMASK}/>
             <WalletItem 
               image={<img src={Walletconnect} alt='' />}
-              text={`Wallet Connect`}/>
+              text={`Wallet Connect`}
+              connected={props.connectedWallet === CONST.WALLET_TYPE.WALLETCONNECT}
+              walletType={CONST.WALLET_TYPE.WALLETCONNECT}/>
           </div>
         </div>
       </div>
