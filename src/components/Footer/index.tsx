@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     background: `${theme.palette.text.primary}`,
     position: 'absolute',
     bottom: 0,
+    zIndex: 0,
   },
   container: {
     display: 'flex',
