@@ -102,7 +102,7 @@ const NavBarMenu = () => {
 
     initAddress()
 
-    if (window.ethereum !== null) {
+    if (window.ethereum !== undefined) {
       window.ethereum.on('accountsChanged', initAddress)
       window.ethereum.on('chainChanged', initAddress)
     }
@@ -130,7 +130,7 @@ const NavBarMenu = () => {
             >
               <Typography variant="subtitle1">Connect Wallet</Typography>
             </Button>
-            <SelectWalletModal open={false} />   
+            <SelectWalletModal open={true} />   
           </div>
         ) : (
           <Button
