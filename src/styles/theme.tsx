@@ -30,7 +30,7 @@ export const marketTheme = responsiveFontSizes(
         contrastText: '#FFFCED',
       },
       secondary: {
-        main: '#30C5A8',
+        main: '#308D7B',
         contrastText: '#FFFCED',
       },
     },
