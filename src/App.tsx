@@ -14,6 +14,7 @@ import ConnectWalletModal from 'components/Modal/ConnectWallet'
 
 store.setState('account', '')
 store.setState('showConnectWalletModal', false)
+store.setState('openConnectWalletMenu', false)
 InitializeGlobalVar()
 
 const Home = lazy(() => import('./views/Home'))

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useGlobalState } from 'state-pool'
 import Triangle from 'assets/img/triangle.svg'
 import Metamask from 'assets/img/metamask.svg'
 import Walletconnect from 'assets/img/walletconnect.svg'
@@ -9,10 +10,12 @@ interface Props {
 }
 
 const SelectWalletModal: React.FC<Props> = (props) => {
+  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+
   if (props.open === true) {
     return (
       <div className="wallet-select-modal">
-        <div id="back" />
+        <div id="back" onClick={() => setOpenConnectWalletMenu(false)}/>
         <div id="content">
           <img src={Triangle} alt="triangle" id="triangle"/>
           <div className="modal-content">

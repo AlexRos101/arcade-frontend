@@ -59,11 +59,13 @@ const NavBarMenu = () => {
   const classes = useStyles()
 
   const [account, setAccount] = useGlobalState('account')
+  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
   const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
-    await connect()
-    initAddress()
+    // await connect()
+    // initAddress()
+    setOpenConnectWalletMenu(true)
   }
   const onPlayGameHandler = useCallback(() => {
     history.push('/')
@@ -130,8 +132,7 @@ const NavBarMenu = () => {
             >
               <Typography variant="subtitle1">Connect Wallet</Typography>
             </Button>
-            <SelectWalletModal open={false} />   
-          </div>
+            <SelectWalletModal open={openConnectWalletMenu} />             </div>
         ) : (
           <Button
             variant="outlined"
