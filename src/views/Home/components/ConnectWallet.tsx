@@ -6,14 +6,22 @@ import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import { useGlobalState } from 'state-pool'
 import { connect } from 'global/wallet'
 import * as WalletUtils from '../../../global/wallet'
+import * as CONST from 'global/const'
 
-import { Typography, Button } from '@material-ui/core'
+import { Typography, Button, Hidden } from '@material-ui/core'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
   const [account, setAccount] = useGlobalState('account')
+  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const onConnectWalletHandler = async () => {
-    connect()
+    // connect()
+    // initAddress()
+    setOpenConnectWalletMenu(true)
+  }
+
+  const onWalletConnctHandler = async () => {
+    await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
     initAddress()
   }
 
@@ -29,9 +37,16 @@ const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ childre
       </div>
       <RowLabel style={{ textAlign: 'center' }}>Connect wallet to start playing!</RowLabel>
       <div className="mw-auto mt-5" style={{ width: 'fit-content', maxWidth: 'max-content' }}>
-        <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
-          <Typography variant="subtitle1">Connect Wallet{children}</Typography>
-        </Button>
+        <Hidden xsDown>
+          <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
+            <Typography variant="subtitle1">Connect Wallet{children}</Typography>
+          </Button>
+        </Hidden>
+        <Hidden smUp>
+          <Button variant="contained" color="primary" onClick={onWalletConnctHandler} startIcon={<Wallet />}>
+            <Typography variant="subtitle1">Connect Wallet{children}</Typography>
+          </Button>
+        </Hidden>
       </div>
     </div>
   )

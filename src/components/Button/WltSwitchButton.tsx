@@ -64,7 +64,7 @@ const WltSwitchButton: React.FC<Props> = (props) => {
         flexDirection: 'row',
       }}
     >
-      <IOSSwitch sx={{ m: 0 }} value={props.value} onChange={props.onChange} />
+      <IOSSwitch sx={{ m: 0 }} checked={props.value} onChange={props.onChange} />
     </div>
   )
 }

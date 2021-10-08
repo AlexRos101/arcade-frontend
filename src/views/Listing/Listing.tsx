@@ -49,7 +49,8 @@ const Listing: React.FC = () => {
   const [showListModal, setShowListModal] = useState(false)
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
-  const [showLoading, setShowLoading] = useState(true)
+  const [showLoading, setShowLoading] = useState(false)
+  const [account, setAccount] = useGlobalState('account')
 
   /* eslint-disable */
 
@@ -136,6 +137,11 @@ const Listing: React.FC = () => {
     if (initialized) return
     setInitialized(true)
 
+    if (account === '') {
+      setShowConnectWalletModal(true)
+      return
+    }
+
     getMyItems(0, 10)
   })
 
@@ -151,7 +157,7 @@ const Listing: React.FC = () => {
       .then((res: string) => {
         setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
 
-        setTimeout(getRate, 30000)
+        setTimeout(getRate, 300000)
       })
       .catch(() => {
         setTimeout(getRate, 500)
