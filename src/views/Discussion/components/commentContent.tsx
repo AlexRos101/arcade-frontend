@@ -146,7 +146,7 @@ const CommentContent: React.FC<Props> = (props) => {
               />
             )}
           </Link>
-          <Link href="#" onClick={onAddReply}>
+          <Link onClick={onAddReply}>
             <IconLabel avatar={ReplyIcon} label="Send a reply" style={{ color: '#B7B091' }} />
           </Link>
         </div>

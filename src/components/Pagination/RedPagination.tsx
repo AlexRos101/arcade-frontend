@@ -13,7 +13,7 @@ interface Props {
 const RedPagination: React.FC<Props> = (props) => {
   const [pageNum, setPageNum] = useState(0)
   const [prevDisabled, setPrevDisabled] = useState(true)
-  const [nextDisabled, setNextDisabled] = useState(false)
+  const [nextDisabled, setNextDisabled] = useState(pageNum + 1 > props.totalPage / props.rowsPerPage? true: false)
 
   useEffect(() => {
     if (props.totalPage === 0 || props.rowsPerPage === undefined || props.rowsPerPage <= 0) return

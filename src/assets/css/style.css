@@ -457,7 +457,7 @@ a {
   }
   
   .rect-9 {
-    background: #1571FF;
+    background: #22303D;
     right: -48px;
     bottom: 48px;
   }
@@ -469,7 +469,7 @@ a {
   }
   
   .rect-11 {
-    background: #22303D;
+    background: #FCBF4A;
     right: -48px;
     top: 0px;
   }
@@ -481,7 +481,7 @@ a {
   }
 
   .rect-13 {
-    background: #FCBF4A;
+    background: #1571FF;
     right: -48px;
     top: 96px;
   }
@@ -1268,11 +1268,12 @@ a {
     border: none;
   }
 
+
   .pagination-btn:disabled {
     background-color: transparent;
     border: 1px solid #B7B091;
     color: #9D9468;
-  }
+  } 
 
   .wallet-select-modal {
     position: absolute;
@@ -1280,9 +1281,7 @@ a {
     height: 135px;
     right: 10px;
     z-index: 1;
-  }
-
-  .wallet-select-modal #back {
+  }  .wallet-select-modal #back {
     position: fixed;
     left: 0;
     top: 0;
@@ -1814,6 +1813,94 @@ a {
   }
 
   @media screen and (max-width: 550px) {
+    .rect {
+      width: 24px;
+      height: 24px;
+      position:absolute;
+    }
+
+    .rect-1 {
+      background: #FF6C50;
+      left: 0px;
+      top: 96px;
+    }
+    
+    .rect-2 {
+      background: #22303D;
+      left: -24px;
+      top: 72px;
+    }
+    
+    .rect-3 {
+      background: #30C5A8;
+      left: -24px;
+      top: 0px;
+    }
+  
+    .no-width-limit {
+      max-width: 100vw;
+    }
+    
+    .rect-4 {
+      background: #FCBF4A;
+      left: 0px;
+      top: 24px;
+    }
+    
+    .rect-5 {
+      background: #30C5A8;
+      left: 0px;
+      bottom: 0px;
+    }
+    
+    .rect-6 {
+      background: #1571FF;
+      left: -24px;
+      bottom: 0px;
+    }
+    
+    .rect-7 {
+      background: #FB98B4;
+      left: -24px;
+      bottom: 24px;
+    }
+    
+    .rect-8 {
+      background: #FB98B4;
+      right: 0px;
+      bottom: 0px;
+    }
+    
+    .rect-9 {
+      background: #22303D;
+      right: -24px;
+      bottom: 24px;
+    }
+    
+    .rect-10 {
+      background: #FF6C50;
+      right: 0px;
+      bottom: 48px;
+    }
+    
+    .rect-11 {
+      background: #FCBF4A;
+      right: -24px;
+      top: 0px;
+    }
+    
+    .rect-12 {
+      background: #30C5A8;
+      right: 0px;
+      top: 24px;
+    }
+  
+    .rect-13 {
+      background: #1571FF;
+      right: -24px;
+      top: 48px;
+    }
+
     .market-header-action {
       height: 15vh;
       flex-direction: column;
