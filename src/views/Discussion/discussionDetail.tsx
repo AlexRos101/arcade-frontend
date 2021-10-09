@@ -61,14 +61,28 @@ const DiscussionDetail: React.FC = () => {
     }
   })
 
-  const appendComment = (cmts: Comment[], comment: Comment, parent: number) => {
+  const appendComment = (cmts: Comment[], comment: Comment, parent: number, isAdded: boolean) => {
+    if (isAdded == true) return cmts
+
     let i = 0
     for (i = 0; i < cmts.length ; i ++) {
       if (cmts[i].id === parent) {
-        if (cmts[i].reply == undefined) {
+        const replys = cmts[i].reply
+        if (replys == undefined) {
           cmts[i].reply = []
+        } else {
+          let isExist = false
+          for (let j = 0; j < replys.length; j ++) {
+            if (replys[j].id == comment.id) {
+              isExist = true
+              break
+            }
+          }
+
+          if (isExist == true) break
         }
         cmts[i].reply?.push(comment)
+        isAdded = true
         break;
       }
     }
@@ -76,9 +90,11 @@ const DiscussionDetail: React.FC = () => {
     if (i != cmts.length) return cmts
 
     for (i = 0; i < cmts.length; i ++) {
+      if (isAdded == true) break;
+
       const replys = cmts[i].reply
       if (replys != undefined) {
-        cmts[i].reply = appendComment(replys, comment, parent)
+        cmts[i].reply = appendComment(replys, comment, parent, isAdded)  
       }
     }
 
@@ -87,7 +103,8 @@ const DiscussionDetail: React.FC = () => {
 
   const onReset = (comment: Comment, parent: number) => {
     let tempComments = comments.slice()
-    tempComments = appendComment(tempComments, comment, parent)
+    let isAdded = false
+    tempComments = appendComment(tempComments, comment, parent, isAdded)
     setComments(tempComments)
   }
 
