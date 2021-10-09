@@ -8,4 +8,5 @@ export const InitializeGlobalVar = (): void => {
   store.setState('openConnectWalletMenu', false)
   store.setState('connectedWalletType', CONST.WALLET_TYPE.NONE)
   store.setState('hiddenMenu', 'hidden-menu')
+  store.setState('dscUpdate', false)
 }

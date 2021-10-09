@@ -107,7 +107,11 @@ const AddComment: React.FC<Props> = (props) => {
           </Flex>
           <Flex alignItems="center" className={`${classes.spacing} ${classes.margin} r-comment-btn`}>
             <ThemeProvider theme={greenTheme}>
-              <Button variant="contained" color="primary" className="r-wd-100" onClick={onAddComment}>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                className="r-sm-wd-100" 
+                onClick={onAddComment}>
                 Add Comment
               </Button>
             </ThemeProvider>

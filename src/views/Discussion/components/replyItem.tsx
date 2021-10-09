@@ -7,6 +7,7 @@ import { Comment } from 'global/interface'
 interface Props {
   comment: Comment
   depth: number
+  onReset: (comment: Comment, parent: number) => unknown
 }
 
 const ReplyItem: React.FC<Props> = (props) => {
@@ -22,10 +23,10 @@ const ReplyItem: React.FC<Props> = (props) => {
     <div>
       <div className="flex-row r-flex-row" style={{ marginTop: '1rem' }}>
         <DepthStick />
-        <CommentContent comment={props.comment} />
+        <CommentContent comment={props.comment} onReset={props.onReset} />
       </div>
       {reply.map((replyItem: Comment, index: number) => {
-        return <ReplyItem key={index} comment={replyItem} depth={props.depth + 1} />
+        return <ReplyItem key={index} comment={replyItem} depth={props.depth + 1} onReset={props.onReset} />
       })}
     </div>
   )
