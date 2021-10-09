@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
+import BigNumber from 'bignumber.js'
 
 import avatar from 'assets/img/avatar.png'
 import bnb from 'assets/img/bnb.svg'
@@ -39,7 +40,7 @@ const Thumb = styled(Card)<{
 interface Props {
   data: GameItem
   index: number
-  rate: number
+  rate: BigNumber
   toggleClicked: (index: number) => unknown
   burnToken: (index: number) => unknown
 }
@@ -107,7 +108,7 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
               <PriceLabel
                 scales={ScaleDefaults.MD}
                 avatar={bnb}
-                price={(Number(row.arcadedoge_price) * rate).toFixed(2)}
+                price={rate.multipliedBy(Number.parseFloat(String(row.arcadedoge_price))).toFixed(2)}
                 // pricePerUsd={Number(row.priceBnbPerUsd)}
               />
             </Flex>
@@ -178,7 +179,7 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
                   <PriceLabel
                     scales={ScaleDefaults.MD}
                     avatar={bnb}
-                    price={(Number(row.arcadedoge_price) * rate).toFixed(2)}
+                    price={rate.multipliedBy(Number.parseFloat(String(row.arcadedoge_price))).toFixed(2)}
                     // pricePerUsd={row.priceBnbPerUsd}
                   />
                 </Flex>

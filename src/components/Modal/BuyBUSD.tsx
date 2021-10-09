@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { Typography, Button } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
 
 import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
@@ -24,7 +25,7 @@ const DialogContent = withStyles((theme) => ({
 interface Props {
   item: GameItem
   open: boolean
-  rate: number
+  rate: BigNumber
   onClose: () => void
 }
 
@@ -65,7 +66,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
       .call()
       .then((res: string) => {
-        if (Number.parseFloat(web3.utils.fromWei(res)) >= Number(props.item.arcadedoge_price) * props.rate) {
+        if (props.rate.multipliedBy(parseFloat(String(props.item.arcadedoge_price))).minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
           // setIsLoading(false);
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
@@ -99,7 +100,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
     BUSD.methods
       .approve(
         process.env.REACT_APP_EXCHANGE_ADDRESS,
-        Web3.utils.toWei(Number(props.item.arcadedoge_price) * props.rate + '', 'ether'),
+        Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
       )
       .send({ from: account })
       .then(() => {
@@ -134,7 +135,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         props.item.token_id,
         props.item.owner,
         Web3.utils.toWei(
-          Math.floor(Number(props.item.arcadedoge_price) * props.rate * 10 ** 12) / 10 ** 12 + '',
+          props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '',
           'ether',
         ),
         account,

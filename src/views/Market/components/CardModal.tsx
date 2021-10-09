@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGlobalState } from 'state-pool'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
@@ -9,6 +9,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { Button } from '@material-ui/core'
 import avatar from 'assets/img/avatar.png'
 import doge from 'assets/img/doge.svg'
+import BigNumber from 'bignumber.js'
 
 import MarketModalRow from './MarketModalRow'
 import ModalNavLabel from 'views/Market/components/ModalnavLabel'
@@ -58,7 +59,8 @@ const CardModal: React.FC<Props> = (props) => {
   const [account] = useGlobalState('account')
   const [showBuyDlg, setShowBuyDlg] = useState(false)
   const [showBuyBUSDDlg, setShowBuyBUSDDlg] = useState(false)
-  const [rate, setRate] = useState(0.0)
+  const [rate, setRate] = useState(new BigNumber(0))
+  const [initialized, setInitialized] = useState(false)
 
   const getRate = async () => {
     const provider = await Wallet.getCurrentProvider()
@@ -70,7 +72,7 @@ const CardModal: React.FC<Props> = (props) => {
       .getRate()
       .call()
       .then((res: string) => {
-        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+        setRate(new BigNumber(res).div(10 ** 18))
 
         setTimeout(getRate, 300000)
       })
@@ -79,7 +81,12 @@ const CardModal: React.FC<Props> = (props) => {
       })
   }
 
-  getRate()
+  useEffect(() => {
+    if (initialized) return
+    setInitialized(true)
+
+    getRate()
+  }, [initialized])
 
   return (
     <Dialog
@@ -111,7 +118,7 @@ const CardModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="price-sector">
                   <img className="mr-5 mh-auto" src={doge} alt="avatar" style={{ width: '30px', height: '30px' }} />
-                  <PriceLabel>{(Number(props.item.arcadedoge_price) * rate).toFixed(2)}</PriceLabel>
+                  <PriceLabel>{rate.multipliedBy(Number(props.item.arcadedoge_price)).toFixed(2)}</PriceLabel>
                   {/* <PriceDexLabel>(US$15.00)</PriceDexLabel> */}
                 </div>
               </div>

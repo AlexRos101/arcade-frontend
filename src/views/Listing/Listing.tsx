@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper'
 import { useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
 import * as WalletUtils from '../../global/wallet'
+import BigNumber from 'bignumber.js'
 
 import Card from 'components/Card'
 import Page from 'components/Layout/Page'
@@ -59,7 +60,7 @@ const Listing: React.FC = () => {
 
   /* eslint-enable */
 
-  const [rate, setRate] = useState(0.0)
+  const [rate, setRate] = useState(new BigNumber(0))
 
   const handleChangePage = useCallback(
     (newPage: number) => {
@@ -157,7 +158,7 @@ const Listing: React.FC = () => {
       .getRate()
       .call()
       .then((res: string) => {
-        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+        setRate(new BigNumber(res).div(10 ** 18))
 
         setTimeout(getRate, 300000)
       })

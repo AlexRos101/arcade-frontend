@@ -9,6 +9,7 @@ import { Theme, ThemeProvider, createStyles, makeStyles, withStyles } from '@mat
 import InputBase from '@material-ui/core/InputBase'
 import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
+import BigNumber from 'bignumber.js'
 
 import avatar from 'assets/img/avatar.png'
 import bnb from 'assets/img/bnb.svg'
@@ -127,7 +128,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   const [selectedCategoryID, setSelectedCategoryID] = useState(1)
   const [tokenID, setTokenID] = useState(0)
   const [showThumbnailWarning, setShowThumbnailWarning] = useState(false)
-  const [rate, setRate] = useState(0.0)
+  const [rate, setRate] = useState(new BigNumber(0))
   const [description, setDescription] = useState('')
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
@@ -178,6 +179,8 @@ const Sell: React.FC<SkinProps> = (data) => {
 
     if (initialized) return
     setInitialized(true)
+
+    getRate()
 
     const getGamesAndCategories = async () => {
       setShowLoading(true)
@@ -361,7 +364,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .getRate()
       .call()
       .then((res: string) => {
-        setRate(Number.parseFloat(Web3.utils.fromWei(res + '', 'ether')))
+        setRate(new BigNumber(res).div(10 ** 18))
 
         setTimeout(getRate, 300000)
       })
@@ -374,7 +377,6 @@ const Sell: React.FC<SkinProps> = (data) => {
     setTokenID(0)
   }, [tokenID])
 
-  getRate()
   return (
     <Page>
       <MainLoading show={showLoading} />
@@ -486,7 +488,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                         <PriceLabel
                           scales={ScaleDefaults.LG}
                           avatar={bnb}
-                          price={isNaN(Number.parseFloat(price)) ? 0 : (Number.parseFloat(price) * rate).toFixed(2)}
+                          price={isNaN(Number.parseFloat(price)) ? 0 : rate.multipliedBy(Number.parseFloat(price)).toFixed(2)}
                           pricePerUsd={skinItem?.priceBnbPerUsd}
                         />
                       </Grid>
