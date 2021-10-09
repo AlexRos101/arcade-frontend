@@ -84,7 +84,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
   return (
     <Card>
       <Grid container alignItems="center" justifyContent="space-between" direction="row" className="dsc-content-header">
-        <p style={{ marginTop: 0 }}>
+        <p style={{ marginTop: 0, overflowWrap: 'anywhere' }}>
           {discussion.is_hot === undefined || discussion.is_hot === false ? (
             ''
           ) : (

@@ -1124,6 +1124,8 @@ a {
     min-width: 34px;
     border-radius: 18px;
     border: 2px solid #B7B091;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   .item-processed .circle-number {
@@ -1195,7 +1197,7 @@ a {
     font-size: 12px;
     line-height: 15px;
     /* identical to box height */
-    word-break: break-all;
+    word-break: break-word;
     color: #9D9468;
     margin: 0 !important;
   }
