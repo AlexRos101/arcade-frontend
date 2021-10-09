@@ -245,7 +245,6 @@ const Sell: React.FC<SkinProps> = (data) => {
       axios
         .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
         .then((res) => {
-          console.log(res)
           setIsUploading(false)
           if (res.data.code === -1) {
             setShowThumbnailWarning(true)
