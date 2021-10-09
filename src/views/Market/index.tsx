@@ -135,10 +135,10 @@ const Market: React.FC = () => {
         <MarketHeader />
       </Header>
       <MarketRow id="arcade_map">
-        <RowLabel>MarsDoge</RowLabel>
+        <RowLabel style={{ marginLeft: '14px' }}>MarsDoge</RowLabel>
       </MarketRow>
       <MarketRow>
-        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} />
+        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} style={{ marginLeft:'-8px' }}/>
       </MarketRow>
       <MarketRow id="skin_slider">
         <CardSlider context={marsdogeItems} onOpen={handleMarsDogeOpenCard} rows={1} open-ri />

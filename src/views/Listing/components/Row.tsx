@@ -138,9 +138,11 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
                   },
                 }}
               >
-                <MenuItem key="edit" onClick={handleEditMenu}>
-                  <Typography variant="subtitle1">Edit</Typography>
-                </MenuItem>
+                { !row.is_visible && 
+                  (<MenuItem key="edit" onClick={handleEditMenu}>
+                    <Typography variant="subtitle1">Edit</Typography>
+                  </MenuItem>)
+                }
                 <MenuItem key="delete" onClick={handleBurn}>
                   <Typography variant="subtitle1">Delete</Typography>
                 </MenuItem>
@@ -208,9 +210,11 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
                       },
                     }}
                   >
-                    <MenuItem key="edit" onClick={handleEditMenu}>
-                      <Typography variant="subtitle1">Edit</Typography>
-                    </MenuItem>
+                    { !row.is_visible && 
+                      (<MenuItem key="edit" onClick={handleEditMenu}>
+                        <Typography variant="subtitle1">Edit</Typography>
+                      </MenuItem>)
+                    }
                     <MenuItem key="delete" onClick={handleBurn}>
                       <Typography variant="subtitle1">Delete</Typography>
                     </MenuItem>

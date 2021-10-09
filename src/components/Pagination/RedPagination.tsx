@@ -67,15 +67,14 @@ const RedPagination: React.FC<Props> = (props) => {
         <Typography variant="subtitle1">Previous</Typography>
       </Button>
       <Typography className="discuss-detail-link">
-        Showing { props.totalPage == 0 ? 0 : pageNum * props.rowsPerPage + 1 } ~{' '}
-        {Math.min(pageNum * props.rowsPerPage + props.rowsPerPage, props.totalPage)} of {props.totalPage}
+        Showing Page { props.totalPage == 0 ? 0 : pageNum + 1 } of { Math.ceil(props.totalPage / props.rowsPerPage) }
       </Typography>
       <Button
         variant="contained"
         color="secondary"
         onClick={onHandleNext}
         className="pagination-btn"
-        endIcon={<ArrowForwardIos fontSize="small" />}
+        endIcon={<ArrowForwardIos fontSize="small" style={{ marginLeft: '4px' }} />}
         style={{ marginLeft: 'auto' }}
         disabled={nextDisabled}
       >

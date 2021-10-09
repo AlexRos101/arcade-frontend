@@ -135,16 +135,16 @@ const MarketDoge: React.FC = () => {
   return (
     <Page id="market_page" className="styled-market ">
       <MainLoading show={showLoading} />
-      <Header>
+      <Header style={{ marginLeft: '14px', marginRight: '14px' }}>
         <HeaderLabel>ArcadeMarket</HeaderLabel>
         <Info className="mh-auto ml-10 market-info-tag" />
         <MarketHeader />
       </Header>
       <MarketRow id="arcade_map">
-        <RowLabel>MarsDoge</RowLabel>
+        <RowLabel style={{ paddingLeft: '16px' }}>MarsDoge</RowLabel>
       </MarketRow>
       <MarketRow>
-        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} style={{ width: 'calc(100% - 20px)' }}/>
+        <TabRow tabs={dogeTab} refresh={refreshMarsDogePanel} style={{ width: 'calc(100% - 24px)', paddingLeft: '6px' }}/>
       </MarketRow>
       <MarketRow
         id="skin_slider"
