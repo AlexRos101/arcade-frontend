@@ -65,7 +65,6 @@ const DiscussionDetail: React.FC = () => {
     let i = 0
     for (i = 0; i < cmts.length ; i ++) {
       if (cmts[i].id === parent) {
-        console.log('asdf')
         if (cmts[i].reply == undefined) {
           cmts[i].reply = []
         }

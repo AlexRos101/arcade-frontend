@@ -28,7 +28,6 @@ const RedPagination: React.FC<Props> = (props) => {
     }
 
     if (pageNum + 1 >= props.totalPage / props.rowsPerPage) {
-      console.log(props.totalPage / props.rowsPerPage)
       setNextDisabled(true)
     } else {
       setNextDisabled(false)

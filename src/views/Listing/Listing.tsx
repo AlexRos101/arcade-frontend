@@ -82,7 +82,6 @@ const Listing: React.FC = () => {
       const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
       setCount(Number(items.total))
       setRows(items.data)
-      console.log(items.data)
 
       setShowLoading(false)
     },
