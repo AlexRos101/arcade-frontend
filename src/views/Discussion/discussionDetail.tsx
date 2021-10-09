@@ -61,6 +61,37 @@ const DiscussionDetail: React.FC = () => {
     }
   })
 
+  const appendComment = (cmts: Comment[], comment: Comment, parent: number) => {
+    let i = 0
+    for (i = 0; i < cmts.length ; i ++) {
+      if (cmts[i].id === parent) {
+        console.log('asdf')
+        if (cmts[i].reply == undefined) {
+          cmts[i].reply = []
+        }
+        cmts[i].reply?.push(comment)
+        break;
+      }
+    }
+
+    if (i != cmts.length) return cmts
+
+    for (i = 0; i < cmts.length; i ++) {
+      const replys = cmts[i].reply
+      if (replys != undefined) {
+        cmts[i].reply = appendComment(replys, comment, parent)
+      }
+    }
+
+    return cmts
+  }
+
+  const onReset = (comment: Comment, parent: number) => {
+    let tempComments = comments.slice()
+    tempComments = appendComment(tempComments, comment, parent)
+    setComments(tempComments)
+  }
+
   const refresh = () => {
     // setDscUpdate(false)
     getDiscussion(Number(discussionId), account, page, 4).then((res) => {
@@ -177,9 +208,9 @@ const DiscussionDetail: React.FC = () => {
           )}
           {comments.map((comment: Comment, index: number) => {
             if (index === 0) {
-              return <CommentItem key={index} comment={comment} badge="Hot Comment" onReset={() => refresh()} />
+              return <CommentItem key={index} comment={comment} badge="Hot Comment" onReset={onReset} />
             } else {
-              return <CommentItem key={index} comment={comment} onReset={() => refresh()} />
+              return <CommentItem key={index} comment={comment} onReset={onReset} />
             }
           })}
           <div ref={loader} />

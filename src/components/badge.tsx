@@ -9,9 +9,9 @@ interface Props {
 
 const Badge: React.FC<Props> = (props) => {
   return (
-    <p className={`badge badge-${props.type}`} style={props.style}>
+    <a className={`badge badge-${props.type}`} style={props.style}>
       {props.content}
-    </p>
+    </a>
   )
 }
 

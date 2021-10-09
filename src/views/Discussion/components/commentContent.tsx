@@ -21,7 +21,7 @@ import AddReply from './addReply'
 interface Props {
   comment: Comment
   badge?: string
-  onReset: () => unknown
+  onReset: (comment: Comment, parent: number) => unknown
 }
 
 const CommentContent: React.FC<Props> = (props) => {
@@ -75,6 +75,10 @@ const CommentContent: React.FC<Props> = (props) => {
     setShowAddReply(true)
   }, [commentState, replyOn, showAddReply])
 
+  const onReset = (newComment: Comment) => {
+    props.onReset(newComment, comment.id)
+  }
+
   const onHandleLikes = useCallback(() => {
     if (account !== '') {
       if (cmtIsSet !== 2) return
@@ -118,11 +122,11 @@ const CommentContent: React.FC<Props> = (props) => {
         direction="row"
         style={{ display: 'inline-block', wordBreak: 'break-word' }}
       >
-        <CommentLabel style={{ display: 'flex', marginTop: 0 }}>
+        <CommentLabel style={{ marginTop: 0 }}>
           {props.badge === undefined ? (
             ''
           ) : (
-            <Badge type="note" content={String(props.badge)} style={{ marginLeft: 0 }} />
+            <Badge type="note" content={String(props.badge)} style={{ marginLeft: 0, display: 'inline' }} />
           )}
           {comment.content}
         </CommentLabel>
@@ -169,7 +173,7 @@ const CommentContent: React.FC<Props> = (props) => {
           />
         </div>
       </Grid>
-      <AddReply visible={showAddReply} comment={comment} onReset={props.onReset} />
+      <AddReply visible={showAddReply} comment={comment} onReset={onReset} />
     </div>
   )
 }

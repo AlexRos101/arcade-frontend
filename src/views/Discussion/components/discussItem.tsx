@@ -30,9 +30,9 @@ const DiscussItem: React.FC<Props> = (props) => {
     <Link href={`/discussion/details/${discussion.stuff_id}/${discussion.id}`} underline="none">
       <ItemContainer>
         <Grid container alignItems="center" justifyContent="space-between" direction="row">
-          <DisucssionLabel style={{ display: 'flex' }}>
+          <DisucssionLabel>
             {props.badge !== undefined ? (
-              <Badge type="danger" content={String(props.badge)} style={{ marginLeft: 0 }} />
+              <Badge type="danger" content={String(props.badge)} style={{ marginLeft: 0, display: 'inline' }} />
             ) : (
               ''
             )}

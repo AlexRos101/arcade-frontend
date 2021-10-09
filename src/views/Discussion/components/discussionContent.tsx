@@ -53,7 +53,6 @@ const DiscussionContent: React.FC<Props> = (props) => {
 
     getDiscussion(props.discussion.id, account).then((response) => {
       setDiscussion(response.data)
-      console.log('AAA')
       setDscIsSet(2)
     })
   }, [props, discussion, dscIsSet])

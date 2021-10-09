@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   comment: Comment
   visible: boolean
-  onReset: () => unknown
+  onReset: (comment: Comment) => unknown
 }
 
 const AddReply: React.FC<Props> = (props) => {
@@ -54,6 +54,12 @@ const AddReply: React.FC<Props> = (props) => {
     setAnonymous(!anonymous)
   }, [anonymous])
 
+  const getCurrentTime = () => {
+    const today = new Date()
+    const date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' ' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+    return date
+  }
+
   const onAddComment = useCallback(() => {
     addNewComment(
       Number(props.comment.discussion_id),
@@ -61,10 +67,23 @@ const AddReply: React.FC<Props> = (props) => {
       content,
       anonymous === false ? 0 : 1,
       user,
-    ).then(() => {
+    ).then((res) => {
       setCommentState(2)
-      // props.onReset()
-      document.location.reload()
+      const commentData: Comment = {
+        id: res.data,
+        likes: 0,
+        discussion_id: Number(props.comment.discussion_id),
+        parent_id: Number(props.comment.id),
+        user: user,
+        user_type: anonymous === false ? 0 : 1,
+        content: content,
+        updated_at: getCurrentTime(),
+        reply: [],
+        user_like: []
+      }
+
+      props.onReset(commentData)
+      //document.location.reload()
     })
   }, [props, anonymous, content, user, commentState])
 

@@ -7,7 +7,7 @@ import { Comment } from 'global/interface'
 interface Props {
   comment: Comment
   depth: number
-  onReset: () => unknown
+  onReset: (comment: Comment, parent: number) => unknown
 }
 
 const ReplyItem: React.FC<Props> = (props) => {

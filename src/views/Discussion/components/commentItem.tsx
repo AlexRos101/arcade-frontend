@@ -10,7 +10,7 @@ import { Comment } from 'global/interface'
 interface Props {
   comment: Comment
   badge?: string
-  onReset: () => unknown
+  onReset: (comment: Comment, parent: number) => unknown
 }
 
 const ItemContainer = styled.div`
