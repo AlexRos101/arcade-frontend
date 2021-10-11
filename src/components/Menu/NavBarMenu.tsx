@@ -132,6 +132,7 @@ const NavBarMenu = () => {
       <IconButton edge="start" className="menu-expand" color="inherit" aria-label="menu" onClick={onPressMenu}>
         <MenuIcon />
       </IconButton>
+      <div className={`menu-back ${hiddenMenu}`} onClick={onCloseMenu}/>
       <div className={`${classes.root} menu-inspect ${hiddenMenu}`}>
         <div className="menu">
           <SubMenu text="Games" menuData={gameMenu} />
