@@ -99,12 +99,13 @@ const BuyModal: React.FC<Props> = (props) => {
     ARCADEDOGE.methods
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         setIsLoading(false)
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
-      .catch(() => {
+      .catch((err: any) => {
+        console.log(err)
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -134,7 +135,7 @@ const BuyModal: React.FC<Props> = (props) => {
         account,
       )
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
           if (item.owner === Web3.utils.toChecksumAddress(account)) {
@@ -146,7 +147,7 @@ const BuyModal: React.FC<Props> = (props) => {
 
         checkDBStatus()
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
       })
   }

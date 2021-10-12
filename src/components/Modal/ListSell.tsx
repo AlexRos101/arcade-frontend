@@ -95,12 +95,12 @@ const ListSellModal: React.FC<Props> = (props) => {
     NFT.methods
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         setIsLoading(false)
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -128,7 +128,7 @@ const ListSellModal: React.FC<Props> = (props) => {
         Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
       )
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         const checkDBStatus = async () => {
           console.log('bbb')
           const item = (await API.getItemById(props.item.id)).data
@@ -142,7 +142,7 @@ const ListSellModal: React.FC<Props> = (props) => {
         checkDBStatus()
         console.log('aaa')
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
       })
   }

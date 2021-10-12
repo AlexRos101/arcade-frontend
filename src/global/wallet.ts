@@ -126,17 +126,21 @@ export const getCurrentWallet = async () => {
     const accounts = await new Web3(Web3.givenProvider).eth.getAccounts()
     return Web3.utils.toChecksumAddress(accounts[0])
   } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
-    const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
-    if (wcData.accounts.length == 0) {
-      return null
-    }
-    return Web3.utils.toChecksumAddress(wcData.accounts[0])
+    // const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
+    // if (wcData.accounts.length == 0) {
+    //   return null
+    // }
+    // return Web3.utils.toChecksumAddress(wcData.accounts[0])
+    var provider = await getCurrentProvider()
+    const accounts = await (new Web3(provider)).eth.getAccounts();
+    if (accounts.length == 0) return null;
+    return accounts[0];
   }
 
   return null
 }
 
-export const getCurrentChainId = () => {
+export const getCurrentChainId = async () => {
   const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
 
   if (walletType == null) return null
@@ -144,8 +148,11 @@ export const getCurrentChainId = () => {
   if (walletType == CONST.WALLET_TYPE.METAMASK) {
     return Web3.givenProvider.chainId
   } else if (walletType == CONST.WALLET_TYPE.WALLETCONNECT) {
-    const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
-    return wcData.chainId
+    // const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
+    // return wcData.chainId
+    var provider = await getCurrentProvider()
+    const chainId = await (new Web3(provider)).eth.net.getId()
+    return chainId
   }
 
   return null
@@ -158,7 +165,7 @@ export const isConnected = async (): Promise<boolean> => {
 
   const address = await getCurrentWallet()
   const provider = await getCurrentProvider()
-  let chainId = getCurrentChainId()
+  let chainId = await getCurrentChainId()
 
   if (address == null || address == '' || provider == null || chainId == null) {
     return false

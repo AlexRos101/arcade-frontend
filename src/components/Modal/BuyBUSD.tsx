@@ -103,12 +103,12 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
       )
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         setIsLoading(false)
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
@@ -141,7 +141,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         account,
       )
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
           if (item.owner === Web3.utils.toChecksumAddress(account)) {
@@ -153,7 +153,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
 
         checkDBStatus()
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
       })
   }

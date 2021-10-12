@@ -116,7 +116,7 @@ const Listing: React.FC = () => {
     NFT.methods
       .burn(rows[index].token_id)
       .send({ from: address })
-      .then(() => {
+      .then((res: any) => {
         const checkItemStatus = async () => {
           const item = (await API.getItemById(rows[index].id)).data
           if (item.is_burnt) {
@@ -128,7 +128,7 @@ const Listing: React.FC = () => {
 
         checkItemStatus()
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
       })
   }

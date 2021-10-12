@@ -70,7 +70,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
     NFT.methods
       .freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         document.location.reload()
       })
       .catch(() => {
@@ -95,7 +95,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
     exchange.methods
       .CancelSellRequest(props.item.contract_address, props.item.token_id)
       .send({ from: account })
-      .then(() => {
+      .then((res: any) => {
         const checkDBStatus = async () => {
           console.log('ddd')
           const item = (await API.getItemById(props.item.id)).data
@@ -111,7 +111,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
         checkDBStatus()
         console.log('ccc')
       })
-      .catch(() => {
+      .catch((err: any) => {
         setIsLoading(false)
       })
   }
