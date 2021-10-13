@@ -1,6 +1,6 @@
-import React, { memo } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { useGlobalState } from 'state-pool'
-
+import * as Wallet from 'global/wallet'
 import { Grid, Typography } from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FooterRoadmap = () => {
   const classes = useStyles()
+  const [account] = useGlobalState('account')
 
   /* eslint-disable */
 
@@ -73,9 +74,11 @@ const FooterRoadmap = () => {
             <Link href="/sell">
               <RoadmapEntry title="Sell Customized Item" />
             </Link>
-            <Link href="/listing">
-              <RoadmapEntry title="View Your Listings" />
-            </Link>
+            { account != '' && 
+              (<Link href="/listing">
+                <RoadmapEntry title="View Your Listings" />
+              </Link>)
+            }
           </div>
         </Grid>
         <Grid item md={3} className="r-wd-50">

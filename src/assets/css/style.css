@@ -1584,8 +1584,9 @@ a {
     }
 
     .expanded-card-content {
-      width: calc(100% - 72px);
-      max-width: calc(100vw - 64px);
+      width: calc(100% - 36px);
+      max-width: calc(100vw - 36px);
+      padding: 18px 18px;
     }
 
     .modal-buy-arcade-btn {
