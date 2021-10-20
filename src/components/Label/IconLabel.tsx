@@ -14,7 +14,7 @@ interface IconLabelProps {
 const IconLabel: React.FC<IconLabelProps> = (props) => {
   return (
     <Grid alignItems="center" direction="row" style={props.style} className={`flex-row r-flex-row ${props.className}`}>
-      {props.avatar && <img src={props.avatar} width={props.avatarWidth} height={props.avatarHeight} style={{ marginRight: '10px' }} />}
+      {props.avatar && <img src={props.avatar} width={props.avatarWidth} height={props.avatarHeight} style={{ marginRight: '10px' }} alt=""/>}
       <Grid item>
         <Typography style={{ fontSize: props.fontSize, color: 'rgb(183, 176, 145)' }}>{props.label}</Typography>
       </Grid>

@@ -48,7 +48,7 @@ const DiscussionSearch: React.FC = () => {
         setShowLoading(false)
       })
     }
-  })
+  }, [staffIsSet, keyword, checkArray])
 
   return (
     <Page className="styled-search">

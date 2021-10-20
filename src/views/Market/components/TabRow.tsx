@@ -103,7 +103,7 @@ const TabRow: React.FC<TabsData> = (props) => {
 
       props.refresh(props.tabs[newValue].categoryId, sort)
     },
-    [value, props],
+    [props, sort],
   )
 
   const handleChangeSort = useCallback(
@@ -111,7 +111,7 @@ const TabRow: React.FC<TabsData> = (props) => {
       setSort(event.target.value as number)
       props.refresh(props.tabs[value].categoryId, sort)
     },
-    [sort, props],
+    [sort, props,value],
   )
 
   return (

@@ -46,7 +46,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
     if (props.item === selectedItem) return
     setSelectedItem(props.item)
     refresh()
-  })
+  }, [props.item, selectedItem])
 
   const refresh = async () => {
     setFirstStepClassName('item')

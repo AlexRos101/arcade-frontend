@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -43,13 +43,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
-  useEffect(() => {
-    if (props.item === selectedItem) return
-    setSelectedItem(props.item)
-    refresh()
-  })
-
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     // setIsLoading(true);
 
     if (!(await Wallet.isConnected())) {
@@ -81,7 +75,13 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }
+  }, [account, props.item.arcadedoge_price, props.rate, setIsLoading])
+
+  useEffect(() => {
+    if (props.item === selectedItem) return
+    setSelectedItem(props.item)
+    refresh()
+  }, [props.item, selectedItem, refresh])
 
   const approve = async () => {
     setIsLoading(true)

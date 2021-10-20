@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useGlobalState } from 'state-pool'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
@@ -62,7 +62,7 @@ const CardModal: React.FC<Props> = (props) => {
   const [rate, setRate] = useState(new BigNumber(0))
   const [initialized, setInitialized] = useState(false)
 
-  const getRate = async () => {
+  const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
@@ -79,14 +79,14 @@ const CardModal: React.FC<Props> = (props) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }
+  }, [])
 
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
 
     getRate()
-  }, [initialized])
+  }, [initialized, getRate])
 
   return (
     <Dialog
@@ -98,7 +98,7 @@ const CardModal: React.FC<Props> = (props) => {
       PaperProps={{ style: { borderRadius: 7 } }}
     >
       <DialogContent className="modal-card-content flex-row" dividers>
-        <img className="expanded-card-img" src={`${process.env.REACT_APP_THUMBNAIL_NODE}${props.item.token_id}.png`} />
+        <img className="expanded-card-img" src={`${process.env.REACT_APP_THUMBNAIL_NODE}${props.item.token_id}.png`} alt=""/>
         <div className="expanded-card-content">
           <ModalNavLabel>{props.category}</ModalNavLabel>
           <MarketModalRow>

@@ -18,7 +18,7 @@ const SearchHeader: React.FC<Props> = (props) => {
       history.push(`/discussion/search/${keyword}`)
       document.location.reload()
     }
-  }, [])
+  }, [history, keyword])
 
   return (
     <div className="flex-row wd-100">

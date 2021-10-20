@@ -49,11 +49,11 @@ const Footer = () => {
 
   const handleClose = useCallback(() => {
     setOpenTerm(false)
-  }, [openTerm])
+  }, [setOpenTerm])
 
   const handleClosePrivacy = useCallback(() => {
     setOpenPrivacyPolicy(false)
-  }, [openPrivacyPolicy])
+  }, [setOpenPrivacyPolicy])
 
   return (
     <AppBar position="static" className={classes.root} id="footer">

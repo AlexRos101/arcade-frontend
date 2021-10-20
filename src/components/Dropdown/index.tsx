@@ -34,6 +34,8 @@ interface Props {
   onDrop: (files: Array<File>) => void
 }
 
+/* eslint-disable */
+
 const ItemDropdown: React.FC<Props> = (props) => {
   return (
     <DropContainer height={props.height}>
@@ -64,5 +66,7 @@ const ItemDropdown: React.FC<Props> = (props) => {
     </DropContainer>
   )
 }
+
+/* eslint-enable */
 
 export default ItemDropdown

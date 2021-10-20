@@ -43,7 +43,6 @@ const useStyles = makeStyles({
 
 const Listing: React.FC = () => {
   const classes = useStyles()
-  const [page, setPage] = useState(0)
   const [rowsPerPage] = useState(10)
   const [rows, setRows] = useState<Array<GameItem>>([])
   const [count, setCount] = useState(0)
@@ -51,24 +50,16 @@ const Listing: React.FC = () => {
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
   const [showLoading, setShowLoading] = useState(false)
-  const [account, setAccount] = useGlobalState('account')
 
   /* eslint-disable */
 
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [isLoading, setIsLoading] = useGlobalState('isLoading')
+  const [page, setPage] = useState(0)
 
   /* eslint-enable */
 
   const [rate, setRate] = useState(new BigNumber(0))
-
-  const handleChangePage = useCallback(
-    (newPage: number) => {
-      setPage(newPage)
-      getMyItems(newPage * rowsPerPage, rowsPerPage)
-    },
-    [page, rowsPerPage],
-  )
 
   const getMyItems = useCallback(
     async (limit: number, cnt: number) => {
@@ -85,7 +76,7 @@ const Listing: React.FC = () => {
 
       setShowLoading(false)
     },
-    [rows, count, showLoading],
+    [],
   )
 
   const toggleVisibility = async (index: number) => {
@@ -133,21 +124,15 @@ const Listing: React.FC = () => {
       })
   }
 
-  const init = async () => {
-    if (!(await WalletUtils.isConnected())) {
-      setShowConnectWalletModal(true);
-      return;
-    }
+  const handleChangePage = useCallback(
+    (newPage: number) => {
+      setPage(newPage)
+      getMyItems(newPage * rowsPerPage, rowsPerPage)
+    },
+    [rowsPerPage, getMyItems],
+  )
 
-    getMyItems(0, 10)
-    getRate()
-  }
-
-  useEffect(() => {
-    init()
-  }, [account])
-
-  const getRate = async () => {
+  const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
@@ -164,7 +149,21 @@ const Listing: React.FC = () => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }
+  }, [])
+
+  const init = useCallback(async () => {
+    if (!(await WalletUtils.isConnected())) {
+      setShowConnectWalletModal(true);
+      return;
+    }
+
+    getMyItems(0, 10)
+    getRate()
+  }, [getMyItems, getRate, setShowConnectWalletModal])
+
+  useEffect(() => {
+    init()
+  }, [init])
 
   return (
     <Page>

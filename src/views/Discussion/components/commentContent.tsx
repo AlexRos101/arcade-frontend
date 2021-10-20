@@ -49,9 +49,9 @@ const CommentContent: React.FC<Props> = (props) => {
         setCommentState(0)
       }
     }
-  }, [commentState, replyOn, showAddReply])
+  }, [commentState, replyOn, showAddReply, setCommentState])
 
-  const refreshLikeStatus = async () => {
+  const refreshLikeStatus = useCallback(async () => {
     if (isLike !== 0) return
     if (props.comment.id === undefined || props.comment.id === -1) return
     if (!(await Wallet.isConnected())) return
@@ -63,17 +63,17 @@ const CommentContent: React.FC<Props> = (props) => {
         setIsLike(1)
       }
     }
-  }
+  }, [isLike, props.comment.id, props.comment.user_like])
 
   useEffect(() => {
     refreshLikeStatus()
-  }, [props, isLike, account])
+  }, [props, isLike, account, refreshLikeStatus])
 
   const onAddReply = useCallback(() => {
     setCommentState(2)
     setReplyOn(true)
     setShowAddReply(true)
-  }, [commentState, replyOn, showAddReply])
+  }, [setCommentState])
 
   const onReset = (newComment: Comment) => {
     props.onReset(newComment, comment.id)
@@ -101,7 +101,7 @@ const CommentContent: React.FC<Props> = (props) => {
     } else {
       setShowConnectWalletModal(true)
     }
-  }, [isLike, account, comment, cmtIsSet])
+  }, [isLike, account, comment, cmtIsSet, setShowConnectWalletModal])
 
   useEffect(() => {
     if (cmtIsSet === 0) {
@@ -111,7 +111,7 @@ const CommentContent: React.FC<Props> = (props) => {
         setCmtIsSet(2)
       })
     }
-  }, [cmtIsSet, comment])
+  }, [cmtIsSet, comment, props.comment.id])
 
   return (
     <div style={{ flexGrow: 1 }}>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 
 import { Typography } from '@material-ui/core'
 
@@ -27,10 +27,12 @@ interface Props {
 const StaffSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const checkArray = [] as Array<boolean>
-  props.checkArray.forEach((check: boolean) => {
-    checkArray.push(check)
-  })
+  const checkArray = useMemo(
+    () => props.checkArray.map(check => {
+      return check
+    }),
+    [props.checkArray]
+  )
 
   const [initialized, setInitialized] = useState(false)
 
@@ -44,7 +46,7 @@ const StaffSelect: React.FC<Props> = (props) => {
       props.setCheckArray(checkArray)
       setInitialized(true)
     },
-    [initialized, props, checkArray],
+    [props, checkArray],
   )
 
   return (

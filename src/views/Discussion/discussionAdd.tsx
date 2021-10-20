@@ -28,7 +28,7 @@ const DiscussionAdd: React.FC = () => {
         setStaff(data)
       })
     }
-  })
+  }, [staffIsSet, stuffId])
   return (
     <Page className="styled-rule">
       <Header>

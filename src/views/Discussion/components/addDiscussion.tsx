@@ -57,7 +57,7 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
       history.push(`/discussion/stuff/${props.stuff.id}`)
       document.location.reload()
     })
-  }, [props, content, anonymous, user])
+  }, [props, content, anonymous, user, history])
 
   return (
     <Grid container spacing={1} alignItems="flex-start" style={{ marginTop: '1vh', marginBottom: '1vh' }}>

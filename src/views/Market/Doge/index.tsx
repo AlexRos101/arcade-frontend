@@ -78,12 +78,12 @@ const MarketDoge: React.FC = () => {
 
       setMarsdogeItems(items)
     },
-    [marsdogeItems],
+    [],
   )
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setOpen(false)
-  }, [open])
+  }
 
   const handleOpenCard = useCallback(
     (index: number) => {
@@ -91,20 +91,17 @@ const MarketDoge: React.FC = () => {
       setSelectedCard(marsdogeItems[index])
       setSelectedCategoryName(getMarsDogeCategoryName(Number((marsdogeItems[index] as GameItem).category_id)))
     },
-    [open, selectedCategoryName, selectedCard, marsdogeItems],
+    [marsdogeItems],
   )
 
-  const getMarsDogeCategoryName = useCallback(
-    (categoryId: number) => {
-      for (let i = 0; i < dogeTab.length; i++) {
-        if (dogeTab[i].categoryId === categoryId) {
-          return dogeTab[i].tabName
-        }
+  const getMarsDogeCategoryName = (categoryId: number) => {
+    for (let i = 0; i < dogeTab.length; i++) {
+      if (dogeTab[i].categoryId === categoryId) {
+        return dogeTab[i].tabName
       }
-      return ''
-    },
-    [dogeTab],
-  )
+    }
+    return ''
+  }
 
   const handleChangePage = useCallback(
     (newPage: number) => {
@@ -112,7 +109,7 @@ const MarketDoge: React.FC = () => {
 
       getMarsDogeItems(0, 0, newPage * rowsPerPage, rowsPerPage)
     },
-    [page],
+    [getMarsDogeItems, rowsPerPage],
   )
 
   const refreshMarsDogePanel = useCallback(async (category: number, sort: number) => {
@@ -121,7 +118,7 @@ const MarketDoge: React.FC = () => {
     getMarsDogeItems(category, sort, page * rowsPerPage, rowsPerPage)
 
     setShowLoading(false)
-  }, [])
+  }, [getMarsDogeItems, page, rowsPerPage])
 
   useEffect(() => {
     if (initialized) return
@@ -130,7 +127,7 @@ const MarketDoge: React.FC = () => {
     setShowLoading(true)
     getMarsDogeItems(0, 0, 0, 10)
     setShowLoading(false)
-  })
+  }, [initialized, getMarsDogeItems])
 
   return (
     <Page id="market_page" className="styled-market ">

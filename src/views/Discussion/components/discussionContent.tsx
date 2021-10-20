@@ -55,7 +55,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
       setDiscussion(response.data)
       setDscIsSet(2)
     })
-  }, [props, discussion, dscIsSet])
+  }, [props, discussion, dscIsSet, account])
 
   const onHandleLikes = useCallback(() => {
     if (account !== '') {
@@ -79,7 +79,9 @@ const DiscussionContent: React.FC<Props> = (props) => {
     } else {
       setShowConnectWalletModal(true)
     }
-  }, [isLike, account, discussion, dscIsSet])
+  }, [isLike, account, discussion, dscIsSet, setShowConnectWalletModal])
+
+  /* eslint-disable */
 
   return (
     <Card>
@@ -95,7 +97,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
       </Grid>
       <Grid container alignItems="center" justifyContent="space-between" direction="row" className="mt-5">
         <div className="flex-row r-flex-row r-comment-count-row r-wd-100">
-          <a href="#" onClick={onHandleLikes} style={{ textDecoration: 'none' }}>
+          <a onClick={onHandleLikes} style={{ textDecoration: 'none' }}>
             {isLike === 2 && account !== '' ? (
               <IconLabel
                 avatar={RocketBlueIcon}
@@ -146,6 +148,8 @@ const DiscussionContent: React.FC<Props> = (props) => {
       </Grid>
     </Card>
   )
+
+  /* eslint-enable */
 }
 
 export default DiscussionContent

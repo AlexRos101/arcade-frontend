@@ -24,11 +24,13 @@ const AddNote: React.FC = () => {
 
   const handleClose = useCallback(() => {
     setOpenRule(false)
-  }, [openRule])
+  }, [setOpenRule])
 
   const handleOpenRules = useCallback(() => {
     setOpenRule(true)
-  }, [openRule])
+  }, [setOpenRule])
+
+  /* eslint-disable */
 
   return (
     <OutlinedCard className="outlined-card">
@@ -44,6 +46,9 @@ const AddNote: React.FC = () => {
       <DiscussionRule onClose={handleClose} open={openRule} />
     </OutlinedCard>
   )
+
+  /* eslint-enable */
+
 }
 
 export default AddNote

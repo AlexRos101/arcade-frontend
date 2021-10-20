@@ -81,15 +81,15 @@ const NavBarMenu = () => {
   const onPlayGameHandler = useCallback(() => {
     setHiddenMenu('hidden-menu')
     history.push('/')
-  }, [])
+  }, [history, setHiddenMenu])
 
   const onPressMenu = useCallback(() => {
     setHiddenMenu('')
-  }, [hiddenMenu])
+  }, [setHiddenMenu])
 
   const onCloseMenu = useCallback(() => {
     setHiddenMenu('hidden-menu')
-  }, [hiddenMenu])
+  }, [setHiddenMenu])
 
   const shortenString = useCallback((source: string) => {
     if (source.length <= 12) return source
@@ -108,12 +108,12 @@ const NavBarMenu = () => {
       setAccount('')
       setConnectedWalletType(CONST.WALLET_TYPE.NONE)
     }
-  }, [account, connectedWalletType])
+  }, [setAccount, setConnectedWalletType])
 
   const onClickDiscussions = useCallback(() => {
     setHiddenMenu('hidden-menu')
     history.push('/discussion')
-  }, [])
+  }, [history, setHiddenMenu])
 
   useEffect(() => {
     if (initialized) return
@@ -125,7 +125,7 @@ const NavBarMenu = () => {
       window.ethereum.on('accountsChanged', initAddress)
       window.ethereum.on('chainChanged', initAddress)
     }
-  }, [account, connectedWalletType])
+  }, [connectedWalletType, initAddress, initialized])
 
   return (
     <div>

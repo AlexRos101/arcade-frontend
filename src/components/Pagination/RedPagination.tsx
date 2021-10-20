@@ -16,7 +16,7 @@ const RedPagination: React.FC<Props> = (props) => {
   const [prevDisabled, setPrevDisabled] = useState(true)
   const [nextDisabled, setNextDisabled] = useState(true)
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     if (props.totalPage === 0 || props.rowsPerPage === undefined || props.rowsPerPage <= 0) {
       setTimeout(refresh, 200)
       return
@@ -32,11 +32,11 @@ const RedPagination: React.FC<Props> = (props) => {
     } else {
       setNextDisabled(false)
     }
-  }
+  }, [pageNum, props.rowsPerPage, props.totalPage])
 
   useEffect(() => {
     refresh()
-  }, [pageNum, props])
+  }, [pageNum, props, refresh])
 
   const onHandlePrev = useCallback(() => {
     if (pageNum > 0 && props.onChange !== undefined) {
@@ -66,7 +66,7 @@ const RedPagination: React.FC<Props> = (props) => {
         <Typography variant="subtitle1">Previous</Typography>
       </Button>
       <Typography className="discuss-detail-link">
-        Showing Page { props.totalPage == 0 ? 0 : pageNum + 1 } of { Math.ceil(props.totalPage / props.rowsPerPage) }
+        Showing Page { props.totalPage === 0 ? 0 : pageNum + 1 } of { Math.ceil(props.totalPage / props.rowsPerPage) }
       </Typography>
       <Button
         variant="contained"

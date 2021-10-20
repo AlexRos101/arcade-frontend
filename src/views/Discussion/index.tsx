@@ -24,7 +24,7 @@ const Discussion: React.FC = () => {
         setShowLoading(false)
       })
     }
-  })
+  }, [staffIsSet])
 
   return (
     <Page className="styled-search">

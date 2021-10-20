@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-const Category = {
+const CategoryData = {
   '1': 'Category1',
   '2': 'Category2',
   '3': 'Category3',
@@ -90,8 +90,8 @@ const Category = {
 
 const initData: SkinProps = {
   item: '',
-  category: Category['1'],
-  combo: Category['1'],
+  category: CategoryData['1'],
+  combo: CategoryData['1'],
   name: '',
   description: '',
   priceArc: 100,
@@ -171,44 +171,14 @@ const Sell: React.FC<SkinProps> = (data) => {
         }
       })
     }
-  })
-
-  useEffect(() => {
-    const cardHeight = `${sellCardRef?.current?.clientHeight}px`
-    setCardHeight(cardHeight)
-
-    if (initialized) return
-    setInitialized(true)
-
-    getRate()
-
-    const getGamesAndCategories = async () => {
-      setShowLoading(true)
-      let response = await API.getGames()
-      if (response.result) {
-        setGames(response.data)
-      } else {
-        setShowLoading(false)
-        return
-      }
-
-      response = await API.getCategories()
-      if (response.result) {
-        setCategories(response.data)
-      }
-
-      setShowLoading(false)
-    }
-
-    getGamesAndCategories()
-  }, [])
+  }, [paramIsSet, itemTokenId])
 
   const handleSelectGame = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       const value = event.target.value as number
       setSelectedGameID(value)
     },
-    [selectedGameID],
+    [setSelectedGameID],
   )
 
   const handleSelectCategory = useCallback(
@@ -216,49 +186,46 @@ const Sell: React.FC<SkinProps> = (data) => {
       const value = event.target.value as number
       setSelectedCategoryID(value)
     },
-    [selectedCategoryID],
+    [setSelectedCategoryID],
   )
 
-  const uploadMaterial = useCallback(
-    async (files: Array<File>) => {
-      setShowThumbnailWarning(false)
-      const file = files[0]
-      if (
-        file.name.slice(file.name.length - 4, file.name.length) !== '.rar' &&
-        file.name.slice(file.name.length - 4, file.name.length) !== '.zip'
-      ) {
-        alert(JSON.stringify(file))
-        Swal('Please select *.rar or *.zip file.')
-        return
-      }
+  const uploadMaterial = async (files: Array<File>) => {
+    setShowThumbnailWarning(false)
+    const file = files[0]
+    if (
+      file.name.slice(file.name.length - 4, file.name.length) !== '.rar' &&
+      file.name.slice(file.name.length - 4, file.name.length) !== '.zip'
+    ) {
+      alert(JSON.stringify(file))
+      Swal('Please select *.rar or *.zip file.')
+      return
+    }
 
-      const tokenTemp = Date.now()
+    const tokenTemp = Date.now()
 
-      setIsUploading(true)
+    setIsUploading(true)
 
-      const formData = new FormData()
-      // Update the formData object
-      formData.append('myFile', file, tokenTemp + file.name.slice(file.name.length - 4, file.name.length))
+    const formData = new FormData()
+    // Update the formData object
+    formData.append('myFile', file, tokenTemp + file.name.slice(file.name.length - 4, file.name.length))
 
-      // Request made to the backend api
-      // Send formData object
-      axios
-        .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
-        .then((res) => {
-          setIsUploading(false)
-          if (res.data.code === -1) {
-            setShowThumbnailWarning(true)
-            return
-          }
-          setTokenID(tokenTemp)
-        })
-        .catch((err) => {
-          setIsUploading(false)
-          console.log(err)
-        })
-    },
-    [isLoading, showThumbnailWarning, tokenID],
-  )
+    // Request made to the backend api
+    // Send formData object
+    axios
+      .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
+      .then((res) => {
+        setIsUploading(false)
+        if (res.data.code === -1) {
+          setShowThumbnailWarning(true)
+          return
+        }
+        setTokenID(tokenTemp)
+      })
+      .catch((err) => {
+        setIsUploading(false)
+        console.log(err)
+      })
+  }
 
   const isNumeric = useCallback((str: string) => {
     if (typeof str !== 'string') return false
@@ -330,7 +297,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setIsLoading(false)
       })
-  }, [isLoading, tokenID, selectedGameID, anonymous, price, selectedCategoryID, description])
+  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal])
 
   const UpdateItem = useCallback(() => {
     setShowLoading(true)
@@ -351,7 +318,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         setShowLoading(false)
       }
     })
-  }, [itemId, selectedGameID, selectedCategoryID, description, name, anonymous, price])
+  }, [itemId, selectedGameID, selectedCategoryID, description, name, anonymous, price, history])
 
   const getRate = useCallback(async () => {
     const provider = await Wallet.getCurrentProvider()
@@ -372,9 +339,39 @@ const Sell: React.FC<SkinProps> = (data) => {
       })
   }, [])
 
-  const onHandleResetFile = useCallback(() => {
+  const onHandleResetFile = () => {
     setTokenID(0)
-  }, [tokenID])
+  }
+
+  useEffect(() => {
+    const cardHeight = `${sellCardRef?.current?.clientHeight}px`
+    setCardHeight(cardHeight)
+
+    if (initialized) return
+    setInitialized(true)
+
+    getRate()
+
+    const getGamesAndCategories = async () => {
+      setShowLoading(true)
+      let response = await API.getGames()
+      if (response.result) {
+        setGames(response.data)
+      } else {
+        setShowLoading(false)
+        return
+      }
+
+      response = await API.getCategories()
+      if (response.result) {
+        setCategories(response.data)
+      }
+
+      setShowLoading(false)
+    }
+
+    getGamesAndCategories()
+  }, [getRate, initialized])
 
   return (
     <Page>
@@ -422,6 +419,8 @@ const Sell: React.FC<SkinProps> = (data) => {
                           </MenuItem>
                         )
                       }
+
+                      return ''
                     })}
                   </Select>
                 </LabelComponent>
@@ -520,7 +519,7 @@ const Sell: React.FC<SkinProps> = (data) => {
             </ItemDropdown>
           ) : (
             <Relative>
-              <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img" />
+              <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img" alt=""/>
               {paramIsSet === false ? <HoverButton onClick={onHandleResetFile}>Reset File</HoverButton> : ''}
             </Relative>
           )}

@@ -30,7 +30,7 @@ const DiscussionStaff: React.FC = () => {
         setShowLoading(false)
       })
     }
-  })
+  }, [staffIsSet, staffId])
   return (
     <Page className="styled-search">
       <Header>

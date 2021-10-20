@@ -10,7 +10,6 @@ import CloseIcon from '@material-ui/icons/Close'
 import { Typography, Button, Hidden } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
-import { connect } from 'global/wallet'
 import * as WalletUtils from '../../global/wallet'
 import * as CONST from 'global/const'
 
@@ -27,7 +26,12 @@ interface Props {
 const ConnectWalletModal: React.FC<Props> = (props) => {
   const [account, setAccount] = useGlobalState('account')
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  
+  /* eslint-disable */
+
   const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+
+  /* eslint-enable */
 
   const onConnectWalletHandler = async () => {
     setShowConnectWalletModal(false)

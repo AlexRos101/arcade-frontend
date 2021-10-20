@@ -33,7 +33,12 @@ const DiscussionSearch = lazy(() => import('./views/Discussion/discussionSearch'
 const DiscussionAdd = lazy(() => import('./views/Discussion/discussionAdd'))
 
 const App: React.FunctionComponent = () => {
+  /* eslint-disable */
+
   const [dscIsSet, setDscIsSet] = useGlobalState('dscUpdate')
+
+  /* eslint-enable */
+
   setDscIsSet(false)
   
   return (

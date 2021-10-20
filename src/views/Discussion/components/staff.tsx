@@ -71,18 +71,18 @@ const Staff: React.FC<Props> = (props) => {
         })
       }
     }
-  })
+  }, [dscIsSet, staff.discussions, staff.id, pageNum])
 
   const onAddNewThread = useCallback(() => {
     history.push(`/discussion/new/${staff.id}`)
-  }, [])
+  }, [history, staff.id])
 
   const onPageChanged = useCallback(
     (pageNum: number) => {
       setPageNum(pageNum)
       setDscIsSet(false)
     },
-    [pageNum, dscIsSet],
+    [],
   )
 
   return (
@@ -92,7 +92,7 @@ const Staff: React.FC<Props> = (props) => {
           <Grid item>
             <Grid container alignItems="center" spacing={1}>
               <Grid item>
-                <img src={AvatarIcon} width="34px" height="34px" />
+                <img src={AvatarIcon} width="34px" height="34px" alt=""/>
               </Grid>
               <Grid item>
                 <Typography variant="h3" style={{ color: '#FF6C50' }}>

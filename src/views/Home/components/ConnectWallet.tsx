@@ -4,7 +4,6 @@ import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
 import { useGlobalState } from 'state-pool'
-import { connect } from 'global/wallet'
 import * as WalletUtils from '../../../global/wallet'
 import * as CONST from 'global/const'
 
@@ -12,7 +11,12 @@ import { Typography, Button, Hidden } from '@material-ui/core'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
   const [account, setAccount] = useGlobalState('account')
+
+  /* eslint-disable */
+
   const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+
+  /* eslint-enable */
 
   const onConnectWalletHandler = async () => {
     // connect()

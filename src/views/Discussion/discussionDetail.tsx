@@ -41,7 +41,6 @@ const DiscussionDetail: React.FC = () => {
     is_hot: false,
   })
   const [dscIsSet, setDscIsSet] = useState(false)
-  const [dscUpdate, setDscUpdate] = useGlobalState('dscUpdate')
   const [comments, setComments] = useState<Comment[]>([])
   const { staffId, discussionId } = useParams<ParamTypes>()
   const [showAddComments, setShowAddComments] = useState(false)
@@ -59,27 +58,27 @@ const DiscussionDetail: React.FC = () => {
         setStaff(data)
       })
     }
-  })
+  }, [staffIsSet, staffId])
 
   const appendComment = (cmts: Comment[], comment: Comment, parent: number, isAdded: boolean) => {
-    if (isAdded == true) return cmts
+    if (isAdded === true) return cmts
 
     let i = 0
     for (i = 0; i < cmts.length ; i ++) {
       if (cmts[i].id === parent) {
         const replys = cmts[i].reply
-        if (replys == undefined) {
+        if (replys === undefined) {
           cmts[i].reply = []
         } else {
           let isExist = false
           for (let j = 0; j < replys.length; j ++) {
-            if (replys[j].id == comment.id) {
+            if (replys[j].id === comment.id) {
               isExist = true
               break
             }
           }
 
-          if (isExist == true) break
+          if (isExist === true) break
         }
         cmts[i].reply?.push(comment)
         isAdded = true
@@ -87,13 +86,13 @@ const DiscussionDetail: React.FC = () => {
       }
     }
 
-    if (i != cmts.length) return cmts
+    if (i !== cmts.length) return cmts
 
     for (i = 0; i < cmts.length; i ++) {
-      if (isAdded == true) break;
+      if (isAdded === true) break;
 
       const replys = cmts[i].reply
-      if (replys != undefined) {
+      if (replys !== undefined) {
         cmts[i].reply = appendComment(replys, comment, parent, isAdded)  
       }
     }
@@ -109,7 +108,6 @@ const DiscussionDetail: React.FC = () => {
   }
 
   const refresh = () => {
-    // setDscUpdate(false)
     getDiscussion(Number(discussionId), account, page, 4).then((res) => {
       const { data } = res
       setDiscussion(data)
@@ -171,7 +169,7 @@ const DiscussionDetail: React.FC = () => {
         setCommentState(0)
       }
     }
-  })
+  }, [commentState, commentOn, setCommentState])
 
   useEffect(() => {
     if (loader.current) observer.observe(loader.current)
@@ -184,7 +182,7 @@ const DiscussionDetail: React.FC = () => {
         setDscIsSet(false)
       }
     },
-    [page, setPage, total],
+    [],
   )
 
   const [observer] = useState<IntersectionObserver>(new IntersectionObserver(handleObserver, option))
@@ -193,7 +191,7 @@ const DiscussionDetail: React.FC = () => {
     setCommentState(2)
     setShowAddComments(true)
     setCommentOn(true)
-  }, [commentOn, showAddComments, commentState])
+  }, [setCommentState])
 
   return (
     <Page className="styled-search">

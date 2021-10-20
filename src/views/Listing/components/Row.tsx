@@ -60,7 +60,7 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
     //   }
     // })
     toggleClicked(index)
-  }, [])
+  }, [index, toggleClicked])
 
   const handleClickMenu = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -72,11 +72,11 @@ const Row: React.FC<Props> = ({ data, index, toggleClicked, burnToken, rate }) =
 
   const handleEditMenu = useCallback(() => {
     history.push(`/item/edit/${row.token_id}`)
-  }, [])
+  }, [history, row])
 
   const handleBurn = useCallback(() => {
     burnToken(index)
-  }, [])
+  }, [burnToken, index])
 
   return (
     <>

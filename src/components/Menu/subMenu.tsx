@@ -15,7 +15,12 @@ interface Props {
 }
 
 const SubMenu: React.FC<Props> = (props) => {
+
+  /* eslint-disable */
+
   const [hiddenMenu, setHiddenMenu] = useGlobalState('hiddenMenu')
+
+  /* eslint-enable */
 
   const onClickMenu = () => {
     setHiddenMenu('hidden-menu')

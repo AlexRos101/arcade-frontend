@@ -48,7 +48,12 @@ const AddReply: React.FC<Props> = (props) => {
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
+
+  /* eslint-disable */
+
   const [commentState, setCommentState] = useGlobalState('commentState')
+
+  /* eslint-enable */
 
   const onSwitchAnonymous = useCallback(() => {
     setAnonymous(!anonymous)
@@ -85,7 +90,7 @@ const AddReply: React.FC<Props> = (props) => {
       props.onReset(commentData)
       //document.location.reload()
     })
-  }, [props, anonymous, content, user, commentState])
+  }, [props, anonymous, content, user, setCommentState])
 
   if (props.visible === false) return <div />
 

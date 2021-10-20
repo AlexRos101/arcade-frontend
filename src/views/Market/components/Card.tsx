@@ -28,7 +28,7 @@ const Card: React.FC<Props> = (Props) => {
       onMouseDown={() => setMouseMoved(false)}
       onMouseUp={handleClick}
     >
-      <img className="card-img" src={`${process.env.REACT_APP_THUMBNAIL_NODE}${Props.tokenId}.png`} />
+      <img className="card-img" src={`${process.env.REACT_APP_THUMBNAIL_NODE}${Props.tokenId}.png`} alt=""/>
       <div className="card-label">
         <div className="card-price flex-row frame-vc">
           <p>{Props.name}</p>

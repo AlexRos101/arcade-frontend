@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useGlobalState } from 'state-pool'
 
@@ -22,13 +22,13 @@ const Home: React.FC = () => {
   const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [showConnectWallet, setShowConnectWallet] = useState(false)
 
-  const onClickArcadeMarket = useCallback(() => {
+  const onClickArcadeMarket = () => {
     history.push('/market')
-  }, [])
+  }
 
-  const onClickBuyArcadeDoge = useCallback(() => {
+  const onClickBuyArcadeDoge = () => {
     window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-  }, [])
+  }
 
   const init = async () => {
     if (await WalletUtils.isConnected()) {
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
   return (
     <Page className="no-width-limit">
       <div className="iframe-template">
-        <iframe />
+        <iframe title="Game Frame"/>
         <div className="rect rect-1" />
         <div className="rect rect-2" />
         <div className="rect rect-3" />

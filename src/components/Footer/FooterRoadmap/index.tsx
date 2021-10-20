@@ -1,6 +1,5 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo } from 'react'
 import { useGlobalState } from 'state-pool'
-import * as Wallet from 'global/wallet'
 import { Grid, Typography } from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
@@ -74,7 +73,7 @@ const FooterRoadmap = () => {
             <Link href="/sell">
               <RoadmapEntry title="Sell Customized Item" />
             </Link>
-            { account != '' && 
+            { account !== '' && 
               (<Link href="/listing">
                 <RoadmapEntry title="View Your Listings" />
               </Link>)
