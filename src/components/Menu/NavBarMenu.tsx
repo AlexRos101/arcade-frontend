@@ -6,8 +6,8 @@ import { useGlobalState } from 'state-pool'
 import * as WalletUtils from '../../global/wallet'
 import * as CONST from '../../global/const'
 
-import MenuItem from './menuItem'
-import SubMenu from './subMenu'
+import MenuItem from './MenuItem'
+import SubMenu from './SubMenu'
 
 import { makeStyles } from '@material-ui/core'
 import { ReactComponent as Astronaut } from 'assets/img/astronaut.svg'

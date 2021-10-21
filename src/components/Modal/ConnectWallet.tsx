@@ -26,12 +26,7 @@ interface Props {
 const ConnectWalletModal: React.FC<Props> = (props) => {
   const [account, setAccount] = useGlobalState('account')
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-  
-  /* eslint-disable */
-
-  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
-
-  /* eslint-enable */
+  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const onConnectWalletHandler = async () => {
     setShowConnectWalletModal(false)

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
 import { ReactComponent as Cloud } from 'assets/img/cloud.svg'
-import Uploading from 'components/uploading'
+import Uploading from 'components/Uploading'
 
 const DropContainer = styled.div<{
   width?: string

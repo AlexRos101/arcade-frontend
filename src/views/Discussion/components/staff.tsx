@@ -4,8 +4,8 @@ import { Button, Grid, ThemeProvider, Typography } from '@material-ui/core'
 
 import AvatarIcon from 'assets/img/avatar.svg'
 import Card from 'components/Card'
-import DiscussItem from './discussItem'
-import DetailLink from './detailLink'
+import DiscussItem from './DiscussItem'
+import DetailLink from './DetailLink'
 import { getAllDiscussion } from 'hooks/api'
 
 import Pagination from 'components/Pagination/Pagination'

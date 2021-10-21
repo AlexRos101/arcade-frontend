@@ -13,13 +13,9 @@ interface Props {
 
 const WalletItem: React.FC<Props> = (props) => {
 
-  /* eslint-disable */
-
-  const [account, setAccount] = useGlobalState('account')
-  const [connectedWalletType, setConnectedWalletType] = useGlobalState('connectedWalletType')
-  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
-
-  /* eslint-enable */
+  const [, setAccount] = useGlobalState('account')
+  const [, setConnectedWalletType] = useGlobalState('connectedWalletType')
+  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const initAddress = useCallback(async () => {
     const address = await WalletUtils.getCurrentWallet()

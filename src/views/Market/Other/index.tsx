@@ -142,13 +142,8 @@ const skinCards = [
 
 const MarketOther: React.FC = () => {
   const maplevel = 0
-
-  /* eslint-disable */
-
-  const [open, setOpen] = React.useState(false)
-  const [selectedCard, setSelectedCard] = React.useState({ color: '', tokenId: '', price: 0 })
-
-  /* eslint-enable */
+  const [, setOpen] = React.useState(false)
+  const [, setSelectedCard] = React.useState({ color: '', tokenId: '', price: 0 })
 
   const handleOpenCard = (index: number) => {
     setOpen(true)

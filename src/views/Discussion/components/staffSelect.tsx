@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import StaffSelectItem from './staffSelectItem'
+import StaffSelectItem from './StaffSelectItem'
 import { OutlinedCard } from 'components/Card'
 
 import { Stuff, Discussion } from 'global/interface'

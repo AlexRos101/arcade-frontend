@@ -30,13 +30,8 @@ interface Props {
 
 const BuyModal: React.FC<Props> = (props) => {
   const [account] = useGlobalState('account')
-
-  /* eslint-disable */
-  
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-
-  /* eslint-enable */
+  const [, setIsLoading] = useGlobalState('isLoading')
+  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')

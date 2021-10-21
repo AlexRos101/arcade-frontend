@@ -34,12 +34,7 @@ const useStyles = makeStyles(() => ({
 const Menu = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
-
-  /* eslint-disable */
-
-  const [account, setAccount] = useGlobalState('account')
-
-  /* eslint-enable */
+  const [, setAccount] = useGlobalState('account')
 
   const onConnectWalletHandler = async () => {
     await connect()

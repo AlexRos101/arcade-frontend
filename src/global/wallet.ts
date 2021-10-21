@@ -46,7 +46,7 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
     } else {
       const accounts = await window.ethereum.send('eth_requestAccounts')
       if (accounts.result.length > 0) {
-        if ((await getCurrentChainId()) != process.env.REACT_APP_CHAIN_ID) {
+        if ((await getCurrentChainId()) !== process.env.REACT_APP_CHAIN_ID) {
           const web3: any = new Web3(Web3.givenProvider)
           try {
             await web3.currentProvider.request({
@@ -56,7 +56,7 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
             ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
             ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK)
           } catch (error) {
-            if ((error as any).code == 4902) {
+            if ((error as any).code === 4902) {
               try {
                 await web3.currentProvider.request({
                   method: 'wallet_addEthereumChain',

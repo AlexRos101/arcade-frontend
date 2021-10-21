@@ -1,6 +1,6 @@
 import React from 'react'
 import 'assets/css/loading.css'
-import mainLoading from '../assets/lotties/main-loading.json'
+import MainLoadingAnim from '../assets/lotties/main-loading.json'
 import Lottie from 'react-lottie-player'
 
 interface Props {
@@ -12,7 +12,7 @@ const MainLoading: React.FC<Props> = (props) => {
     return (
       <div id="loader-absolute-wrapper">
         <div id="loader-lotties">
-          <Lottie loop animationData={mainLoading} play style={{ width: 150, height: 150 }} />
+          <Lottie loop animationData={MainLoadingAnim} play style={{ width: 150, height: 150 }} />
         </div>
       </div>
     )

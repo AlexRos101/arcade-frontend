@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Card from 'components/Card'
-import CommentContent from './commentContent'
-import ReplyItem from './replyItem'
+import CommentContent from './CommentContent'
+import ReplyItem from './ReplyItem'
 
 import { Comment } from 'global/interface'
 

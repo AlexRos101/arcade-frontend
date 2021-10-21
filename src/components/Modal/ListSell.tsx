@@ -15,7 +15,7 @@ import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
-import MainLoading from 'components/mainLoading'
+import MainLoading from 'components/MainLoading'
 
 const DialogContent = withStyles((theme) => ({
   root: {

@@ -3,8 +3,8 @@ import { Grid, Typography } from '@material-ui/core'
 
 import AvatarIcon from 'assets/img/avatar.svg'
 import Card from 'components/Card'
-import DetailLink from './detailLink'
-import AddDiscussionForm from './addDiscussion'
+import DetailLink from './DetailLink'
+import AddDiscussionForm from './AddDiscussion'
 
 import { Stuff } from 'global/interface'
 

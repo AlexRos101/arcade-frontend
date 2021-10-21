@@ -35,7 +35,7 @@ import ERC721 from '../../contracts/ERC721.json'
 import EXCHANGE from '../../contracts/EXCHANGE.json'
 
 import { Response, GameItem } from 'global/interface'
-import MainLoading from 'components/mainLoading'
+import MainLoading from 'components/MainLoading'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -137,19 +137,14 @@ const Sell: React.FC<SkinProps> = (data) => {
   const [itemId, setItemId] = useState(-1)
   const [showLoading, setShowLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
-
-  /* eslint-disable */
-
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-
-  /* eslint-enable */
+  const [, setIsLoading] = useGlobalState('isLoading')
+  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const history = useHistory()
 
-  const onSwitchAnonymous = useCallback(() => {
+  const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
-  }, [anonymous])
+  }
 
   const { itemTokenId } = useParams<ParamTypes>()
 

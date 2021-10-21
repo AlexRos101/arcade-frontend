@@ -12,11 +12,7 @@ interface Props {
 }
 
 const SelectWalletModal: React.FC<Props> = (props) => {
-  /* eslint-disable */
-
-  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
-
-  /* eslint-enable */
+  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   if (props.open === true) {
     return (

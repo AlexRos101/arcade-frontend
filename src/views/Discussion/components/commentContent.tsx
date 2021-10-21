@@ -14,9 +14,9 @@ import * as Wallet from 'global/wallet'
 import { setLikes, getComment } from 'hooks/api'
 import { useGlobalState } from 'state-pool'
 import { Comment } from 'global/interface'
-import Badge from 'components/badge'
+import Badge from 'components/Badge'
 
-import AddReply from './addReply'
+import AddReply from './AddReply'
 
 interface Props {
   comment: Comment
@@ -34,11 +34,7 @@ const CommentContent: React.FC<Props> = (props) => {
   const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
 
-  /* eslint-disable */
-
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-
-  /* eslint-enable */
+  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   useEffect(() => {
     if (commentState === 2) {

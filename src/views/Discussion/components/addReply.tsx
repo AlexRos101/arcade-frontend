@@ -48,16 +48,12 @@ const AddReply: React.FC<Props> = (props) => {
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
+  const [, setCommentState] = useGlobalState('commentState')
 
-  /* eslint-disable */
 
-  const [commentState, setCommentState] = useGlobalState('commentState')
-
-  /* eslint-enable */
-
-  const onSwitchAnonymous = useCallback(() => {
+  const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
-  }, [anonymous])
+  }
 
   const getCurrentTime = () => {
     const today = new Date()

@@ -27,17 +27,13 @@ const MarketOther = lazy(() => import('views/Market/Other'))
 const Listing = lazy(() => import('./views/Listing'))
 const Sell = lazy(() => import('./views/Sell'))
 const Discussion = lazy(() => import('./views/Discussion'))
-const DiscussionStaff = lazy(() => import('./views/Discussion/discussionStaff'))
-const DiscussionDetail = lazy(() => import('./views/Discussion/discussionDetail'))
-const DiscussionSearch = lazy(() => import('./views/Discussion/discussionSearch'))
-const DiscussionAdd = lazy(() => import('./views/Discussion/discussionAdd'))
+const DiscussionStaff = lazy(() => import('./views/Discussion/DiscussionStaff'))
+const DiscussionDetail = lazy(() => import('./views/Discussion/DiscussionDetail'))
+const DiscussionSearch = lazy(() => import('./views/Discussion/DiscussionSearch'))
+const DiscussionAdd = lazy(() => import('./views/Discussion/DiscussionAdd'))
 
 const App: React.FunctionComponent = () => {
-  /* eslint-disable */
-
-  const [dscIsSet, setDscIsSet] = useGlobalState('dscUpdate')
-
-  /* eslint-enable */
+  const [, setDscIsSet] = useGlobalState('dscUpdate')
 
   setDscIsSet(false)
   

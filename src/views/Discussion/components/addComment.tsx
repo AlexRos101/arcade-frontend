@@ -49,16 +49,11 @@ const AddComment: React.FC<Props> = (props) => {
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
+  const [, setCommentState] = useGlobalState('commentState')
 
-  /* eslint-disable */
-
-  const [commentState, setCommentState] = useGlobalState('commentState')
-
-  /* eslint-enable */
-
-  const onSwitchAnonymous = useCallback(() => {
+  const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
-  }, [anonymous])
+  }
 
   const onAddComment = useCallback(() => {
     addNewComment(Number(props.discussion.id), -1, content, anonymous === false ? 0 : 1, user).then(() => {

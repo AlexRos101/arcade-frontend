@@ -6,8 +6,8 @@ import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 
-import NewDiscussion from './components/newDiscussion'
-import AddNote from './components/addNote'
+import NewDiscussion from './components/NewDiscussion'
+import AddNote from './components/AddNote'
 import { getStuff } from 'hooks/api'
 
 import { Stuff } from 'global/interface'

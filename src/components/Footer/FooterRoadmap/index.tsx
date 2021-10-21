@@ -36,13 +36,8 @@ const useStyles = makeStyles((theme) => ({
 const FooterRoadmap = () => {
   const classes = useStyles()
   const [account] = useGlobalState('account')
-
-  /* eslint-disable */
-
-  const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
-  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
-
-  /* eslint-enable */
+  const [, setOpenTerm] = useGlobalState('openTermOfUse')
+  const [, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
 
   const onClickTermOfUse = () => {
     setOpenTerm(true)

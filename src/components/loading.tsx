@@ -1,7 +1,7 @@
 import React from 'react'
 import 'assets/css/loading.css'
 import { store, useGlobalState } from 'state-pool'
-import MainLoading from 'components/mainLoading'
+import MainLoading from 'components/MainLoading'
 
 store.setState('isLoading', false)
 

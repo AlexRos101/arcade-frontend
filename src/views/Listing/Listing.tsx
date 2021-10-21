@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import MainLoading from 'components/mainLoading'
+import MainLoading from 'components/MainLoading'
 import Paper from '@material-ui/core/Paper'
 import { useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
@@ -50,15 +50,9 @@ const Listing: React.FC = () => {
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
   const [showLoading, setShowLoading] = useState(false)
-
-  /* eslint-disable */
-
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-  const [isLoading, setIsLoading] = useGlobalState('isLoading')
-  const [page, setPage] = useState(0)
-
-  /* eslint-enable */
-
+  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const [, setIsLoading] = useGlobalState('isLoading')
+  const [, setPage] = useState(0)
   const [rate, setRate] = useState(new BigNumber(0))
 
   const getMyItems = useCallback(
@@ -68,7 +62,7 @@ const Listing: React.FC = () => {
         return
       }
       setShowLoading(true)
-
+      console.log('asdf')
       // setRows([])
       const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
       setCount(Number(items.total))
@@ -161,9 +155,13 @@ const Listing: React.FC = () => {
     getRate()
   }, [getMyItems, getRate, setShowConnectWalletModal])
 
+  /* eslint-disable */
+
   useEffect(() => {
     init()
-  }, [init])
+  }, [])
+
+  /* eslint-enable */
 
   return (
     <Page>

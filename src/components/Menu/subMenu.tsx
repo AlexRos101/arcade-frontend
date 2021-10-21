@@ -1,7 +1,7 @@
 import React from 'react'
 import { useGlobalState } from 'state-pool'
 import { ReactComponent as Arrow } from 'assets/img/arrow.svg'
-import Badge from '../badge'
+import Badge from '../Badge'
 
 interface DropMenuItem {
   content: string
@@ -16,11 +16,7 @@ interface Props {
 
 const SubMenu: React.FC<Props> = (props) => {
 
-  /* eslint-disable */
-
-  const [hiddenMenu, setHiddenMenu] = useGlobalState('hiddenMenu')
-
-  /* eslint-enable */
+  const [, setHiddenMenu] = useGlobalState('hiddenMenu')
 
   const onClickMenu = () => {
     setHiddenMenu('hidden-menu')

@@ -12,7 +12,7 @@ import Header from 'components/Layout/Header'
 import HeaderLabel from 'components/Label/HeaderLabel'
 import RowLabel from 'components/Label/RowLabel'
 import TabRow from '../components/TabRow'
-import MainLoading from '../../../components/mainLoading'
+import MainLoading from '../../../components/MainLoading'
 import RedPagination from 'components/Pagination/RedPagination'
 
 import { GameItem, CategoryTab } from 'global/interface'

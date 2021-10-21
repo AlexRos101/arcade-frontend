@@ -11,12 +11,7 @@ import { Typography, Button, Hidden } from '@material-ui/core'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
   const [account, setAccount] = useGlobalState('account')
-
-  /* eslint-disable */
-
-  const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
-
-  /* eslint-enable */
+  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const onConnectWalletHandler = async () => {
     // connect()

@@ -16,7 +16,7 @@ import RowLabel from 'components/Label/RowLabel'
 import ExpandButton from 'components/Button/ExpandButton'
 import TabRow from './components/TabRow'
 import { GameItem } from 'global/interface'
-import MainLoading from 'components/mainLoading'
+import MainLoading from 'components/MainLoading'
 
 import OrderApprovalModal from 'components/Modal/OrderApproval'
 import * as API from '../../hooks/api'

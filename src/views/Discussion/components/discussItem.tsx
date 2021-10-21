@@ -9,7 +9,7 @@ import ChartIcon from 'assets/img/bxs-chart.svg'
 import IconLabel from 'components/Label/IconLabel'
 import DisucssionLabel from 'components/Label/DiscussionLabel'
 import ReactTimeAgo from 'react-time-ago'
-import Badge from 'components/badge'
+import Badge from 'components/Badge'
 
 import { Discussion } from 'global/interface'
 

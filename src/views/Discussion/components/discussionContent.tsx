@@ -9,7 +9,7 @@ import IconLabel from 'components/Label/IconLabel'
 import { useGlobalState } from 'state-pool'
 import { setLikes, getLikes, getDiscussion } from 'hooks/api'
 import ReactTimeAgo from 'react-time-ago'
-import Badge from 'components/badge'
+import Badge from 'components/Badge'
 
 import { Discussion } from 'global/interface'
 
@@ -22,12 +22,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
   const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
   const [dscIsSet, setDscIsSet] = useState(0)
-
-  /* eslint-disable */
-
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-
-  /* eslint-enable */
+  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   useEffect(() => {
     if (isLike !== 0) return

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import CommentContent from './commentContent'
+import CommentContent from './CommentContent'
 
 import { Comment } from 'global/interface'
 

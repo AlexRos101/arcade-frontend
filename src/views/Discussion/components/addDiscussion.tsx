@@ -48,9 +48,9 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
   const [user, setUser] = useState('')
   const [tag, setTag] = useState('')
 
-  const onSwitchAnonymous = useCallback(() => {
+  const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
-  }, [anonymous])
+  }
 
   const onAddDiscussion = useCallback(() => {
     addNewDiscussion(Number(props.stuff.id), content, anonymous === false ? 0 : 1, user).then(() => {
