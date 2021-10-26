@@ -9,7 +9,7 @@ import theme from './styles/theme'
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
-import { InitializeGlobalVar } from 'global/gloalVar'
+import { initializeGlobalVar } from 'global/gloalVar'
 import { useGlobalState } from 'state-pool'
 import ConnectWalletModal from 'components/Modal/ConnectWallet'
 import * as CONST from './global/const'
@@ -18,7 +18,7 @@ store.setState('account', '')
 store.setState('showConnectWalletModal', false)
 store.setState('openConnectWalletMenu', false)
 store.setState('connectedWalletType', CONST.WALLET_TYPE.NONE)
-InitializeGlobalVar()
+initializeGlobalVar()
 
 const Home = lazy(() => import('./views/Home'))
 const Market = lazy(() => import('./views/Market'))

@@ -227,7 +227,7 @@ const Sell: React.FC<SkinProps> = (data) => {
     return !isNaN(parseFloat(str))
   }, [])
 
-  const MintToken = useCallback(async () => {
+  const mintToken = useCallback(async () => {
     if (tokenID === 0) {
       Swal('Please upload item file!')
       return
@@ -294,7 +294,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       })
   }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal])
 
-  const UpdateItem = useCallback(() => {
+  const updateItem = useCallback(() => {
     setShowLoading(true)
     API.updateItemByID(
       itemId,
@@ -496,7 +496,7 @@ const Sell: React.FC<SkinProps> = (data) => {
                       variant="contained"
                       color="primary"
                       className="wd-100"
-                      onClick={paramIsSet === false ? MintToken : UpdateItem}
+                      onClick={paramIsSet === false ? mintToken : updateItem}
                     >
                       {paramIsSet === false ? 'Save and Publish' : 'Update Item'}
                     </Button>

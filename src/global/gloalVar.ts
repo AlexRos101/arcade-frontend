@@ -1,7 +1,7 @@
 import { store } from 'state-pool'
 import * as CONST from '../global/const'
 
-export const InitializeGlobalVar = (): void => {
+export const initializeGlobalVar = (): void => {
   store.setState('account', '')
   store.setState('commentState', 0)
   store.setState('openDiscussionRule', false)
