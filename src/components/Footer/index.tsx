@@ -9,12 +9,14 @@ import FooterRoadmap from './FooterRoadmap'
 import FooterFollowUs from './FooterFollowUs'
 import TermOfUse from 'components/Modal/TermOfUse'
 import PrivacyPolicy from 'components/Modal/PrivacyPolicy'
+import PointSwap from 'components/Modal/PointSwap'
 import { useCommonStyles } from '../../styles/use-styles'
 
 import { store, useGlobalState } from 'state-pool'
 
 store.setState('openTermOfUse', false)
 store.setState('openPrivacyPolicy', false)
+store.setState('openPointSwap', false)
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +48,7 @@ const Footer = () => {
 
   const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
   const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
+  const [openPointSwap, setOpenPointSwap] = useGlobalState('openPointSwap')
 
   const handleClose = useCallback(() => {
     setOpenTerm(false)
@@ -54,6 +57,10 @@ const Footer = () => {
   const handleClosePrivacy = useCallback(() => {
     setOpenPrivacyPolicy(false)
   }, [setOpenPrivacyPolicy])
+
+  const handleClosePointSwap = useCallback(() => {
+    setOpenPointSwap(false)
+  }, [setOpenPointSwap])
 
   return (
     <AppBar position="static" className={classes.root} id="footer">
@@ -70,6 +77,7 @@ const Footer = () => {
       </Grid>
       <TermOfUse onClose={handleClose} open={openTerm} />
       <PrivacyPolicy onClose={handleClosePrivacy} open={openPrivacyPolicy} />
+      <PointSwap onClose={handleClosePointSwap} open={openPointSwap} />
     </AppBar>
   )
 }

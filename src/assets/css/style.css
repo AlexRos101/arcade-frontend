@@ -154,9 +154,6 @@ a {
     border: 1px solid #EAE5CE;
   }
   
-  
-  
-  
   .btn-image {
     height: 40px;
   }
@@ -180,6 +177,10 @@ a {
   
   .mr-15 {
     margin-right: 15px;
+  }
+
+  .mr-35 {
+    margin-right: 35px;
   }
 
   .mr-5 {
@@ -494,6 +495,7 @@ a {
     padding-top: 0px !important;
   }
 
+
   .mt-5 {
     margin-top: 3vh;
   }
@@ -560,9 +562,15 @@ a {
   }
 
 
-  .mh-auto {
-    margin-top: auto;
-    margin-bottom: auto;
+
+  .mh-0 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .mh-10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .mw-auto {
@@ -935,10 +943,8 @@ a {
     right: 2vh;
     top: 2vh;
     color: #CAC197 !important;
-    width: 26px;
-    height: 26px;
-    border: solid 1px #CAC197 !important;
-    border-radius: 15px !important;
+    width: 16px;
+    height: 16px;
     padding:0 !important;
   }
   
@@ -1391,6 +1397,102 @@ a {
      margin-right: 0;
   }
 
+  .switch-label {
+    border: solid 1px #7E5504;
+    border-radius: 15px;
+
+    padding: 4px;
+    max-height: 17px;
+    width: fit-content !important;
+  }
+
+  .underline {
+    border-bottom: solid 1px #DBDBDB;
+  }
+
+  .upperline {
+    border-top: solid 1px #DBDBDB;
+  }
+
+  .swap-modal-title {
+    padding: 0 !important;
+    margin-left: 3vw !important;
+    margin-right: 3vw !important;
+    padding-top: 3vw !important;
+    padding-bottom: 1vw !important;
+  }
+
+  .swap-modal-content {
+    padding: 0 !important;
+    margin-left: 3vw !important;
+    margin-right: 3vw !important;
+    padding-top: 1.5vh !important;
+    padding-bottom: 1.5vh !important;
+    min-width: 500px;
+  }
+
+  .swap-label {
+    color: #7E5504;
+    font-size: 14px;
+  }
+
+  .swap-label p {
+    margin-top: auto;
+  }
+
+  .ml-0 {
+    margin-left: 0px !important;
+  }
+
+  .ml-auto {
+    margin-left: auto !important;
+  }
+
+  .swap-input input{
+    font-size: 14px;
+  }
+
+  .swap-footer-label {
+    color: #A6A6A6;
+    font-size: 11px;
+  }
+
+  .display-inline {
+    display: inline !important;
+  }
+
+  .pt-20 {
+    padding-top: 20px !important;
+  }
+
+  .custom-input {
+    height: 100%;
+    font-size: 14px;
+    position: relative;
+  }
+
+  .custom-input input{
+    font-family: Montserrat !important; 
+    padding: 9px 9px !important;
+    width: calc(100% - 20px) !important;
+    background: #FDFCF8;
+    border: 1px solid #CAC197;
+    border-radius: 7px;
+  }
+
+  .custom-input .placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 9px !important;
+    width: calc(100% - 20px) !important;
+    color: #B7B091;
+  }
+
+  .custom-input input:focus {
+    outline-color: sandybrown;
+  }
+
 
 /*************************************************************************************/
 /*************************************************************************************/
@@ -1419,6 +1521,7 @@ a {
 
 
   @media screen and (max-width: 1080px) {
+
     .menu-back {
       position: fixed;
       width: 100vw;
@@ -1448,6 +1551,11 @@ a {
       margin-right: auto;
     }
 
+    
+    .ml-auto {
+      margin-left: 0px !important;
+    }
+
     .r-ml-auto {
       margin-left: auto !important;
     }
@@ -1458,6 +1566,18 @@ a {
 
     .r-mt-5 {
       margin-top: 0.5rem;
+    }
+
+    .r-mt-px-10 {
+      margin-top: 10px !important;
+    }
+
+    .r-mt-px-15 {
+      margin-top: 15px !important;
+    }
+
+    .r-mb-px-15 {
+      margin-bottom: 15px !important;
     }
 
     .r-no-display {
@@ -1483,6 +1603,10 @@ a {
 
     .no-display {
       display: block !important;
+    }
+    
+    .mr-35 {
+      margin-right: 0px !important;
     }
 
     .wallet-cage {
@@ -1900,6 +2024,25 @@ a {
     .r-flex-column {
       flex-direction: column !important;
     }
+
+    .swap-modal-title {
+      padding: 0 !important;
+      margin-left: 20px !important;
+      margin-right: 20px !important;
+      padding-top: 20px !important;
+      padding-bottom: 10px !important;
+    }
+
+    .swap-modal-content {
+      padding: 0 !important;
+      margin-left: 20px !important;
+      margin-right: 20px !important;
+      min-width: 0px;
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+    }
+
+
   }
 
   @media screen and (max-width: 550px) {
@@ -2012,6 +2155,8 @@ a {
     .styled-market {
       padding-bottom: calc(24vh + 450px);
     }
+
+
   }
 
   

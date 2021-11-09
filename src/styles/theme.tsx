@@ -22,6 +22,32 @@ export const greenTheme = responsiveFontSizes(
   }),
 )
 
+export const pinkTheme = responsiveFontSizes(
+  createTheme({
+    palette: {
+      primary: {
+        main: '#FB98B4',
+        contrastText: '#FFFCED',
+      },
+      secondary: {
+        main: '#FB98B4',
+        contrastText: '#FFFCED',
+      },
+    },
+    overrides: {
+      MuiButton: {
+        outlined: {
+          boxShadow:
+            '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
+          // '&:hover': {
+          //   backgroundColor: 'rgba(0,0,0,0.1) !important'
+          // }
+        },
+      },
+    },
+  }),
+)
+
 export const marketTheme = responsiveFontSizes(
   createTheme({
     palette: {

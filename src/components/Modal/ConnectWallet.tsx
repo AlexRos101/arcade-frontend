@@ -6,7 +6,7 @@ import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button, Hidden } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'

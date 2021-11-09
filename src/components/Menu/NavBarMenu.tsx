@@ -14,7 +14,7 @@ import { ReactComponent as Astronaut } from 'assets/img/astronaut.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import MenuIcon from '@material-ui/icons/Menu'
 import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import SelectWalletModal from 'components/Modal/SelectWallet'
 
 const useStyles = makeStyles((theme) => ({

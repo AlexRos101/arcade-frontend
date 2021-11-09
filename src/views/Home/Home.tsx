@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useGlobalState } from 'state-pool'
 
+import { ThemeProvider } from '@material-ui/core/styles'
+
+import { greenTheme, pinkTheme } from 'styles/theme'
+
 import { Typography, Button } from '@material-ui/core'
 import Page from 'components/Layout/Page'
-
-import { ThemeProvider } from '@material-ui/core'
 import { ReactComponent as AstronautBuy } from 'assets/img/astronautbuy.svg'
 import Info from '@material-ui/icons/Info'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
+import { ReactComponent as Ticket } from 'assets/img/ticket.svg'
 
 import HeaderLabel from 'components/Label/HeaderLabel'
 import ConnectWallet from './components/ConnectWallet'
@@ -19,6 +22,7 @@ import * as WalletUtils from 'global/wallet'
 const Home: React.FC = () => {
   const history = useHistory()
   const [account] = useGlobalState('account')
+  const [openPointSwap, setOpenPointSwap] = useGlobalState('openPointSwap')
   const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [showConnectWallet, setShowConnectWallet] = useState(false)
 
@@ -75,15 +79,28 @@ const Home: React.FC = () => {
           >
             <Typography variant="subtitle1">Buy ArcadeDoges</Typography>
           </Button>
-          <Button
-            className="mg-8 btn-wd-limit"
-            variant="contained"
-            color="primary"
-            onClick={onClickArcadeMarket}
-            startIcon={<ShoppingCart />}
-          >
-            <Typography variant="subtitle1">Vend at ArcadeMarket</Typography>
-          </Button>
+          <ThemeProvider theme={greenTheme}>
+            <Button
+              className="mg-8 btn-wd-limit"
+              variant="contained"
+              color="primary"
+              onClick={onClickArcadeMarket}
+              startIcon={<ShoppingCart />}
+            >
+              Vend at ArcadeMarket
+            </Button>
+          </ThemeProvider>
+          <ThemeProvider theme={pinkTheme}>
+            <Button
+              className="mg-8 btn-wd-limit"
+              variant="contained"
+              color="primary"
+              onClick={() => setOpenPointSwap(true)}
+              startIcon={<Ticket />}
+            >
+              Convert Game Tokens
+            </Button>
+          </ThemeProvider>
         </div>
         <div className="flex-row row col-2" style={{ paddingBottom: '0px', position: 'relative' }}>
           <ThemeProvider theme={homeTheme}>

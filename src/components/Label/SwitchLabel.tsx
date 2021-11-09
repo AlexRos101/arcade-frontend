@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Typography, Grid } from '@material-ui/core'
 
-interface IconLabelProps {
+interface SwitchLabelProps {
   avatar?: string // React.FunctionComponent<SVGProps<SVGSVGElement>>,
   label: ReactNode
   avatarWidth?: string
@@ -12,10 +12,10 @@ interface IconLabelProps {
   style?: React.CSSProperties
 }
 
-const IconLabel: React.FC<IconLabelProps> = (props) => {
+const SwitchLabel: React.FC<SwitchLabelProps> = (props) => {
   return (
-    <Grid alignItems="center" direction="row" style={props.style} className={`flex-row r-flex-row ${props.className}`}>
-      {props.avatar && <img src={props.avatar} width={props.avatarWidth} height={props.avatarHeight} style={{ marginRight: '10px' }} alt=""/>}
+    <Grid alignItems="center" direction="row" style={props.style} className={`switch-label flex-row r-flex-row ${props.className}`}>
+      <img src={props.avatar} width={props.avatarWidth} height={props.avatarHeight} style={{ marginRight: '5px' }} alt=""/>
       <Grid item>
         <Typography style={{ fontSize: props.fontSize, color: (props.fontColor?props.fontColor:'rgb(183, 176, 145)') }}>{props.label}</Typography>
       </Grid>
@@ -23,4 +23,4 @@ const IconLabel: React.FC<IconLabelProps> = (props) => {
   )
 }
 
-export default IconLabel
+export default SwitchLabel
