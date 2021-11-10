@@ -15,6 +15,8 @@ import { useGlobalState } from 'state-pool'
 import { addNewComment } from 'hooks/api'
 import { Discussion } from 'global/interface'
 
+import { signText, checkSign } from 'global/wallet'
+
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
     '&::placeholder': {
@@ -50,17 +52,30 @@ const AddComment: React.FC<Props> = (props) => {
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
   const [, setCommentState] = useGlobalState('commentState')
+  const [account] = useGlobalState('account')
 
   const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
   }
 
-  const onAddComment = useCallback(() => {
-    addNewComment(Number(props.discussion.id), -1, content, anonymous === false ? 0 : 1, user).then(() => {
-      setCommentState(2)
-      props.onReset()
+  const onAddComment = useCallback(async () => {
+    if (account === '' || account === undefined) return
+
+    const signature = await signText(content, account)
+    const is_signed = await checkSign(content, signature, account)
+
+    if (is_signed !== true) 
+      console.log("Signature Verify failed!")
+
+    addNewComment(Number(props.discussion.id), -1, content, anonymous === false ? 0 : 1, user, signature, account).then((res) => {
+      if (res.result === true) {
+        setCommentState(2)
+        props.onReset()
+      } else {
+        console.log(res.data)
+      }
     })
-  }, [props, anonymous, content, user, setCommentState])
+  }, [props, account, anonymous, content, user, setCommentState])
 
   if (props.visible === false) return <div />
 

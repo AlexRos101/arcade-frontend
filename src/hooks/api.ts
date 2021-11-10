@@ -69,6 +69,8 @@ export const addNewComment = async (
   content: string,
   user_type: number,
   user: string,
+  signature: string,
+  account: string
 ): Promise<Response> => {
   const response = await sendPost('comment/new', {
     discussion_id: discussion_id,
@@ -76,6 +78,8 @@ export const addNewComment = async (
     content: content,
     user_type: user_type,
     user: user,
+    signature: signature,
+    account: account
   })
   return response
 }
@@ -85,12 +89,16 @@ export const addNewDiscussion = async (
   content: string,
   user_type: number,
   user: string,
+  signature: string,
+  account: string
 ): Promise<Response> => {
   const response = await sendPost('discussion/new', {
     stuff_id: stuff_id,
     content: content,
     user_type: user_type,
     user: user,
+    signature: signature,
+    account: account
   })
   return response
 }

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 
+import { useGlobalState } from 'state-pool'
 import { Button, Grid } from '@material-ui/core'
 import { Theme, ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
@@ -13,6 +14,7 @@ import SwitchButton from 'components/Button/SwitchButton'
 
 import { addNewDiscussion } from 'hooks/api'
 import { Stuff } from 'global/interface'
+import { signText, checkSign } from 'global/wallet'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -47,17 +49,30 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
   const [tag, setTag] = useState('')
-
+  const [account] = useGlobalState('account')
+  
   const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
   }
 
-  const onAddDiscussion = useCallback(() => {
-    addNewDiscussion(Number(props.stuff.id), content, anonymous === false ? 0 : 1, user).then(() => {
-      history.push(`/discussion/stuff/${props.stuff.id}`)
-      document.location.reload()
+  const onAddDiscussion = useCallback(async () => {
+    if (account === '' || account === undefined) return
+
+    const signature = await signText(content, account)
+    const is_signed = await checkSign(content, signature, account)
+
+    if (is_signed !== true) 
+      console.log("Signature Verify failed!")
+
+    addNewDiscussion(Number(props.stuff.id), content, anonymous === false ? 0 : 1, user, signature, account).then((res) => {
+      if (res.result === true) {
+        history.push(`/discussion/stuff/${props.stuff.id}`)
+        document.location.reload()
+      } else {
+        console.log(res.data)
+      }
     })
-  }, [props, content, anonymous, user, history])
+  }, [props, account, content, anonymous, user, history])
 
   return (
     <Grid container spacing={1} alignItems="flex-start" style={{ marginTop: '1vh', marginBottom: '1vh' }}>

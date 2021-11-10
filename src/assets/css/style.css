@@ -1484,13 +1484,17 @@ a {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 10px 9px !important;
+    padding: 10px 10px !important;
     width: calc(100% - 20px) !important;
     color: #B7B091;
   }
 
   .custom-input input:focus {
     outline-color: sandybrown;
+  }
+
+  .switch-link {
+    cursor: pointer;
   }
 
 

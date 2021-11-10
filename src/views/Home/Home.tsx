@@ -22,7 +22,7 @@ import * as WalletUtils from 'global/wallet'
 const Home: React.FC = () => {
   const history = useHistory()
   const [account] = useGlobalState('account')
-  const [openPointSwap, setOpenPointSwap] = useGlobalState('openPointSwap')
+  const [, setOpenPointSwap] = useGlobalState('openPointSwap')
   const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [showConnectWallet, setShowConnectWallet] = useState(false)
 

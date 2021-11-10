@@ -32,7 +32,7 @@ const SwapItem: React.FC<SwapItemProps>  = (props) => {
           className="swap-input r-mt-px-10 ml-auto"
           style={{ marginTop: 'auto', marginBottom: 'auto', width: '220px' }}
         />) :
-        (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '220px' }}>
+        (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '200px', paddingLeft: '10px', paddingRight: '10px' }}>
           <p className="ml-0">{props.coinName}</p>
           <p className="ml-auto r-ml-auto">{props.coinValue}</p>
         </div>)

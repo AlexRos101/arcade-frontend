@@ -14,6 +14,8 @@ import { useGlobalState } from 'state-pool'
 import { addNewComment } from 'hooks/api'
 import { Comment } from 'global/interface'
 
+import { signText, checkSign } from 'global/wallet'
+
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
     '&::placeholder': {
@@ -49,7 +51,7 @@ const AddReply: React.FC<Props> = (props) => {
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
   const [, setCommentState] = useGlobalState('commentState')
-
+  const [account] = useGlobalState('account')
 
   const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
@@ -61,32 +63,46 @@ const AddReply: React.FC<Props> = (props) => {
     return date
   }
 
-  const onAddComment = useCallback(() => {
+  const onAddComment = useCallback(async () => {
+    if (account === '' || account === undefined) return
+
+    const signature = await signText(content, account)
+    const is_signed = await checkSign(content, signature, account)
+
+    if (is_signed !== true) 
+      console.log("Signature Verify failed!")
+
     addNewComment(
       Number(props.comment.discussion_id),
       Number(props.comment.id),
       content,
       anonymous === false ? 0 : 1,
       user,
+      signature,
+      account
     ).then((res) => {
-      setCommentState(2)
-      const commentData: Comment = {
-        id: res.data,
-        likes: 0,
-        discussion_id: Number(props.comment.discussion_id),
-        parent_id: Number(props.comment.id),
-        user: user,
-        user_type: anonymous === false ? 0 : 1,
-        content: content,
-        updated_at: getCurrentTime(),
-        reply: [],
-        user_like: []
-      }
+      if (res.result === true) {
+        setCommentState(2)
+        const commentData: Comment = {
+          id: res.data,
+          likes: 0,
+          discussion_id: Number(props.comment.discussion_id),
+          parent_id: Number(props.comment.id),
+          user: user,
+          user_type: anonymous === false ? 0 : 1,
+          content: content,
+          updated_at: getCurrentTime(),
+          reply: [],
+          user_like: []
+        }
 
-      props.onReset(commentData)
-      //document.location.reload()
+        props.onReset(commentData)
+        //document.location.reload()
+      } else {
+        console.log(res.data)
+      }
     })
-  }, [props, anonymous, content, user, setCommentState])
+  }, [props, account, anonymous, content, user, setCommentState])
 
   if (props.visible === false) return <div />
 

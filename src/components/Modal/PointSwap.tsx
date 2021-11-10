@@ -17,7 +17,6 @@ import Avatar from 'assets/img/avatar.png'
 import StarShard from 'assets/img/starshard.png'
 import Switch from 'assets/img/switch.svg'
 import SwapItem from 'components/Item/SwapItem'
-import Link from '@material-ui/core/Link'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -31,6 +30,11 @@ interface Props {
 }
 
 const PointSwap: React.FC<Props> = (props) => {
+
+  const onClick = () => {
+    console.log('asdf')
+  }
+
   return (
     <Dialog
       className="card-dialog"
@@ -85,16 +89,17 @@ const PointSwap: React.FC<Props> = (props) => {
             fontColor="#22303D"
             isInput={true}
             />
-          <Link href="#">
-            <IconLabel
-              avatar={Switch}
-              label="Switch"
-              avatarWidth="24"
-              avatarHeight="24"
-              fontSize="13px"
-              style={{ color: '#B7B091', marginRight: '1rem', marginTop: '20px', marginBottom: '20px', marginLeft: '3px' }}
-              />
-            </Link>
+
+          <IconLabel
+            avatar={Switch}
+            label="Switch"
+            avatarWidth="24"
+            avatarHeight="24"
+            fontSize="13px"
+            style={{ color: '#B7B091', marginRight: '0', marginTop: '20px', marginBottom: '20px', marginLeft: '3px', width: 'fit-content' }}
+            onClick={onClick}
+            className="switch-link"
+            />
           <SwapItem
             avatar={StarShard}
             label="StarShard"
