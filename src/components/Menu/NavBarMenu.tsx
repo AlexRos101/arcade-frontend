@@ -68,7 +68,7 @@ const NavBarMenu = () => {
     setOpenConnectWalletMenu(true)
   }
 
-  const onWalletConnctHandler = async () => {
+  const onWalletConnectHandler = async () => {
     await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
     initAddress()
   }
@@ -157,7 +157,7 @@ const NavBarMenu = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={onWalletConnctHandler}
+                onClick={onWalletConnectHandler}
                 className="menu-btn"
                 startIcon={<Wallet />}
               >
