@@ -172,8 +172,7 @@ export const isConnected = async (): Promise<boolean> => {
 
   chainId = Number.parseInt(chainId as string)
 
-  // eslint-disable-next-line
-  if (chainId != process.env.REACT_APP_CHAIN_ID) {
+  if (chainId !== Number.parseInt(process.env.REACT_APP_CHAIN_ID as string)) {
     return false
   }
 
