@@ -88,6 +88,7 @@ const PointSwap: React.FC<Props> = (props) => {
             fontSize="28px"
             fontColor="#22303D"
             isInput={true}
+            coinName="$ARCADE"
             />
 
           <IconLabel
