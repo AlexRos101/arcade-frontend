@@ -6,15 +6,14 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-
+import Swal from 'sweetalert'
 import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
 import ERC20 from '../../contracts/ERC20.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
-import * as API from '../../hooks/api'
-import { GameItem } from 'global/interface'
+import SWAP from '../../contracts/SWAP.json'
+import { Token } from 'global/interface'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -25,6 +24,9 @@ const DialogContent = withStyles((theme) => ({
 interface Props {
   open: boolean
   rate: number
+  amount: BigNumber
+  inputCoin?: Token
+  outputCoin?: Token
   onClose: () => void
 }
 
@@ -35,24 +37,29 @@ const SwapGameToken: React.FC<Props> = (props) => {
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
 
-  /* const refresh = useCallback(async () => {
+  const refresh = useCallback(async () => {
     // setIsLoading(true);
-
     if (!(await Wallet.isConnected())) {
       setIsLoading(false)
+      return
+    }
+
+    if (props.inputCoin !== undefined && props.inputCoin?.tokenName !== "$ARCADE") {
+      setFirstStepClassName('item-processed')
+      setSecondStepClassName('item')
       return
     }
 
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
-    const BUSD = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
+    const ARCADE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
-    BUSD.methods
-      .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
+    ARCADE.methods
+      .allowance(account, process.env.REACT_APP_SWAP_ADDRESS)
       .call()
       .then((res: string) => {
-        if (props.rate.multipliedBy(parseFloat(String(props.item.arcadedoge_price))).minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
+        if (props.amount.minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
           // setIsLoading(false);
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
@@ -67,16 +74,14 @@ const SwapGameToken: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, props.rate, setIsLoading]) 
+  }, [account, props.amount]) 
 
   useEffect(() => {
-    if (props.item === selectedItem) return
-    setSelectedItem(props.item)
-    // refresh()
-  }, [props.item, selectedItem, refresh]) */
+    refresh()
+  }, [props.inputCoin, props.open])
 
   const approve = async () => {
-    /* setIsLoading(true)
+    setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
       setIsLoading(false)
@@ -87,12 +92,12 @@ const SwapGameToken: React.FC<Props> = (props) => {
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
-    const BUSD = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
+    const ARCADE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
-    BUSD.methods
+    ARCADE.methods
       .approve(
-        process.env.REACT_APP_EXCHANGE_ADDRESS,
-        Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
+        process.env.REACT_APP_SWAP_ADDRESS,
+        Web3.utils.toWei(props.amount.toString() + '', 'ether'),
       )
       .send({ from: account })
       .then((res: any) => {
@@ -104,11 +109,11 @@ const SwapGameToken: React.FC<Props> = (props) => {
         setIsLoading(false)
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
-      }) */
+      })
   }
 
-  const buy = async () => {
-    /* setIsLoading(true)
+  const buyGamePoint = async () => {
+    setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
       setIsLoading(false)
@@ -119,35 +124,32 @@ const SwapGameToken: React.FC<Props> = (props) => {
     const provider = await Wallet.getCurrentProvider()
 
     const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
+    const swap = new web3.eth.Contract(SWAP as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
 
-    exchange.methods
-      .exchangeBUSD(
-        props.item.contract_address,
-        props.item.token_id,
-        props.item.owner,
+    swap.methods
+      .buyGamePoint(
+        1,
         Web3.utils.toWei(
-          props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '',
+          props.amount.toString() + '',
           'ether',
-        ),
-        account,
+        )
       )
       .send({ from: account })
-      .then((res: any) => {
-        const checkDBStatus = async () => {
-          const item = (await API.getItemById(props.item.id)).data
-          if (item.owner === Web3.utils.toChecksumAddress(account)) {
-            window.location.href = '/listing'
-          } else {
-            setTimeout(checkDBStatus, 500)
-          }
-        }
-
-        checkDBStatus()
-      })
-      .catch((err: any) => {
+      .then(() => {
+        Swal("Game Point bought successfully!")
         setIsLoading(false)
-      }) */
+        props.onClose()
+      })
+      .catch(() => {
+        Swal("Buy Game Point failed!")
+        setIsLoading(false)
+      })
+  }
+
+  const onBuy = () => {
+    if (props.inputCoin?.tokenName === "$ARCADE") {
+      buyGamePoint()
+    }
   }
 
   return (
@@ -204,7 +206,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
-                <Button variant="contained" color="primary" onClick={buy}>
+                <Button variant="contained" color="primary" onClick={onBuy}>
                   <Typography variant="subtitle1">Buy</Typography>
                 </Button>
               </div>

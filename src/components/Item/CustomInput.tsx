@@ -5,7 +5,7 @@ interface CustomInputProps {
   className?: string
   style?: React.CSSProperties
   placeholder?: string | ReactElement
-  onChange?: () => void
+  onChange?: (value: string) => void
 }
 
 const CustomInput: React.FC<CustomInputProps>  = (props) => {
@@ -19,6 +19,8 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
     else
       setHiddenHolder(false)
     setTextValue(e.currentTarget.value)
+    if (props.onChange !== undefined)
+      props.onChange(e.currentTarget.value)
   }
 
   const onFocus = () => {

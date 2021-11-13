@@ -169,4 +169,9 @@ export const getComment = async (id: number) => {
   return response
 }
 
+export const getVerificationCode = async (game_id: number, address: string, amount: number): Promise<Response> => {
+  const response = await sendPost('verify/swap_request', { id: game_id, address: address, amount: amount })
+  return response
+}
+
 /* eslint-enable */

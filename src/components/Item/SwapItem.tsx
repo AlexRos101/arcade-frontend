@@ -14,6 +14,7 @@ interface SwapItemProps {
   isInput?: boolean
   coinValue?: string
   coinName?: string
+  onChange?: (value: string) => void
 }
 
 const SwapItem: React.FC<SwapItemProps>  = (props) => {
@@ -31,6 +32,7 @@ const SwapItem: React.FC<SwapItemProps>  = (props) => {
           placeholder={(<div className='flex-row r-flex-row'><div>{props.coinName}</div><div style={{ marginLeft: 'auto' }}>000</div></div>)}
           className="swap-input r-mt-px-10 ml-auto"
           style={{ marginTop: 'auto', marginBottom: 'auto', width: '220px' }}
+          onChange={props.onChange}
         />) :
         (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '200px', paddingLeft: '10px', paddingRight: '10px' }}>
           <p className="ml-0">{props.coinName}</p>
