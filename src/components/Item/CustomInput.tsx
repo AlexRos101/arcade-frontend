@@ -1,3 +1,4 @@
+import { FlashOnOutlined } from '@material-ui/icons'
 import React, { ReactElement, useState } from 'react'
 
 interface CustomInputProps {
@@ -13,11 +14,14 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
   const [inputCp, setInputCp] = useState<HTMLInputElement | null>()
 
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    if (e.currentTarget.value.length > 0)
+      setHiddenHolder(true)
+    else
+      setHiddenHolder(false)
     setTextValue(e.currentTarget.value)
   }
 
   const onFocus = () => {
-    setHiddenHolder(true)
     if (inputCp !== undefined && inputCp !== null)
       inputCp.focus()
   }
@@ -39,6 +43,7 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
         ref = {inputEl => (setInputCp(inputEl))}
         type="text"
         value={textValue}
+        style={{ textAlign: 'right' }}
         onChange={(e) => onInputChange(e)}
         />
       {

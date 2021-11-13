@@ -58,3 +58,9 @@ export interface Stuff {
   title: string
   discussions?: Array<Discussion>
 }
+
+export interface Token {
+  tokenName: string
+  tokenFullName: string
+  tokenAvartar: string
+}

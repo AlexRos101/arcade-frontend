@@ -4,7 +4,7 @@ import CustomInput from './CustomInput'
 
 interface SwapItemProps {
   avatar?: string
-  label: string
+  label?: string
   avatarWidth?: string
   avatarHeight?: string
   fontSize?: string
@@ -28,7 +28,7 @@ const SwapItem: React.FC<SwapItemProps>  = (props) => {
       {
         props.isInput ?
         (<CustomInput
-          placeholder={(<div className='flex-row r-flex-row'><div>$ARCADE</div><div style={{ marginLeft: 'auto' }}>000</div></div>)}
+          placeholder={(<div className='flex-row r-flex-row'><div>{props.coinName}</div><div style={{ marginLeft: 'auto' }}>000</div></div>)}
           className="swap-input r-mt-px-10 ml-auto"
           style={{ marginTop: 'auto', marginBottom: 'auto', width: '220px' }}
         />) :
