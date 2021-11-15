@@ -233,7 +233,7 @@ const PointSwap: React.FC<Props> = (props) => {
 
     getArcadeBalance()
     getGamePointBalance()
-  }, [inputCoin, outputCoin, setInputCoin, account])
+  }, [inputCoin, outputCoin, setInputCoin, account, props.open])
 
   useEffect(() => {
     setInputCoin({
@@ -261,7 +261,7 @@ const PointSwap: React.FC<Props> = (props) => {
       <DialogTitle className="swap-modal-title modal-dialog-title">
         <div className="flex-row">
           <RowLabel>Convert Tokens</RowLabel>
-          <div className="flex-row r-flex-row r-mt-px-15" style={{ marginLeft: 'auto' }}>
+          <div className="flex-row r-flex-row r-mt-px-15 ml-auto">
             <IconLabel
               avatar={WALLET}
               label="Balance"

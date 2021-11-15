@@ -74,11 +74,11 @@ const SwapGameToken: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.amount]) 
+  }, [account, props.amount, props.inputCoin, setIsLoading]) 
 
   useEffect(() => {
     refresh()
-  }, [props.inputCoin, props.open])
+  }, [props.inputCoin, props.open, refresh])
 
   const approve = async () => {
     setIsLoading(true)

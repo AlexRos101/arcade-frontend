@@ -1,4 +1,3 @@
-import { FlashOnOutlined } from '@material-ui/icons'
 import React, { ReactElement, useState } from 'react'
 
 interface CustomInputProps {
