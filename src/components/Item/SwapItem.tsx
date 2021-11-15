@@ -4,7 +4,7 @@ import CustomInput from './CustomInput'
 
 interface SwapItemProps {
   avatar?: string
-  label: string
+  label?: string
   avatarWidth?: string
   avatarHeight?: string
   fontSize?: string
@@ -14,6 +14,7 @@ interface SwapItemProps {
   isInput?: boolean
   coinValue?: string
   coinName?: string
+  onChange?: (value: string) => void
 }
 
 const SwapItem: React.FC<SwapItemProps>  = (props) => {
@@ -28,11 +29,12 @@ const SwapItem: React.FC<SwapItemProps>  = (props) => {
       {
         props.isInput ?
         (<CustomInput
-          placeholder={(<div className='flex-row r-flex-row'><div>$ARCADE</div><div style={{ marginLeft: 'auto' }}>000</div></div>)}
+          placeholder={(<div className='flex-row r-flex-row'><div>{props.coinName}</div><div style={{ marginLeft: 'auto' }}>000</div></div>)}
           className="swap-input r-mt-px-10 ml-auto"
           style={{ marginTop: 'auto', marginBottom: 'auto', width: '220px' }}
+          onChange={props.onChange}
         />) :
-        (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '200px', paddingLeft: '10px', paddingRight: '10px' }}>
+        (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '200px', paddingLeft: '11px', paddingRight: '11px' }}>
           <p className="ml-0">{props.coinName}</p>
           <p className="ml-auto r-ml-auto">{props.coinValue}</p>
         </div>)

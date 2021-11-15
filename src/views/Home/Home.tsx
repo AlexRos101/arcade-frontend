@@ -23,6 +23,7 @@ const Home: React.FC = () => {
   const history = useHistory()
   const [account] = useGlobalState('account')
   const [, setOpenPointSwap] = useGlobalState('openPointSwap')
+  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
   const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [showConnectWallet, setShowConnectWallet] = useState(false)
 
@@ -32,6 +33,14 @@ const Home: React.FC = () => {
 
   const onClickBuyArcadeDoge = () => {
     window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+  }
+
+  const onOpenConvertGameToken = () => {
+    if (account === '') {
+      setOpenConnectWalletMenu(true)
+    } else {
+      setOpenPointSwap(true)
+    }
   }
 
   const init = async () => {
@@ -95,7 +104,7 @@ const Home: React.FC = () => {
               className="mg-8 btn-wd-limit"
               variant="contained"
               color="primary"
-              onClick={() => setOpenPointSwap(true)}
+              onClick={onOpenConvertGameToken}
               startIcon={<Ticket />}
             >
               Convert Game Tokens

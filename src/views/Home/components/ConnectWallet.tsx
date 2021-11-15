@@ -19,7 +19,7 @@ const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ childre
     setOpenConnectWalletMenu(true)
   }
 
-  const onWalletConnctHandler = async () => {
+  const onWalletConnectHandler = async () => {
     await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
     initAddress()
   }
@@ -42,7 +42,7 @@ const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ childre
           </Button>
         </Hidden>
         <Hidden smUp>
-          <Button variant="contained" color="primary" onClick={onWalletConnctHandler} startIcon={<Wallet />}>
+          <Button variant="contained" color="primary" onClick={onWalletConnectHandler} startIcon={<Wallet />}>
             <Typography variant="subtitle1">Connect Wallet{children}</Typography>
           </Button>
         </Hidden>
