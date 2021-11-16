@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -8,13 +8,12 @@ import { Typography, Button } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC20 from '../../contracts/ERC20.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useERC20, useExchange } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -29,7 +28,9 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const ARCADEDOGE = useERC20(web3, process.env.REACT_APP_ARCADEDOGE_ADDRESS as string)
+  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
@@ -38,23 +39,16 @@ const BuyModal: React.FC<Props> = (props) => {
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
   const refresh = useCallback(async () => {
-    // setIsLoading(true);
-
     if (!(await Wallet.isConnected())) {
       setIsLoading(false)
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const ARCADEDOGE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
-
     ARCADEDOGE.methods
       .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
       .call()
       .then((res: string) => {
-        if (Number.parseFloat(web3.utils.fromWei(res)) >= Number(props.item.arcadedoge_price)) {
+        if (Number.parseFloat(Web3.utils.fromWei(res)) >= Number(props.item.arcadedoge_price)) {
           // setIsLoading(false);
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
@@ -69,7 +63,7 @@ const BuyModal: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, setIsLoading])
+  }, [account, props.item.arcadedoge_price, setIsLoading, ARCADEDOGE])
 
   useEffect(() => {
     if (props.item === selectedItem) return
@@ -78,6 +72,8 @@ const BuyModal: React.FC<Props> = (props) => {
   }, [props.item, selectedItem, refresh])
 
   const approve = async () => {
+    if (web3 === undefined) return
+
     setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
@@ -85,11 +81,6 @@ const BuyModal: React.FC<Props> = (props) => {
       setShowConnectWalletModal(true)
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const ARCADEDOGE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
     ARCADEDOGE.methods
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
@@ -108,6 +99,7 @@ const BuyModal: React.FC<Props> = (props) => {
   }
 
   const buy = async () => {
+    if (web3 === undefined) return
     setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
@@ -116,12 +108,7 @@ const BuyModal: React.FC<Props> = (props) => {
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods
+    EXCHANGE.methods
       .exchange(
         props.item.contract_address,
         props.item.token_id,
@@ -133,7 +120,7 @@ const BuyModal: React.FC<Props> = (props) => {
       .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
-          if (item.owner === Web3.utils.toChecksumAddress(account)) {
+          if (account !== undefined && item.owner === Web3.utils.toChecksumAddress(account)) {
             window.location.href = '/listing'
           } else {
             setTimeout(checkDBStatus, 500)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 
 import Card from 'components/Card'
@@ -10,7 +10,7 @@ import { useGlobalState } from 'state-pool'
 import { setLikes, getLikes, getDiscussion } from 'hooks/api'
 import ReactTimeAgo from 'react-time-ago'
 import Badge from 'components/Badge'
-
+import { ArcadeContext } from 'contexts/ArcadeContext'
 import { Discussion } from 'global/interface'
 
 interface Props {
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const DiscussionContent: React.FC<Props> = (props) => {
+  const account = useContext(ArcadeContext)?.account
   const [discussion, setDiscussion] = useState(props.discussion)
-  const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
   const [dscIsSet, setDscIsSet] = useState(0)
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
@@ -31,7 +31,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
 
     setIsLike(3)
 
-    getLikes(props.discussion.id, -1, account).then((response) => {
+    account &&  getLikes(props.discussion.id, -1, account).then((response) => {
       if (response.data.length === 0) {
         setIsLike(1)
       } else {
@@ -46,14 +46,14 @@ const DiscussionContent: React.FC<Props> = (props) => {
 
     setDscIsSet(1)
 
-    getDiscussion(props.discussion.id, account).then((response) => {
+    account && getDiscussion(props.discussion.id, account).then((response) => {
       setDiscussion(response.data)
       setDscIsSet(2)
     })
   }, [props, discussion, dscIsSet, account])
 
   const onHandleLikes = useCallback(() => {
-    if (account !== '') {
+    if (account !== '' && account !== undefined) {
       if (dscIsSet !== 2) return
       setDscIsSet(1)
       if (isLike === 1) {

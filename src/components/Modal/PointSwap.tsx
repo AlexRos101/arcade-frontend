@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useGlobalState } from 'state-pool'
 import Swal from 'sweetalert'
@@ -24,11 +22,11 @@ import STARSHARD from 'assets/img/starshard.png'
 import Switch from 'assets/img/switch.svg'
 import SwapItem from 'components/Item/SwapItem'
 import { Token } from 'global/interface'
-import SWAP from 'contracts/SWAP.json'
-import ERC20 from 'contracts/ERC20.json'
 import * as Wallet from '../../global/wallet'
 import { getVerificationCode } from 'hooks/api'
 import { getBalance } from 'hooks/gameapi'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useSwap, useERC20 } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -42,9 +40,11 @@ interface Props {
 }
 
 const PointSwap: React.FC<Props> = (props) => {
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const SWAP = useSwap(web3, process.env.REACT_APP_SWAP_ADDRESS as string)
+  const ARCADETOKEN = useERC20(web3, process.env.REACT_APP_ARCADEDOGE_ADDRESS as string)
   const [inputCoin, setInputCoin] = useState<Token>()
   const [outputCoin, setOutputCoin] = useState<Token>()
-  const [account] = useGlobalState('account')
   const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(0))
   const [gamePointRate, setGamePointRate] = useState(new BigNumber(0))
   const [swapRate, setSwapRate] = useState(0.0)
@@ -56,31 +56,24 @@ const PointSwap: React.FC<Props> = (props) => {
   const [, setIsLoading] = useGlobalState('isLoading')
 
   const getArcadeDogeRate = useCallback(async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const swap = new web3.eth.Contract(SWAP as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
-
-    swap.methods
-      .getArcadeDogeRate()
-      .call()
-      .then((res: string) => {
-        setArcadeDogeRate(new BigNumber(res).div(10 ** 18))
-      })
-      .catch(() => {
-        setTimeout(getArcadeDogeRate, 500)
-      })
-
-  }, [])  
+    if (web3 !== undefined)  {
+      SWAP.methods
+        .getArcadeDogeRate()
+        .call()
+        .then((res: string) => {
+          setArcadeDogeRate(new BigNumber(res).div(10 ** 18))
+        })
+        .catch(() => {
+          setTimeout(getArcadeDogeRate, 500)
+        })
+    }
+  }, [web3, SWAP])  
 
   const getGamePointRate = async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const swap = new web3.eth.Contract(SWAP as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
+    if (web3 === undefined) return
 
     if (inputCoin?.tokenName === "$ARCADE" || inputCoin === undefined) {
-      swap.methods
+      SWAP.methods
         .gamePointPrice(1)
         .call()
         .then((res: string) => {
@@ -90,7 +83,7 @@ const PointSwap: React.FC<Props> = (props) => {
           setTimeout(getGamePointRate, 500)
         })
     } else {
-      swap.methods
+      SWAP.methods
         .getGamePointRate(account, 1)
         .call()
         .then((res: string) => {
@@ -112,7 +105,7 @@ const PointSwap: React.FC<Props> = (props) => {
   }, [setInputCoin, setOutputCoin, setSwapRate, inputCoin, outputCoin])
 
 
-  const BuyArcade = async () => {
+  const buyArcade = async () => {
     setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
@@ -120,15 +113,12 @@ const PointSwap: React.FC<Props> = (props) => {
       return
     }
 
-    getVerificationCode(1, account, inputBalance)
+    account && getVerificationCode(1, account, inputBalance)
     .then(async (res) => {
+      if (web3 === undefined) return
       const verificationToken = res.data.verification_token
-      const provider = await Wallet.getCurrentProvider()
 
-      const web3 = new Web3(provider)
-      const swap = new web3.eth.Contract(SWAP as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
-
-      swap.methods
+      SWAP.methods
         .sellGamePoint(
           1,
           inputBalance,
@@ -156,17 +146,15 @@ const PointSwap: React.FC<Props> = (props) => {
     if (inputCoin?.tokenName === "$ARCADE") {
       setOpenSwapToken(true)
     } else {
-      BuyArcade()
+      buyArcade()
     }
   }
 
   const getArcadeBalance = async () => {
-    const provider = await Wallet.getCurrentProvider()
+    if (web3 === undefined) return
 
-    const web3 = new Web3(provider)
-    const arcadeToken = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
     if (account !== undefined && account !== "") {
-      arcadeToken.methods
+      ARCADETOKEN.methods
       .balanceOf(account)
       .call()
       .then((res: string) => {
@@ -201,16 +189,6 @@ const PointSwap: React.FC<Props> = (props) => {
       setSwapRate(arcadeDogeRate.div(gamePointRate).toNumber())
   }, [arcadeDogeRate, gamePointRate, inputCoin])
 
-  const updateLoop = async () => {
-    getArcadeDogeRate()
-    getGamePointRate()
-
-    getArcadeBalance()
-    getGamePointBalance()
-
-    setTimeout(updateLoop, 30000)
-  }
-
   const onChangeInput = (value: string) => {
     setInputBalance(Number.parseFloat(value))
   }
@@ -227,13 +205,15 @@ const PointSwap: React.FC<Props> = (props) => {
       setOutputBalance(0)
   }, [inputCoin, inputBalance, swapRate])
 
+  /* eslint-disable */
   useEffect(() => {
     getArcadeDogeRate()
     getGamePointRate()
 
     getArcadeBalance()
     getGamePointBalance()
-  }, [inputCoin, outputCoin, setInputCoin, account, props.open])
+  }, [inputCoin, outputCoin, setInputCoin, account, props.open, web3])
+  /* eslint-enable */
 
   useEffect(() => {
     setInputCoin({

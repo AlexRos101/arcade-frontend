@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useContext } from 'react'
 import { AppBar, Toolbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -6,11 +6,10 @@ import clsx from 'clsx'
 import Logo from '../Logo'
 import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
-import { useGlobalState } from 'state-pool'
-import * as WalletUtils from '../../global/wallet'
-import { connect } from 'global/wallet'
 
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
+import { ArcadeContext } from 'contexts/ArcadeContext'
+import * as CONST from 'global/const'
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -34,20 +33,10 @@ const useStyles = makeStyles(() => ({
 const Menu = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
-  const [, setAccount] = useGlobalState('account')
+  const context = useContext(ArcadeContext)
 
   const onConnectWalletHandler = async () => {
-    await connect()
-    initAddress()
-  }
-
-  const initAddress = async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (await WalletUtils.isConnected()) {
-      setAccount(address === null ? '' : address)
-    } else {
-      setAccount('')
-    }
+    context?.connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (

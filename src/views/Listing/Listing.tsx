@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { Hidden } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -21,15 +21,13 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import * as API from '../../hooks/api'
 import ListSellModal from 'components/Modal/ListSell'
 import RemoveSellModal from 'components/Modal/RemoveSell'
-import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC721 from '../../contracts/ERC721.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 import RedPagination from 'components/Pagination/RedPagination'
 
 import Row from './components/Row'
 import { GameItem } from 'global/interface'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useERC721, useExchange } from 'hooks/useContract'
 
 const useStyles = makeStyles({
   tableContainer: {
@@ -43,6 +41,9 @@ const useStyles = makeStyles({
 
 const Listing: React.FC = () => {
   const classes = useStyles()
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
+  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
   const [rowsPerPage] = useState(10)
   const [rows, setRows] = useState<Array<GameItem>>([])
   const [count, setCount] = useState(0)
@@ -57,21 +58,18 @@ const Listing: React.FC = () => {
 
   const getMyItems = useCallback(
     async (limit: number, cnt: number) => {
-      const address = await Wallet.getCurrentWallet()
-      if (address === null) {
+      if (account === null) {
         return
       }
       setShowLoading(true)
-      console.log('asdf')
       // setRows([])
-      const items = await API.getItemsByAddress(address, CONST.SORT_TYPE.NONE, limit, cnt)
+      const items = await API.getItemsByAddress(account, CONST.SORT_TYPE.NONE, limit, cnt)
       setCount(Number(items.total))
       setRows(items.data)
 
       setShowLoading(false)
     },
-    [],
-  )
+    [account])
 
   const toggleVisibility = async (index: number) => {
     if (rows[index].is_visible) {
@@ -92,15 +90,9 @@ const Listing: React.FC = () => {
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-    const address = await Wallet.getCurrentWallet()
-
-    const web3 = new Web3(provider)
-    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
-
     NFT.methods
       .burn(rows[index].token_id)
-      .send({ from: address })
+      .send({ from: account })
       .then((res: any) => {
         const checkItemStatus = async () => {
           const item = (await API.getItemById(rows[index].id)).data
@@ -127,12 +119,8 @@ const Listing: React.FC = () => {
   )
 
   const getRate = useCallback(async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods
+    
+    EXCHANGE.methods
       .getRate()
       .call()
       .then((res: string) => {
@@ -143,7 +131,7 @@ const Listing: React.FC = () => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [])
+  }, [EXCHANGE.methods])
 
   const init = useCallback(async () => {
     if (!(await WalletUtils.isConnected())) {

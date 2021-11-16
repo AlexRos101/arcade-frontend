@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useContext } from 'react'
 import { useGlobalState } from 'state-pool'
 import WltSwitchButton from 'components/Button/WltSwitchButton'
-import * as WalletUtils from '../../global/wallet'
-import * as CONST from '../../global/const'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 interface Props {
   image: any
@@ -13,32 +12,17 @@ interface Props {
 
 const WalletItem: React.FC<Props> = (props) => {
 
-  const [, setAccount] = useGlobalState('account')
-  const [, setConnectedWalletType] = useGlobalState('connectedWalletType')
+  const context = useContext(ArcadeContext)
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
-
-  const initAddress = useCallback(async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (await WalletUtils.isConnected()) {
-      setAccount(address === null ? '' : address)
-
-      const walletType = WalletUtils.getWalletType()
-      setConnectedWalletType(walletType)
-    } else {
-      setAccount('')
-      setConnectedWalletType(CONST.WALLET_TYPE.NONE)
-    }
-  }, [setAccount, setConnectedWalletType])
   
-  const switchHandler = useCallback(async () => {
+  const switchHandler = async () => {
     if (props.connected === false) {
-      await WalletUtils.connect(props.walletType);
+      await context?.connectWallet(props.walletType)
     } else {
-      WalletUtils.disconnect();
+      context?.disconnectWallet()
     }
-    await initAddress()
     setOpenConnectWalletMenu(false)
-  }, [initAddress, props.connected, props.walletType, setOpenConnectWalletMenu])
+  }
 
   if (props.connected === false) {
     return (

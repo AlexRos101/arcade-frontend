@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { useGlobalState } from 'state-pool'
 import { Button, Grid } from '@material-ui/core'
 import { Theme, ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
@@ -15,6 +14,7 @@ import SwitchButton from 'components/Button/SwitchButton'
 import { addNewDiscussion } from 'hooks/api'
 import { Stuff } from 'global/interface'
 import { signText, checkSign } from 'global/wallet'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -45,11 +45,11 @@ interface Props {
 const AddDiscussionForm: React.FC<Props> = (props) => {
   const history = useHistory()
   const classes = useStyles()
+  const account = useContext(ArcadeContext)?.account
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
   const [tag, setTag] = useState('')
-  const [account] = useGlobalState('account')
   
   const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)

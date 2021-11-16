@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
@@ -28,14 +28,12 @@ import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 import Swal from 'sweetalert'
-import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC721 from '../../contracts/ERC721.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 
 import { Response, GameItem } from 'global/interface'
 import MainLoading from 'components/MainLoading'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useERC721, useExchange } from 'hooks/useContract'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -119,6 +117,9 @@ interface ParamTypes {
 const Sell: React.FC<SkinProps> = (data) => {
   const classes = useStyles()
   const skinItem = data ?? initData
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
+  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
   const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
   const sellCardRef = useRef<HTMLDivElement>(null)
   const [games, setGames] = useState([])
@@ -256,11 +257,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-    const address = await Wallet.getCurrentWallet()
-
-    const web3 = new Web3(provider)
-    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+    
 
     const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
     const tokenInfo = {
@@ -274,7 +271,7 @@ const Sell: React.FC<SkinProps> = (data) => {
 
     NFT.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-      .send({ from: address })
+      .send({ from: account })
       .then(async () => {
         const checkDBStatus = async () => {
           const item = (await API.getItemByTokenID(tokenID)).data as unknown
@@ -292,7 +289,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setIsLoading(false)
       })
-  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal])
+  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal, account, NFT.methods])
 
   const updateItem = useCallback(() => {
     setShowLoading(true)
@@ -316,12 +313,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   }, [itemId, selectedGameID, selectedCategoryID, description, name, anonymous, price, history])
 
   const getRate = useCallback(async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods
+    EXCHANGE.methods
       .getRate()
       .call()
       .then((res: string) => {
@@ -332,7 +324,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [])
+  }, [EXCHANGE.methods])
 
   const onHandleResetFile = () => {
     setTokenID(0)

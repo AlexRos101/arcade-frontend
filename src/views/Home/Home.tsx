@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useGlobalState } from 'state-pool'
 
@@ -18,10 +18,11 @@ import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
 import * as WalletUtils from 'global/wallet'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 const Home: React.FC = () => {
   const history = useHistory()
-  const [account] = useGlobalState('account')
+  const account = useContext(ArcadeContext)?.account
   const [, setOpenPointSwap] = useGlobalState('openPointSwap')
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
   const [showHowToPlay, setShowHowToPlay] = useState(false)

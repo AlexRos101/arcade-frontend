@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -8,14 +8,13 @@ import { Typography, Button } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC721 from '../../contracts/ERC721.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
 import MainLoading from 'components/MainLoading'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useERC721, useExchange } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -30,7 +29,9 @@ interface Props {
 }
 
 const ListSellModal: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
+  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
@@ -39,17 +40,13 @@ const ListSellModal: React.FC<Props> = (props) => {
   const [showLoading, setShowLoading] = useState(false)
 
   const refresh = useCallback(async () => {
+    if (web3 === undefined) return
     if (props.open) setShowLoading(true)
 
     if (!(await Wallet.isConnected())) {
       setShowLoading(false)
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
 
     NFT.methods
       .getApproved(props.item.token_id)
@@ -70,7 +67,7 @@ const ListSellModal: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [props.item.token_id, props.open])
+  }, [props.item.token_id, props.open, NFT, web3])
 
   useEffect(() => {
     if (props.item === selectedItem) return
@@ -80,6 +77,7 @@ const ListSellModal: React.FC<Props> = (props) => {
  
 
   const approve = async () => {
+    if (web3 === undefined) return
     setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
@@ -87,11 +85,6 @@ const ListSellModal: React.FC<Props> = (props) => {
       setShowConnectWalletModal(true)
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
 
     NFT.methods
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
@@ -109,6 +102,7 @@ const ListSellModal: React.FC<Props> = (props) => {
   }
 
   const sellRequest = async () => {
+    if (web3 === undefined) return
     setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
@@ -117,12 +111,7 @@ const ListSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods
+    EXCHANGE.methods
       .SellRequest(
         props.item.contract_address,
         props.item.token_id,

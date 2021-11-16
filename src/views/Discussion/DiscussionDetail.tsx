@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Grid, ThemeProvider } from '@material-ui/core'
 import Page from 'components/Layout/Page'
@@ -14,6 +14,7 @@ import { useGlobalState } from 'state-pool'
 import { getStuff, getDiscussion } from 'hooks/api'
 import { greenTheme } from 'styles/theme'
 import { Discussion, Comment, Stuff } from 'global/interface'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 interface ParamTypes {
   staffId: string
@@ -26,6 +27,8 @@ const DiscussionDetail: React.FC = () => {
     rootMargin: '20px',
     threshold: 0,
   }
+
+  const account = useContext(ArcadeContext)?.account
 
   const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)
@@ -45,7 +48,6 @@ const DiscussionDetail: React.FC = () => {
   const { staffId, discussionId } = useParams<ParamTypes>()
   const [showAddComments, setShowAddComments] = useState(false)
   const [commentState, setCommentState] = useGlobalState('commentState')
-  const [account] = useGlobalState('account')
   const [commentOn, setCommentOn] = useState(false)
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(-1)
@@ -108,7 +110,7 @@ const DiscussionDetail: React.FC = () => {
   }
 
   const refresh = () => {
-    getDiscussion(Number(discussionId), account, page, 4).then((res) => {
+    account && getDiscussion(Number(discussionId), account, page, 4).then((res) => {
       const { data } = res
       setDiscussion(data)
 

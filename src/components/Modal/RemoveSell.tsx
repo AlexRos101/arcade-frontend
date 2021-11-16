@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -7,14 +7,12 @@ import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
-import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC721 from '../../contracts/ERC721.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useERC721, useExchange } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -29,7 +27,9 @@ interface Props {
 }
 
 const RemoveSellModal: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
+  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
@@ -48,6 +48,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
   }
 
   const freeze = async () => {
+    if (web3 === undefined) return
     setIsLoading(true)
 
     if (!(await Wallet.isConnected())) {
@@ -55,11 +56,6 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       setShowConnectWalletModal(true)
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
 
     NFT.methods
       .freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
@@ -81,12 +77,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods
+    EXCHANGE.methods
       .CancelSellRequest(props.item.contract_address, props.item.token_id)
       .send({ from: account })
       .then((res: any) => {

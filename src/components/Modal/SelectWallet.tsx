@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useGlobalState } from 'state-pool'
 import Triangle from 'assets/img/triangle.svg'
 import Metamask from 'assets/img/metamask.svg'
 import Walletconnect from 'assets/img/walletconnect.svg'
 import WalletItem from 'components/Menu/WalletItem'
 import * as CONST from '../../global/const'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 interface Props {
   open: boolean
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const SelectWalletModal: React.FC<Props> = (props) => {
+  const connectType = useContext(ArcadeContext)?.connectType
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   if (props.open === true) {
@@ -25,12 +27,12 @@ const SelectWalletModal: React.FC<Props> = (props) => {
             <WalletItem 
               image={<img src={Metamask} alt='' />}
               text={`Metamask`}
-              connected={props.connectedWallet === CONST.WALLET_TYPE.METAMASK}
+              connected={connectType === CONST.WALLET_TYPE.METAMASK}
               walletType={CONST.WALLET_TYPE.METAMASK}/>
             <WalletItem 
               image={<img src={Walletconnect} alt='' />}
               text={`Wallet Connect`}
-              connected={props.connectedWallet === CONST.WALLET_TYPE.WALLETCONNECT}
+              connected={connectType === CONST.WALLET_TYPE.WALLETCONNECT}
               walletType={CONST.WALLET_TYPE.WALLETCONNECT}/>
           </div>
         </div>

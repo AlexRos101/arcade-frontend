@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useCallback } from 'react'
+import React, { memo, useContext, useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Typography, Button, Hidden } from '@material-ui/core'
 
@@ -16,6 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import SelectWalletModal from 'components/Modal/SelectWallet'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,9 +58,8 @@ const NavBarMenu = () => {
   const [hiddenMenu, setHiddenMenu] = useGlobalState('hiddenMenu')
   const classes = useStyles()
 
-  const [account, setAccount] = useGlobalState('account')
+  const context = useContext(ArcadeContext)
   const [openConnectWalletMenu, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
-  const [connectedWalletType, setConnectedWalletType] = useGlobalState('connectedWalletType')
   const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
@@ -70,12 +70,10 @@ const NavBarMenu = () => {
 
   const onWalletConnectHandler = async () => {
     await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
-    initAddress()
   }
 
   const onDisconnectHandler = () => {
     WalletUtils.disconnect()
-    initAddress()
   }
 
   const onPlayGameHandler = useCallback(() => {
@@ -97,19 +95,6 @@ const NavBarMenu = () => {
     return '********' + source.substring(source.length - 6, source.length)
   }, [])
 
-  const initAddress = useCallback(async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (await WalletUtils.isConnected()) {
-      setAccount(address === null ? '' : address)
-
-      const walletType = WalletUtils.getWalletType()
-      setConnectedWalletType(walletType)
-    } else {
-      setAccount('')
-      setConnectedWalletType(CONST.WALLET_TYPE.NONE)
-    }
-  }, [setAccount, setConnectedWalletType])
-
   const onClickDiscussions = useCallback(() => {
     setHiddenMenu('hidden-menu')
     history.push('/discussion')
@@ -119,13 +104,11 @@ const NavBarMenu = () => {
     if (initialized) return
     setInitialized(true)
 
-    initAddress()
-
     if (window.ethereum !== undefined) {
-      window.ethereum.on('accountsChanged', initAddress)
-      window.ethereum.on('chainChanged', initAddress)
+      window.ethereum.on('accountsChanged', context?.updateConnect)
+      window.ethereum.on('chainChanged', context?.updateConnect)
     }
-  }, [connectedWalletType, initAddress, initialized])
+  }, [initialized, context?.updateConnect])
 
   return (
     <div>
@@ -139,7 +122,7 @@ const NavBarMenu = () => {
           <MenuItem text="Discussions" onClick={onClickDiscussions} />
           <SubMenu text="ArcadeMarket" menuData={marketMenu} />
         </div>
-        {account === '' ? (
+        {context?.account === '' || context?.account === undefined ? (
           <div style={{ position: 'relative', }} className="r-wd-100">
             <Hidden xsDown>
               <Button
@@ -151,7 +134,7 @@ const NavBarMenu = () => {
               >
                 <Typography variant="subtitle1">Connect Wallet</Typography>
               </Button>
-              <SelectWalletModal open={openConnectWalletMenu} connectedWallet={Number(connectedWalletType)}/>
+              <SelectWalletModal open={openConnectWalletMenu} connectedWallet={Number(context?.connectType)}/>
             </Hidden>
             <Hidden smUp>
               <Button
@@ -174,9 +157,9 @@ const NavBarMenu = () => {
                 className="menu-btn btn-note"
                 startIcon={<Wallet />}
               >
-                <Typography variant="subtitle1">{shortenString(account)}</Typography>
+                <Typography variant="subtitle1">{shortenString(context?.account)}</Typography>
               </Button>
-              <SelectWalletModal open={openConnectWalletMenu} connectedWallet={connectedWalletType}/>
+              <SelectWalletModal open={openConnectWalletMenu} connectedWallet={context.connectType}/>
             </Hidden>
             <Hidden smUp>
               <Button
@@ -186,7 +169,7 @@ const NavBarMenu = () => {
                 className="menu-btn btn-note"
                 startIcon={<Wallet />}
               >
-                <Typography variant="subtitle1">{shortenString(account)}</Typography>
+                <Typography variant="subtitle1">{shortenString(context?.account)}</Typography>
               </Button>
             </Hidden>
           </div>

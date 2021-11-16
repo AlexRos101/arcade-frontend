@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import RowLabel from 'components/Label/RowLabel'
 import { withStyles } from '@material-ui/core/styles'
 import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
@@ -10,8 +10,8 @@ import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button, Hidden } from '@material-ui/core'
 
 import { useGlobalState } from 'state-pool'
-import * as WalletUtils from '../../global/wallet'
 import * as CONST from 'global/const'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const ConnectWalletModal: React.FC<Props> = (props) => {
-  const [account, setAccount] = useGlobalState('account')
+  const context = useContext(ArcadeContext)
   const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
@@ -34,15 +34,9 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
   }
 
   const onWalletConnectHandler = async () => {
-    await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
-    initAddress()
+    await context?.connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
-
-  const initAddress = async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (address !== account) setAccount(address === null ? '' : address)
-  }
-
+  
   return (
     <Dialog
       className="card-dialog"

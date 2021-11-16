@@ -1,32 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import RowLabel from 'components/Label/RowLabel'
 import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
 import { useGlobalState } from 'state-pool'
-import * as WalletUtils from '../../../global/wallet'
 import * as CONST from 'global/const'
 
 import { Typography, Button, Hidden } from '@material-ui/core'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
-  const [account, setAccount] = useGlobalState('account')
+  const context = useContext(ArcadeContext)
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const onConnectWalletHandler = async () => {
-    // connect()
-    // initAddress()
     setOpenConnectWalletMenu(true)
   }
 
   const onWalletConnectHandler = async () => {
-    await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
-    initAddress()
-  }
-
-  const initAddress = async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (address !== account) setAccount(address === null ? '' : address)
+    context?.connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 
 import { Button, Grid } from '@material-ui/core'
 import { Theme, ThemeProvider, makeStyles } from '@material-ui/core/styles'
@@ -15,6 +15,7 @@ import { addNewComment } from 'hooks/api'
 import { Comment } from 'global/interface'
 
 import { signText, checkSign } from 'global/wallet'
+import { ArcadeContext } from 'contexts/ArcadeContext'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -47,11 +48,11 @@ interface Props {
 
 const AddReply: React.FC<Props> = (props) => {
   const classes = useStyles()
+  const account = useContext(ArcadeContext)?.account
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
   const [, setCommentState] = useGlobalState('commentState')
-  const [account] = useGlobalState('account')
 
   const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)

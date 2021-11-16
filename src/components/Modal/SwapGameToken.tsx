@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -9,11 +9,10 @@ import BigNumber from 'bignumber.js'
 import Swal from 'sweetalert'
 import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC20 from '../../contracts/ERC20.json'
-import SWAP from '../../contracts/SWAP.json'
 import { Token } from 'global/interface'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useERC20, useSwap } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -31,7 +30,9 @@ interface Props {
 }
 
 const SwapGameToken: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const ARCADE = useERC20(web3, process.env.REACT_APP_ARCADEDOGE_ADDRESS as string)
+  const SWAP = useSwap(web3, process.env.REACT_APP_SWAP_ADDRESS as string)
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
@@ -49,11 +50,6 @@ const SwapGameToken: React.FC<Props> = (props) => {
       setSecondStepClassName('item')
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const ARCADE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
     ARCADE.methods
       .allowance(account, process.env.REACT_APP_SWAP_ADDRESS)
@@ -74,7 +70,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.amount, props.inputCoin, setIsLoading]) 
+  }, [account, props.amount, props.inputCoin, setIsLoading, ARCADE, web3]) 
 
   useEffect(() => {
     refresh()
@@ -88,11 +84,6 @@ const SwapGameToken: React.FC<Props> = (props) => {
       setShowConnectWalletModal(true)
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const ARCADE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
 
     ARCADE.methods
       .approve(
@@ -121,12 +112,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const swap = new web3.eth.Contract(SWAP as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
-
-    swap.methods
+    SWAP.methods
       .buyGamePoint(
         1,
         Web3.utils.toWei(

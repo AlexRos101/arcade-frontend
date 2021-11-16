@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { useGlobalState } from 'state-pool'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -20,14 +19,12 @@ import PriceLayout from 'components/Layout/PriceLayout'
 import PriceHeaderLabel from './PriceHeaderLabel'
 import PriceLabel from './PriceLabel'
 
-import { AbiItem } from 'web3-utils'
-import * as Wallet from '../../../global/wallet'
-import EXCHANGE from '../../../contracts/EXCHANGE.json'
-import Web3 from 'web3'
 import BuyModal from 'components/Modal/Buy'
 import BuyBUSDModal from 'components/Modal/BuyBUSD'
 
 import { GameItem } from 'global/interface'
+import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useExchange } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -56,19 +53,15 @@ const theme = createTheme({
 })
 
 const CardModal: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
+  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
+  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
   const [showBuyDlg, setShowBuyDlg] = useState(false)
   const [showBuyBUSDDlg, setShowBuyBUSDDlg] = useState(false)
   const [rate, setRate] = useState(new BigNumber(0))
   const [initialized, setInitialized] = useState(false)
 
   const getRate = useCallback(async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
-    exchange.methods
+    EXCHANGE.methods
       .getRate()
       .call()
       .then((res: string) => {
@@ -79,7 +72,7 @@ const CardModal: React.FC<Props> = (props) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [])
+  }, [EXCHANGE.methods])
 
   useEffect(() => {
     if (initialized) return
