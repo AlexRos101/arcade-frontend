@@ -3,22 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { ThemeProvider as MuiThemeProvider, StylesProvider } from '@material-ui/core/styles'
 
-import { store } from 'state-pool'
 import { ArcadeProvider } from 'Providers'
 import theme from './styles/theme'
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
-import { initializeGlobalVar } from 'global/gloalVar'
-import { useGlobalState } from 'state-pool'
 import ConnectWalletModal from 'components/Modal/ConnectWallet'
-import * as CONST from './global/const'
-
-store.setState('account', '')
-store.setState('showConnectWalletModal', false)
-store.setState('openConnectWalletMenu', false)
-store.setState('connectedWalletType', CONST.WALLET_TYPE.NONE)
-initializeGlobalVar()
 
 const Home = lazy(() => import('./views/Home'))
 const Market = lazy(() => import('./views/Market'))
@@ -33,10 +23,7 @@ const DiscussionSearch = lazy(() => import('./views/Discussion/DiscussionSearch'
 const DiscussionAdd = lazy(() => import('./views/Discussion/DiscussionAdd'))
 
 const App: React.FunctionComponent = () => {
-  const [, setDscIsSet] = useGlobalState('dscUpdate')
-
-  setDscIsSet(false)
-  
+ 
   return (
     <MuiThemeProvider theme={theme}>
       <ArcadeProvider>

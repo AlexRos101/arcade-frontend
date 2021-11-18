@@ -10,13 +10,14 @@ import Flex from 'components/Layout/Flex'
 import LabelComponent from 'components/Label/LabelComponent'
 import TextField from '@material-ui/core/TextField'
 import SwitchButton from 'components/Button/SwitchButton'
-import { useGlobalState } from 'state-pool'
 
 import { addNewComment } from 'hooks/api'
 import { Discussion } from 'global/interface'
 
 import { signText, checkSign } from 'global/wallet'
 import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setCommentState } from 'state/show'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -49,11 +50,11 @@ interface Props {
 
 const AddComment: React.FC<Props> = (props) => {
   const classes = useStyles()
+  const dispatch = useAppDispatch()
   const { account } = useArcadeContext()
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
-  const [, setCommentState] = useGlobalState('commentState')
 
   const onSwitchAnonymous = () => {
     setAnonymous(!anonymous)
@@ -70,13 +71,13 @@ const AddComment: React.FC<Props> = (props) => {
 
     addNewComment(Number(props.discussion.id), -1, content, anonymous === false ? 0 : 1, user, signature, account).then((res) => {
       if (res.result === true) {
-        setCommentState(2)
+        dispatch(setCommentState(2))
         props.onReset()
       } else {
         console.log(res.data)
       }
     })
-  }, [props, account, anonymous, content, user, setCommentState])
+  }, [props, account, anonymous, content, user, dispatch])
 
   if (props.visible === false) return <div />
 

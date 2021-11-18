@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+import internal from "stream";
+
 export interface Response {
   result: boolean
   data?: any
@@ -64,4 +66,20 @@ export interface Token {
   tokenName: string
   tokenFullName: string
   tokenAvartar: string
+}
+
+export interface ShowState {
+  termOfUse: boolean,
+  privacyPolicy: boolean,
+  walletMenu: boolean,
+  connWallet: boolean,
+  isLoading: boolean,
+  pointSwap: boolean,
+  hiddenMenu: string,
+  discussionRule: boolean,
+  commentState: number,
+}
+
+export interface State {
+  show: ShowState
 }

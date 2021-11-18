@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
 import axios from 'axios'
-import { useGlobalState } from 'state-pool'
 import { Box, Button, Grid, Select } from '@material-ui/core'
 import { Theme, ThemeProvider, createStyles, makeStyles, withStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
@@ -34,6 +33,8 @@ import { Response, GameItem } from 'global/interface'
 import MainLoading from 'components/MainLoading'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useNFT, useExchange } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -115,6 +116,7 @@ interface ParamTypes {
 }
 
 const Sell: React.FC<SkinProps> = (data) => {
+  const dispatch = useAppDispatch()
   const classes = useStyles()
   const skinItem = data ?? initData
   const { account } = useArcadeContext()
@@ -138,8 +140,6 @@ const Sell: React.FC<SkinProps> = (data) => {
   const [itemId, setItemId] = useState(-1)
   const [showLoading, setShowLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const history = useHistory()
 
@@ -249,11 +249,11 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -276,7 +276,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemByTokenID(tokenID)).data as unknown
           if (item !== undefined && item !== null) {
-            setIsLoading(false)
+            dispatch(setIsLoading(false))
             history.push('/listing')
             document.location.reload()
           } else {
@@ -287,9 +287,9 @@ const Sell: React.FC<SkinProps> = (data) => {
         checkDBStatus()
       })
       .catch(() => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
-  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal, account, nft.methods])
+  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, dispatch, account, nft.methods])
 
   const updateItem = useCallback(() => {
     setShowLoading(true)

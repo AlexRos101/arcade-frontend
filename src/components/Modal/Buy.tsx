@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 
-import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
@@ -14,6 +13,8 @@ import * as API from '../../hooks/api'
 import { GameItem } from 'global/interface'
 import { useArcadeDoge, useExchange } from 'hooks/useContract'
 import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -28,43 +29,42 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { account, web3 } = useArcadeContext()
   const arcadeDoge = useArcadeDoge()
   const exchange = useExchange()
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
   const refresh = useCallback(async () => {
+    if (!account) return
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
       return
     }
-    // @Testcode@
-    console.log('ASDF')
+
     arcadeDoge.methods
-      .allowance(account, process.env.REACT_APP_exchange_ADDRESS)
+      .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
       .call()
       .then((res: string) => {
         if (Number.parseFloat(Web3.utils.fromWei(res)) >= Number(props.item.arcadedoge_price)) {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
         } else {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item')
           setSecondStepClassName('item-disabled')
         }
       })
       .catch(() => {
-        // setIsLoading(false);
+        // dispatch(setIsLoading(false));
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, setIsLoading, arcadeDoge])
+  }, [account, props.item.arcadedoge_price, dispatch, arcadeDoge])
 
   useEffect(() => {
     if (props.item === selectedItem) return
@@ -75,25 +75,25 @@ const BuyModal: React.FC<Props> = (props) => {
   const approve = async () => {
     if (web3 === undefined) return
 
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
     arcadeDoge.methods
-      .approve(process.env.REACT_APP_exchange_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
+      .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
       .send({ from: account })
       .then((res: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
       .catch((err: any) => {
         console.log(err)
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
@@ -101,11 +101,11 @@ const BuyModal: React.FC<Props> = (props) => {
 
   const buy = async () => {
     if (web3 === undefined) return
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -131,7 +131,7 @@ const BuyModal: React.FC<Props> = (props) => {
         checkDBStatus()
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 

@@ -3,18 +3,19 @@ import RowLabel from 'components/Label/RowLabel'
 import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
-import { useGlobalState } from 'state-pool'
 import * as CONST from 'global/const'
 
 import { Typography, Button, Hidden } from '@material-ui/core'
 import { useArcadeContext } from 'hooks/useArcadeContext'
+import { setWalletMenu } from 'state/show'
+import { useAppDispatch } from 'state'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
-  const context = useArcadeContext()
-  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+  const dispatch = useAppDispatch()
+  const { connectWallet } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
-    setOpenConnectWalletMenu(true)
+    dispatch(setWalletMenu(true))
   }
 
   const onWalletConnectHandler = async () => {

@@ -21,7 +21,7 @@ interface Props {
 }
 
 const OrderApprovalModal: React.FC<Props> = (props) => {
-  const context = useArcadeContext()
+  const { connectWallet } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
     connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)

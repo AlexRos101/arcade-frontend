@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import { useGlobalState } from 'state-pool'
 import Swal from 'sweetalert'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
@@ -27,6 +26,8 @@ import { getVerificationCode } from 'hooks/api'
 import { getBalance } from 'hooks/gameapi'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useSwap, useArcadeDoge } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -40,6 +41,7 @@ interface Props {
 }
 
 const PointSwap: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { account, web3 } = useArcadeContext()
   const swap = useSwap()
   const arcadeDoge = useArcadeDoge()
@@ -61,7 +63,6 @@ const PointSwap: React.FC<Props> = (props) => {
   const [gamePointBalance, setGamePointBalance] = useState(new BigNumber(0))
   const [outputBalance, setOutputBalance] = useState(0)
   const [inputBalance, setInputBalance] = useState(0)
-  const [, setIsLoading] = useGlobalState('isLoading')
 
   const getArcadeDogeRate = useCallback(async () => {
     swap.methods
@@ -112,10 +113,10 @@ const PointSwap: React.FC<Props> = (props) => {
 
 
   const buyArcade = async () => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
       return
     }
 
@@ -123,7 +124,7 @@ const PointSwap: React.FC<Props> = (props) => {
     .then(async (res) => {
       if (res.result === false) {
         Swal(res.msg as string)
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         onClose()
         return
       }
@@ -138,12 +139,12 @@ const PointSwap: React.FC<Props> = (props) => {
         .send({ from: account })
         .then(() => {
           Swal("Game Point sold successfully!")
-          setIsLoading(false)
+          dispatch(setIsLoading(false))
           onClose()
         })
         .catch(() => {
           Swal("Sell Game Point failed!")
-          setIsLoading(false)
+          dispatch(setIsLoading(false))
         })
     })
   }

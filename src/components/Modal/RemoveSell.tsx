@@ -6,13 +6,14 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 
-import { useGlobalState } from 'state-pool'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useNFT, useExchange } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -27,11 +28,10 @@ interface Props {
 }
 
 const RemoveSellModal: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { account, web3 } = useArcadeContext()
   const nft = useNFT()
   const exchange = useExchange()
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
@@ -49,11 +49,11 @@ const RemoveSellModal: React.FC<Props> = (props) => {
 
   const freeze = async () => {
     if (web3 === undefined) return
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -64,16 +64,16 @@ const RemoveSellModal: React.FC<Props> = (props) => {
         document.location.reload()
       })
       .catch(() => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 
   const removeSellRequest = async () => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -85,7 +85,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
           console.log('ddd')
           const item = (await API.getItemById(props.item.id)).data
           if (!item.is_visible) {
-            setIsLoading(false)
+            dispatch(setIsLoading(false))
             setFirstStepClassName('item-processed')
             setSecondStepClassName('item')
           } else {
@@ -97,7 +97,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
         console.log('ccc')
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 

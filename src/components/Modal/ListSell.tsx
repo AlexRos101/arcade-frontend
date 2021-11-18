@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 
-import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
@@ -14,6 +13,8 @@ import { useArcadeContext } from 'hooks/useArcadeContext'
 import { GameItem } from 'global/interface'
 import MainLoading from 'components/MainLoading'
 import { useNFT, useExchange } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -28,11 +29,10 @@ interface Props {
 }
 
 const ListSellModal: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { account, web3 } = useArcadeContext()
   const nft = useNFT()
   const exchange = useExchange()
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
@@ -77,11 +77,11 @@ const ListSellModal: React.FC<Props> = (props) => {
 
   const approve = async () => {
     if (web3 === undefined) return
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -89,12 +89,12 @@ const ListSellModal: React.FC<Props> = (props) => {
       .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
       .send({ from: account })
       .then((res: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
@@ -102,11 +102,11 @@ const ListSellModal: React.FC<Props> = (props) => {
 
   const sellRequest = async () => {
     if (web3 === undefined) return
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -132,7 +132,7 @@ const ListSellModal: React.FC<Props> = (props) => {
         console.log('aaa')
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 

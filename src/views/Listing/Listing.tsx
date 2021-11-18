@@ -9,7 +9,6 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import MainLoading from 'components/MainLoading'
 import Paper from '@material-ui/core/Paper'
-import { useGlobalState } from 'state-pool'
 import * as CONST from '../../global/const'
 import * as WalletUtils from '../../global/wallet'
 import BigNumber from 'bignumber.js'
@@ -28,6 +27,8 @@ import Row from './components/Row'
 import { GameItem } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useNFT, useExchange } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const useStyles = makeStyles({
   tableContainer: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles({
 })
 
 const Listing: React.FC = () => {
+  const dispatch = useAppDispatch()
   const classes = useStyles()
   const { account } = useArcadeContext()
   const nft = useNFT()
@@ -51,8 +53,6 @@ const Listing: React.FC = () => {
   const [showUnlistModal, setShowUnlistModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
   const [showLoading, setShowLoading] = useState(false)
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-  const [, setIsLoading] = useGlobalState('isLoading')
   const [, setPage] = useState(0)
   const [rate, setRate] = useState(new BigNumber(0))
 
@@ -81,11 +81,11 @@ const Listing: React.FC = () => {
   }
 
   const burnToken = async (index: number) => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -105,7 +105,7 @@ const Listing: React.FC = () => {
         checkItemStatus()
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 
@@ -134,13 +134,13 @@ const Listing: React.FC = () => {
 
   const init = useCallback(async () => {
     if (!(await WalletUtils.isConnected())) {
-      setShowConnectWalletModal(true);
-      return;
+      dispatch(setConnectWallet(true))
+      return
     }
 
     getMyItems(0, 10)
     getRate()
-  }, [getMyItems, getRate, setShowConnectWalletModal])
+  }, [getMyItems, getRate, dispatch])
 
   /* eslint-disable */
 

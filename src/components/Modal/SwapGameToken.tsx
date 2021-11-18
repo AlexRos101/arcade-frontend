@@ -7,12 +7,13 @@ import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import Swal from 'sweetalert'
-import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import { Token } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useArcadeDoge, useSwap } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -30,18 +31,17 @@ interface Props {
 }
 
 const SwapGameToken: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { account, web3 } = useArcadeContext()
   const arcadeDoge = useArcadeDoge()
   const swap = useSwap()
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
 
   const refresh = useCallback(async () => {
-    // setIsLoading(true);
+    // dispatch(setIsLoading(true));
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
       return
     }
 
@@ -56,32 +56,32 @@ const SwapGameToken: React.FC<Props> = (props) => {
       .call()
       .then((res: string) => {
         if (props.amount.minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
         } else {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item')
           setSecondStepClassName('item-disabled')
         }
       })
       .catch(() => {
-        // setIsLoading(false);
+        // dispatch(setIsLoading(false));
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.amount, props.inputCoin, setIsLoading, arcadeDoge, web3]) 
+  }, [account, props.amount, props.inputCoin, dispatch, arcadeDoge, web3]) 
 
   useEffect(() => {
     refresh()
   }, [props.inputCoin, props.open, refresh])
 
   const approve = async () => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -92,23 +92,23 @@ const SwapGameToken: React.FC<Props> = (props) => {
       )
       .send({ from: account })
       .then((res: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
   }
 
   const buyGamePoint = async () => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
@@ -123,12 +123,12 @@ const SwapGameToken: React.FC<Props> = (props) => {
       .send({ from: account })
       .then(() => {
         Swal("Game Point bought successfully!")
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         props.onClose()
       })
       .catch(() => {
         Swal("Buy Game Point failed!")
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 

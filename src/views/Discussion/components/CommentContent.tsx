@@ -12,12 +12,14 @@ import IconLabel from 'components/Label/IconLabel'
 import ReactTimeAgo from 'react-time-ago'
 import * as Wallet from 'global/wallet'
 import { setLikes, getComment } from 'hooks/api'
-import { useGlobalState } from 'state-pool'
 import { Comment } from 'global/interface'
 import Badge from 'components/Badge'
 
 import AddReply from './AddReply'
 import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { useShow } from 'state/show/hook'
+import { setConnectWallet, setCommentState } from 'state/show'
 
 interface Props {
   comment: Comment
@@ -26,15 +28,14 @@ interface Props {
 }
 
 const CommentContent: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { account } = useArcadeContext()
+  const { commentState } = useShow()
   const [comment, setComment] = useState(props.comment)
   const [cmtIsSet, setCmtIsSet] = useState(0)
   const [showAddReply, setShowAddReply] = useState(false)
-  const [commentState, setCommentState] = useGlobalState('commentState')
   const [replyOn, setReplyOn] = useState(false)
   const [isLike, setIsLike] = useState(0)
-
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   useEffect(() => {
     if (commentState === 2) {
@@ -42,10 +43,10 @@ const CommentContent: React.FC<Props> = (props) => {
         setShowAddReply(false)
       } else {
         setReplyOn(false)
-        setCommentState(0)
+        dispatch(setCommentState(0))
       }
     }
-  }, [commentState, replyOn, showAddReply, setCommentState])
+  }, [commentState, replyOn, showAddReply, dispatch])
 
   const refreshLikeStatus = useCallback(async () => {
     if (isLike !== 0) return
@@ -66,10 +67,10 @@ const CommentContent: React.FC<Props> = (props) => {
   }, [props, isLike, account, refreshLikeStatus])
 
   const onAddReply = useCallback(() => {
-    setCommentState(2)
+    dispatch(setCommentState(2))
     setReplyOn(true)
     setShowAddReply(true)
-  }, [setCommentState])
+  }, [dispatch])
 
   const onReset = (newComment: Comment) => {
     props.onReset(newComment, comment.id)
@@ -95,9 +96,9 @@ const CommentContent: React.FC<Props> = (props) => {
         })
       }
     } else {
-      setShowConnectWalletModal(true)
+      dispatch(setConnectWallet(true))
     }
-  }, [isLike, account, comment, cmtIsSet, setShowConnectWalletModal])
+  }, [isLike, account, comment, cmtIsSet, dispatch])
 
   useEffect(() => {
     if (cmtIsSet === 0) {

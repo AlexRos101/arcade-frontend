@@ -9,9 +9,11 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button, Hidden } from '@material-ui/core'
 
-import { useGlobalState } from 'state-pool'
 import * as CONST from 'global/const'
 import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setWalletMenu, setConnectWallet } from 'state/show'
+import { useShow } from 'state/show/hook'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -24,13 +26,13 @@ interface Props {
 }
 
 const ConnectWalletModal: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
   const { connectWallet } = useArcadeContext()
-  const [showConnectWalletModal, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
-  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+  const { connWallet } =  useShow()
 
   const onConnectWalletHandler = async () => {
-    setShowConnectWalletModal(false)
-    setOpenConnectWalletMenu(true)
+    dispatch(setConnectWallet(false))
+    dispatch(setWalletMenu(true))
   }
 
   const onWalletConnectHandler = async () => {
@@ -41,9 +43,9 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
     <Dialog
       className="card-dialog"
       maxWidth="sm"
-      onClose={() => setShowConnectWalletModal(false)}
+      onClose={() => dispatch(setConnectWallet(false))}
       aria-labelledby="customized-dialog-title"
-      open={showConnectWalletModal}
+      open={connWallet}
       PaperProps={{ style: { borderRadius: 7 } }}
     >
       <DialogContent className="modal-wallet-content" dividers>
@@ -67,7 +69,7 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
           </div>
         </div>
       </DialogContent>
-      <IconButton aria-label="close" className="modal-close" onClick={() => setShowConnectWalletModal(false)}>
+      <IconButton aria-label="close" className="modal-close" onClick={() => dispatch(setConnectWallet(false))}>
         <CloseIcon />
       </IconButton>
     </Dialog>
