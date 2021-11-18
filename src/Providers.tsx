@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
+import { isMobile } from 'react-device-detect'
 
 import { ArcadeContext } from 'contexts/ArcadeContext'
 import * as Wallet from 'global/wallet'
@@ -9,13 +10,10 @@ import * as CONST from 'global/const'
 
 export const ArcadeProvider: React.FC = ({ children }) => {
 
-  const [account, setAccount] = useState<string>('')
+  const [account, setAccount] = useState<string>()
   const [web3, setWeb3] = useState<Web3>(new Web3())
-  const [width, ] = useState<number>(window.innerWidth)
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const [connectType, setConnectType] = useState<number>(CONST.WALLET_TYPE.NONE)
-
-  const isMobile: boolean = (width <= 768)
   
   const getWeb3 = async () => {
     const provider = await Wallet.getCurrentProvider()
@@ -61,7 +59,7 @@ export const ArcadeProvider: React.FC = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (account === '')
+    if (!account)
       setIsConnected(false)
     else
       setIsConnected(true)

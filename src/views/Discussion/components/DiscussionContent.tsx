@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 
 import Card from 'components/Card'
@@ -10,7 +10,7 @@ import { useGlobalState } from 'state-pool'
 import { setLikes, getLikes, getDiscussion } from 'hooks/api'
 import ReactTimeAgo from 'react-time-ago'
 import Badge from 'components/Badge'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 import { Discussion } from 'global/interface'
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const DiscussionContent: React.FC<Props> = (props) => {
-  const account = useContext(ArcadeContext)?.account
+  const { account } = useArcadeContext()
   const [discussion, setDiscussion] = useState(props.discussion)
   const [isLike, setIsLike] = useState(0)
   const [dscIsSet, setDscIsSet] = useState(0)
@@ -27,7 +27,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
   useEffect(() => {
     if (isLike !== 0) return
     if (props.discussion.id === -1 || props.discussion.id === undefined) return
-    if (account === '') return
+    if (!account) return
 
     setIsLike(3)
 
@@ -53,7 +53,7 @@ const DiscussionContent: React.FC<Props> = (props) => {
   }, [props, discussion, dscIsSet, account])
 
   const onHandleLikes = useCallback(() => {
-    if (account !== '' && account !== undefined) {
+    if (account) {
       if (dscIsSet !== 2) return
       setDscIsSet(1)
       if (isLike === 1) {

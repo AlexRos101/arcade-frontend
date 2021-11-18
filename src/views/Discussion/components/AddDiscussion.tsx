@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { Button, Grid } from '@material-ui/core'
@@ -14,7 +14,7 @@ import SwitchButton from 'components/Button/SwitchButton'
 import { addNewDiscussion } from 'hooks/api'
 import { Stuff } from 'global/interface'
 import { signText, checkSign } from 'global/wallet'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -45,7 +45,7 @@ interface Props {
 const AddDiscussionForm: React.FC<Props> = (props) => {
   const history = useHistory()
   const classes = useStyles()
-  const account = useContext(ArcadeContext)?.account
+  const { account } = useArcadeContext()
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
@@ -56,7 +56,7 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
   }
 
   const onAddDiscussion = useCallback(async () => {
-    if (account === '' || account === undefined) return
+    if (!account) return
 
     const signature = await signText(content, account)
     const is_signed = await checkSign(content, signature, account)

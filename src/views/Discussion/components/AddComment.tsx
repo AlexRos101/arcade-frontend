@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback } from 'react'
 
 import { Button, Grid } from '@material-ui/core'
 
@@ -16,7 +16,7 @@ import { addNewComment } from 'hooks/api'
 import { Discussion } from 'global/interface'
 
 import { signText, checkSign } from 'global/wallet'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -49,7 +49,7 @@ interface Props {
 
 const AddComment: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const account = useContext(ArcadeContext)?.account
+  const { account } = useArcadeContext()
   const [anonymous, setAnonymous] = useState(false)
   const [content, setContent] = useState('')
   const [user, setUser] = useState('')
@@ -60,7 +60,7 @@ const AddComment: React.FC<Props> = (props) => {
   }
 
   const onAddComment = useCallback(async () => {
-    if (account === '' || account === undefined) return
+    if (!account) return
 
     const signature = await signText(content, account)
     const is_signed = await checkSign(content, signature, account)

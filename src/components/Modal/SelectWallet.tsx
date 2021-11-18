@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useGlobalState } from 'state-pool'
 import Triangle from 'assets/img/triangle.svg'
 import Metamask from 'assets/img/metamask.svg'
 import Walletconnect from 'assets/img/walletconnect.svg'
 import WalletItem from 'components/Menu/WalletItem'
 import * as CONST from '../../global/const'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 interface Props {
   open: boolean
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const SelectWalletModal: React.FC<Props> = (props) => {
-  const connectType = useContext(ArcadeContext)?.connectType
+  const { connectType } = useArcadeContext()
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   if (props.open === true) {

@@ -3,7 +3,7 @@ import Web3 from 'web3'
 
 export interface ArcadeContextValue {
   web3: Web3,
-  account: string,
+  account: string | undefined,
   isConnected: boolean,
   connectType: number,
   disconnectWallet: () => void,

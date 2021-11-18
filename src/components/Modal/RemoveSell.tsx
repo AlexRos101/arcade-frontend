@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -11,8 +11,8 @@ import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useERC721, useExchange } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useNFT, useExchange } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -27,9 +27,9 @@ interface Props {
 }
 
 const RemoveSellModal: React.FC<Props> = (props) => {
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
-  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
+  const { account, web3 } = useArcadeContext()
+  const nft = useNFT()
+  const exchange = useExchange()
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
@@ -57,7 +57,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    NFT.methods
+    nft.methods
       .freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
       .send({ from: account })
       .then((res: any) => {
@@ -77,7 +77,7 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    EXCHANGE.methods
+    exchange.methods
       .CancelSellRequest(props.item.contract_address, props.item.token_id)
       .send({ from: account })
       .then((res: any) => {

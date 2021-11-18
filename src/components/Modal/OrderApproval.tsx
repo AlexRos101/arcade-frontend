@@ -1,12 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
-
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 import * as CONST from 'global/const'
 
 const DialogContent = withStyles((theme) => ({
@@ -22,10 +21,10 @@ interface Props {
 }
 
 const OrderApprovalModal: React.FC<Props> = (props) => {
-  const context = useContext(ArcadeContext)
+  const context = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
-    context?.connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
+    connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (

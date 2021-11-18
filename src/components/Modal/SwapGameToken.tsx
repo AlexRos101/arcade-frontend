@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -11,8 +11,8 @@ import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import { Token } from 'global/interface'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useERC20, useSwap } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useArcadeDoge, useSwap } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -30,9 +30,9 @@ interface Props {
 }
 
 const SwapGameToken: React.FC<Props> = (props) => {
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const ARCADE = useERC20(web3, process.env.REACT_APP_ARCADEDOGE_ADDRESS as string)
-  const SWAP = useSwap(web3, process.env.REACT_APP_SWAP_ADDRESS as string)
+  const { account, web3 } = useArcadeContext()
+  const arcadeDoge = useArcadeDoge()
+  const swap = useSwap()
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
@@ -45,13 +45,13 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
-    if (props.inputCoin !== undefined && props.inputCoin?.tokenName !== "$ARCADE") {
+    if (props.inputCoin !== undefined && props.inputCoin?.tokenName !== "$arcadeDoge") {
       setFirstStepClassName('item-processed')
       setSecondStepClassName('item')
       return
     }
 
-    ARCADE.methods
+    arcadeDoge.methods
       .allowance(account, process.env.REACT_APP_SWAP_ADDRESS)
       .call()
       .then((res: string) => {
@@ -70,7 +70,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.amount, props.inputCoin, setIsLoading, ARCADE, web3]) 
+  }, [account, props.amount, props.inputCoin, setIsLoading, arcadeDoge, web3]) 
 
   useEffect(() => {
     refresh()
@@ -85,7 +85,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
-    ARCADE.methods
+    arcadeDoge.methods
       .approve(
         process.env.REACT_APP_SWAP_ADDRESS,
         Web3.utils.toWei(props.amount.toString() + '', 'ether'),
@@ -112,7 +112,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
-    SWAP.methods
+    swap.methods
       .buyGamePoint(
         1,
         Web3.utils.toWei(
@@ -133,7 +133,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
   }
 
   const onBuy = () => {
-    if (props.inputCoin?.tokenName === "$ARCADE") {
+    if (props.inputCoin?.tokenName === "$arcadeDoge") {
       buyGamePoint()
     }
   }
@@ -150,7 +150,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       <DialogContent className="modal-order-content" dividers>
         <div {...props} style={{ padding: '2vh 0' }}>
           <p className="approval-header" style={{ textAlign: 'center', maxWidth: '300px' }}>
-            Swap $ARCADE to STARSHARD Token
+            Swap $arcadeDoge to STARSHARD Token
           </p>
 
           <div className={firstStepClassName}>
@@ -162,7 +162,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your $ARCADE token</p>
+                  <p id="content">Approve your $arcadeDoge token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -188,7 +188,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy STARSHARD with $ARCADE</p>
+                  <p id="content">Buy STARSHARD with $arcadeDoge</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

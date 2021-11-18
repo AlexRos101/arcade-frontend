@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useGlobalState } from 'state-pool'
 import WltSwitchButton from 'components/Button/WltSwitchButton'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 interface Props {
   image: any
@@ -12,14 +12,14 @@ interface Props {
 
 const WalletItem: React.FC<Props> = (props) => {
 
-  const context = useContext(ArcadeContext)
+  const { connectWallet, disconnectWallet } = useArcadeContext()
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
   
   const switchHandler = async () => {
     if (props.connected === false) {
-      await context?.connectWallet(props.walletType)
+      await connectWallet(props.walletType)
     } else {
-      context?.disconnectWallet()
+      disconnectWallet()
     }
     setOpenConnectWalletMenu(false)
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Hidden } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -26,8 +26,8 @@ import RedPagination from 'components/Pagination/RedPagination'
 
 import Row from './components/Row'
 import { GameItem } from 'global/interface'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useERC721, useExchange } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useNFT, useExchange } from 'hooks/useContract'
 
 const useStyles = makeStyles({
   tableContainer: {
@@ -41,9 +41,9 @@ const useStyles = makeStyles({
 
 const Listing: React.FC = () => {
   const classes = useStyles()
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
-  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
+  const { account } = useArcadeContext()
+  const nft = useNFT()
+  const exchange = useExchange()
   const [rowsPerPage] = useState(10)
   const [rows, setRows] = useState<Array<GameItem>>([])
   const [count, setCount] = useState(0)
@@ -58,11 +58,10 @@ const Listing: React.FC = () => {
 
   const getMyItems = useCallback(
     async (limit: number, cnt: number) => {
-      if (account === null) {
+      if (!account) {
         return
       }
       setShowLoading(true)
-      // setRows([])
       const items = await API.getItemsByAddress(account, CONST.SORT_TYPE.NONE, limit, cnt)
       setCount(Number(items.total))
       setRows(items.data)
@@ -90,7 +89,7 @@ const Listing: React.FC = () => {
       return
     }
 
-    NFT.methods
+    nft.methods
       .burn(rows[index].token_id)
       .send({ from: account })
       .then((res: any) => {
@@ -120,7 +119,7 @@ const Listing: React.FC = () => {
 
   const getRate = useCallback(async () => {
     
-    EXCHANGE.methods
+    exchange.methods
       .getRate()
       .call()
       .then((res: string) => {
@@ -131,7 +130,7 @@ const Listing: React.FC = () => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [EXCHANGE.methods])
+  }, [exchange.methods])
 
   const init = useCallback(async () => {
     if (!(await WalletUtils.isConnected())) {

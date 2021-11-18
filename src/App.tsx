@@ -39,9 +39,9 @@ const App: React.FunctionComponent = () => {
   
   return (
     <MuiThemeProvider theme={theme}>
-      <ThemeProvider theme={theme}>
-        <StylesProvider injectFirst>
-          <ArcadeProvider>
+      <ArcadeProvider>
+        <ThemeProvider theme={theme}>
+          <StylesProvider injectFirst>
             <Router>
               <Menu />
               <Suspense fallback={<PageLoader />}>
@@ -62,10 +62,10 @@ const App: React.FunctionComponent = () => {
               </Suspense>
               <Footer />
             </Router>
-          </ArcadeProvider>
-        </StylesProvider>
-        <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet." />
-      </ThemeProvider>
+          </StylesProvider>
+          <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet." />
+        </ThemeProvider>
+      </ArcadeProvider>
     </MuiThemeProvider>
   )
 }

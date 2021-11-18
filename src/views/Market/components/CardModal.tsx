@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -23,7 +23,7 @@ import BuyModal from 'components/Modal/Buy'
 import BuyBUSDModal from 'components/Modal/BuyBUSD'
 
 import { GameItem } from 'global/interface'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useExchange } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
@@ -53,15 +53,15 @@ const theme = createTheme({
 })
 
 const CardModal: React.FC<Props> = (props) => {
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
+  const { account } = useArcadeContext()
+  const exchange = useExchange()
   const [showBuyDlg, setShowBuyDlg] = useState(false)
   const [showBuyBUSDDlg, setShowBuyBUSDDlg] = useState(false)
   const [rate, setRate] = useState(new BigNumber(0))
   const [initialized, setInitialized] = useState(false)
 
   const getRate = useCallback(async () => {
-    EXCHANGE.methods
+    exchange.methods
       .getRate()
       .call()
       .then((res: string) => {
@@ -72,7 +72,7 @@ const CardModal: React.FC<Props> = (props) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [EXCHANGE.methods])
+  }, [exchange.methods])
 
   useEffect(() => {
     if (initialized) return

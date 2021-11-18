@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -12,8 +12,8 @@ import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
 
 import { GameItem } from 'global/interface'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useERC20, useExchange } from 'hooks/useContract'
+import { useArcadeDoge, useExchange } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -28,9 +28,9 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = (props) => {
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const ARCADEDOGE = useERC20(web3, process.env.REACT_APP_ARCADEDOGE_ADDRESS as string)
-  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
+  const { account, web3 } = useArcadeContext()
+  const arcadeDoge = useArcadeDoge()
+  const exchange = useExchange()
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
@@ -43,9 +43,10 @@ const BuyModal: React.FC<Props> = (props) => {
       setIsLoading(false)
       return
     }
-
-    ARCADEDOGE.methods
-      .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
+    // @Testcode@
+    console.log('ASDF')
+    arcadeDoge.methods
+      .allowance(account, process.env.REACT_APP_exchange_ADDRESS)
       .call()
       .then((res: string) => {
         if (Number.parseFloat(Web3.utils.fromWei(res)) >= Number(props.item.arcadedoge_price)) {
@@ -63,7 +64,7 @@ const BuyModal: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, setIsLoading, ARCADEDOGE])
+  }, [account, props.item.arcadedoge_price, setIsLoading, arcadeDoge])
 
   useEffect(() => {
     if (props.item === selectedItem) return
@@ -82,8 +83,8 @@ const BuyModal: React.FC<Props> = (props) => {
       return
     }
 
-    ARCADEDOGE.methods
-      .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
+    arcadeDoge.methods
+      .approve(process.env.REACT_APP_exchange_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
       .send({ from: account })
       .then((res: any) => {
         setIsLoading(false)
@@ -108,7 +109,7 @@ const BuyModal: React.FC<Props> = (props) => {
       return
     }
 
-    EXCHANGE.methods
+    exchange.methods
       .exchange(
         props.item.contract_address,
         props.item.token_id,
@@ -120,7 +121,7 @@ const BuyModal: React.FC<Props> = (props) => {
       .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
-          if (account !== undefined && item.owner === Web3.utils.toChecksumAddress(account)) {
+          if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
             window.location.href = '/listing'
           } else {
             setTimeout(checkDBStatus, 500)

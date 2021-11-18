@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useContext } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Grid, ThemeProvider } from '@material-ui/core'
 import Page from 'components/Layout/Page'
@@ -14,7 +14,7 @@ import { useGlobalState } from 'state-pool'
 import { getStuff, getDiscussion } from 'hooks/api'
 import { greenTheme } from 'styles/theme'
 import { Discussion, Comment, Stuff } from 'global/interface'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 interface ParamTypes {
   staffId: string
@@ -28,7 +28,7 @@ const DiscussionDetail: React.FC = () => {
     threshold: 0,
   }
 
-  const account = useContext(ArcadeContext)?.account
+  const { account } = useArcadeContext()
 
   const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)

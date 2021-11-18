@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
@@ -32,8 +32,8 @@ import * as Wallet from '../../global/wallet'
 
 import { Response, GameItem } from 'global/interface'
 import MainLoading from 'components/MainLoading'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useERC721, useExchange } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useNFT, useExchange } from 'hooks/useContract'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -117,9 +117,9 @@ interface ParamTypes {
 const Sell: React.FC<SkinProps> = (data) => {
   const classes = useStyles()
   const skinItem = data ?? initData
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const NFT = useERC721(web3, process.env.REACT_APP_NFT_ADDRESS as string)
-  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
+  const { account } = useArcadeContext()
+  const nft = useNFT()
+  const exchange = useExchange()
   const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
   const sellCardRef = useRef<HTMLDivElement>(null)
   const [games, setGames] = useState([])
@@ -269,7 +269,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       is_anonymous: anonymous === false ? 0 : 1,
     }
 
-    NFT.methods
+    nft.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
       .send({ from: account })
       .then(async () => {
@@ -289,7 +289,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setIsLoading(false)
       })
-  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal, account, NFT.methods])
+  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal, account, nft.methods])
 
   const updateItem = useCallback(() => {
     setShowLoading(true)
@@ -313,7 +313,7 @@ const Sell: React.FC<SkinProps> = (data) => {
   }, [itemId, selectedGameID, selectedCategoryID, description, name, anonymous, price, history])
 
   const getRate = useCallback(async () => {
-    EXCHANGE.methods
+    exchange.methods
       .getRate()
       .call()
       .then((res: string) => {
@@ -324,7 +324,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [EXCHANGE.methods])
+  }, [exchange.methods])
 
   const onHandleResetFile = () => {
     setTokenID(0)

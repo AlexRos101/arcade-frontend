@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -12,8 +12,8 @@ import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
 import { GameItem } from 'global/interface'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useERC20, useExchange } from 'hooks/useContract'
+import { useBUSD, useExchange } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -29,9 +29,9 @@ interface Props {
 }
 
 const BuyBUSDModal: React.FC<Props> = (props) => {
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const BUSD = useERC20(web3, process.env.REACT_APP_BUSD_ADDRESS as string)
-  const EXCHANGE = useExchange(web3, process.env.REACT_APP_EXCHANGE_ADDRESS as string)
+  const { account, web3 } = useArcadeContext()
+  const bUSD = useBUSD()
+  const exchange = useExchange()
   const [, setIsLoading] = useGlobalState('isLoading')
   const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
   const [firstStepClassName, setFirstStepClassName] = useState('item')
@@ -46,8 +46,8 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
-    BUSD.methods
-      .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
+    bUSD.methods
+      .allowance(account, process.env.REACT_APP_exchange_ADDRESS)
       .call()
       .then((res: string) => {
         if (props.rate.multipliedBy(parseFloat(String(props.item.arcadedoge_price))).minus(parseFloat(Web3.utils.fromWei(res))).toNumber() <= 0) {
@@ -65,7 +65,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, props.rate, setIsLoading, BUSD, web3])
+  }, [account, props.item.arcadedoge_price, props.rate, setIsLoading, bUSD, web3])
 
   useEffect(() => {
     if (props.item === selectedItem) return
@@ -83,9 +83,9 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
-    BUSD.methods
+    bUSD.methods
       .approve(
-        process.env.REACT_APP_EXCHANGE_ADDRESS,
+        process.env.REACT_APP_exchange_ADDRESS,
         Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
       )
       .send({ from: account })
@@ -111,7 +111,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
-    EXCHANGE.methods
+    exchange.methods
       .exchangeBUSD(
         props.item.contract_address,
         props.item.token_id,
@@ -126,7 +126,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
-          if (account !== undefined && item.owner === Web3.utils.toChecksumAddress(account)) {
+          if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
             window.location.href = '/listing'
           } else {
             setTimeout(checkDBStatus, 500)
@@ -164,7 +164,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your BUSD token</p>
+                  <p id="content">Approve your bUSD token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -190,7 +190,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy item with BUSD</p>
+                  <p id="content">Buy item with bUSD</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

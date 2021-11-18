@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useGlobalState } from 'state-pool'
 import Swal from 'sweetalert'
@@ -25,8 +25,8 @@ import { Token } from 'global/interface'
 import * as Wallet from '../../global/wallet'
 import { getVerificationCode } from 'hooks/api'
 import { getBalance } from 'hooks/gameapi'
-import { ArcadeContext, ArcadeContextValue } from 'contexts/ArcadeContext'
-import { useSwap, useERC20 } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useSwap, useArcadeDoge } from 'hooks/useContract'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -40,11 +40,19 @@ interface Props {
 }
 
 const PointSwap: React.FC<Props> = (props) => {
-  const { account, web3 } = useContext(ArcadeContext) as ArcadeContextValue
-  const SWAP = useSwap(web3, process.env.REACT_APP_SWAP_ADDRESS as string)
-  const ARCADETOKEN = useERC20(web3, process.env.REACT_APP_ARCADEDOGE_ADDRESS as string)
-  const [inputCoin, setInputCoin] = useState<Token>()
-  const [outputCoin, setOutputCoin] = useState<Token>()
+  const { account, web3 } = useArcadeContext()
+  const swap = useSwap()
+  const arcadeDoge = useArcadeDoge()
+  const [inputCoin, setInputCoin] = useState<Token>({
+    tokenAvartar: ARCADE,
+    tokenName: '$ARCADE',
+    tokenFullName: 'ArcadeDoge'
+  })
+  const [outputCoin, setOutputCoin] = useState<Token>({
+    tokenAvartar: STARSHARD,
+    tokenName: 'STARSHARD',
+    tokenFullName: 'StarShard'
+  })
   const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(0))
   const [gamePointRate, setGamePointRate] = useState(new BigNumber(0))
   const [swapRate, setSwapRate] = useState(0.0)
@@ -56,24 +64,22 @@ const PointSwap: React.FC<Props> = (props) => {
   const [, setIsLoading] = useGlobalState('isLoading')
 
   const getArcadeDogeRate = useCallback(async () => {
-    if (web3 !== undefined)  {
-      SWAP.methods
-        .getArcadeDogeRate()
-        .call()
-        .then((res: string) => {
-          setArcadeDogeRate(new BigNumber(res).div(10 ** 18))
-        })
-        .catch(() => {
-          setTimeout(getArcadeDogeRate, 500)
-        })
-    }
-  }, [web3, SWAP])  
+    swap.methods
+      .getArcadeDogeRate()
+      .call()
+      .then((res: string) => {
+        setArcadeDogeRate(new BigNumber(res).div(10 ** 18))
+      })
+      .catch(() => {
+        setTimeout(getArcadeDogeRate, 500)
+      })
+  }, [swap])  
 
   const getGamePointRate = async () => {
     if (web3 === undefined) return
 
     if (inputCoin?.tokenName === "$ARCADE" || inputCoin === undefined) {
-      SWAP.methods
+      swap.methods
         .gamePointPrice(1)
         .call()
         .then((res: string) => {
@@ -83,7 +89,7 @@ const PointSwap: React.FC<Props> = (props) => {
           setTimeout(getGamePointRate, 500)
         })
     } else {
-      SWAP.methods
+      swap.methods
         .getGamePointRate(account, 1)
         .call()
         .then((res: string) => {
@@ -118,7 +124,7 @@ const PointSwap: React.FC<Props> = (props) => {
       if (web3 === undefined) return
       const verificationToken = res.data.verification_token
 
-      SWAP.methods
+      swap.methods
         .sellGamePoint(
           1,
           inputBalance,
@@ -153,8 +159,8 @@ const PointSwap: React.FC<Props> = (props) => {
   const getArcadeBalance = async () => {
     if (web3 === undefined) return
 
-    if (account !== undefined && account !== "") {
-      ARCADETOKEN.methods
+    if (account) {
+      arcadeDoge.methods
       .balanceOf(account)
       .call()
       .then((res: string) => {
@@ -167,7 +173,7 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getGamePointBalance = () => {
-    if (account !== undefined && account !== "")
+    if (account)
     {
       getBalance(account)
       .then((res) => {
@@ -214,20 +220,6 @@ const PointSwap: React.FC<Props> = (props) => {
     getGamePointBalance()
   }, [inputCoin, outputCoin, setInputCoin, account, props.open, web3])
   /* eslint-enable */
-
-  useEffect(() => {
-    setInputCoin({
-      tokenAvartar: ARCADE,
-      tokenName: '$ARCADE',
-      tokenFullName: 'ArcadeDoge'
-    })
-
-    setOutputCoin({
-      tokenAvartar: STARSHARD,
-      tokenName: 'STARSHARD',
-      tokenFullName: 'StarShard'
-    })
-  }, [setInputCoin, setOutputCoin, setSwapRate])
 
   return (
     <Dialog

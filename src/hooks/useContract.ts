@@ -1,34 +1,43 @@
-
 import { useMemo } from 'react'
-
 import ERC20_ABI from 'contracts/ERC20.json'
 import EXCHANGE_ABI from 'contracts/EXCHANGE.json'
 import ERC721_ABI from 'contracts/ERC721.json'
 import SWAP_ABI from 'contracts/SWAP.json'
-import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
+import { useArcadeContext } from './useArcadeContext'
 
-export const useERC20 = (web3: Web3, address: string) => {
+export const useArcadeDoge = () => {
+  const { web3 } = useArcadeContext() 
   return useMemo(() => {
-    return new web3.eth.Contract(ERC20_ABI as AbiItem[], address)
-  }, [address, web3])
+    return new web3.eth.Contract(ERC20_ABI as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
+  }, [web3])
 }
 
-export const useExchange = (web3: Web3, address: string) => {
+export const useBUSD = () => {
+  const { web3 } = useArcadeContext()
   return useMemo(() => {
-    return new web3.eth.Contract(EXCHANGE_ABI as AbiItem[], address)
-  }, [address, web3])
+    return new web3.eth.Contract(ERC20_ABI as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
+  }, [web3])
 }
 
-export const useERC721 = (web3: Web3, address: string) => {
+export const useExchange = () => {
+  const { web3 } = useArcadeContext() 
   return useMemo(() => {
-    return new web3.eth.Contract(ERC721_ABI as AbiItem[], address)
-  }, [address, web3])
+    return new web3.eth.Contract(EXCHANGE_ABI as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
+  }, [web3])
 }
 
-export const useSwap = (web3: Web3, address: string) => {
+export const useNFT = () => {
+  const { web3 } = useArcadeContext() 
   return useMemo(() => {
-    return new web3.eth.Contract(SWAP_ABI as AbiItem[], address)
-  }, [address, web3])
+    return new web3.eth.Contract(ERC721_ABI as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+  }, [web3])
+}
+
+export const useSwap = () => {
+  const { web3 } = useArcadeContext() 
+  return useMemo(() => {
+    return new web3.eth.Contract(SWAP_ABI as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
+  }, [web3])
 }
 

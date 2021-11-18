@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Grid } from '@material-ui/core'
 
 import Link from '@material-ui/core/Link'
@@ -17,7 +17,7 @@ import { Comment } from 'global/interface'
 import Badge from 'components/Badge'
 
 import AddReply from './AddReply'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 interface Props {
   comment: Comment
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const CommentContent: React.FC<Props> = (props) => {
-  const account = useContext(ArcadeContext)?.account
+  const { account } = useArcadeContext()
   const [comment, setComment] = useState(props.comment)
   const [cmtIsSet, setCmtIsSet] = useState(0)
   const [showAddReply, setShowAddReply] = useState(false)
@@ -76,7 +76,7 @@ const CommentContent: React.FC<Props> = (props) => {
   }
 
   const onHandleLikes = useCallback(() => {
-    if (account !== '' && account !== undefined) {
+    if (account) {
       if (cmtIsSet !== 2) return
       setCmtIsSet(1)
       if (isLike === 1) {

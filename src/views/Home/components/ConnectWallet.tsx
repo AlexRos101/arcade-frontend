@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import RowLabel from 'components/Label/RowLabel'
 import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
@@ -7,10 +7,10 @@ import { useGlobalState } from 'state-pool'
 import * as CONST from 'global/const'
 
 import { Typography, Button, Hidden } from '@material-ui/core'
-import { ArcadeContext } from 'contexts/ArcadeContext'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
-  const context = useContext(ArcadeContext)
+  const context = useArcadeContext()
   const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
 
   const onConnectWalletHandler = async () => {
@@ -18,7 +18,7 @@ const ConnectWallet: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ childre
   }
 
   const onWalletConnectHandler = async () => {
-    context?.connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
+    connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (

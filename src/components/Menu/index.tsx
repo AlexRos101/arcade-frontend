@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react'
+import React, { memo } from 'react'
 import { AppBar, Toolbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -8,8 +8,8 @@ import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
 
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
-import { ArcadeContext } from 'contexts/ArcadeContext'
 import * as CONST from 'global/const'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -33,10 +33,10 @@ const useStyles = makeStyles(() => ({
 const Menu = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
-  const context = useContext(ArcadeContext)
+  const { connectWallet } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
-    context?.connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
+    connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (
