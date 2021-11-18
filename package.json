@@ -43,8 +43,8 @@
     "web3-utils": "^1.5.3"
   },
   "scripts": {
-    "start": "react-scripts start HTTPS=true HOST='arcadedoge.games'",
-    "build": "react-scripts build HTTPS=true",
+    "start": "react-scripts start HTTPS=true HOST='arcadetoken.games'",
+    "build": "rimraf ./build && react-scripts build HTTPS=true && rimraf ./build/**/*.map",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts --ext .tsx --fix"
