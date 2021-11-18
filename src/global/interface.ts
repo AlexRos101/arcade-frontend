@@ -2,8 +2,9 @@
 
 export interface Response {
   result: boolean
-  data: any
+  data?: any
   total?: number
+  msg?: string
 }
 
 /* eslint-enable */

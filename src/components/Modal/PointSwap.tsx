@@ -122,6 +122,12 @@ const PointSwap: React.FC<Props> = (props) => {
 
     getVerificationCode(1, account, inputBalance)
     .then(async (res) => {
+      if (res.result === false) {
+        Swal(res.msg as string)
+        setIsLoading(false)
+        onClose()
+        return
+      }
       const verificationToken = res.data.verification_token
       const provider = await Wallet.getCurrentProvider()
 
