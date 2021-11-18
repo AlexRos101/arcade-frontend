@@ -121,7 +121,12 @@ const PointSwap: React.FC<Props> = (props) => {
 
     account && getVerificationCode(1, account, inputBalance)
     .then(async (res) => {
-      if (web3 === undefined) return
+      if (res.result === false) {
+        Swal(res.msg as string)
+        setIsLoading(false)
+        onClose()
+        return
+      }
       const verificationToken = res.data.verification_token
 
       swap.methods
