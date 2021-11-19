@@ -22,6 +22,7 @@ import Switch from 'assets/img/switch.svg'
 import SwapItem from 'components/Item/SwapItem'
 import { Token } from 'global/interface'
 import * as Wallet from '../../global/wallet'
+import useRefresh from 'hooks/useRefresh'
 import { getVerificationCode } from 'hooks/api'
 import { getBalance } from 'hooks/gameapi'
 import { useArcadeContext } from 'hooks/useArcadeContext'
@@ -45,6 +46,7 @@ const PointSwap: React.FC<Props> = (props) => {
   const { account, web3 } = useArcadeContext()
   const swap = useSwap()
   const arcadeDoge = useArcadeDoge()
+ 
   const [inputCoin, setInputCoin] = useState<Token>({
     tokenAvartar: ARCADE,
     tokenName: '$ARCADE',
@@ -55,6 +57,7 @@ const PointSwap: React.FC<Props> = (props) => {
     tokenName: 'STARSHARD',
     tokenFullName: 'StarShard'
   })
+  const { slowRefresh } = useRefresh()
   const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(0))
   const [gamePointRate, setGamePointRate] = useState(new BigNumber(0))
   const [swapRate, setSwapRate] = useState(0.0)
@@ -64,22 +67,22 @@ const PointSwap: React.FC<Props> = (props) => {
   const [outputBalance, setOutputBalance] = useState(0)
   const [inputBalance, setInputBalance] = useState(0)
 
-  const getArcadeDogeRate = useCallback(async () => {
-    swap.methods
-      .getArcadeDogeRate()
-      .call()
-      .then((res: string) => {
-        setArcadeDogeRate(new BigNumber(res).div(10 ** 18))
-      })
-      .catch(() => {
-        setTimeout(getArcadeDogeRate, 500)
-      })
-  }, [swap])  
+  const getArcadeDogeRate = async () => {
+    swap.methods.getArcadeDogeRate().call()
+    .then((result: string) => {
+      if (result)
+        setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
+      else 
+        setArcadeDogeRate(new BigNumber(0))
+    })
+    .catch((ex: string) => {
+      console.log(ex)
+      setTimeout(getArcadeDogeRate, 500)
+    })
+  }
 
   const getGamePointRate = async () => {
-    if (web3 === undefined) return
-
-    if (inputCoin?.tokenName === "$ARCADE" || inputCoin === undefined) {
+    if (inputCoin?.tokenName === "$ARCADE" || !inputCoin) {
       swap.methods
         .gamePointPrice(1)
         .call()
@@ -103,13 +106,10 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const onSwitchToken = useCallback(() => {
-    const input = outputCoin, output = inputCoin, rate = 1.1
+    const input = outputCoin, output = inputCoin
     setInputCoin(input)
     setOutputCoin(output)
-
-    // get Swap Rate here.
-    setSwapRate(rate)
-  }, [setInputCoin, setOutputCoin, setSwapRate, inputCoin, outputCoin])
+  }, [setInputCoin, setOutputCoin, inputCoin, outputCoin])
 
 
   const buyArcade = async () => {
@@ -163,7 +163,7 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getArcadeBalance = async () => {
-    if (web3 === undefined) return
+    if (!web3) return
 
     if (account) {
       arcadeDoge.methods
@@ -179,8 +179,7 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getGamePointBalance = () => {
-    if (account)
-    {
+    if (account) {
       getBalance(account)
       .then((res) => {
         if (res.result === 1) {
@@ -217,15 +216,14 @@ const PointSwap: React.FC<Props> = (props) => {
       setOutputBalance(0)
   }, [inputCoin, inputBalance, swapRate])
 
-  /* eslint-disable */
   useEffect(() => {
+    if (!account) return
     getArcadeDogeRate()
     getGamePointRate()
-
     getArcadeBalance()
     getGamePointBalance()
-  }, [inputCoin, outputCoin, setInputCoin, account, props.open, web3])
-  /* eslint-enable */
+  // eslint-disable-next-line
+  }, [slowRefresh])
 
   return (
     <Dialog

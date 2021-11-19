@@ -9,6 +9,7 @@ import Menu from './components/Menu'
 import Footer from './components/Footer'
 import PageLoader from './components/Loader/PageLoader'
 import ConnectWalletModal from 'components/Modal/ConnectWallet'
+import { RefreshContextProvider } from 'contexts/RefreshContext'
 
 const Home = lazy(() => import('./views/Home'))
 const Market = lazy(() => import('./views/Market'))
@@ -28,6 +29,7 @@ const App: React.FunctionComponent = () => {
     <MuiThemeProvider theme={theme}>
       <ArcadeProvider>
         <ThemeProvider theme={theme}>
+          <RefreshContextProvider>
           <StylesProvider injectFirst>
             <Router>
               <Menu />
@@ -51,6 +53,7 @@ const App: React.FunctionComponent = () => {
             </Router>
           </StylesProvider>
           <ConnectWalletModal contents="Oops! You're not connected yet or not connected to BSC mainnet." />
+          </RefreshContextProvider>
         </ThemeProvider>
       </ArcadeProvider>
     </MuiThemeProvider>

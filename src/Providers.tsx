@@ -56,7 +56,7 @@ export const ArcadeProvider: React.FC = ({ children }) => {
     initWeb3()
     updateConnect()
     // eslint-disable-next-line
-  }, [])
+  }, [account])
 
   useEffect(() => {
     if (!account)

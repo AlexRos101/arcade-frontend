@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import BigNumber from "bignumber.js";
 import internal from "stream";
 
 export interface Response {
@@ -80,6 +81,12 @@ export interface ShowState {
   commentState: number,
 }
 
+export interface SwapState {
+  arcadeDogeRate: BigNumber,
+  gamePointRate: BigNumber,
+}
+
 export interface State {
   show: ShowState
+  swap: SwapState
 }
