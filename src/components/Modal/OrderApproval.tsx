@@ -5,10 +5,8 @@ import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
-
-import { useGlobalState } from 'state-pool'
-import { connect } from 'global/wallet'
-import * as WalletUtils from '../../global/wallet'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import * as CONST from 'global/const'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -23,16 +21,10 @@ interface Props {
 }
 
 const OrderApprovalModal: React.FC<Props> = (props) => {
-  const [account, setAccount] = useGlobalState('account')
+  const { connectWallet } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
-    connect()
-    initAddress()
-  }
-
-  const initAddress = async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (address !== account) setAccount(address === null ? '' : address)
+    connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (

@@ -7,13 +7,13 @@ import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import Swal from 'sweetalert'
-import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC20 from '../../contracts/ERC20.json'
-import SWAP from '../../contracts/SWAP.json'
 import { Token } from 'global/interface'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useArcadeDoge, useSwap } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -31,100 +31,86 @@ interface Props {
 }
 
 const SwapGameToken: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const dispatch = useAppDispatch()
+  const { account, web3 } = useArcadeContext()
+  const arcadeDoge = useArcadeDoge()
+  const swap = useSwap()
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
 
   const refresh = useCallback(async () => {
-    // setIsLoading(true);
+    // dispatch(setIsLoading(true));
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
       return
     }
 
-    if (props.inputCoin !== undefined && props.inputCoin?.tokenName !== "$ARCADE") {
+    if (props.inputCoin !== undefined && props.inputCoin?.tokenName !== "$arcadeDoge") {
       setFirstStepClassName('item-processed')
       setSecondStepClassName('item')
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const ARCADE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
-
-    ARCADE.methods
+    arcadeDoge.methods
       .allowance(account, process.env.REACT_APP_SWAP_ADDRESS)
       .call()
       .then((res: string) => {
         if (props.amount.minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
         } else {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item')
           setSecondStepClassName('item-disabled')
         }
       })
       .catch(() => {
-        // setIsLoading(false);
+        // dispatch(setIsLoading(false));
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.amount, props.inputCoin, setIsLoading]) 
+  }, [account, props.amount, props.inputCoin, dispatch, arcadeDoge, web3]) 
 
   useEffect(() => {
     refresh()
   }, [props.inputCoin, props.open, refresh])
 
   const approve = async () => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const ARCADE = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_ARCADEDOGE_ADDRESS)
-
-    ARCADE.methods
+    arcadeDoge.methods
       .approve(
         process.env.REACT_APP_SWAP_ADDRESS,
         Web3.utils.toWei(props.amount.toString() + '', 'ether'),
       )
       .send({ from: account })
       .then((res: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
   }
 
   const buyGamePoint = async () => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const swap = new web3.eth.Contract(SWAP as AbiItem[], process.env.REACT_APP_SWAP_ADDRESS)
 
     swap.methods
       .buyGamePoint(
@@ -137,17 +123,17 @@ const SwapGameToken: React.FC<Props> = (props) => {
       .send({ from: account })
       .then(() => {
         Swal("Game Point bought successfully!")
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         props.onClose()
       })
       .catch(() => {
         Swal("Buy Game Point failed!")
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 
   const onBuy = () => {
-    if (props.inputCoin?.tokenName === "$ARCADE") {
+    if (props.inputCoin?.tokenName === "$arcadeDoge") {
       buyGamePoint()
     }
   }
@@ -164,7 +150,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       <DialogContent className="modal-order-content" dividers>
         <div {...props} style={{ padding: '2vh 0' }}>
           <p className="approval-header" style={{ textAlign: 'center', maxWidth: '300px' }}>
-            Swap $ARCADE to STARSHARD Token
+            Swap $arcadeDoge to STARSHARD Token
           </p>
 
           <div className={firstStepClassName}>
@@ -176,7 +162,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your $ARCADE token</p>
+                  <p id="content">Approve your $arcadeDoge token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -202,7 +188,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy STARSHARD with $ARCADE</p>
+                  <p id="content">Buy STARSHARD with $arcadeDoge</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

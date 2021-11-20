@@ -1,7 +1,8 @@
 import React from 'react'
-import { useGlobalState } from 'state-pool'
 import { ReactComponent as Arrow } from 'assets/img/arrow.svg'
 import Badge from '../Badge'
+import { useAppDispatch } from 'state'
+import { setHiddenMenu } from 'state/show'
 
 interface DropMenuItem {
   content: string
@@ -15,11 +16,10 @@ interface Props {
 }
 
 const SubMenu: React.FC<Props> = (props) => {
-
-  const [, setHiddenMenu] = useGlobalState('hiddenMenu')
+  const dispatch = useAppDispatch()
 
   const onClickMenu = () => {
-    setHiddenMenu('hidden-menu')
+    dispatch(setHiddenMenu('hidden-menu'))
   }
 
   return (

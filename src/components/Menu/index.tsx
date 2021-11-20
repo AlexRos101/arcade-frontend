@@ -6,11 +6,10 @@ import clsx from 'clsx'
 import Logo from '../Logo'
 import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
-import { useGlobalState } from 'state-pool'
-import * as WalletUtils from '../../global/wallet'
-import { connect } from 'global/wallet'
 
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
+import * as CONST from 'global/const'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -34,20 +33,10 @@ const useStyles = makeStyles(() => ({
 const Menu = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
-  const [, setAccount] = useGlobalState('account')
+  const { connectWallet } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
-    await connect()
-    initAddress()
-  }
-
-  const initAddress = async () => {
-    const address = await WalletUtils.getCurrentWallet()
-    if (await WalletUtils.isConnected()) {
-      setAccount(address === null ? '' : address)
-    } else {
-      setAccount('')
-    }
+    connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
   }
 
   return (

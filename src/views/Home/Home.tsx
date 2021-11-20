@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useGlobalState } from 'state-pool'
 
 import { ThemeProvider } from '@material-ui/core/styles'
 
@@ -18,12 +17,14 @@ import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
 import * as WalletUtils from 'global/wallet'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setWalletMenu, setPointSwap } from 'state/show'
 
 const Home: React.FC = () => {
   const history = useHistory()
-  const [account] = useGlobalState('account')
-  const [, setOpenPointSwap] = useGlobalState('openPointSwap')
-  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+  const dispatch = useAppDispatch()
+  const { account } = useArcadeContext()
   const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [showConnectWallet, setShowConnectWallet] = useState(false)
 
@@ -36,10 +37,10 @@ const Home: React.FC = () => {
   }
 
   const onOpenConvertGameToken = () => {
-    if (account === '') {
-      setOpenConnectWalletMenu(true)
+    if (!account) {
+      dispatch(setWalletMenu(true))
     } else {
-      setOpenPointSwap(true)
+      dispatch(setPointSwap(true))
     }
   }
 

@@ -7,14 +7,14 @@ import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 
-import { useGlobalState } from 'state-pool'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC20 from '../../contracts/ERC20.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 import * as API from '../../hooks/api'
 import { GameItem } from 'global/interface'
+import { useBUSD, useExchange } from 'hooks/useContract'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -30,46 +30,41 @@ interface Props {
 }
 
 const BuyBUSDModal: React.FC<Props> = (props) => {
-  const [account] = useGlobalState('account')
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
+  const dispatch = useAppDispatch()
+  const { account, web3 } = useArcadeContext()
+  const bUSD = useBUSD()
+  const exchange = useExchange()
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
   const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
   const refresh = useCallback(async () => {
-    // setIsLoading(true);
-
+    if (!web3 || !account) return
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const BUSD = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
-
-    BUSD.methods
+    bUSD.methods
       .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
       .call()
       .then((res: string) => {
-        if (props.rate.multipliedBy(parseFloat(String(props.item.arcadedoge_price))).minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
-          // setIsLoading(false);
+        if (props.rate.multipliedBy(parseFloat(String(props.item.arcadedoge_price))).minus(parseFloat(Web3.utils.fromWei(res))).toNumber() <= 0) {
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
         } else {
-          // setIsLoading(false);
+          // dispatch(setIsLoading(false));
           setFirstStepClassName('item')
           setSecondStepClassName('item-disabled')
         }
       })
       .catch(() => {
-        // setIsLoading(false);
+        // dispatch(setIsLoading(false));
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, props.rate, setIsLoading])
+  }, [account, props.item.arcadedoge_price, props.rate, dispatch, bUSD, web3])
 
   useEffect(() => {
     if (props.item === selectedItem) return
@@ -78,50 +73,42 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
   }, [props.item, selectedItem, refresh])
 
   const approve = async () => {
-    setIsLoading(true)
+    if (web3 === undefined) return
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const BUSD = new web3.eth.Contract(ERC20 as AbiItem[], process.env.REACT_APP_BUSD_ADDRESS)
-
-    BUSD.methods
+    bUSD.methods
       .approve(
         process.env.REACT_APP_EXCHANGE_ADDRESS,
         Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
       )
       .send({ from: account })
       .then((res: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item-processed')
         setSecondStepClassName('item')
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
   }
 
   const buy = async () => {
-    setIsLoading(true)
+    if (!web3 || !account) return
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
-
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
 
     exchange.methods
       .exchangeBUSD(
@@ -138,7 +125,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
-          if (item.owner === Web3.utils.toChecksumAddress(account)) {
+          if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
             window.location.href = '/listing'
           } else {
             setTimeout(checkDBStatus, 500)
@@ -148,7 +135,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         checkDBStatus()
       })
       .catch((err: any) => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
   }
 
@@ -176,7 +163,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your BUSD token</p>
+                  <p id="content">Approve your bUSD token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -202,7 +189,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy item with BUSD</p>
+                  <p id="content">Buy item with bUSD</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

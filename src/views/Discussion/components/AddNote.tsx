@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { useGlobalState } from 'state-pool'
 
 import { Typography } from '@material-ui/core'
 
@@ -7,6 +6,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { OutlinedCard } from 'components/Card'
 import DiscussionRule from 'components/Modal/DiscussionRule'
+import { useAppDispatch } from 'state'
+import { setDiscussionRule } from 'state/show'
+import { useShow } from 'state/show/hook'
 
 const useStyles = makeStyles({
   searchCardTitle: {
@@ -19,16 +21,16 @@ const useStyles = makeStyles({
 
 const AddNote: React.FC = () => {
   const classes = useStyles()
-
-  const [openRule, setOpenRule] = useGlobalState('openDiscussionRule')
+  const dispatch = useAppDispatch()
+  const { discussionRule } = useShow()
 
   const handleClose = useCallback(() => {
-    setOpenRule(false)
-  }, [setOpenRule])
-
+    dispatch(setDiscussionRule(false))
+  }, [dispatch])
+  
   const handleOpenRules = useCallback(() => {
-    setOpenRule(true)
-  }, [setOpenRule])
+    dispatch(setDiscussionRule(true))
+  }, [dispatch])
 
   /* eslint-disable */
 
@@ -43,7 +45,7 @@ const AddNote: React.FC = () => {
           ArcadeDoge Discussion Rules & Regulation.
         </a>
       </Typography>
-      <DiscussionRule onClose={handleClose} open={openRule} />
+      <DiscussionRule onClose={handleClose} open={discussionRule} />
     </OutlinedCard>
   )
 

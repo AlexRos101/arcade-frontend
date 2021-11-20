@@ -12,11 +12,9 @@ import PrivacyPolicy from 'components/Modal/PrivacyPolicy'
 import PointSwap from 'components/Modal/PointSwap'
 import { useCommonStyles } from '../../styles/use-styles'
 
-import { store, useGlobalState } from 'state-pool'
-
-store.setState('openTermOfUse', false)
-store.setState('openPrivacyPolicy', false)
-store.setState('openPointSwap', false)
+import { useShow } from 'state/show/hook'
+import { setTermOfUse, setPrivacyPolicy, setPointSwap } from 'state/show'
+import { useAppDispatch } from '../../state'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,22 +43,21 @@ const useStyles = makeStyles((theme) => ({
 const Footer = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
+  const dispatch = useAppDispatch()
 
-  const [openTerm, setOpenTerm] = useGlobalState('openTermOfUse')
-  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
-  const [openPointSwap, setOpenPointSwap] = useGlobalState('openPointSwap')
+  const { termOfUse, privacyPolicy, pointSwap } = useShow()
 
   const handleClose = useCallback(() => {
-    setOpenTerm(false)
-  }, [setOpenTerm])
+    dispatch(setTermOfUse(false))
+  }, [dispatch])
 
   const handleClosePrivacy = useCallback(() => {
-    setOpenPrivacyPolicy(false)
-  }, [setOpenPrivacyPolicy])
+    dispatch(setPrivacyPolicy(false))
+  }, [dispatch])
 
   const handleClosePointSwap = useCallback(() => {
-    setOpenPointSwap(false)
-  }, [setOpenPointSwap])
+    dispatch(setPointSwap(false))
+  }, [dispatch])
 
   return (
     <AppBar position="static" className={classes.root} id="footer">
@@ -75,9 +72,9 @@ const Footer = () => {
           <FooterFollowUs />
         </Grid>
       </Grid>
-      <TermOfUse onClose={handleClose} open={openTerm} />
-      <PrivacyPolicy onClose={handleClosePrivacy} open={openPrivacyPolicy} />
-      <PointSwap onClose={handleClosePointSwap} open={openPointSwap} />
+      <TermOfUse onClose={handleClose} open={termOfUse} />
+      <PrivacyPolicy onClose={handleClosePrivacy} open={privacyPolicy} />
+      <PointSwap onClose={handleClosePointSwap} open={pointSwap} />
     </AppBar>
   )
 }

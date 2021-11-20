@@ -1,12 +1,10 @@
 import React from 'react'
 import 'assets/css/loading.css'
-import { store, useGlobalState } from 'state-pool'
 import MainLoading from 'components/MainLoading'
-
-store.setState('isLoading', false)
+import { useShow } from 'state/show/hook'
 
 const Loading: React.FC = () => {
-  const [isLoading] = useGlobalState('isLoading')
+  const { isLoading } = useShow()
   if (isLoading === true) {
     return (
       <div id="loader-wrapper">

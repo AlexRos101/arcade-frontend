@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 
 import Card from 'components/Card'
@@ -6,32 +6,33 @@ import RocketIcon from 'assets/img/rocket.svg'
 import RocketBlueIcon from 'assets/img/rocket-blue.svg'
 import ChartIcon from 'assets/img/bxs-chart.svg'
 import IconLabel from 'components/Label/IconLabel'
-import { useGlobalState } from 'state-pool'
 import { setLikes, getLikes, getDiscussion } from 'hooks/api'
 import ReactTimeAgo from 'react-time-ago'
 import Badge from 'components/Badge'
-
+import { useArcadeContext } from 'hooks/useArcadeContext'
 import { Discussion } from 'global/interface'
+import { useAppDispatch } from 'state'
+import { setConnectWallet } from 'state/show'
 
 interface Props {
   discussion: Discussion
 }
 
 const DiscussionContent: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch()
+  const { account } = useArcadeContext()
   const [discussion, setDiscussion] = useState(props.discussion)
-  const [account] = useGlobalState('account')
   const [isLike, setIsLike] = useState(0)
   const [dscIsSet, setDscIsSet] = useState(0)
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   useEffect(() => {
     if (isLike !== 0) return
     if (props.discussion.id === -1 || props.discussion.id === undefined) return
-    if (account === '') return
+    if (!account) return
 
     setIsLike(3)
 
-    getLikes(props.discussion.id, -1, account).then((response) => {
+    account &&  getLikes(props.discussion.id, -1, account).then((response) => {
       if (response.data.length === 0) {
         setIsLike(1)
       } else {
@@ -46,14 +47,14 @@ const DiscussionContent: React.FC<Props> = (props) => {
 
     setDscIsSet(1)
 
-    getDiscussion(props.discussion.id, account).then((response) => {
+    account && getDiscussion(props.discussion.id, account).then((response) => {
       setDiscussion(response.data)
       setDscIsSet(2)
     })
   }, [props, discussion, dscIsSet, account])
 
   const onHandleLikes = useCallback(() => {
-    if (account !== '') {
+    if (account) {
       if (dscIsSet !== 2) return
       setDscIsSet(1)
       if (isLike === 1) {
@@ -72,9 +73,9 @@ const DiscussionContent: React.FC<Props> = (props) => {
         })
       }
     } else {
-      setShowConnectWalletModal(true)
+      dispatch(setConnectWallet(true))
     }
-  }, [isLike, account, discussion, dscIsSet, setShowConnectWalletModal])
+  }, [isLike, account, discussion, dscIsSet, dispatch])
 
   /* eslint-disable */
 

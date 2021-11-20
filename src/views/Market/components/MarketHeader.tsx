@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 import Storefront from '@material-ui/icons/Storefront'
 import { Button } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import { marketTheme } from 'styles/theme'
 import { ReactComponent as Sell } from 'assets/img/sell.svg'
-import { useGlobalState } from 'state-pool'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const MarketHeader: React.FC = () => {
   const history = useHistory()
   const classes = useStyles()
-  const [account] = useGlobalState('account')
+  const { account } = useArcadeContext()
 
   const onClickViewListing = () => {
     history.push('/listing')
@@ -30,10 +30,6 @@ const MarketHeader: React.FC = () => {
   const onClickSellItem = () => {
     history.push('/sell')
   }
-
-  useEffect(() => {
-    console.log(account)
-  })
 
   return (
     <div className="right">
