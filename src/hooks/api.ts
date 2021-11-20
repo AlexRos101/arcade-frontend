@@ -1,7 +1,5 @@
 import { Response } from 'global/interface'
 
-/* eslint-disable */
-
 const sendPost = (requestUrl: string, params: any): Promise<any> => {
   const requestOptions = {
     method: 'POST',
@@ -174,4 +172,4 @@ export const getVerificationCode = async (game_id: number, address: string, amou
   return response
 }
 
-/* eslint-enable */
+
