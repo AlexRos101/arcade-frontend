@@ -40,12 +40,12 @@ const SwapGameToken: React.FC<Props> = (props) => {
 
   const refresh = useCallback(async () => {
     // dispatch(setIsLoading(true));
-    if (!(await Wallet.isConnected())) {
+    if (!account) {
       dispatch(setIsLoading(false))
       return
     }
 
-    if (props.inputCoin !== undefined && props.inputCoin?.tokenName !== "$arcadeDoge") {
+    if (props.inputCoin && props.inputCoin?.tokenName !== "$ARCADE") {
       setFirstStepClassName('item-processed')
       setSecondStepClassName('item')
       return
@@ -133,7 +133,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
   }
 
   const onBuy = () => {
-    if (props.inputCoin?.tokenName === "$arcadeDoge") {
+    if (props.inputCoin?.tokenName === "$ARCADE") {
       buyGamePoint()
     }
   }

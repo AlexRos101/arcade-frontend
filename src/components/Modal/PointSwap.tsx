@@ -70,8 +70,10 @@ const PointSwap: React.FC<Props> = (props) => {
   const getArcadeDogeRate = async () => {
     swap.methods.getArcadeDogeRate().call()
     .then((result: string) => {
+
       if (result) {       
-		setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
+		    setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
+
       else 
         setArcadeDogeRate(new BigNumber(0))
     })
@@ -87,6 +89,7 @@ const PointSwap: React.FC<Props> = (props) => {
         .gamePointPrice(1)
         .call()
         .then((res: string) => {
+          console.log(res)
           setGamePointRate(new BigNumber(res).div(10 ** 3))
         })
         .catch(() => {
@@ -97,6 +100,7 @@ const PointSwap: React.FC<Props> = (props) => {
         .getGamePointRate(account, 1)
         .call()
         .then((res: string) => {
+          console.log(res)
           setGamePointRate(new BigNumber(res).multipliedBy(arcadeDogeRate).div(10 ** 18))
         })
         .catch(() => {
