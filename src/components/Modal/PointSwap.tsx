@@ -43,7 +43,7 @@ interface Props {
 
 const PointSwap: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch()
-  const { account, web3 } = useArcadeContext()
+  const { account } = useArcadeContext()
   const swap = useSwap()
   const arcadeDoge = useArcadeDoge()
  
@@ -132,6 +132,7 @@ const PointSwap: React.FC<Props> = (props) => {
         onClose()
         return
       }
+
       const verificationToken = res.data.verification_token
 
       swap.methods
@@ -159,7 +160,7 @@ const PointSwap: React.FC<Props> = (props) => {
       return
     }
 
-    if (inputCoin?.tokenName === "$ARCADE") {
+    if (inputCoin && inputCoin?.tokenName === "$ARCADE") {
       setOpenSwapToken(true)
     } else {
       buyArcade()
@@ -167,8 +168,6 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getArcadeBalance = async () => {
-    if (!web3) return
-
     if (account) {
       arcadeDoge.methods
       .balanceOf(account)
