@@ -10,10 +10,13 @@ import DiscussionContent from './components/DiscussionContent'
 import SearchBox from './components/SearchBox'
 import AddComment from './components/AddComment'
 import * as Wallet from 'global/wallet'
-import { useGlobalState } from 'state-pool'
 import { getStuff, getDiscussion } from 'hooks/api'
 import { greenTheme } from 'styles/theme'
 import { Discussion, Comment, Stuff } from 'global/interface'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setCommentState } from 'state/show'
+import { useShow } from 'state/show/hook'
 
 interface ParamTypes {
   staffId: string
@@ -26,7 +29,9 @@ const DiscussionDetail: React.FC = () => {
     rootMargin: '20px',
     threshold: 0,
   }
-
+  const dispatch = useAppDispatch()
+  const { account } = useArcadeContext()
+  const { commentState } = useShow()
   const [staff, setStaff] = useState<Stuff>({ id: -1, title: '' })
   const [staffIsSet, setStaffIsSet] = useState(false)
   const [showLoading, setShowLoading] = useState(true)
@@ -44,8 +49,6 @@ const DiscussionDetail: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([])
   const { staffId, discussionId } = useParams<ParamTypes>()
   const [showAddComments, setShowAddComments] = useState(false)
-  const [commentState, setCommentState] = useGlobalState('commentState')
-  const [account] = useGlobalState('account')
   const [commentOn, setCommentOn] = useState(false)
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(-1)
@@ -108,7 +111,7 @@ const DiscussionDetail: React.FC = () => {
   }
 
   const refresh = () => {
-    getDiscussion(Number(discussionId), account, page, 4).then((res) => {
+    account && getDiscussion(Number(discussionId), account, page, 4).then((res) => {
       const { data } = res
       setDiscussion(data)
 
@@ -145,7 +148,7 @@ const DiscussionDetail: React.FC = () => {
   }
 
   const initDiscussion = async () => {
-    if ((await Wallet.isConnected()) && (account === '' || account === undefined)) {
+    if ((await Wallet.isConnected()) && (!account)) {
       return
     }
     if (dscIsSet === true) return
@@ -166,10 +169,10 @@ const DiscussionDetail: React.FC = () => {
         setShowAddComments(false)
       } else {
         setCommentOn(false)
-        setCommentState(0)
+        dispatch(setCommentState(0))
       }
     }
-  }, [commentState, commentOn, setCommentState])
+  }, [commentState, commentOn, dispatch])
 
   useEffect(() => {
     if (loader.current) observer.observe(loader.current)
@@ -188,10 +191,10 @@ const DiscussionDetail: React.FC = () => {
   const [observer] = useState<IntersectionObserver>(new IntersectionObserver(handleObserver, option))
 
   const onAddComment = useCallback(() => {
-    setCommentState(2)
+    dispatch(setCommentState(2))
     setShowAddComments(true)
     setCommentOn(true)
-  }, [setCommentState])
+  }, [dispatch])
 
   return (
     <Page className="styled-search">

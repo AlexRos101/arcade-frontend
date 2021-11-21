@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useGlobalState } from 'state-pool'
 
 import { ThemeProvider } from '@material-ui/core/styles'
 
@@ -18,11 +17,16 @@ import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
 import * as WalletUtils from 'global/wallet'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from 'state'
+import { setWalletMenu, setPointSwap } from 'state/show'
+import { getValidationCheck } from 'hooks/gameapi'
+import swal from 'sweetalert'
 
 const Home: React.FC = () => {
   const history = useHistory()
-  const [account] = useGlobalState('account')
-  const [, setOpenPointSwap] = useGlobalState('openPointSwap')
+  const dispatch = useAppDispatch()
+  const { account } = useArcadeContext()
   const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [showConnectWallet, setShowConnectWallet] = useState(false)
 
@@ -32,6 +36,21 @@ const Home: React.FC = () => {
 
   const onClickBuyArcadeDoge = () => {
     window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+  }
+
+  const onOpenConvertGameToken = () => {
+    if (!account) {
+      dispatch(setWalletMenu(true))
+    } else {
+      getValidationCheck(account)
+      .then((result) => {
+        if (result.result === true) {
+          dispatch(setPointSwap(true))
+        } else {
+          swal("No matching game account found!")
+        }
+      })
+    }
   }
 
   const init = async () => {
@@ -95,7 +114,7 @@ const Home: React.FC = () => {
               className="mg-8 btn-wd-limit"
               variant="contained"
               color="primary"
-              onClick={() => setOpenPointSwap(true)}
+              onClick={onOpenConvertGameToken}
               startIcon={<Ticket />}
             >
               Convert Game Tokens

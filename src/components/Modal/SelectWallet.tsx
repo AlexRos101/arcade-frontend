@@ -1,10 +1,12 @@
 import React from 'react'
-import { useGlobalState } from 'state-pool'
 import Triangle from 'assets/img/triangle.svg'
 import Metamask from 'assets/img/metamask.svg'
 import Walletconnect from 'assets/img/walletconnect.svg'
 import WalletItem from 'components/Menu/WalletItem'
 import * as CONST from '../../global/const'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { setWalletMenu } from 'state/show'
+import { useAppDispatch } from 'state'
 
 interface Props {
   open: boolean
@@ -12,12 +14,13 @@ interface Props {
 }
 
 const SelectWalletModal: React.FC<Props> = (props) => {
-  const [, setOpenConnectWalletMenu] = useGlobalState('openConnectWalletMenu')
+  const dispatch = useAppDispatch()
+  const { connectType } = useArcadeContext()
 
   if (props.open === true) {
     return (
       <div className="wallet-select-modal">
-        <div id="back" onClick={() => setOpenConnectWalletMenu(false)}/>
+        <div id="back" onClick={() => dispatch(setWalletMenu(false))}/>
         <div id="content">
           <img src={Triangle} alt="triangle" id="triangle"/>
           <div className="modal-content">
@@ -25,12 +28,12 @@ const SelectWalletModal: React.FC<Props> = (props) => {
             <WalletItem 
               image={<img src={Metamask} alt='' />}
               text={`Metamask`}
-              connected={props.connectedWallet === CONST.WALLET_TYPE.METAMASK}
+              connected={connectType === CONST.WALLET_TYPE.METAMASK}
               walletType={CONST.WALLET_TYPE.METAMASK}/>
             <WalletItem 
               image={<img src={Walletconnect} alt='' />}
               text={`Wallet Connect`}
-              connected={props.connectedWallet === CONST.WALLET_TYPE.WALLETCONNECT}
+              connected={connectType === CONST.WALLET_TYPE.WALLETCONNECT}
               walletType={CONST.WALLET_TYPE.WALLETCONNECT}/>
           </div>
         </div>

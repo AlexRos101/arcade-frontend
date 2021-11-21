@@ -4,7 +4,7 @@ interface CustomInputProps {
   className?: string
   style?: React.CSSProperties
   placeholder?: string | ReactElement
-  onChange?: () => void
+  onChange?: (value: string) => void
 }
 
 const CustomInput: React.FC<CustomInputProps>  = (props) => {
@@ -13,11 +13,16 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
   const [inputCp, setInputCp] = useState<HTMLInputElement | null>()
 
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    if (e.currentTarget.value.length > 0)
+      setHiddenHolder(true)
+    else
+      setHiddenHolder(false)
     setTextValue(e.currentTarget.value)
+    if (props.onChange !== undefined)
+      props.onChange(e.currentTarget.value)
   }
 
   const onFocus = () => {
-    setHiddenHolder(true)
     if (inputCp !== undefined && inputCp !== null)
       inputCp.focus()
   }
@@ -39,6 +44,7 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
         ref = {inputEl => (setInputCp(inputEl))}
         type="text"
         value={textValue}
+        style={{ textAlign: 'right' }}
         onChange={(e) => onInputChange(e)}
         />
       {

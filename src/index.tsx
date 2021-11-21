@@ -8,13 +8,17 @@ import './assets/css/style.css'
 import './assets/css/material-ui.css'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
+import { Provider } from 'react-redux'
+import store from './state'
 
 TimeAgo.addDefaultLocale(en)
 
 ReactDOM.render(
   <React.StrictMode>
-    <Loading />
-    <App />
+    <Provider store={store}>
+      <Loading />
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 )

@@ -6,13 +6,12 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-
+import Swal from 'sweetalert'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
-import * as API from '../../hooks/api'
-import { GameItem } from 'global/interface'
-import { useBUSD, useExchange } from 'hooks/useContract'
+import { Token } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useArcadeDoge, useSwap } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
 
@@ -23,33 +22,40 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent)
 
 interface Props {
-  item: GameItem
   open: boolean
-  rate: BigNumber
+  rate: number
+  amount: BigNumber
+  inputCoin?: Token
+  outputCoin?: Token
   onClose: () => void
 }
 
-const BuyBUSDModal: React.FC<Props> = (props) => {
+const SwapGameToken: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch()
   const { account, web3 } = useArcadeContext()
-  const bUSD = useBUSD()
-  const exchange = useExchange()
+  const arcadeDoge = useArcadeDoge()
+  const swap = useSwap()
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
-  const [selectedItem, setSelectedItem] = useState<GameItem>({ id: -1, name: '', token_id: 0 })
 
   const refresh = useCallback(async () => {
-    if (!web3 || !account) return
-    if (!(await Wallet.isConnected())) {
+    // dispatch(setIsLoading(true));
+    if (!account) {
       dispatch(setIsLoading(false))
       return
     }
 
-    bUSD.methods
-      .allowance(account, process.env.REACT_APP_EXCHANGE_ADDRESS)
+    if (props.inputCoin && props.inputCoin?.tokenName !== "$ARCADE") {
+      setFirstStepClassName('item-processed')
+      setSecondStepClassName('item')
+      return
+    }
+
+    arcadeDoge.methods
+      .allowance(account, process.env.REACT_APP_SWAP_ADDRESS)
       .call()
       .then((res: string) => {
-        if (props.rate.multipliedBy(parseFloat(String(props.item.arcadedoge_price))).minus(parseFloat(Web3.utils.fromWei(res))).toNumber() <= 0) {
+        if (props.amount.minus(parseFloat(web3.utils.fromWei(res))).toNumber() <= 0) {
           // dispatch(setIsLoading(false));
           setFirstStepClassName('item-processed')
           setSecondStepClassName('item')
@@ -64,16 +70,13 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         setFirstStepClassName('item')
         setSecondStepClassName('item-disabled')
       })
-  }, [account, props.item.arcadedoge_price, props.rate, dispatch, bUSD, web3])
+  }, [account, props.amount, props.inputCoin, dispatch, arcadeDoge, web3]) 
 
   useEffect(() => {
-    if (props.item === selectedItem) return
-    setSelectedItem(props.item)
     refresh()
-  }, [props.item, selectedItem, refresh])
+  }, [props.inputCoin, props.open, refresh])
 
   const approve = async () => {
-    if (web3 === undefined) return
     dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
@@ -82,10 +85,10 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
-    bUSD.methods
+    arcadeDoge.methods
       .approve(
-        process.env.REACT_APP_EXCHANGE_ADDRESS,
-        Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
+        process.env.REACT_APP_SWAP_ADDRESS,
+        Web3.utils.toWei(props.amount.toString() + '', 'ether'),
       )
       .send({ from: account })
       .then((res: any) => {
@@ -100,8 +103,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       })
   }
 
-  const buy = async () => {
-    if (!web3 || !account) return
+  const buyGamePoint = async () => {
     dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
@@ -110,33 +112,30 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
-    exchange.methods
-      .exchangeBUSD(
-        props.item.contract_address,
-        props.item.token_id,
-        props.item.owner,
+    swap.methods
+      .buyGamePoint(
+        1,
         Web3.utils.toWei(
-          props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '',
+          props.amount.toString() + '',
           'ether',
-        ),
-        account,
+        )
       )
       .send({ from: account })
-      .then((res: any) => {
-        const checkDBStatus = async () => {
-          const item = (await API.getItemById(props.item.id)).data
-          if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
-            window.location.href = '/listing'
-          } else {
-            setTimeout(checkDBStatus, 500)
-          }
-        }
-
-        checkDBStatus()
+      .then(() => {
+        Swal("Game Point bought successfully!")
+        dispatch(setIsLoading(false))
+        props.onClose()
       })
-      .catch((err: any) => {
+      .catch(() => {
+        Swal("Buy Game Point failed!")
         dispatch(setIsLoading(false))
       })
+  }
+
+  const onBuy = () => {
+    if (props.inputCoin?.tokenName === "$ARCADE") {
+      buyGamePoint()
+    }
   }
 
   return (
@@ -151,7 +150,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       <DialogContent className="modal-order-content" dividers>
         <div {...props} style={{ padding: '2vh 0' }}>
           <p className="approval-header" style={{ textAlign: 'center', maxWidth: '300px' }}>
-            Buy {props.item.name} on Market
+            Swap $arcadeDoge to STARSHARD Token
           </p>
 
           <div className={firstStepClassName}>
@@ -163,7 +162,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your BUSD token</p>
+                  <p id="content">Approve your $arcadeDoge token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -189,11 +188,11 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy item with BUSD</p>
+                  <p id="content">Buy STARSHARD with $arcadeDoge</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
-                <Button variant="contained" color="primary" onClick={buy}>
+                <Button variant="contained" color="primary" onClick={onBuy}>
                   <Typography variant="subtitle1">Buy</Typography>
                 </Button>
               </div>
@@ -208,4 +207,4 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
   )
 }
 
-export default BuyBUSDModal
+export default SwapGameToken

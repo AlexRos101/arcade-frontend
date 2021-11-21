@@ -1,9 +1,13 @@
 /* eslint-disable */
 
+import BigNumber from "bignumber.js";
+import internal from "stream";
+
 export interface Response {
   result: boolean
-  data: any
+  data?: any
   total?: number
+  msg?: string
 }
 
 /* eslint-enable */
@@ -57,4 +61,32 @@ export interface Stuff {
   id: number
   title: string
   discussions?: Array<Discussion>
+}
+
+export interface Token {
+  tokenName: string
+  tokenFullName: string
+  tokenAvartar: string
+}
+
+export interface ShowState {
+  termOfUse: boolean,
+  privacyPolicy: boolean,
+  walletMenu: boolean,
+  connWallet: boolean,
+  isLoading: boolean,
+  pointSwap: boolean,
+  hiddenMenu: string,
+  discussionRule: boolean,
+  commentState: number,
+}
+
+export interface SwapState {
+  arcadeDogeRate: BigNumber,
+  gamePointRate: BigNumber,
+}
+
+export interface State {
+  show: ShowState
+  swap: SwapState
 }

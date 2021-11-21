@@ -86,7 +86,6 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
 
 export const getCurrentProvider = async () => {
   const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
-
   if (walletType === null) return null
 
   if (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === null || ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === 0) {
@@ -172,7 +171,7 @@ export const isConnected = async (): Promise<boolean> => {
 
   chainId = Number.parseInt(chainId as string)
 
-  if (chainId !== process.env.REACT_APP_CHAIN_ID) {
+  if (chainId !== Number.parseInt(process.env.REACT_APP_CHAIN_ID as string)) {
     return false
   }
 

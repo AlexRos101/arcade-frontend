@@ -1,7 +1,5 @@
 import { Response } from 'global/interface'
 
-/* eslint-disable */
-
 const sendPost = (requestUrl: string, params: any): Promise<any> => {
   const requestOptions = {
     method: 'POST',
@@ -169,4 +167,9 @@ export const getComment = async (id: number) => {
   return response
 }
 
-/* eslint-enable */
+export const getVerificationCode = async (game_id: number, address: string, amount: number): Promise<Response> => {
+  const response = await sendPost('verify/swap_request', { id: game_id, address: address, amount: amount })
+  return response
+}
+
+

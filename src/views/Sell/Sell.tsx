@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import * as API from '../../hooks/api'
 import axios from 'axios'
-import { useGlobalState } from 'state-pool'
 import { Box, Button, Grid, Select } from '@material-ui/core'
 import { Theme, ThemeProvider, createStyles, makeStyles, withStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
@@ -28,14 +27,14 @@ import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
 import Swal from 'sweetalert'
-import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 import * as Wallet from '../../global/wallet'
-import ERC721 from '../../contracts/ERC721.json'
-import EXCHANGE from '../../contracts/EXCHANGE.json'
 
 import { Response, GameItem } from 'global/interface'
 import MainLoading from 'components/MainLoading'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useNFT, useExchange } from 'hooks/useContract'
+import { useAppDispatch } from 'state'
+import { setConnectWallet, setIsLoading } from 'state/show'
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -117,8 +116,12 @@ interface ParamTypes {
 }
 
 const Sell: React.FC<SkinProps> = (data) => {
+  const dispatch = useAppDispatch()
   const classes = useStyles()
   const skinItem = data ?? initData
+  const { account } = useArcadeContext()
+  const nft = useNFT()
+  const exchange = useExchange()
   const [cardHeight, setCardHeight] = useState<string | undefined>('40px')
   const sellCardRef = useRef<HTMLDivElement>(null)
   const [games, setGames] = useState([])
@@ -137,8 +140,6 @@ const Sell: React.FC<SkinProps> = (data) => {
   const [itemId, setItemId] = useState(-1)
   const [showLoading, setShowLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
-  const [, setIsLoading] = useGlobalState('isLoading')
-  const [, setShowConnectWalletModal] = useGlobalState('showConnectWalletModal')
 
   const history = useHistory()
 
@@ -248,19 +249,15 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     if (!(await Wallet.isConnected())) {
-      setIsLoading(false)
-      setShowConnectWalletModal(true)
+      dispatch(setIsLoading(false))
+      dispatch(setConnectWallet(true))
       return
     }
 
-    const provider = await Wallet.getCurrentProvider()
-    const address = await Wallet.getCurrentWallet()
-
-    const web3 = new Web3(provider)
-    const NFT = new web3.eth.Contract(ERC721 as AbiItem[], process.env.REACT_APP_NFT_ADDRESS)
+    
 
     const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
     const tokenInfo = {
@@ -272,14 +269,14 @@ const Sell: React.FC<SkinProps> = (data) => {
       is_anonymous: anonymous === false ? 0 : 1,
     }
 
-    NFT.methods
+    nft.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-      .send({ from: address })
+      .send({ from: account })
       .then(async () => {
         const checkDBStatus = async () => {
           const item = (await API.getItemByTokenID(tokenID)).data as unknown
           if (item !== undefined && item !== null) {
-            setIsLoading(false)
+            dispatch(setIsLoading(false))
             history.push('/listing')
             document.location.reload()
           } else {
@@ -290,9 +287,9 @@ const Sell: React.FC<SkinProps> = (data) => {
         checkDBStatus()
       })
       .catch(() => {
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
       })
-  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, setIsLoading, setShowConnectWalletModal])
+  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, dispatch, account, nft.methods])
 
   const updateItem = useCallback(() => {
     setShowLoading(true)
@@ -316,11 +313,6 @@ const Sell: React.FC<SkinProps> = (data) => {
   }, [itemId, selectedGameID, selectedCategoryID, description, name, anonymous, price, history])
 
   const getRate = useCallback(async () => {
-    const provider = await Wallet.getCurrentProvider()
-
-    const web3 = new Web3(provider)
-    const exchange = new web3.eth.Contract(EXCHANGE as AbiItem[], process.env.REACT_APP_EXCHANGE_ADDRESS)
-
     exchange.methods
       .getRate()
       .call()
@@ -332,7 +324,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         setTimeout(getRate, 500)
       })
-  }, [])
+  }, [exchange.methods])
 
   const onHandleResetFile = () => {
     setTokenID(0)

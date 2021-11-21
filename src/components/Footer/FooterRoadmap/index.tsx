@@ -1,10 +1,12 @@
 import React, { memo } from 'react'
-import { useGlobalState } from 'state-pool'
 import { Grid, Typography } from '@material-ui/core'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 
 import RoadmapEntry from './RoadmapEntry'
+import { useArcadeContext } from 'hooks/useArcadeContext'
+import { useAppDispatch } from '../../../state'
+import { setTermOfUse, setPrivacyPolicy } from 'state/show'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,16 +37,15 @@ const useStyles = makeStyles((theme) => ({
 
 const FooterRoadmap = () => {
   const classes = useStyles()
-  const [account] = useGlobalState('account')
-  const [, setOpenTerm] = useGlobalState('openTermOfUse')
-  const [, setOpenPrivacyPolicy] = useGlobalState('openPrivacyPolicy')
+  const dispatch = useAppDispatch()
+  const { account } = useArcadeContext()
 
   const onClickTermOfUse = () => {
-    setOpenTerm(true)
+    dispatch(setTermOfUse(true))
   }
 
   const onClickPrivacyPolicy = () => {
-    setOpenPrivacyPolicy(true)
+    dispatch(setPrivacyPolicy(true))
   }
 
   return (
