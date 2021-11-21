@@ -58,8 +58,9 @@ const PointSwap: React.FC<Props> = (props) => {
     tokenFullName: 'StarShard'
   })
   const { slowRefresh } = useRefresh()
-  const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(0))
-  const [gamePointRate, setGamePointRate] = useState(new BigNumber(0))
+  const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(NaN))
+  const [gamePointRate, setGamePointRate] = useState(new BigNumber(NaN))
+  const [sellGamePointRate, setSellGamePointRate] = useState(new BigNumber(NaN))
   const [swapRate, setSwapRate] = useState(0.0)
   const [openSwapToken, setOpenSwapToken] = useState(false)
   const [arcadeBalance, setArcadeBalance] = useState(new BigNumber(0))
@@ -82,29 +83,27 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getGamePointRate = async () => {
-    if (inputCoin?.tokenName === "$ARCADE" || !inputCoin) {
-      swap.methods
-        .gamePointPrice(1)
-        .call()
-        .then((res: string) => {
-          console.log(res)
-          setGamePointRate(new BigNumber(res).div(10 ** 3))
-        })
-        .catch(() => {
-          setTimeout(getGamePointRate, 500)
-        })
-    } else {
-      swap.methods
-        .getGamePointRate(account, 1)
-        .call()
-        .then((res: string) => {
-          console.log(res)
-          setGamePointRate(new BigNumber(res).multipliedBy(arcadeDogeRate).div(10 ** 18))
-        })
-        .catch(() => {
-          setTimeout(getGamePointRate, 500)
-        })
-    }
+    swap.methods
+      .gamePointPrice(1)
+      .call()
+      .then((res: string) => {
+        setGamePointRate(new BigNumber(res).div(10 ** 3))
+      })
+      .catch(() => {
+        setTimeout(getGamePointRate, 500)
+      })
+  }
+
+  const getSellGamePointRate = async () => {
+    swap.methods
+      .getGamePointRate(account, 1)
+      .call()
+      .then((res: string) => {
+        setSellGamePointRate(new BigNumber(res).multipliedBy(arcadeDogeRate).div(10 ** 18))
+      })
+      .catch(() => {
+        setTimeout(getSellGamePointRate, 500)
+      })
   }
 
   const onSwitchToken = useCallback(() => {
@@ -193,13 +192,17 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    if (arcadeDogeRate === new BigNumber(0) || gamePointRate === new BigNumber(0))
+    if (arcadeDogeRate.s === null || 
+        gamePointRate.s === null || 
+        sellGamePointRate.s === null) {
       setSwapRate(0.0)
-    else if (inputCoin?.tokenName !== "$ARCADE")
-      setSwapRate(gamePointRate.div(arcadeDogeRate).toNumber())
+    }
+    else if (inputCoin?.tokenName !== "$ARCADE") {
+      setSwapRate(sellGamePointRate.div(arcadeDogeRate).toNumber())
+    }
     else
       setSwapRate(arcadeDogeRate.div(gamePointRate).toNumber())
-  }, [arcadeDogeRate, gamePointRate, inputCoin])
+  }, [arcadeDogeRate, gamePointRate, sellGamePointRate, inputCoin])
 
   const onChangeInput = (value: string) => {
     setInputBalance(Number.parseFloat(value))
@@ -221,6 +224,7 @@ const PointSwap: React.FC<Props> = (props) => {
     if (!account) return
     getArcadeDogeRate()
     getGamePointRate()
+    getSellGamePointRate()
     getArcadeBalance()
     getGamePointBalance()
   // eslint-disable-next-line

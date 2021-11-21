@@ -82,7 +82,6 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       .send({ from: account })
       .then((res: any) => {
         const checkDBStatus = async () => {
-          console.log('ddd')
           const item = (await API.getItemById(props.item.id)).data
           if (!item.is_visible) {
             dispatch(setIsLoading(false))
@@ -94,7 +93,6 @@ const RemoveSellModal: React.FC<Props> = (props) => {
         }
 
         checkDBStatus()
-        console.log('ccc')
       })
       .catch((err: any) => {
         dispatch(setIsLoading(false))

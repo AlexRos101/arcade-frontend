@@ -16,7 +16,6 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
-import * as WalletUtils from 'global/wallet'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setWalletMenu, setPointSwap } from 'state/show'
@@ -54,7 +53,7 @@ const Home: React.FC = () => {
   }
 
   const init = async () => {
-    if (await WalletUtils.isConnected()) {
+    if (account) {
       setShowConnectWallet(false);
     } else {
       setShowConnectWallet(true);

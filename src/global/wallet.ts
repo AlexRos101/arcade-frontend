@@ -44,6 +44,10 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
       return -1;
     } else {
       const accounts = await window.ethereum.send('eth_requestAccounts')
+
+      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
+      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK)
+      
       if (accounts.result.length > 0) {
         if ((await getCurrentChainId()) !== process.env.REACT_APP_CHAIN_ID) {
           const web3: any = new Web3(Web3.givenProvider)
@@ -52,8 +56,6 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
               method: 'wallet_switchEthereumChain',
               params: [{ chainId: '0x' + Number(process.env.REACT_APP_CHAIN_ID).toString(16) }],
             })
-            ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
-            ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK)
           } catch (error) {
             if ((error as any).code === 4902) {
               try {
@@ -170,7 +172,7 @@ export const isConnected = async (): Promise<boolean> => {
     return false
   }
 
-  chainId = Number.parseInt(chainId as string)
+  chainId = Number.parseInt(chainId.toString())
 
   if (chainId !== Number.parseInt(process.env.REACT_APP_CHAIN_ID as string)) {
     return false

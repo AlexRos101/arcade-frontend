@@ -58,7 +58,7 @@ const NavBarMenu = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
   const classes = useStyles()
-  const { account, updateConnect, connectType } = useArcadeContext()
+  const { account, updateConnect, connectType, connectWallet } = useArcadeContext()
   const { walletMenu, hiddenMenu } = useShow()
   const [initialized, setInitialized] = useState(false)
 
@@ -67,7 +67,7 @@ const NavBarMenu = () => {
   }
 
   const onWalletConnectHandler = async () => {
-    await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT);
+    dispatch(connectWallet(CONST.WALLET_TYPE.WALLETCONNECT))
   }
 
   const onDisconnectHandler = () => {
