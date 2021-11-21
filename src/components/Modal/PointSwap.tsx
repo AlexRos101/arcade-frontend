@@ -71,9 +71,8 @@ const PointSwap: React.FC<Props> = (props) => {
     swap.methods.getArcadeDogeRate().call()
     .then((result: string) => {
 
-      if (result) {       
+      if (result)
 		    setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
-
       else 
         setArcadeDogeRate(new BigNumber(0))
     })

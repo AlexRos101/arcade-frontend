@@ -144,7 +144,9 @@ const Listing: React.FC = () => {
 
   useEffect(() => {
     init()
+  // eslint-disable-next-line
   }, [account])
+
 
   return (
     <Page>
