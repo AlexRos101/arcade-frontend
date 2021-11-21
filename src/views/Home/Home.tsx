@@ -44,7 +44,7 @@ const Home: React.FC = () => {
     } else {
       getValidationCheck(account)
       .then((result) => {
-        if (result.result === true) {
+        if (result.result === 0) {
           dispatch(setPointSwap(true))
         } else {
           swal("No matching game account found!")
