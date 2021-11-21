@@ -142,13 +142,9 @@ const Listing: React.FC = () => {
     getRate()
   }, [getMyItems, getRate, dispatch])
 
-  /* eslint-disable */
-
   useEffect(() => {
     init()
-  }, [])
-
-  /* eslint-enable */
+  }, [account])
 
   return (
     <Page>

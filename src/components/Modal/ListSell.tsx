@@ -132,6 +132,7 @@ const ListSellModal: React.FC<Props> = (props) => {
         console.log('aaa')
       })
       .catch((err: any) => {
+        console.log(err)
         dispatch(setIsLoading(false))
       })
   }

@@ -104,6 +104,7 @@ export const getCurrentProvider = async () => {
     })
 
     provider.on('error', (code: number, reason: string) => {
+      console.log(code)
       console.log(reason)
     })
 
