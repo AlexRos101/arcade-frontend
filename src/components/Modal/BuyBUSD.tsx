@@ -163,7 +163,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your bUSD token</p>
+                  <p id="content">Approve your BUSD token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -189,7 +189,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy item with bUSD</p>
+                  <p id="content">Buy item with BUSD</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

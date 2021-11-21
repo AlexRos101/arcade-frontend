@@ -1,3 +1,5 @@
+import { Response } from 'global/interface'
+
 
 const sendPost = (requestUrl: string, params: any): Promise<any> => {
   const requestOptions = {
@@ -10,5 +12,10 @@ const sendPost = (requestUrl: string, params: any): Promise<any> => {
 
 export const getBalance = async (address: string): Promise<any> => {
   const response = await sendPost('balance', {address})
+  return response
+}
+
+export const getValidationCheck = async (address: string): Promise<Response> => {
+  const response = await sendPost('verify/address' , { address: address })
   return response
 }

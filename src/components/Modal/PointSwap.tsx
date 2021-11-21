@@ -43,7 +43,7 @@ interface Props {
 
 const PointSwap: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch()
-  const { account, web3 } = useArcadeContext()
+  const { account } = useArcadeContext()
   const swap = useSwap()
   const arcadeDoge = useArcadeDoge()
  
@@ -70,8 +70,10 @@ const PointSwap: React.FC<Props> = (props) => {
   const getArcadeDogeRate = async () => {
     swap.methods.getArcadeDogeRate().call()
     .then((result: string) => {
-      if (result)
+      if (result) {
+        console.log(result)
         setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
+      }
       else 
         setArcadeDogeRate(new BigNumber(0))
     })
@@ -87,6 +89,7 @@ const PointSwap: React.FC<Props> = (props) => {
         .gamePointPrice(1)
         .call()
         .then((res: string) => {
+          console.log(res)
           setGamePointRate(new BigNumber(res).div(10 ** 3))
         })
         .catch(() => {
@@ -97,6 +100,7 @@ const PointSwap: React.FC<Props> = (props) => {
         .getGamePointRate(account, 1)
         .call()
         .then((res: string) => {
+          console.log(res)
           setGamePointRate(new BigNumber(res).multipliedBy(arcadeDogeRate).div(10 ** 18))
         })
         .catch(() => {
@@ -128,6 +132,7 @@ const PointSwap: React.FC<Props> = (props) => {
         onClose()
         return
       }
+
       const verificationToken = res.data.verification_token
 
       swap.methods
@@ -155,7 +160,7 @@ const PointSwap: React.FC<Props> = (props) => {
       return
     }
 
-    if (inputCoin?.tokenName === "$ARCADE") {
+    if (inputCoin && inputCoin?.tokenName === "$ARCADE") {
       setOpenSwapToken(true)
     } else {
       buyArcade()
@@ -163,8 +168,6 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getArcadeBalance = async () => {
-    if (!web3) return
-
     if (account) {
       arcadeDoge.methods
       .balanceOf(account)

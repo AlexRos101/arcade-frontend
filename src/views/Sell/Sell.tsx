@@ -228,7 +228,7 @@ const Sell: React.FC<SkinProps> = (data) => {
     return !isNaN(parseFloat(str))
   }, [])
 
-  const mintToken = useCallback(async () => {
+  const mintToken = async () => {
     if (tokenID === 0) {
       Swal('Please upload item file!')
       return
@@ -289,7 +289,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       .catch(() => {
         dispatch(setIsLoading(false))
       })
-  }, [tokenID, selectedGameID, anonymous, price, selectedCategoryID, description, history, isNumeric, name, dispatch, account, nft.methods])
+  }
 
   const updateItem = useCallback(() => {
     setShowLoading(true)

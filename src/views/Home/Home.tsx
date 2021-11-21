@@ -20,6 +20,8 @@ import * as WalletUtils from 'global/wallet'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setWalletMenu, setPointSwap } from 'state/show'
+import { getValidationCheck } from 'hooks/gameapi'
+import swal from 'sweetalert'
 
 const Home: React.FC = () => {
   const history = useHistory()
@@ -40,7 +42,14 @@ const Home: React.FC = () => {
     if (!account) {
       dispatch(setWalletMenu(true))
     } else {
-      dispatch(setPointSwap(true))
+      getValidationCheck(account)
+      .then((result) => {
+        if (result.result === true) {
+          dispatch(setPointSwap(true))
+        } else {
+          swal("No matching game account found!")
+        }
+      })
     }
   }
 
