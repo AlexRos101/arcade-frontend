@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import showReducer from './show'
 import swapReducer from './swap'
 
-const PERSISTED_KEYS: string[] = []
+const PERSISTED_KEYS: string[] = ['swap']
 
 const store = configureStore({
   reducer: {

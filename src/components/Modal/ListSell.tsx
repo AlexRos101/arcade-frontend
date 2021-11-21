@@ -119,7 +119,6 @@ const ListSellModal: React.FC<Props> = (props) => {
       .send({ from: account })
       .then((res: any) => {
         const checkDBStatus = async () => {
-          console.log('bbb')
           const item = (await API.getItemById(props.item.id)).data
           if (item.is_visible) {
             document.location.reload()
@@ -129,9 +128,9 @@ const ListSellModal: React.FC<Props> = (props) => {
         }
 
         checkDBStatus()
-        console.log('aaa')
       })
       .catch((err: any) => {
+        console.log(err)
         dispatch(setIsLoading(false))
       })
   }

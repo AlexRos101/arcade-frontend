@@ -7,6 +7,7 @@ import * as Wallet from 'global/wallet'
 import * as WalletUtils from 'global/wallet'
 import * as CONST from 'global/const'
 
+declare let window: any
 
 export const ArcadeProvider: React.FC = ({ children }) => {
 
@@ -34,7 +35,10 @@ export const ArcadeProvider: React.FC = ({ children }) => {
 
   const connectWallet = async (connectType: number = CONST.WALLET_TYPE.WALLETCONNECT) => {
     if (isMobile) {
-      await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT)
+      if (window.ethereum)
+        await WalletUtils.connect(CONST.WALLET_TYPE.METAMASK)
+      else
+        await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT)
     } else {
       await WalletUtils.connect(connectType)
     }

@@ -192,7 +192,6 @@ const Sell: React.FC<SkinProps> = (data) => {
       file.name.slice(file.name.length - 4, file.name.length) !== '.rar' &&
       file.name.slice(file.name.length - 4, file.name.length) !== '.zip'
     ) {
-      alert(JSON.stringify(file))
       Swal('Please select *.rar or *.zip file.')
       return
     }
