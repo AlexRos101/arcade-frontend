@@ -1,10 +1,12 @@
 import React, { ReactElement, useState } from 'react'
+import Info from '@material-ui/icons/Info'
 
 interface CustomInputProps {
   className?: string
   style?: React.CSSProperties
   placeholder?: string | ReactElement
   onChange?: (value: string) => void
+  isAlert?: boolean
 }
 
 const CustomInput: React.FC<CustomInputProps>  = (props) => {
@@ -46,6 +48,7 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
         value={textValue}
         style={{ textAlign: 'right' }}
         onChange={(e) => onInputChange(e)}
+        className={props.isAlert ? 'alert-input' : ''}
         />
       {
         !hiddenHolder &&
@@ -53,6 +56,12 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
           {props.placeholder}
         </div>)
       }
+      <div className={`alert ${props.isAlert ? '' : 'cr-hidden'}`}>
+          <span>
+            <Info />
+            <p>You don’t have enough balance</p>
+          </span>
+      </div>
     </div>
   )
 }

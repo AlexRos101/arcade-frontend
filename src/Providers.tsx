@@ -42,8 +42,7 @@ export const ArcadeProvider: React.FC = ({ children }) => {
     } else {
       await WalletUtils.connect(connectType)
     }
-    setConnectType(Number(WalletUtils.getWalletType()))
-    initAddress()
+    await initWeb3()
   }
 
   const disconnectWallet = () => {
@@ -54,13 +53,13 @@ export const ArcadeProvider: React.FC = ({ children }) => {
 
   const initWeb3 = async () => {
     setWeb3(await getWeb3())
+    updateConnect()
   }
 
   useEffect(() => {
     initWeb3()
-    updateConnect()
     // eslint-disable-next-line
-  }, [account])
+  }, [])
 
   useEffect(() => {
     if (!account)

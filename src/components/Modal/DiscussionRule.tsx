@@ -34,7 +34,7 @@ const DiscussionRule: React.FC<Props> = (props) => {
       PaperProps={{ style: { borderRadius: 7 } }}
     >
       <DialogTitle className="modal-dialog-title">
-        <RowLabel>ArcadeDoge Discussions Rules & Regulations</RowLabel>
+        <RowLabel>Arcade Discussions Rules & Regulations</RowLabel>
       </DialogTitle>
       <DialogContent className="modal-dialog-content" dividers>
         <div>

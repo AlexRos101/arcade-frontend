@@ -95,7 +95,7 @@ const Home: React.FC = () => {
             onClick={onClickBuyArcadeDoge}
             startIcon={<AstronautBuy />}
           >
-            <Typography variant="subtitle1">Buy ArcadeDoges</Typography>
+            <Typography variant="subtitle1">Buy $ARC</Typography>
           </Button>
           <ThemeProvider theme={greenTheme}>
             <Button

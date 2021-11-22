@@ -26,6 +26,7 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
     })
 
     provider.on('disconnect', (code: number, reason: string) => {
+      console.log('asdf')
       document.location.reload()
     })
 
