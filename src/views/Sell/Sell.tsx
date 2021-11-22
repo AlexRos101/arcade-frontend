@@ -208,7 +208,7 @@ const Sell: React.FC<SkinProps> = (data) => {
     // Send formData object
     axios
       .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
-      .then((res) => {
+      .then((res: any) => {
         setIsUploading(false)
         if (res.data.code === -1) {
           setShowThumbnailWarning(true)
@@ -216,7 +216,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         }
         setTokenID(tokenTemp)
       })
-      .catch((err) => {
+      .catch((err: any) => {
         setIsUploading(false)
         console.log(err)
       })
@@ -446,7 +446,7 @@ const Sell: React.FC<SkinProps> = (data) => {
               </Flex>
               <Grid container spacing={2} alignItems="flex-start" className={classes.spacing}>
                 <Grid item sm={4}>
-                  <LabelComponent label="Price in ARCADEDOGE">
+                  <LabelComponent label="Price in $ARCADE">
                     <TextField
                       fullWidth
                       placeholder="0.0"
@@ -504,7 +504,7 @@ const Sell: React.FC<SkinProps> = (data) => {
               drop files
             </ItemDropdown>
           ) : (
-            <Relative>
+            <Relative style={{ display: 'flex' }}>
               <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img" alt=""/>
               {paramIsSet === false ? <HoverButton onClick={onHandleResetFile}>Reset File</HoverButton> : ''}
             </Relative>

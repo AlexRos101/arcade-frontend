@@ -18,7 +18,7 @@ const HoverContainer = styled.div`
 const HoverButton: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {
   return (
     <HoverContainer {...props} className="fade">
-      <div className="mw-auto mh-auto flex-column ">
+      <div className="mw-auto mh-auto flex-column " style={{ margin: 'auto' }}>
         <AutorenewIcon className="mw-auto mb-5" style={{ fontSize: '60px' }} />
         {children}
       </div>

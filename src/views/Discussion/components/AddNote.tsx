@@ -42,7 +42,7 @@ const AddNote: React.FC = () => {
       <Typography gutterBottom variant="subtitle1" component="div" className={classes.searchCardBody}>
         By posting a discussion thread, you agree to the{' '}
         <a href="#" onClick={handleOpenRules} className={classes.searchCardBody}>
-          ArcadeDoge Discussion Rules & Regulation.
+          Arcade Discussion Rules & Regulation.
         </a>
       </Typography>
       <DiscussionRule onClose={handleClose} open={discussionRule} />

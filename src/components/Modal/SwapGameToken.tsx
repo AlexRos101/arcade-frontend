@@ -150,7 +150,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       <DialogContent className="modal-order-content" dividers>
         <div {...props} style={{ padding: '2vh 0' }}>
           <p className="approval-header" style={{ textAlign: 'center', maxWidth: '300px' }}>
-            Swap $arcadeDoge to STARSHARD Token
+            Swap $ARCADE to STARSHARD Token
           </p>
 
           <div className={firstStepClassName}>
@@ -162,7 +162,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your $arcadeDoge token</p>
+                  <p id="content">Approve your $ARCADE token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -188,7 +188,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy STARSHARD with $arcadeDoge</p>
+                  <p id="content">Buy STARSHARD with $ARCADE</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

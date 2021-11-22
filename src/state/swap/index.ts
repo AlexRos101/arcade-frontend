@@ -14,7 +14,7 @@ export const fetchArcadeDogeRate = createAsyncThunk<BigNumber>(
   'swap/fetchArcadeDogeRate',
   async () => {
     const swap = useSwap()
-    const result = await swap.methods.getArcadeDogeRate().call()
+    const result = await swap.methods.getArcadeRate().call()
     return new BigNumber(result).div(10 ** 18)
   }
 )

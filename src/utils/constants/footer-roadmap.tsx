@@ -7,7 +7,7 @@ const DEFAULT_FOOTER_ROADMAP = [
         link: '#',
       },
       {
-        title: 'Buy ArcadeDoges',
+        title: 'Buy Arcade',
         link: '#',
       },
     ],

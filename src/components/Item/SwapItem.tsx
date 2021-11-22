@@ -15,12 +15,13 @@ interface SwapItemProps {
   coinValue?: string
   coinName?: string
   onChange?: (value: string) => void
+  isAlert?: boolean
 }
 
 const SwapItem: React.FC<SwapItemProps>  = (props) => {
   return (
     <div className="flex-row">
-      <div className="flex-row mr-35 r-flex-row">
+      <div className="swap-title flex-row mr-35 r-flex-row">
         {props.avatar && <img src={props.avatar} width={props.avatarWidth} height={props.avatarHeight} style={{ marginRight: '10px', marginTop: 'auto', marginBottom: 'auto' }} alt=""/>}
         <Grid item>
           <Typography style={{ fontSize: props.fontSize, color: (props.fontColor?props.fontColor:'rgb(183, 176, 145)') }}>{props.label}</Typography>
@@ -33,6 +34,7 @@ const SwapItem: React.FC<SwapItemProps>  = (props) => {
           className="swap-input r-mt-px-10 ml-auto"
           style={{ marginTop: 'auto', marginBottom: 'auto', width: '220px' }}
           onChange={props.onChange}
+          isAlert={props.isAlert}
         />) :
         (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '200px', paddingLeft: '11px', paddingRight: '11px' }}>
           <p className="ml-0">{props.coinName}</p>

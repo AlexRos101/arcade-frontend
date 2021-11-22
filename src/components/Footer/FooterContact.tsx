@@ -16,7 +16,7 @@ const FooterContact = () => {
   return (
     <div className={classes.root}>
       <Typography variant="body1" color="inherit">
-        ArcadeDoge Game © 2021.
+        ArcadeToken © 2021.
       </Typography>
       <Typography variant="body1" color="inherit">
         All Rights Reserved.
