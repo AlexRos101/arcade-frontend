@@ -29,7 +29,7 @@ export const ArcadeProvider: React.FC = ({ children }) => {
 
   const updateConnect = async () => {
     setIsConnected(await WalletUtils.isConnected())
-    setConnectType(Number(WalletUtils.getWalletType()))
+    setConnectType(Number(await WalletUtils.getWalletType()))
     initAddress()
   }
 

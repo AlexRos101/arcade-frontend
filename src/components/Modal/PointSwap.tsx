@@ -101,7 +101,7 @@ const PointSwap: React.FC<Props> = (props) => {
       .getGamePointRate(account, 1)
       .call()
       .then((res: string) => {
-        setSellGamePointRate(new BigNumber(res).multipliedBy(arcadeDogeRate).div(10 ** 18))
+        setSellGamePointRate(new BigNumber(res).div(10 ** 18))
       })
       .catch(() => {
         setTimeout(getSellGamePointRate, 500)
@@ -222,10 +222,11 @@ const PointSwap: React.FC<Props> = (props) => {
       setSwapRate(0.0)
     }
     else if (inputCoin?.tokenName !== "$ARCADE") {
-      setSwapRate(sellGamePointRate.div(arcadeDogeRate).toNumber())
+      setSwapRate(sellGamePointRate.toNumber())
     }
-    else
+    else {
       setSwapRate(arcadeDogeRate.div(gamePointRate).toNumber())
+    }
   }, [arcadeDogeRate, gamePointRate, sellGamePointRate, inputCoin])
 
   const onChangeInput = (valueStr: string) => {
@@ -269,7 +270,7 @@ const PointSwap: React.FC<Props> = (props) => {
     getArcadeBalance()
     getGamePointBalance()
   // eslint-disable-next-line
-  }, [slowRefresh])
+  }, [slowRefresh, account])
 
   return (
     <Dialog
