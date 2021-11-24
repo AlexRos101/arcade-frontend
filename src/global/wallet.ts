@@ -182,13 +182,14 @@ export const isConnected = async (): Promise<boolean> => {
   return true
 }
 
-export const getWalletType = () => {
+export const getWalletType = async () => {
   if (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === null || ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === 0) {
     return CONST.WALLET_TYPE.NONE
   }
 
   const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
   if (walletType == null) return CONST.WALLET_TYPE.NONE
+  if (!await isConnected()) return CONST.WALLET_TYPE.NONE
   return walletType
 }
 
