@@ -4,6 +4,7 @@ export const LOCAL_STORAGE_KEY = {
   KEY_CONNECTED: 'connected',
   KEY_WALLET_CONNECT: 'walletconnect',
   KEY_WALLETS: 'wallets',
+  CHAIN_ID: 'chain_id'
 }
 
 export const WALLET_TYPE = {

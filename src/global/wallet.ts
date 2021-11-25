@@ -17,16 +17,20 @@ const providerParam: any = {
 export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => {
   if (wallet_type === CONST.WALLET_TYPE.WALLETCONNECT) {
     const provider = new WalletConnectProvider(providerParam)
+    const walletConnectInfo = (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT) as any)
+    if (walletConnectInfo && walletConnectInfo.chainId !== parseInt(process.env.REACT_APP_CHAIN_ID as string, 10)) {
+      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT, '')
+      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.NONE)
+      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 0)
+    }
 
     provider.onConnect(async () => {
-      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.WALLETCONNECT)
-
+      ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
       document.location.reload()
     })
 
     provider.on('disconnect', (code: number, reason: string) => {
-      console.log('asdf')
       document.location.reload()
     })
 
@@ -44,12 +48,14 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
     if (window.ethereum === undefined) {
       return -1;
     } else {
-      const accounts = await window.ethereum.send('eth_requestAccounts')
+      // const accounts = await window.ethereum.enable()
+      const accounts = await window.ethereum.request({method: 'eth_requestAccounts'})
 
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK)
       
-      if (accounts.result.length > 0) {
+      
+      if (accounts.length > 0) {
         if ((await getCurrentChainId()) !== process.env.REACT_APP_CHAIN_ID) {
           const web3: any = new Web3(Web3.givenProvider)
           try {
@@ -106,9 +112,8 @@ export const getCurrentProvider = async () => {
       document.location.reload()
     })
 
-    provider.on('error', (code: number, reason: string) => {
+    provider.on('error', (code: string) => {
       console.log(code)
-      console.log(reason)
     })
 
     await provider.enable()
@@ -124,10 +129,23 @@ export const getCurrentWallet = async () => {
   if (walletType === null) return null
   if (connected === null || connected === 0) return null
 
+  
+
   if (walletType === CONST.WALLET_TYPE.METAMASK) {
+    if (
+      parseInt(process.env.REACT_APP_CHAIN_ID as string, 10) !== parseInt(await getCurrentChainId() as string, 16)
+    ) {
+      return null
+    }
+
     const accounts = await new Web3(Web3.givenProvider).eth.getAccounts()
     return Web3.utils.toChecksumAddress(accounts[0])
   } else if (walletType === CONST.WALLET_TYPE.WALLETCONNECT) {
+    if (
+      parseInt(process.env.REACT_APP_CHAIN_ID as string, 10) !== parseInt(await getCurrentChainId() as string, 10)
+    ) {
+      return null
+    }
     // const wcData: any = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_CONNECT)
     // if (wcData.accounts.length == 0) {
     //   return null
@@ -160,6 +178,13 @@ export const getCurrentChainId = async () => {
   return null
 }
 
+export const isPreviousConnected = (): boolean => {
+  if (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === null || ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === 0) {
+    return false
+  }
+  return true
+}
+
 export const isConnected = async (): Promise<boolean> => {
   if (ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === null || ls.get(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED) === 0) {
     return false
@@ -180,6 +205,11 @@ export const isConnected = async (): Promise<boolean> => {
   }
 
   return true
+}
+
+export const getPreviousWalletType = () => {
+  const walletType = ls.get(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE)
+  return walletType
 }
 
 export const getWalletType = async () => {

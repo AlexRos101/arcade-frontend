@@ -2,9 +2,6 @@ import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Typography, Button, Hidden } from '@material-ui/core'
 
-import * as WalletUtils from '../../global/wallet'
-import * as CONST from '../../global/const'
-
 import MenuItem from './MenuItem'
 import SubMenu from './SubMenu'
 
@@ -58,20 +55,13 @@ const NavBarMenu = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
   const classes = useStyles()
-  const { account, updateConnect, connectType, connectWallet } = useArcadeContext()
+  const { account, updateConnect, connectType } = useArcadeContext()
   const { walletMenu, hiddenMenu } = useShow()
   const [initialized, setInitialized] = useState(false)
 
   const onConnectWalletHandler = async () => {
     dispatch(setWalletMenu(true))
-  }
-
-  const onWalletConnectHandler = async () => {
-    dispatch(connectWallet(CONST.WALLET_TYPE.WALLETCONNECT))
-  }
-
-  const onDisconnectHandler = () => {
-    WalletUtils.disconnect()
+    onCloseMenu()
   }
 
   const onPlayGameHandler = useCallback(() => {
@@ -104,7 +94,7 @@ const NavBarMenu = () => {
 
     if (window.ethereum !== undefined) {
       window.ethereum.on('accountsChanged', updateConnect)
-      window.ethereum.on('chainChanged', updateConnect)
+      window.ethereum.on('chainChanged', (chainId: string) => updateConnect())
     }
   }, [initialized, updateConnect])
 
@@ -122,53 +112,31 @@ const NavBarMenu = () => {
         </div>
         { !account ? (
           <div style={{ position: 'relative', }} className="r-wd-100">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onConnectWalletHandler}
+              className="menu-btn"
+              startIcon={<Wallet />}
+            >
+              <Typography variant="subtitle1">Connect Wallet</Typography>
+            </Button>
             <Hidden xsDown>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={onConnectWalletHandler}
-                className="menu-btn"
-                startIcon={<Wallet />}
-              >
-                <Typography variant="subtitle1">Connect Wallet</Typography>
-              </Button>
               <SelectWalletModal open={walletMenu} connectedWallet={Number(connectType)}/>
             </Hidden>
-            <Hidden smUp>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={onWalletConnectHandler}
-                className="menu-btn"
-                startIcon={<Wallet />}
-              >
-                <Typography variant="subtitle1">Connect Wallet</Typography>
-              </Button>
-            </Hidden> 
           </div> ) : (
           <div style={{ position: 'relative' }} className="r-wd-100">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={onConnectWalletHandler}
+              className="menu-btn btn-note"
+              startIcon={<Wallet />}
+            >
+              <Typography variant="subtitle1">{shortenString(account)}</Typography>
+            </Button>
             <Hidden xsDown>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={onConnectWalletHandler}
-                className="menu-btn btn-note"
-                startIcon={<Wallet />}
-              >
-                <Typography variant="subtitle1">{shortenString(account)}</Typography>
-              </Button>
-              <SelectWalletModal open={walletMenu} connectedWallet={connectType}/>
-            </Hidden>
-            <Hidden smUp>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={onDisconnectHandler}
-                className="menu-btn btn-note"
-                startIcon={<Wallet />}
-              >
-                <Typography variant="subtitle1">{shortenString(account)}</Typography>
-              </Button>
+              <SelectWalletModal open={walletMenu} connectedWallet={Number(connectType)}/>
             </Hidden>
           </div>
         )}

@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react'
-import { AppBar } from '@material-ui/core'
+import { AppBar, Hidden } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -11,10 +11,11 @@ import TermOfUse from 'components/Modal/TermOfUse'
 import PrivacyPolicy from 'components/Modal/PrivacyPolicy'
 import PointSwap from 'components/Modal/PointSwap'
 import { useCommonStyles } from '../../styles/use-styles'
-
+import SelectWalletModal from 'components/Modal/SelectWallet'
 import { useShow } from 'state/show/hook'
 import { setTermOfUse, setPrivacyPolicy, setPointSwap } from 'state/show'
 import { useAppDispatch } from '../../state'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,8 +45,8 @@ const Footer = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
   const dispatch = useAppDispatch()
-
-  const { termOfUse, privacyPolicy, pointSwap } = useShow()
+  const { connectType } = useArcadeContext()
+  const { termOfUse, privacyPolicy, pointSwap, walletMenu } = useShow()
 
   const handleClose = useCallback(() => {
     dispatch(setTermOfUse(false))
@@ -75,6 +76,9 @@ const Footer = () => {
       <TermOfUse onClose={handleClose} open={termOfUse} />
       <PrivacyPolicy onClose={handleClosePrivacy} open={privacyPolicy} />
       <PointSwap onClose={handleClosePointSwap} open={pointSwap} />
+      <Hidden smUp>
+        <SelectWalletModal open={walletMenu} connectedWallet={connectType}/>
+      </Hidden>
     </AppBar>
   )
 }

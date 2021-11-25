@@ -27,7 +27,6 @@ interface Props {
 
 const ConnectWalletModal: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch()
-  const { connectWallet } = useArcadeContext()
   const { connWallet } =  useShow()
 
   const onConnectWalletHandler = async () => {
@@ -35,14 +34,10 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
     dispatch(setWalletMenu(true))
   }
 
-  const onWalletConnectHandler = async () => {
-    await connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
-  }
-  
   return (
     <Dialog
       className="card-dialog"
-      maxWidth="sm"
+      maxWidth="xs"
       onClose={() => dispatch(setConnectWallet(false))}
       aria-labelledby="customized-dialog-title"
       open={connWallet}
@@ -55,17 +50,9 @@ const ConnectWalletModal: React.FC<Props> = (props) => {
           </div>
           <RowLabel style={{ textAlign: 'center' }}>{props.contents}</RowLabel>
           <div className="mw-auto mt-5" style={{ width: 'fit-content', maxWidth: 'max-content' }}>
-            <Hidden xsDown>
-              <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
-                <Typography variant="subtitle1">Connect Wallet</Typography>
-              </Button>
-            </Hidden>
-            <Hidden smUp>
-              <Button variant="contained" color="primary" onClick={onWalletConnectHandler} startIcon={<Wallet />}>
-                <Typography variant="subtitle1">Connect Wallet</Typography>
-              </Button>
-            </Hidden>
-            
+            <Button variant="contained" color="primary" onClick={onConnectWalletHandler} startIcon={<Wallet />}>
+              <Typography variant="subtitle1">Connect Wallet</Typography>
+            </Button>
           </div>
         </div>
       </DialogContent>
