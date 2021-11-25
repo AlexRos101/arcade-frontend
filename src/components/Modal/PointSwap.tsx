@@ -166,7 +166,6 @@ const PointSwap: React.FC<Props> = (props) => {
         .then(() => {
           Swal("The in-game currency has been successfully converted!")
           dispatch(setIsLoading(false))
-          onClose()
         })
         .catch(() => {
           Swal("Oh no! The conversion failed. Please try again.")

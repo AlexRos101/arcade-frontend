@@ -8,8 +8,8 @@ import NavBarMenu from './NavBarMenu'
 import { useCommonStyles } from '../../styles/use-styles'
 
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
-import * as CONST from 'global/const'
-import { useArcadeContext } from 'hooks/useArcadeContext'
+import { setWalletMenu, setHiddenMenu } from 'state/show'
+import { useAppDispatch } from 'state'
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -31,12 +31,13 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Menu = () => {
+  const dispatch = useAppDispatch()
   const classes = useStyles()
   const commonClasses = useCommonStyles()
-  const { connectWallet } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
-    connectWallet(CONST.WALLET_TYPE.WALLETCONNECT)
+    dispatch(setWalletMenu(true))
+    dispatch(setHiddenMenu('hidden-menu'))
   }
 
   return (

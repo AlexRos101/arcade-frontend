@@ -7,15 +7,22 @@ import * as CONST from '../../global/const'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { setWalletMenu } from 'state/show'
 import { useAppDispatch } from 'state'
+import { isMobile } from 'react-device-detect'
 
 interface Props {
   open: boolean
   connectedWallet: number
 }
 
+declare let window: any
+
 const SelectWalletModal: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch()
   const { connectType } = useArcadeContext()
+  const metaMaskDisabled = (isMobile && window.ethereum === undefined)
+  const walletConnectDisabled = (isMobile && window.ethereum !== undefined)
+
+  console.log(walletConnectDisabled)
 
   if (props.open === true) {
     return (
@@ -29,12 +36,14 @@ const SelectWalletModal: React.FC<Props> = (props) => {
               image={<img src={Metamask} alt='' />}
               text={`Metamask`}
               connected={connectType === CONST.WALLET_TYPE.METAMASK}
-              walletType={CONST.WALLET_TYPE.METAMASK}/>
+              walletType={CONST.WALLET_TYPE.METAMASK}
+              disabled={metaMaskDisabled}/>
             <WalletItem 
               image={<img src={Walletconnect} alt='' />}
               text={`Wallet Connect`}
               connected={connectType === CONST.WALLET_TYPE.WALLETCONNECT}
-              walletType={CONST.WALLET_TYPE.WALLETCONNECT}/>
+              walletType={CONST.WALLET_TYPE.WALLETCONNECT}
+              disabled={walletConnectDisabled}/>
           </div>
         </div>
       </div>

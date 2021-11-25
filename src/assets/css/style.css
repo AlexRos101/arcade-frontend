@@ -1305,7 +1305,9 @@ a {
     height: 135px;
     right: 10px;
     z-index: 1;
-  }  .wallet-select-modal #back {
+  }  
+  
+  .wallet-select-modal #back {
     position: fixed;
     left: 0;
     top: 0;
@@ -1385,6 +1387,18 @@ a {
   .wallet-enabled {
     background: #E1EBFA;
     border: 2px solid #1571FF;
+  }
+
+  .wallet-disabled {
+    color: #304050;
+  }
+
+  .wallet-disabled p {
+    color: #808080;
+  }
+
+  .wallet-disabled img {
+    filter: grayscale(100%);
   }
 
   .red-paginator {
@@ -1591,6 +1605,19 @@ a {
 
 
   @media screen and (max-width: 1080px) {
+
+    .wallet-select-modal {
+      position: fixed;
+      width: 230px;
+      height: 135px;
+      left: calc(50vw - 130px);
+      top: calc(50vh - 95px);
+      z-index: 1;
+    }  
+
+    .wallet-select-modal #triangle {
+      display: none;
+    }
 
     .switch-link {
       margin-top: 25px !important;
