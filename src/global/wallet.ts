@@ -3,6 +3,8 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import * as ls from 'local-storage'
 import * as CONST from './const'
 import { ethers } from 'ethers'
+import axios from 'axios'
+import { arcadeAlert } from 'utils/arcadealert'
 
 declare let window: any
 
@@ -250,4 +252,24 @@ export const checkSign = async (text: string, signature: string, account: string
   const signAddress = await ethers.utils.verifyMessage(text, signature)
 
   return (signAddress === account)
+}
+
+export const sendTransaction = async (transaction: any, account: string | undefined) => {
+  let gasData: any = null
+  try {
+    gasData = await axios.get(process.env.REACT_APP_GAS_URL_TESTNET as string);
+
+    if (gasData.data !== undefined) {
+      gasData = gasData.data;
+    }
+  } catch (err) {
+      console.log(err);
+      arcadeAlert("Get gas price failed!")
+      return;
+  }
+
+  return transaction.estimateGas({ from: account })
+  .then(async (gasAmount: any) => { 
+    return transaction.send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+  })
 }

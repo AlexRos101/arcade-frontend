@@ -68,7 +68,7 @@ const Home: React.FC = () => {
   return (
     <Page className="no-width-limit">
       <div className="iframe-template">
-        <iframe title="Game Frame"/>
+        <iframe title="Game Frame" id="game_panel"/>
         <div className="rect rect-1" />
         <div className="rect rect-2" />
         <div className="rect rect-3" />

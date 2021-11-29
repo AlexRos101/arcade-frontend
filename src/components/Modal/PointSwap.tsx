@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import { arcadeAlert } from 'utils/arcadealert'
+import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -30,6 +30,7 @@ import { useSwap, useArcadeDoge } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setIsLoading } from 'state/show'
 import SkeletonLoading from 'components/SkeletonLoading'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -156,13 +157,13 @@ const PointSwap: React.FC<Props> = (props) => {
 
       const verificationToken = res.data.verification_token
 
+      Wallet.sendTransaction(
       swap.methods
         .sellGamePoint(
           1,
           inputBalance,
           verificationToken
-        )
-        .send({ from: account })
+        ), account)
         .then(() => {
           arcadeAlert("The in-game currency has been successfully converted!")
           dispatch(setIsLoading(false))
@@ -171,6 +172,7 @@ const PointSwap: React.FC<Props> = (props) => {
           arcadeAlert("Oh no! The conversion failed. Please try again.")
           dispatch(setIsLoading(false))
         })
+        
     })
   }
 

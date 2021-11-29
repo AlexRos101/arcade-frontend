@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -85,12 +86,12 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
+    Wallet.sendTransaction(
     arcadeDoge.methods
       .approve(
         process.env.REACT_APP_SWAP_ADDRESS,
         Web3.utils.toWei(props.amount.toString() + '', 'ether'),
-      )
-      .send({ from: account })
+      ), account)
       .then((res: any) => {
         dispatch(setIsLoading(false))
         setFirstStepClassName('item-processed')
@@ -112,6 +113,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
+    Wallet.sendTransaction(
     swap.methods
       .buyGamePoint(
         1,
@@ -119,10 +121,9 @@ const SwapGameToken: React.FC<Props> = (props) => {
           props.amount.toString() + '',
           'ether',
         )
-      )
-      .send({ from: account })
+      ), account)
       .then(() => {
-        arcadeAlert("Game Point bought successfully!")
+        arcadeAlert("StarShards successfully exchanged!")
         dispatch(setIsLoading(false))
         props.onClose()
       })

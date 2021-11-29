@@ -37,16 +37,16 @@ const FooterFollowUs = () => {
     <div className={classes.root}>
       <Typography variant="subtitle1">Follow Us</Typography>
       <div className={classes.container}>
-        <Link href="https://www.facebook.com/ArcadeDoge/">
+        <Link href="https://www.facebook.com/ArcadeToken">
           <img src={Facebook} alt="Facebook" />
         </Link>
-        <Link href="https://www.reddit.com/r/ArcadeDoge">
+        <Link href="https://www.reddit.com/r/ArcadeToken/">
           <img src={Reddit} alt="Reddit" />
         </Link>
-        <Link href="https://t.me/ArcadeDoge">
+        <Link href="https://t.me/ArcadeTokenOfficial">
           <img src={Telegram} alt="Telegram" />
         </Link>
-        <Link href="https://twitter.com/ArcadeDoge">
+        <Link href="https://twitter.com/_ArcadeToken">
           <img src={Twitter} alt="Twitter" />
         </Link>
       </div>

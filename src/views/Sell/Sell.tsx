@@ -256,8 +256,6 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    
-
     const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
     const tokenInfo = {
       game_id: selectedGameID,
@@ -268,9 +266,10 @@ const Sell: React.FC<SkinProps> = (data) => {
       is_anonymous: anonymous === false ? 0 : 1,
     }
 
+    Wallet.sendTransaction(
     nft.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-      .send({ from: account })
+    , account)  
       .then(async () => {
         const checkDBStatus = async () => {
           const item = (await API.getItemByTokenID(tokenID)).data as unknown

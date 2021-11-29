@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
-
+import axios from 'axios'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
@@ -15,6 +15,7 @@ import MainLoading from 'components/MainLoading'
 import { useNFT, useExchange } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -110,13 +111,12 @@ const ListSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    exchange.methods
+    Wallet.sendTransaction( exchange.methods
       .SellRequest(
         props.item.contract_address,
         props.item.token_id,
         Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
-      )
-      .send({ from: account })
+      ), account)
       .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data

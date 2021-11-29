@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-
+import axios from 'axios'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
@@ -15,6 +15,7 @@ import { useBUSD, useExchange } from 'hooks/useContract'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -110,7 +111,8 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
-    exchange.methods
+    Wallet.sendTransaction(
+      exchange.methods
       .exchangeBUSD(
         props.item.contract_address,
         props.item.token_id,
@@ -120,8 +122,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
           'ether',
         ),
         account,
-      )
-      .send({ from: account })
+      ), account)
       .then((res: any) => {
         const checkDBStatus = async () => {
           const item = (await API.getItemById(props.item.id)).data
