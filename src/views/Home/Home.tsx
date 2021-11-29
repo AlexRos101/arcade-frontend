@@ -20,7 +20,7 @@ import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setWalletMenu, setPointSwap } from 'state/show'
 import { getValidationCheck } from 'hooks/gameapi'
-import swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const Home: React.FC = () => {
   const history = useHistory()
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
         if (result.result === 0) {
           dispatch(setPointSwap(true))
         } else {
-          swal("No matching game account found!")
+          arcadeAlert("No matching game account found!")
         }
       })
     }
@@ -62,6 +62,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     init()
+  // eslint-disable-next-line
   }, [account])
 
   return (

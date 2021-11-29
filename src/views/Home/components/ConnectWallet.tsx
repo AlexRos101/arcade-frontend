@@ -3,7 +3,7 @@ import RowLabel from 'components/Label/RowLabel'
 import { ReactComponent as IframeLogo } from 'assets/img/iframelogo.svg'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 
-import { Typography, Button, Hidden } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 import { setWalletMenu } from 'state/show'
 import { useAppDispatch } from 'state'
 

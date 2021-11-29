@@ -3,7 +3,7 @@ import WltSwitchButton from 'components/Button/WltSwitchButton'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { setWalletMenu } from 'state/show'
 import { useAppDispatch } from 'state'
-import swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 import * as CONST from 'global/const'
 
 declare let window: any
@@ -18,7 +18,7 @@ interface Props {
 
 const WalletItem: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch()
-  const { connectWallet, disconnectWallet, web3 } = useArcadeContext()
+  const { connectWallet, disconnectWallet } = useArcadeContext()
   
   const switchHandler = async () => {
     if (props.disabled === true) return
@@ -26,7 +26,7 @@ const WalletItem: React.FC<Props> = (props) => {
       if (window.ethereum || props.walletType === CONST.WALLET_TYPE.WALLETCONNECT) {
         await connectWallet(props.walletType)
       } else {
-        swal('Oops! Metamask is not installed. Please install metamask.')
+        arcadeAlert('Oops! Metamask is not installed. Please install metamask.')
       }
       
     } else {

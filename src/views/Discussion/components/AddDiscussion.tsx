@@ -68,8 +68,6 @@ const AddDiscussionForm: React.FC<Props> = (props) => {
       if (res.result === true) {
         history.push(`/discussion/stuff/${props.stuff.id}`)
         document.location.reload()
-      } else {
-        console.log(res.data)
       }
     })
   }, [props, account, content, anonymous, user, history])

@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-import Swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import { Token } from 'global/interface'
@@ -122,12 +122,12 @@ const SwapGameToken: React.FC<Props> = (props) => {
       )
       .send({ from: account })
       .then(() => {
-        Swal("Game Point bought successfully!")
+        arcadeAlert("Game Point bought successfully!")
         dispatch(setIsLoading(false))
         props.onClose()
       })
       .catch(() => {
-        Swal("Buy Game Point failed!")
+        arcadeAlert("Buy Game Point failed!")
         dispatch(setIsLoading(false))
       })
   }

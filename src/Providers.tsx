@@ -53,6 +53,7 @@ export const ArcadeProvider: React.FC = ({ children }) => {
   }
 
   useEffect(() => {
+    initConnection()
     initWeb3()
 // eslint-disable-next-line
   }, [])
@@ -63,10 +64,6 @@ export const ArcadeProvider: React.FC = ({ children }) => {
     else
       setIsConnected(true)
   }, [account])
-
-  useEffect(() => {
-    initConnection()
-  }, [])
 
   return  (
     <ArcadeContext.Provider value={{

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import Swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -146,9 +146,9 @@ const PointSwap: React.FC<Props> = (props) => {
     .then(async (res) => {
       if (res.result === false) {
         if (res.msg !== undefined)
-          Swal(res.msg as string)
+          arcadeAlert(res.msg as string)
         else
-          Swal("Unknown Error!")
+          arcadeAlert("Unknown Error!")
         dispatch(setIsLoading(false))
         onClose()
         return
@@ -164,11 +164,11 @@ const PointSwap: React.FC<Props> = (props) => {
         )
         .send({ from: account })
         .then(() => {
-          Swal("The in-game currency has been successfully converted!")
+          arcadeAlert("The in-game currency has been successfully converted!")
           dispatch(setIsLoading(false))
         })
         .catch(() => {
-          Swal("Oh no! The conversion failed. Please try again.")
+          arcadeAlert("Oh no! The conversion failed. Please try again.")
           dispatch(setIsLoading(false))
         })
     })
@@ -176,7 +176,7 @@ const PointSwap: React.FC<Props> = (props) => {
 
   const onConvert = () => {
     if (!(inputBalance > 0)) {
-      Swal("Please input valid amount!")
+      arcadeAlert("Please input valid amount!")
       return
     }
 
@@ -230,6 +230,9 @@ const PointSwap: React.FC<Props> = (props) => {
 
   const onChangeInput = (valueStr: string) => {
     const value = Number.parseFloat(valueStr)
+    if (isNaN(value) && valueStr.length > 0) {
+      return
+    }
     setInputBalance(value)
     if (value > 0) {
       if (inputCoin.tokenName === "$ARCADE")

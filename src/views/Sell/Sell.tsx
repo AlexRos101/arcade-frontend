@@ -26,7 +26,7 @@ import HoverButton from 'components/Button/HoverButton'
 import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
-import Swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 import * as Wallet from '../../global/wallet'
 
 import { Response, GameItem } from 'global/interface'
@@ -192,7 +192,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       file.name.slice(file.name.length - 4, file.name.length) !== '.rar' &&
       file.name.slice(file.name.length - 4, file.name.length) !== '.zip'
     ) {
-      Swal('Please select *.rar or *.zip file.')
+      arcadeAlert('Please select *.rar or *.zip file.')
       return
     }
 
@@ -229,22 +229,22 @@ const Sell: React.FC<SkinProps> = (data) => {
 
   const mintToken = async () => {
     if (tokenID === 0) {
-      Swal('Please upload item file!')
+      arcadeAlert('Please upload item file!')
       return
     }
 
     if (selectedGameID === -1 || selectedCategoryID === -1) {
-      Swal('Game or Category is not selected!')
+      arcadeAlert('Game or Category is not selected!')
       return
     }
 
     if (anonymous === false && name === '') {
-      Swal('Please input name or select anonymous mode!')
+      arcadeAlert('Please input name or select anonymous mode!')
       return
     }
 
     if (!isNumeric(price) || Number(price) <= 0) {
-      Swal('Please input valid price!')
+      arcadeAlert('Please input valid price!')
       return
     }
 
@@ -305,7 +305,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         history.push('/listing')
         document.location.reload()
       } else {
-        Swal('An error occured!')
+        arcadeAlert('An error occured!')
         setShowLoading(false)
       }
     })

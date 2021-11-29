@@ -35,6 +35,7 @@ const SwapItem: React.FC<SwapItemProps>  = (props) => {
           style={{ marginTop: 'auto', marginBottom: 'auto', width: '220px' }}
           onChange={props.onChange}
           isAlert={props.isAlert}
+          type={props.coinName}
         />) :
         (<div className="flex-row r-flex-row swap-label r-mt-px-10 ml-auto" style={{ width: '200px', paddingLeft: '11px', paddingRight: '11px' }}>
           <p className="ml-0">{props.coinName}</p>
