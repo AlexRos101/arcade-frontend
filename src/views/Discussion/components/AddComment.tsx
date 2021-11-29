@@ -73,8 +73,6 @@ const AddComment: React.FC<Props> = (props) => {
       if (res.result === true) {
         dispatch(setCommentState(2))
         props.onReset()
-      } else {
-        console.log(res.data)
       }
     })
   }, [props, account, anonymous, content, user, dispatch])

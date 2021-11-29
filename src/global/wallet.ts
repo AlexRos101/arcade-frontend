@@ -35,7 +35,7 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
     })
 
     provider.on('error', (code: number, reason: string) => {
-      console.log(reason)
+      console.log(code)
     })
 
     //  Enable session (triggers QR Code modal)
@@ -50,11 +50,9 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
     } else {
       // const accounts = await window.ethereum.enable()
       const accounts = await window.ethereum.request({method: 'eth_requestAccounts'})
-
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 1)
       ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.METAMASK)
-      
-      
+
       if (accounts.length > 0) {
         if ((await getCurrentChainId()) !== process.env.REACT_APP_CHAIN_ID) {
           const web3: any = new Web3(Web3.givenProvider)
@@ -63,6 +61,10 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
               method: 'wallet_switchEthereumChain',
               params: [{ chainId: '0x' + Number(process.env.REACT_APP_CHAIN_ID).toString(16) }],
             })
+
+            if ((await getCurrentChainId()) === process.env.REACT_APP_CHAIN_ID) {
+              
+            }
           } catch (error) {
             if ((error as any).code === 4902) {
               try {
@@ -85,6 +87,9 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
               } catch (error) {
                 console.log(error)
               }
+            } else {
+              ls.set(CONST.LOCAL_STORAGE_KEY.KEY_CONNECTED, 0)
+              ls.set(CONST.LOCAL_STORAGE_KEY.KEY_WALLET_TYPE, CONST.WALLET_TYPE.NONE)
             }
           }
         }
@@ -237,7 +242,6 @@ export const signText = async (text: string, account: string) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum)
   const signer = provider.getSigner()
   const signature = await signer.signMessage(text)
-  console.log(await signer.getAddress())
   return signature
 
 }

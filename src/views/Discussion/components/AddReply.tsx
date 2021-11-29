@@ -100,8 +100,6 @@ const AddReply: React.FC<Props> = (props) => {
 
         props.onReset(commentData)
         //document.location.reload()
-      } else {
-        console.log(res.data)
       }
     })
   }, [props, account, anonymous, content, user, dispatch])

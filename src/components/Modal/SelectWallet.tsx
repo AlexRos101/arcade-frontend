@@ -22,8 +22,6 @@ const SelectWalletModal: React.FC<Props> = (props) => {
   const metaMaskDisabled = (isMobile && window.ethereum === undefined)
   const walletConnectDisabled = (isMobile && window.ethereum !== undefined)
 
-  console.log(walletConnectDisabled)
-
   if (props.open === true) {
     return (
       <div className="wallet-select-modal">
