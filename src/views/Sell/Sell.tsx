@@ -256,7 +256,18 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    
+    let gasData: any = null
+    try {
+      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
+
+      if (gasData.data !== undefined) {
+        gasData = gasData.data;
+      }
+    } catch (err) {
+        console.log(err);
+        arcadeAlert("Get Gas value failed!")
+        return;
+    }
 
     const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
     const tokenInfo = {
@@ -270,23 +281,28 @@ const Sell: React.FC<SkinProps> = (data) => {
 
     nft.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-      .send({ from: account })
-      .then(async () => {
-        const checkDBStatus = async () => {
-          const item = (await API.getItemByTokenID(tokenID)).data as unknown
-          if (item !== undefined && item !== null) {
-            dispatch(setIsLoading(false))
-            history.push('/listing')
-            document.location.reload()
-          } else {
-            setTimeout(checkDBStatus, 500)
+      .estimateGas({ from: account })
+      .then(async (gasAmount: any) => {
+        nft.methods
+        .mint(tokenID, metaData, JSON.stringify(tokenInfo))
+        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+        .then(async () => {
+          const checkDBStatus = async () => {
+            const item = (await API.getItemByTokenID(tokenID)).data as unknown
+            if (item !== undefined && item !== null) {
+              dispatch(setIsLoading(false))
+              history.push('/listing')
+              document.location.reload()
+            } else {
+              setTimeout(checkDBStatus, 500)
+            }
           }
-        }
 
-        checkDBStatus()
-      })
-      .catch(() => {
-        dispatch(setIsLoading(false))
+          checkDBStatus()
+        })
+        .catch(() => {
+          dispatch(setIsLoading(false))
+        })
       })
   }
 

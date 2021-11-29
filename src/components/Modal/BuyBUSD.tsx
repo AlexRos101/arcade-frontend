@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-
+import axios from 'axios'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
@@ -15,6 +15,7 @@ import { useBUSD, useExchange } from 'hooks/useContract'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -110,6 +111,19 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       return
     }
 
+    let gasData: any = null
+    try {
+      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
+
+      if (gasData.data !== undefined) {
+        gasData = gasData.data;
+      }
+    } catch (err) {
+        console.log(err);
+        arcadeAlert("Get Gas value failed!")
+        return;
+    }
+
     exchange.methods
       .exchangeBUSD(
         props.item.contract_address,
@@ -121,21 +135,35 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
         ),
         account,
       )
-      .send({ from: account })
-      .then((res: any) => {
-        const checkDBStatus = async () => {
-          const item = (await API.getItemById(props.item.id)).data
-          if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
-            window.location.href = '/listing'
-          } else {
-            setTimeout(checkDBStatus, 500)
+      .estimateGas({ from: account })
+      .then(async (gasAmount: any) => { 
+        exchange.methods
+        .exchangeBUSD(
+          props.item.contract_address,
+          props.item.token_id,
+          props.item.owner,
+          Web3.utils.toWei(
+            props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '',
+            'ether',
+          ),
+          account,
+        )
+        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+        .then((res: any) => {
+          const checkDBStatus = async () => {
+            const item = (await API.getItemById(props.item.id)).data
+            if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
+              window.location.href = '/listing'
+            } else {
+              setTimeout(checkDBStatus, 500)
+            }
           }
-        }
 
-        checkDBStatus()
-      })
-      .catch((err: any) => {
-        dispatch(setIsLoading(false))
+          checkDBStatus()
+        })
+        .catch((err: any) => {
+          dispatch(setIsLoading(false))
+        })
       })
   }
 

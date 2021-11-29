@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
-
+import axios from 'axios'
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
@@ -15,6 +15,7 @@ import MainLoading from 'components/MainLoading'
 import { useNFT, useExchange } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -110,28 +111,50 @@ const ListSellModal: React.FC<Props> = (props) => {
       return
     }
 
+    let gasData: any = null
+    try {
+      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
+
+      if (gasData.data !== undefined) {
+        gasData = gasData.data;
+      }
+    } catch (err) {
+        console.log(err);
+        arcadeAlert("Get Gas value failed!")
+        return;
+    }
+
     exchange.methods
       .SellRequest(
         props.item.contract_address,
         props.item.token_id,
         Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
       )
-      .send({ from: account })
-      .then((res: any) => {
-        const checkDBStatus = async () => {
-          const item = (await API.getItemById(props.item.id)).data
-          if (item.is_visible) {
-            document.location.reload()
-          } else {
-            setTimeout(checkDBStatus, 500)
+      .estimateGas({ from: account })
+      .then(async (gasAmount: any) => { 
+        exchange.methods
+        .SellRequest(
+          props.item.contract_address,
+          props.item.token_id,
+          Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
+        )
+        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+        .then((res: any) => {
+          const checkDBStatus = async () => {
+            const item = (await API.getItemById(props.item.id)).data
+            if (item.is_visible) {
+              document.location.reload()
+            } else {
+              setTimeout(checkDBStatus, 500)
+            }
           }
-        }
 
-        checkDBStatus()
-      })
-      .catch((err: any) => {
-        console.log(err)
-        dispatch(setIsLoading(false))
+          checkDBStatus()
+        })
+        .catch((err: any) => {
+          console.log(err)
+          dispatch(setIsLoading(false))
+        })
       })
   }
 

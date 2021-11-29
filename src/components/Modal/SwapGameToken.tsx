@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -85,21 +86,42 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
+    let gasData: any = null
+    try {
+      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
+
+      if (gasData.data !== undefined) {
+        gasData = gasData.data;
+      }
+    } catch (err) {
+        console.log(err);
+        arcadeAlert("Get Gas value failed!")
+        return;
+    }
+
     arcadeDoge.methods
       .approve(
         process.env.REACT_APP_SWAP_ADDRESS,
         Web3.utils.toWei(props.amount.toString() + '', 'ether'),
       )
-      .send({ from: account })
-      .then((res: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item-processed')
-        setSecondStepClassName('item')
-      })
-      .catch((err: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item')
-        setSecondStepClassName('item-disabled')
+      .estimateGas({ from: account })
+      .then(async (gasAmount: any) => { 
+        arcadeDoge.methods
+        .approve(
+          process.env.REACT_APP_SWAP_ADDRESS,
+          Web3.utils.toWei(props.amount.toString() + '', 'ether'),
+        )
+        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+        .then((res: any) => {
+          dispatch(setIsLoading(false))
+          setFirstStepClassName('item-processed')
+          setSecondStepClassName('item')
+        })
+        .catch((err: any) => {
+          dispatch(setIsLoading(false))
+          setFirstStepClassName('item')
+          setSecondStepClassName('item-disabled')
+        })
       })
   }
 
@@ -112,6 +134,19 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
+    let gasData: any = null
+    try {
+      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
+
+      if (gasData.data !== undefined) {
+        gasData = gasData.data;
+      }
+    } catch (err) {
+        console.log(err);
+        arcadeAlert("Get Gas value failed!")
+        return;
+    }
+
     swap.methods
       .buyGamePoint(
         1,
@@ -120,15 +155,26 @@ const SwapGameToken: React.FC<Props> = (props) => {
           'ether',
         )
       )
-      .send({ from: account })
-      .then(() => {
-        arcadeAlert("Game Point bought successfully!")
-        dispatch(setIsLoading(false))
-        props.onClose()
-      })
-      .catch(() => {
-        arcadeAlert("Buy Game Point failed!")
-        dispatch(setIsLoading(false))
+      .estimateGas({ from: account })
+      .then(async (gasAmount: any) => { 
+        swap.methods
+        .buyGamePoint(
+          1,
+          Web3.utils.toWei(
+            props.amount.toString() + '',
+            'ether',
+          )
+        )
+        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+        .then(() => {
+          arcadeAlert("Game Point bought successfully!")
+          dispatch(setIsLoading(false))
+          props.onClose()
+        })
+        .catch(() => {
+          arcadeAlert("Buy Game Point failed!")
+          dispatch(setIsLoading(false))
+        })
       })
   }
 

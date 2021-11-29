@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper'
 import * as CONST from '../../global/const'
 import * as WalletUtils from '../../global/wallet'
 import BigNumber from 'bignumber.js'
-
+import axios from 'axios'
 import Card from 'components/Card'
 import Page from 'components/Layout/Page'
 import Header from 'components/Layout/Header'
@@ -22,7 +22,7 @@ import ListSellModal from 'components/Modal/ListSell'
 import RemoveSellModal from 'components/Modal/RemoveSell'
 import * as Wallet from '../../global/wallet'
 import RedPagination from 'components/Pagination/RedPagination'
-
+import { arcadeAlert } from 'utils/arcadealert'
 import Row from './components/Row'
 import { GameItem } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
@@ -89,23 +89,41 @@ const Listing: React.FC = () => {
       return
     }
 
+    let gasData: any = null
+    try {
+      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
+
+      if (gasData.data !== undefined) {
+        gasData = gasData.data;
+      }
+    } catch (err) {
+        console.log(err);
+        arcadeAlert("Get Gas value failed!")
+        return;
+    }
+
     nft.methods
       .burn(rows[index].token_id)
-      .send({ from: account })
-      .then((res: any) => {
-        const checkItemStatus = async () => {
-          const item = (await API.getItemById(rows[index].id)).data
-          if (item.is_burnt) {
-            document.location.reload()
-          } else {
-            setTimeout(checkItemStatus, 500)
+      .estimateGas({ from: account })
+      .then(async (gasAmount: any) => {
+        nft.methods
+        .burn(rows[index].token_id)
+        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+        .then((res: any) => {
+          const checkItemStatus = async () => {
+            const item = (await API.getItemById(rows[index].id)).data
+            if (item.is_burnt) {
+              document.location.reload()
+            } else {
+              setTimeout(checkItemStatus, 500)
+            }
           }
-        }
 
-        checkItemStatus()
-      })
-      .catch((err: any) => {
-        dispatch(setIsLoading(false))
+          checkItemStatus()
+        })
+        .catch((err: any) => {
+          dispatch(setIsLoading(false))
+        })
       })
   }
 
