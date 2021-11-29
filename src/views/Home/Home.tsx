@@ -16,12 +16,11 @@ import HeaderLabel from 'components/Label/HeaderLabel'
 import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
-import * as WalletUtils from 'global/wallet'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setWalletMenu, setPointSwap } from 'state/show'
 import { getValidationCheck } from 'hooks/gameapi'
-import swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const Home: React.FC = () => {
   const history = useHistory()
@@ -44,17 +43,17 @@ const Home: React.FC = () => {
     } else {
       getValidationCheck(account)
       .then((result) => {
-        if (result.result === true) {
+        if (result.result === 0) {
           dispatch(setPointSwap(true))
         } else {
-          swal("No matching game account found!")
+          arcadeAlert("No matching game account found!")
         }
       })
     }
   }
 
   const init = async () => {
-    if (await WalletUtils.isConnected()) {
+    if (account) {
       setShowConnectWallet(false);
     } else {
       setShowConnectWallet(true);
@@ -63,12 +62,13 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     init()
+  // eslint-disable-next-line
   }, [account])
 
   return (
     <Page className="no-width-limit">
       <div className="iframe-template">
-        <iframe title="Game Frame"/>
+        <iframe title="Game Frame" id="game_panel"/>
         <div className="rect rect-1" />
         <div className="rect rect-2" />
         <div className="rect rect-3" />
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
             onClick={onClickBuyArcadeDoge}
             startIcon={<AstronautBuy />}
           >
-            <Typography variant="subtitle1">Buy ArcadeDoges</Typography>
+            <Typography variant="subtitle1">Buy $ARC</Typography>
           </Button>
           <ThemeProvider theme={greenTheme}>
             <Button

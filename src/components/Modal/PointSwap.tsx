@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import Swal from 'sweetalert'
+import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -29,6 +29,8 @@ import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useSwap, useArcadeDoge } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setIsLoading } from 'state/show'
+import SkeletonLoading from 'components/SkeletonLoading'
+import { arcadeAlert } from 'utils/arcadealert'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -50,7 +52,7 @@ const PointSwap: React.FC<Props> = (props) => {
   const [inputCoin, setInputCoin] = useState<Token>({
     tokenAvartar: ARCADE,
     tokenName: '$ARCADE',
-    tokenFullName: 'ArcadeDoge'
+    tokenFullName: 'Arcade'
   })
   const [outputCoin, setOutputCoin] = useState<Token>({
     tokenAvartar: STARSHARD,
@@ -58,22 +60,22 @@ const PointSwap: React.FC<Props> = (props) => {
     tokenFullName: 'StarShard'
   })
   const { slowRefresh } = useRefresh()
-  const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(0))
-  const [gamePointRate, setGamePointRate] = useState(new BigNumber(0))
+  const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(NaN))
+  const [gamePointRate, setGamePointRate] = useState(new BigNumber(NaN))
+  const [sellGamePointRate, setSellGamePointRate] = useState(new BigNumber(NaN))
   const [swapRate, setSwapRate] = useState(0.0)
   const [openSwapToken, setOpenSwapToken] = useState(false)
-  const [arcadeBalance, setArcadeBalance] = useState(new BigNumber(0))
-  const [gamePointBalance, setGamePointBalance] = useState(new BigNumber(0))
+  const [arcadeBalance, setArcadeBalance] = useState(new BigNumber(NaN))
+  const [gamePointBalance, setGamePointBalance] = useState(new BigNumber(NaN))
   const [outputBalance, setOutputBalance] = useState(0)
   const [inputBalance, setInputBalance] = useState(0)
+  const [inputAlert, setInputAlert] = useState(false)
 
   const getArcadeDogeRate = async () => {
-    swap.methods.getArcadeDogeRate().call()
+    swap.methods.getArcadeRate().call()
     .then((result: string) => {
-      if (result) {
-        console.log(result)
-        setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
-      }
+      if (result) 
+		    setArcadeDogeRate(new BigNumber(result).div(10 ** 18))
       else 
         setArcadeDogeRate(new BigNumber(0))
     })
@@ -84,30 +86,43 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const getGamePointRate = async () => {
-    if (inputCoin?.tokenName === "$ARCADE" || !inputCoin) {
-      swap.methods
-        .gamePointPrice(1)
-        .call()
-        .then((res: string) => {
-          console.log(res)
-          setGamePointRate(new BigNumber(res).div(10 ** 3))
-        })
-        .catch(() => {
-          setTimeout(getGamePointRate, 500)
-        })
-    } else {
-      swap.methods
-        .getGamePointRate(account, 1)
-        .call()
-        .then((res: string) => {
-          console.log(res)
-          setGamePointRate(new BigNumber(res).multipliedBy(arcadeDogeRate).div(10 ** 18))
-        })
-        .catch(() => {
-          setTimeout(getGamePointRate, 500)
-        })
-    }
+    swap.methods
+      .gamePointPrice(1)
+      .call()
+      .then((res: string) => {
+        setGamePointRate(new BigNumber(res).div(10 ** 3))
+      })
+      .catch(() => {
+        setTimeout(getGamePointRate, 500)
+      })
   }
+
+  const getSellGamePointRate = async () => {
+    swap.methods
+      .getGamePointRate(account, 1)
+      .call()
+      .then((res: string) => {
+        setSellGamePointRate(new BigNumber(res).div(10 ** 18))
+      })
+      .catch(() => {
+        setTimeout(getSellGamePointRate, 500)
+      })
+  }
+
+  const updateInputAlert = useCallback(() => {
+    if (inputCoin.tokenName === "$ARCADE")
+    {
+      if(arcadeBalance.comparedTo(new BigNumber(inputBalance)) === -1)
+        setInputAlert(true)
+      else
+        setInputAlert(false)
+    } else {
+      if( gamePointBalance.comparedTo(new BigNumber(inputBalance)) === -1)
+        setInputAlert(true)
+      else
+        setInputAlert(false)
+    }
+  }, [inputCoin, arcadeBalance, gamePointBalance, inputBalance])
 
   const onSwitchToken = useCallback(() => {
     const input = outputCoin, output = inputCoin
@@ -115,6 +130,10 @@ const PointSwap: React.FC<Props> = (props) => {
     setOutputCoin(output)
   }, [setInputCoin, setOutputCoin, inputCoin, outputCoin])
 
+
+  useEffect(() => {
+    updateInputAlert()
+  }, [updateInputAlert])
 
   const buyArcade = async () => {
     dispatch(setIsLoading(true))
@@ -127,7 +146,10 @@ const PointSwap: React.FC<Props> = (props) => {
     account && getVerificationCode(1, account, inputBalance)
     .then(async (res) => {
       if (res.result === false) {
-        Swal(res.msg as string)
+        if (res.msg !== undefined)
+          arcadeAlert(res.msg as string)
+        else
+          arcadeAlert("Unknown Error!")
         dispatch(setIsLoading(false))
         onClose()
         return
@@ -135,28 +157,28 @@ const PointSwap: React.FC<Props> = (props) => {
 
       const verificationToken = res.data.verification_token
 
+      Wallet.sendTransaction(
       swap.methods
         .sellGamePoint(
           1,
           inputBalance,
           verificationToken
-        )
-        .send({ from: account })
+        ), account)
         .then(() => {
-          Swal("Game Point sold successfully!")
+          arcadeAlert("The in-game currency has been successfully converted!")
           dispatch(setIsLoading(false))
-          onClose()
         })
         .catch(() => {
-          Swal("Sell Game Point failed!")
+          arcadeAlert("Oh no! The conversion failed. Please try again.")
           dispatch(setIsLoading(false))
         })
+        
     })
   }
 
   const onConvert = () => {
     if (!(inputBalance > 0)) {
-      Swal("Please input valid amount!")
+      arcadeAlert("Please input valid amount!")
       return
     }
 
@@ -185,8 +207,8 @@ const PointSwap: React.FC<Props> = (props) => {
     if (account) {
       getBalance(account)
       .then((res) => {
-        if (res.result === 1) {
-          setGamePointBalance(res.data.balance)
+        if (res.result === 0) {
+          setGamePointBalance(new BigNumber(res.data.balance))
         }
       })
     } else {
@@ -195,17 +217,42 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    if (arcadeDogeRate === new BigNumber(0) || gamePointRate === new BigNumber(0))
+    if (arcadeDogeRate.s === null || 
+        gamePointRate.s === null || 
+        sellGamePointRate.s === null) {
       setSwapRate(0.0)
-    else if (inputCoin?.tokenName !== "$ARCADE")
-      setSwapRate(gamePointRate.div(arcadeDogeRate).toNumber())
-    else
+    }
+    else if (inputCoin?.tokenName !== "$ARCADE") {
+      setSwapRate(sellGamePointRate.toNumber())
+    }
+    else {
       setSwapRate(arcadeDogeRate.div(gamePointRate).toNumber())
-  }, [arcadeDogeRate, gamePointRate, inputCoin])
+    }
+  }, [arcadeDogeRate, gamePointRate, sellGamePointRate, inputCoin])
 
-  const onChangeInput = (value: string) => {
-    setInputBalance(Number.parseFloat(value))
+  const onChangeInput = (valueStr: string) => {
+    const value = Number.parseFloat(valueStr)
+    if (isNaN(value) && valueStr.length > 0) {
+      return
+    }
+    setInputBalance(value)
+    if (value > 0) {
+      if (inputCoin.tokenName === "$ARCADE")
+      {
+        if(arcadeBalance.comparedTo(new BigNumber(value)) === -1)
+          setInputAlert(true)
+        else
+          setInputAlert(false)
+      } else {
+        if( gamePointBalance.comparedTo(new BigNumber(value)) === -1)
+          setInputAlert(true)
+        else
+          setInputAlert(false)
+      }
+    }
   }
+
+ 
 
   const onClose = () => {
     setInputBalance(0)
@@ -223,10 +270,11 @@ const PointSwap: React.FC<Props> = (props) => {
     if (!account) return
     getArcadeDogeRate()
     getGamePointRate()
+    getSellGamePointRate()
     getArcadeBalance()
     getGamePointBalance()
   // eslint-disable-next-line
-  }, [slowRefresh])
+  }, [slowRefresh, account])
 
   return (
     <Dialog
@@ -240,7 +288,7 @@ const PointSwap: React.FC<Props> = (props) => {
       <DialogTitle className="swap-modal-title modal-dialog-title">
         <div className="flex-row">
           <RowLabel>Convert Tokens</RowLabel>
-          <div className="flex-row r-flex-row r-mt-px-15 ml-auto">
+          <div className="flex-row r-flex-row r-mt-px-15 ml-auto" style={{ flexWrap: 'wrap' }}>
             <IconLabel
               avatar={WALLET}
               label="Balance"
@@ -250,24 +298,27 @@ const PointSwap: React.FC<Props> = (props) => {
               fontColor="#7E5504"
               style={{ color: '#7E5504', marginRight: '8px' }}
               />
-            <SwitchLabel
-              avatar={ARCADE}
-              label={arcadeBalance.toFixed(2).toString()}
-              avatarWidth="17"
-              avatarHeight="17"
-              fontSize="14px"
-              fontColor="#7E5504"
-              style={{ color: '#7E5504', marginRight: '4px' }}
-              />
-            <SwitchLabel
-              avatar={STARSHARD}
-              label={gamePointBalance.toString()}
-              avatarWidth="17"
-              avatarHeight="17"
-              fontSize="14px"
-              fontColor="#7E5504"
-              style={{ color: '#7E5504', marginRight: '4px' }}
-              />
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              <SwitchLabel
+                avatar={ARCADE}
+                label={arcadeBalance.toFixed(2).toString()}
+                avatarWidth="17"
+                avatarHeight="17"
+                fontSize="14px"
+                fontColor="#7E5504"
+                style={{ color: '#7E5504', marginRight: '4px' }}
+                />
+              
+              <SwitchLabel
+                avatar={STARSHARD}
+                label={gamePointBalance.toString()}
+                avatarWidth="17"
+                avatarHeight="17"
+                fontSize="14px"
+                fontColor="#7E5504"
+                style={{ color: '#7E5504', marginRight: '4px' }}
+                />
+            </div>
           </div>
         </div>
       </DialogTitle>
@@ -283,6 +334,7 @@ const PointSwap: React.FC<Props> = (props) => {
             isInput={true}
             coinName={inputCoin?.tokenName}
             onChange={onChangeInput}
+            isAlert={inputAlert}
             />
 
           <IconLabel
@@ -291,7 +343,13 @@ const PointSwap: React.FC<Props> = (props) => {
             avatarWidth="24"
             avatarHeight="24"
             fontSize="13px"
-            style={{ color: '#B7B091', marginRight: '0', marginTop: '20px', marginBottom: '20px', marginLeft: '3px', width: 'fit-content' }}
+            style={{  
+              color: '#B7B091', 
+              marginRight: '0', 
+              marginBottom: '20px', 
+              marginLeft: '3px', 
+              width: 'fit-content' 
+            }}
             onClick={onSwitchToken}
             className="switch-link"
             />
@@ -313,11 +371,25 @@ const PointSwap: React.FC<Props> = (props) => {
       <DialogActions className="modal-dialog-action pt-20">
         <div className="flex-row display-inline">
           <ThemeProvider theme={dialogTheme}>
-            <Button className="modal-btn r-mb-px-15" variant="contained" color="primary" onClick={onConvert} style={{ float: "right" }}>
+            <Button 
+              className="modal-btn r-mb-px-15" 
+              variant="contained" 
+              color="primary" 
+              onClick={onConvert} 
+              style={{ float: "right" }}
+              disabled={inputAlert}
+            >
               Convert
             </Button>
           </ThemeProvider>
-          <p className="swap-footer-label">{inputCoin?.tokenName} to {outputCoin?.tokenName} Conversion is 1:{swapRate.toFixed(4)}</p>
+          <p className="swap-footer-label" style={{ display: 'flex' }}>{inputCoin?.tokenName} to {outputCoin?.tokenName} Conversion is 
+          {
+            swapRate === 0 ? 
+              (<SkeletonLoading 
+                style={{ width: '40px', height: '20px', marginRight: '-10px', marginTop: '-3px' }} show={true} />)
+            : ` 1 : ${swapRate.toFixed(4)}`
+          }
+          </p>
         </div>
       </DialogActions>
       <IconButton aria-label="close" className="modal-close" onClick={onClose}>

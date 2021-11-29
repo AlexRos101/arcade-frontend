@@ -65,8 +65,8 @@ const RedPagination: React.FC<Props> = (props) => {
       >
         <Typography variant="subtitle1">Previous</Typography>
       </Button>
-      <Typography className="discuss-detail-link">
-        Showing Page { props.totalPage === 0 ? 0 : pageNum + 1 } of { Math.ceil(props.totalPage / props.rowsPerPage) }
+      <Typography className="discuss-detail-link pagination-text">
+        <span>Showing Page</span> <span>{ props.totalPage === 0 ? 0 : pageNum + 1 } of { Math.ceil(props.totalPage / props.rowsPerPage) }</span>
       </Typography>
       <Button
         variant="contained"

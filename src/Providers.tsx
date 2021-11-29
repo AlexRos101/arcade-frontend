@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
-import { isMobile } from 'react-device-detect'
 
 import { ArcadeContext } from 'contexts/ArcadeContext'
 import * as Wallet from 'global/wallet'
 import * as WalletUtils from 'global/wallet'
 import * as CONST from 'global/const'
-
 
 export const ArcadeProvider: React.FC = ({ children }) => {
 
@@ -28,18 +26,13 @@ export const ArcadeProvider: React.FC = ({ children }) => {
 
   const updateConnect = async () => {
     setIsConnected(await WalletUtils.isConnected())
-    setConnectType(Number(WalletUtils.getWalletType()))
+    setConnectType(Number(await WalletUtils.getWalletType()))
     initAddress()
   }
 
   const connectWallet = async (connectType: number = CONST.WALLET_TYPE.WALLETCONNECT) => {
-    if (isMobile) {
-      await WalletUtils.connect(CONST.WALLET_TYPE.WALLETCONNECT)
-    } else {
-      await WalletUtils.connect(connectType)
-    }
-    setConnectType(Number(WalletUtils.getWalletType()))
-    initAddress()
+    await WalletUtils.connect(connectType)
+    await initWeb3()
   }
 
   const disconnectWallet = () => {
@@ -50,13 +43,20 @@ export const ArcadeProvider: React.FC = ({ children }) => {
 
   const initWeb3 = async () => {
     setWeb3(await getWeb3())
+    updateConnect()
+  }
+
+  const initConnection = async () => {
+    if (WalletUtils.isPreviousConnected()) {
+      connectWallet(Number(WalletUtils.getPreviousWalletType()))
+    }
   }
 
   useEffect(() => {
+    initConnection()
     initWeb3()
-    updateConnect()
-    // eslint-disable-next-line
-  }, [account])
+// eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     if (!account)

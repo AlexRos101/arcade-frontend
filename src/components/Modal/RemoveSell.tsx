@@ -5,10 +5,10 @@ import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
-
+import axios from 'axios'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
-
+import { arcadeAlert } from 'utils/arcadealert'
 import { GameItem } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useNFT, useExchange } from 'hooks/useContract'
@@ -57,9 +57,10 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    nft.methods
+    Wallet.sendTransaction(
+      nft.methods
       .freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
-      .send({ from: account })
+      , account)
       .then((res: any) => {
         document.location.reload()
       })
@@ -77,12 +78,12 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    exchange.methods
+    Wallet.sendTransaction(
+      exchange.methods
       .CancelSellRequest(props.item.contract_address, props.item.token_id)
-      .send({ from: account })
+      , account)
       .then((res: any) => {
         const checkDBStatus = async () => {
-          console.log('ddd')
           const item = (await API.getItemById(props.item.id)).data
           if (!item.is_visible) {
             dispatch(setIsLoading(false))
@@ -94,7 +95,6 @@ const RemoveSellModal: React.FC<Props> = (props) => {
         }
 
         checkDBStatus()
-        console.log('ccc')
       })
       .catch((err: any) => {
         dispatch(setIsLoading(false))

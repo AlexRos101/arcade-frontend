@@ -130,7 +130,7 @@ const CardModal: React.FC<Props> = (props) => {
                   <img className="mh-auto" src={avatar} alt="avatar" style={{ width: '20px', height: '20px' }} />
                 }
               >
-                Buy in ArcadeDoge
+                Buy in Arcade
               </Button>
               <Button
                 className="ml-15 modal-buy-usd-btn"

@@ -16,6 +16,7 @@ import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
 
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -108,31 +109,31 @@ const BuyModal: React.FC<Props> = (props) => {
       dispatch(setConnectWallet(true))
       return
     }
-
-    exchange.methods
-      .exchange(
-        props.item.contract_address,
-        props.item.token_id,
-        props.item.owner,
-        Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
-        account,
-      )
-      .send({ from: account })
-      .then((res: any) => {
-        const checkDBStatus = async () => {
-          const item = (await API.getItemById(props.item.id)).data
-          if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
-            window.location.href = '/listing'
-          } else {
-            setTimeout(checkDBStatus, 500)
-          }
+    
+    Wallet.sendTransaction(
+      exchange.methods
+        .exchange(
+          props.item.contract_address,
+          props.item.token_id,
+          props.item.owner,
+          Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
+          account,
+        ), account
+    ).then((res: any) => {
+      const checkDBStatus = async () => {
+        const item = (await API.getItemById(props.item.id)).data
+        if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
+          window.location.href = '/listing'
+        } else {
+          setTimeout(checkDBStatus, 500)
         }
+      }
 
-        checkDBStatus()
-      })
-      .catch((err: any) => {
-        dispatch(setIsLoading(false))
-      })
+      checkDBStatus()
+    })
+    .catch((err: any) => {
+      dispatch(setIsLoading(false))
+    })
   }
 
   return (
@@ -159,7 +160,7 @@ const BuyModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your ArcadeDoge token</p>
+                  <p id="content">Approve your Arcade token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -185,7 +186,7 @@ const BuyModal: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy item with Arcadedoge</p>
+                  <p id="content">Buy item with Arcade</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

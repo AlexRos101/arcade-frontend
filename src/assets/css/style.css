@@ -1305,7 +1305,9 @@ a {
     height: 135px;
     right: 10px;
     z-index: 1;
-  }  .wallet-select-modal #back {
+  }  
+  
+  .wallet-select-modal #back {
     position: fixed;
     left: 0;
     top: 0;
@@ -1385,6 +1387,18 @@ a {
   .wallet-enabled {
     background: #E1EBFA;
     border: 2px solid #1571FF;
+  }
+
+  .wallet-disabled {
+    color: #304050;
+  }
+
+  .wallet-disabled p {
+    color: #808080;
+  }
+
+  .wallet-disabled img {
+    filter: grayscale(100%);
   }
 
   .red-paginator {
@@ -1480,6 +1494,11 @@ a {
     border-radius: 7px;
   }
 
+  .custom-input .alert-input {
+    background: rgba(255, 108, 80, 0.11);
+    border: 1px solid #B53C2C;
+  }
+
   .custom-input .placeholder {
     position: absolute;
     top: 0;
@@ -1494,8 +1513,72 @@ a {
     outline-color: sandybrown;
   }
 
+  .custom-input .alert-input:focus {
+    outline-color: #B53C2C;
+  }
+
   .switch-link {
     cursor: pointer;
+  }
+
+  .logo-title {
+    font-family: Tovari Sans Bold;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 35px;
+    line-height: 44px;
+    color: #FCBF4A;
+
+    text-shadow: 0px 2px 0px #7E5504;
+    margin-left: 8px;
+  }
+
+  .no-underline {
+    text-decoration: none !important;
+  }
+
+  .logo-title:hover {
+    text-decoration: none !important;
+  }
+
+  .custom-input .alert {
+    color: #B53C2C;
+    font-size: 10px;
+    line-height: 15px;
+    margin-top: 5px;
+    font-weight: bold;
+    height: 15px;
+    min-width: 15px;
+  }
+
+  .custom-input .cr-hidden {
+    visibility: hidden;
+  }
+
+  .custom-input .alert span {
+    display: flex;
+  }
+
+  .custom-input .alert span p {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+    margin-left: 5px;
+  }
+
+  .swap-title {
+    max-height: 42px;
+  }
+
+  .pagination-text {
+    text-align: center;
+  }
+
+  .pagination-text span {
+    white-space: nowrap;
+  }
+
+  .swal2-container {
+    z-index: 4000 !important;
   }
 
 
@@ -1526,6 +1609,40 @@ a {
 
 
   @media screen and (max-width: 1080px) {
+
+    .wallet-select-modal {
+      position: fixed;
+      width: 230px;
+      height: 135px;
+      left: calc(50vw - 130px);
+      top: calc(50vh - 95px);
+      z-index: 1;
+    }  
+
+    .wallet-select-modal #triangle {
+      display: none;
+    }
+
+    .switch-link {
+      margin-top: 25px !important;
+    }
+
+    .custom-input .alert {
+      margin-left: 5px;
+    }
+
+    .swap-footer-label {
+      width: 100%;
+    }
+
+    .custom-input .cr-hidden {
+      display: none;
+    }
+
+    .logo-title {
+      font-size: 30px;
+      line-height: 35px;
+    }
 
     .menu-back {
       position: fixed;

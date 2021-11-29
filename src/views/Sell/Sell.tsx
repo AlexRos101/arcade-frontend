@@ -26,7 +26,7 @@ import HoverButton from 'components/Button/HoverButton'
 import ItemDropdown from 'components/Dropdown'
 import { greenTheme } from 'styles/theme'
 import { ScaleDefaults, SkinProps } from 'utils/constants/types'
-import Swal from 'sweetalert'
+import { arcadeAlert } from 'utils/arcadealert'
 import * as Wallet from '../../global/wallet'
 
 import { Response, GameItem } from 'global/interface'
@@ -192,8 +192,7 @@ const Sell: React.FC<SkinProps> = (data) => {
       file.name.slice(file.name.length - 4, file.name.length) !== '.rar' &&
       file.name.slice(file.name.length - 4, file.name.length) !== '.zip'
     ) {
-      alert(JSON.stringify(file))
-      Swal('Please select *.rar or *.zip file.')
+      arcadeAlert('Please select *.rar or *.zip file.')
       return
     }
 
@@ -209,7 +208,7 @@ const Sell: React.FC<SkinProps> = (data) => {
     // Send formData object
     axios
       .post(process.env.REACT_APP_API_NODE + 'upload_material', formData)
-      .then((res) => {
+      .then((res: any) => {
         setIsUploading(false)
         if (res.data.code === -1) {
           setShowThumbnailWarning(true)
@@ -217,7 +216,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         }
         setTokenID(tokenTemp)
       })
-      .catch((err) => {
+      .catch((err: any) => {
         setIsUploading(false)
         console.log(err)
       })
@@ -230,22 +229,22 @@ const Sell: React.FC<SkinProps> = (data) => {
 
   const mintToken = async () => {
     if (tokenID === 0) {
-      Swal('Please upload item file!')
+      arcadeAlert('Please upload item file!')
       return
     }
 
     if (selectedGameID === -1 || selectedCategoryID === -1) {
-      Swal('Game or Category is not selected!')
+      arcadeAlert('Game or Category is not selected!')
       return
     }
 
     if (anonymous === false && name === '') {
-      Swal('Please input name or select anonymous mode!')
+      arcadeAlert('Please input name or select anonymous mode!')
       return
     }
 
     if (!isNumeric(price) || Number(price) <= 0) {
-      Swal('Please input valid price!')
+      arcadeAlert('Please input valid price!')
       return
     }
 
@@ -257,8 +256,6 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    
-
     const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
     const tokenInfo = {
       game_id: selectedGameID,
@@ -269,9 +266,10 @@ const Sell: React.FC<SkinProps> = (data) => {
       is_anonymous: anonymous === false ? 0 : 1,
     }
 
+    Wallet.sendTransaction(
     nft.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-      .send({ from: account })
+    , account)  
       .then(async () => {
         const checkDBStatus = async () => {
           const item = (await API.getItemByTokenID(tokenID)).data as unknown
@@ -306,7 +304,7 @@ const Sell: React.FC<SkinProps> = (data) => {
         history.push('/listing')
         document.location.reload()
       } else {
-        Swal('An error occured!')
+        arcadeAlert('An error occured!')
         setShowLoading(false)
       }
     })
@@ -447,7 +445,7 @@ const Sell: React.FC<SkinProps> = (data) => {
               </Flex>
               <Grid container spacing={2} alignItems="flex-start" className={classes.spacing}>
                 <Grid item sm={4}>
-                  <LabelComponent label="Price in ARCADEDOGE">
+                  <LabelComponent label="Price in $ARCADE">
                     <TextField
                       fullWidth
                       placeholder="0.0"
@@ -505,7 +503,7 @@ const Sell: React.FC<SkinProps> = (data) => {
               drop files
             </ItemDropdown>
           ) : (
-            <Relative>
+            <Relative style={{ display: 'flex' }}>
               <img src={`${process.env.REACT_APP_THUMBNAIL_NODE}${tokenID}.png`} className="sell-token-img" alt=""/>
               {paramIsSet === false ? <HoverButton onClick={onHandleResetFile}>Reset File</HoverButton> : ''}
             </Relative>
