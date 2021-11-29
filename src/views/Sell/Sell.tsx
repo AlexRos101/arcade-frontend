@@ -256,19 +256,6 @@ const Sell: React.FC<SkinProps> = (data) => {
       return
     }
 
-    let gasData: any = null
-    try {
-      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
-
-      if (gasData.data !== undefined) {
-        gasData = gasData.data;
-      }
-    } catch (err) {
-        console.log(err);
-        arcadeAlert("Get Gas value failed!")
-        return;
-    }
-
     const metaData = `${process.env.REACT_APP_METADATA_NODE}${tokenID}.rar`
     const tokenInfo = {
       game_id: selectedGameID,
@@ -279,30 +266,26 @@ const Sell: React.FC<SkinProps> = (data) => {
       is_anonymous: anonymous === false ? 0 : 1,
     }
 
+    Wallet.sendTransaction(
     nft.methods
       .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-      .estimateGas({ from: account })
-      .then(async (gasAmount: any) => {
-        nft.methods
-        .mint(tokenID, metaData, JSON.stringify(tokenInfo))
-        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
-        .then(async () => {
-          const checkDBStatus = async () => {
-            const item = (await API.getItemByTokenID(tokenID)).data as unknown
-            if (item !== undefined && item !== null) {
-              dispatch(setIsLoading(false))
-              history.push('/listing')
-              document.location.reload()
-            } else {
-              setTimeout(checkDBStatus, 500)
-            }
+    , account)  
+      .then(async () => {
+        const checkDBStatus = async () => {
+          const item = (await API.getItemByTokenID(tokenID)).data as unknown
+          if (item !== undefined && item !== null) {
+            dispatch(setIsLoading(false))
+            history.push('/listing')
+            document.location.reload()
+          } else {
+            setTimeout(checkDBStatus, 500)
           }
+        }
 
-          checkDBStatus()
-        })
-        .catch(() => {
-          dispatch(setIsLoading(false))
-        })
+        checkDBStatus()
+      })
+      .catch(() => {
+        dispatch(setIsLoading(false))
       })
   }
 

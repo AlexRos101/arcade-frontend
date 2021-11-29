@@ -28,23 +28,30 @@ const CardSlider: React.FC<Props> = (props) => {
         },
       },
       {
-        breakpoint: 800,
+        breakpoint: 1010,
         settings: {
           slidesToShow: Math.min(4, props.context.length),
           variableWidth: true,
         },
       },
       {
-        breakpoint: 700,
+        breakpoint: 810,
         settings: {
           slidesToShow: Math.min(3, props.context.length),
           variableWidth: true,
         },
       },
       {
-        breakpoint: 500,
+        breakpoint: 610,
         settings: {
           slidesToShow: Math.min(2, props.context.length),
+          variableWidth: true,
+        },
+      },
+      {
+        breakpoint: 415,
+        settings: {
+          slidesToShow: Math.min(1, props.context.length),
           variableWidth: true,
         },
       },

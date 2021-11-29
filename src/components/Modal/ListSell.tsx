@@ -111,50 +111,27 @@ const ListSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    let gasData: any = null
-    try {
-      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
-
-      if (gasData.data !== undefined) {
-        gasData = gasData.data;
-      }
-    } catch (err) {
-        console.log(err);
-        arcadeAlert("Get Gas value failed!")
-        return;
-    }
-
-    exchange.methods
+    Wallet.sendTransaction( exchange.methods
       .SellRequest(
         props.item.contract_address,
         props.item.token_id,
         Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
-      )
-      .estimateGas({ from: account })
-      .then(async (gasAmount: any) => { 
-        exchange.methods
-        .SellRequest(
-          props.item.contract_address,
-          props.item.token_id,
-          Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'),
-        )
-        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
-        .then((res: any) => {
-          const checkDBStatus = async () => {
-            const item = (await API.getItemById(props.item.id)).data
-            if (item.is_visible) {
-              document.location.reload()
-            } else {
-              setTimeout(checkDBStatus, 500)
-            }
+      ), account)
+      .then((res: any) => {
+        const checkDBStatus = async () => {
+          const item = (await API.getItemById(props.item.id)).data
+          if (item.is_visible) {
+            document.location.reload()
+          } else {
+            setTimeout(checkDBStatus, 500)
           }
+        }
 
-          checkDBStatus()
-        })
-        .catch((err: any) => {
-          console.log(err)
-          dispatch(setIsLoading(false))
-        })
+        checkDBStatus()
+      })
+      .catch((err: any) => {
+        console.log(err)
+        dispatch(setIsLoading(false))
       })
   }
 

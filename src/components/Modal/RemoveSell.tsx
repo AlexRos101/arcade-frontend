@@ -57,32 +57,15 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    let gasData: any = null
-    try {
-      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
-
-      if (gasData.data !== undefined) {
-        gasData = gasData.data;
-      }
-    } catch (err) {
-        console.log(err);
-        arcadeAlert("Get Gas value failed!")
-        return;
-    }
-
-    nft.methods
+    Wallet.sendTransaction(
+      nft.methods
       .freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
-      .estimateGas({ from: account })
-      .then(async (gasAmount: any) => {
-        nft.methods
-        .freeze(process.env.REACT_APP_EXCHANGE_ADDRESS, props.item.token_id)
-        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
-        .then((res: any) => {
-          document.location.reload()
-        })
-        .catch(() => {
-          dispatch(setIsLoading(false))
-        })
+      , account)
+      .then((res: any) => {
+        document.location.reload()
+      })
+      .catch(() => {
+        dispatch(setIsLoading(false))
       })
   }
 
@@ -95,43 +78,26 @@ const RemoveSellModal: React.FC<Props> = (props) => {
       return
     }
 
-    let gasData: any = null
-    try {
-      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
-
-      if (gasData.data !== undefined) {
-        gasData = gasData.data;
-      }
-    } catch (err) {
-        console.log(err);
-        arcadeAlert("Get Gas value failed!")
-        return;
-    }
-
-    exchange.methods
+    Wallet.sendTransaction(
+      exchange.methods
       .CancelSellRequest(props.item.contract_address, props.item.token_id)
-      .estimateGas({ from: account })
-      .then(async (gasAmount: any) => {
-        exchange.methods
-        .CancelSellRequest(props.item.contract_address, props.item.token_id)
-        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
-        .then((res: any) => {
-          const checkDBStatus = async () => {
-            const item = (await API.getItemById(props.item.id)).data
-            if (!item.is_visible) {
-              dispatch(setIsLoading(false))
-              setFirstStepClassName('item-processed')
-              setSecondStepClassName('item')
-            } else {
-              setTimeout(checkDBStatus, 500)
-            }
+      , account)
+      .then((res: any) => {
+        const checkDBStatus = async () => {
+          const item = (await API.getItemById(props.item.id)).data
+          if (!item.is_visible) {
+            dispatch(setIsLoading(false))
+            setFirstStepClassName('item-processed')
+            setSecondStepClassName('item')
+          } else {
+            setTimeout(checkDBStatus, 500)
           }
+        }
 
-          checkDBStatus()
-        })
-        .catch((err: any) => {
-          dispatch(setIsLoading(false))
-        })
+        checkDBStatus()
+      })
+      .catch((err: any) => {
+        dispatch(setIsLoading(false))
       })
   }
 

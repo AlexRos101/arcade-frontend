@@ -157,42 +157,20 @@ const PointSwap: React.FC<Props> = (props) => {
 
       const verificationToken = res.data.verification_token
 
-      let gasData: any = null
-      try {
-        gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
-
-        if (gasData.data !== undefined) {
-          gasData = gasData.data;
-        }
-      } catch (err) {
-          console.log(err);
-          arcadeAlert("Get Gas value failed!")
-          return;
-      }
-
+      Wallet.sendTransaction(
       swap.methods
         .sellGamePoint(
           1,
           inputBalance,
           verificationToken
-        )
-        .estimateGas({ from: account })
-        .then(async (gasAmount: any) => {
-          swap.methods
-          .sellGamePoint(
-            1,
-            inputBalance,
-            verificationToken
-          )
-          .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
-          .then(() => {
-            arcadeAlert("The in-game currency has been successfully converted!")
-            dispatch(setIsLoading(false))
-          })
-          .catch(() => {
-            arcadeAlert("Oh no! The conversion failed. Please try again.")
-            dispatch(setIsLoading(false))
-          })
+        ), account)
+        .then(() => {
+          arcadeAlert("The in-game currency has been successfully converted!")
+          dispatch(setIsLoading(false))
+        })
+        .catch(() => {
+          arcadeAlert("Oh no! The conversion failed. Please try again.")
+          dispatch(setIsLoading(false))
         })
         
     })

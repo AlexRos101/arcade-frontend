@@ -89,42 +89,24 @@ const Listing: React.FC = () => {
       return
     }
 
-    let gasData: any = null
-    try {
-      gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
-
-      if (gasData.data !== undefined) {
-        gasData = gasData.data;
+    WalletUtils.sendTransaction(
+      nft.methods
+      .burn(rows[index].token_id), account
+    ).then((res: any) => {
+      const checkItemStatus = async () => {
+        const item = (await API.getItemById(rows[index].id)).data
+        if (item.is_burnt) {
+          document.location.reload()
+        } else {
+          setTimeout(checkItemStatus, 500)
+        }
       }
-    } catch (err) {
-        console.log(err);
-        arcadeAlert("Get Gas value failed!")
-        return;
-    }
 
-    nft.methods
-      .burn(rows[index].token_id)
-      .estimateGas({ from: account })
-      .then(async (gasAmount: any) => {
-        nft.methods
-        .burn(rows[index].token_id)
-        .send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
-        .then((res: any) => {
-          const checkItemStatus = async () => {
-            const item = (await API.getItemById(rows[index].id)).data
-            if (item.is_burnt) {
-              document.location.reload()
-            } else {
-              setTimeout(checkItemStatus, 500)
-            }
-          }
-
-          checkItemStatus()
-        })
-        .catch((err: any) => {
-          dispatch(setIsLoading(false))
-        })
-      })
+      checkItemStatus()
+    })
+    .catch((err: any) => {
+      dispatch(setIsLoading(false))
+    })
   }
 
   const handleChangePage = useCallback(

@@ -84,7 +84,7 @@ const FooterRoadmap = () => {
             <Link href="/discussion">
               <RoadmapEntry title="Discussions" />
             </Link>
-            <Link href="https://t.me/ArcadeDoge">
+            <Link href="https://t.me/ArcadeTokenOfficial">
               <RoadmapEntry title="Telegram Chat" />
             </Link>
           </div>
