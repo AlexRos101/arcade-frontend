@@ -27,7 +27,6 @@ const Home: React.FC = () => {
   const dispatch = useAppDispatch()
   const { account } = useArcadeContext()
   const [showHowToPlay, setShowHowToPlay] = useState(false)
-  const [showConnectWallet, setShowConnectWallet] = useState(false)
 
   const onClickArcadeMarket = () => {
     history.push('/market')
@@ -52,37 +51,29 @@ const Home: React.FC = () => {
     }
   }
 
-  const init = async () => {
-    if (account) {
-      setShowConnectWallet(false);
-    } else {
-      setShowConnectWallet(true);
-    }
-  }
-
-  useEffect(() => {
-    init()
-  // eslint-disable-next-line
-  }, [account])
-
   return (
     <Page className="no-width-limit">
       <div className="iframe-template">
-        <iframe title="Game Frame" id="game_panel"/>
-        <div className="rect rect-1" />
-        <div className="rect rect-2" />
-        <div className="rect rect-3" />
-        <div className="rect rect-4" />
-        <div className="rect rect-5" />
-        <div className="rect rect-6" />
-        <div className="rect rect-7" />
-        <div className="rect rect-8" />
-        <div className="rect rect-9" />
-        <div className="rect rect-10" />
-        <div className="rect rect-11" />
-        <div className="rect rect-12" />
-        <div className="rect rect-13" />
-        {showConnectWallet ? <ConnectWallet className="iframe-connect" /> : ''}
+        { account ? 
+          ( <iframe title="Game Frame" id="game_panel" src="https://i.arcadetoken.games/game/"/>) : 
+          ( <iframe title="Game Frame" id="game_panel"/> )
+        }
+        {/*
+          (<div className="rect rect-1" />
+          <div className="rect rect-2" />
+          <div className="rect rect-3" />
+          <div className="rect rect-4" />
+          <div className="rect rect-5" />
+          <div className="rect rect-6" />
+          <div className="rect rect-7" />
+          <div className="rect rect-8" />
+          <div className="rect rect-9" />
+          <div className="rect rect-10" />
+          <div className="rect rect-11" />
+          <div className="rect rect-12" />
+          <div className="rect rect-13" />)
+        */}
+        {!account ? <ConnectWallet className="iframe-connect" /> : ''}
       </div>
       <div className="flex-row row iframe-row" style={{ paddingBottom: '0px' }}>
         <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>
