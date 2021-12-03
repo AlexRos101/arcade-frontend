@@ -64,7 +64,7 @@ const FooterRoadmap = () => {
         <Grid item md={3} className="r-wd-50">
           <div className={classes.block}>
             <Typography variant="subtitle1" className={classes.title}>
-              ArcadeMarket
+              Arcade Market
             </Typography>
             <Link href="/sell">
               <RoadmapEntry title="Sell Customized Item" />

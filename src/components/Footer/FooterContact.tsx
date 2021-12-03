@@ -16,7 +16,7 @@ const FooterContact = () => {
   return (
     <div className={classes.root}>
       <Typography variant="body1" color="inherit">
-        ArcadeToken © 2021.
+        Arcade © 2021.
       </Typography>
       <Typography variant="body1" color="inherit">
         All Rights Reserved.

@@ -108,7 +108,7 @@ const NavBarMenu = () => {
         <div className="menu">
           <SubMenu text="Games" menuData={gameMenu} />
           <MenuItem text="Discussions" onClick={onClickDiscussions} />
-          <SubMenu text="ArcadeMarket" menuData={marketMenu} />
+          <SubMenu text="Arcade Market" menuData={marketMenu} />
         </div>
         { !account ? (
           <div style={{ position: 'relative', }} className="r-wd-100">
