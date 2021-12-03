@@ -153,7 +153,7 @@ const MarketOther: React.FC = () => {
   return (
     <Page id="market_page" className="styled-market">
       <Header>
-        <HeaderLabel>ArcadeMarket</HeaderLabel>
+        <HeaderLabel>Arcade Market</HeaderLabel>
         <Info className="mh-auto ml-10 market-info-tag" />
         <MarketHeader />
       </Header>

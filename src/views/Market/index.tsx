@@ -126,7 +126,7 @@ const Market: React.FC = () => {
     <Page id="market_page" className="styled-market">
       <MainLoading show={showLoading} />
       <Header>
-        <HeaderLabel>ArcadeMarket</HeaderLabel>
+        <HeaderLabel>Arcade Market</HeaderLabel>
         <Info className="mh-auto ml-10 market-info-tag" />
         <MarketHeader />
       </Header>

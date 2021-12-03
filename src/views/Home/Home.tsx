@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
   }
 
   const onClickBuyArcadeDoge = () => {
-    window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+    window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xfF6269A074Af20D42571407E8E0E6648134F8878'
   }
 
   const onOpenConvertGameToken = () => {
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
               onClick={onClickArcadeMarket}
               startIcon={<ShoppingCart />}
             >
-              Vend at ArcadeMarket
+              Browse Arcade Market
             </Button>
           </ThemeProvider>
           <ThemeProvider theme={pinkTheme}>

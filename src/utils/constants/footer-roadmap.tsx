@@ -13,7 +13,7 @@ const DEFAULT_FOOTER_ROADMAP = [
     ],
   },
   {
-    title: 'ArcadeMarket',
+    title: 'Arcade Market',
     items: [
       {
         title: 'Sell Customized Item',
