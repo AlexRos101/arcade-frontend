@@ -16,7 +16,7 @@ const CustomInput: React.FC<CustomInputProps>  = (props) => {
   const [inputCp, setInputCp] = useState<HTMLInputElement | null>()
 
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (props.type !== "$ARCADE" && e.currentTarget.value.indexOf('.') >= 0) return
+    if (props.type !== "$ARC" && e.currentTarget.value.indexOf('.') >= 0) return
     if (isNaN(Number(e.currentTarget.value)) && e.currentTarget.value.length > 0) return
     if (e.currentTarget.value.length > 8) return
 

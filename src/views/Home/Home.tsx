@@ -54,10 +54,7 @@ const Home: React.FC = () => {
   return (
     <Page className="no-width-limit">
       <div className="iframe-template">
-        { account ? 
-          ( <iframe title="Game Frame" id="game_panel" src="https://i.arcadetoken.games/game/"/>) : 
-          ( <iframe title="Game Frame" id="game_panel"/> )
-        }
+        <iframe title="Game Frame" id="game_panel" src="https://i.arcadetoken.games/game/"/>
         {/*
           (<div className="rect rect-1" />
           <div className="rect rect-2" />
@@ -72,8 +69,9 @@ const Home: React.FC = () => {
           <div className="rect rect-11" />
           <div className="rect rect-12" />
           <div className="rect rect-13" />)
-        */}
+        
         {!account ? <ConnectWallet className="iframe-connect" /> : ''}
+        */}
       </div>
       <div className="flex-row row iframe-row" style={{ paddingBottom: '0px' }}>
         <div className="flex-row row col-2" style={{ paddingBottom: '0px' }}>

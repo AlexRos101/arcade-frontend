@@ -1594,6 +1594,16 @@ a {
     position: relative;
   }
 
+  .scroll-fade {
+    content: " ";
+    position: absolute;
+    bottom: 75px;
+    width: calc(100% - 80px);
+    z-index: 1111;
+    background-image: linear-gradient(transparent, #fff);
+    height: 60px;
+  }
+
 /*************************************************************************************/
 /*************************************************************************************/
 /*************************************************************************************/
@@ -1621,6 +1631,11 @@ a {
 
 
   @media screen and (max-width: 1080px) {
+    
+    .scroll-fade {
+      width: calc(100% - 6vw);
+      bottom: 70px;
+    }
 
     .wallet-select-modal {
       position: fixed;

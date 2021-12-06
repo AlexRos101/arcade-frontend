@@ -11,7 +11,6 @@ import RowLabel from 'components/Label/RowLabel'
 import TextParam from 'components/Label/TextParam'
 import { Button } from '@material-ui/core'
 import { dialogTheme } from 'styles/theme'
-import { Link } from 'react-router-dom'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -87,11 +86,12 @@ const PrivacyPolicy: React.FC<Props> = (props) => {
  </TextParam><TextParam>
  <strong>Contact us</strong>
  </TextParam><TextParam>
- <span ref={domRef}>
+ <span ref={domRef} style={{paddingBottom: '50px'}}>
    You can contact us via <a href={`mailto:admin@arcadetoken.finance`}>admin@arcadetoken.finance</a> if you have any concerns about your privacy on our website.
  </span>
         </TextParam>
         </div>
+        <div className="scroll-fade" />
       </DialogContent>
       <DialogActions className="modal-dialog-action">
         <ThemeProvider theme={dialogTheme}>

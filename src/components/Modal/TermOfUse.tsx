@@ -213,9 +213,10 @@ We shall maintain certain data that you transmit to the Site, the Game and the C
 </TextParam><TextParam>
 The Terms of Use and any policies or operating rules posted by us on the Site, the Game and the Contracts, or in respect to the Site, the Game and the Contracts constitute the entire agreement and understanding between you and us. Our failure to exercise or enforce any right or provision of the Terms of Use shall not operate as a waiver of such right or provision. The Terms of Use operate to the fullest extent permissible by law. We may assign any or all of our rights and obligations to others at any time. We shall not be responsible or liable for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If any provision or part of a provision of the Terms of Use is determined to be unlawful, void, and unenforceable, that provision or part of the provision is deemed severable from the Terms of Use and does not affect the validity and enforceability of any remaining provisions. There is no joint venture, partnership, employment or agency relationship created between you and us as a result of the Terms of Use or use of the Site or the Game. You agree that the Terms of Use shall not be construed against us by virtue of having drafted them. You hereby waive any and all defenses you may have based on the electronic form of the Terms of Use and the lack of signing by the parties hereto to execute the Terms of Use.
 </TextParam><TextParam>
-<strong>Arcade © 2021 </strong>
+<strong style={{paddingBottom: '50px'}}>Arcade © 2021 </strong>
           </TextParam>
         </div>
+        <div className="scroll-fade" />
       </DialogContent>
       <DialogActions className="modal-dialog-action">
         <ThemeProvider theme={dialogTheme}>
