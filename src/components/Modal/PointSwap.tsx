@@ -50,13 +50,13 @@ const PointSwap: React.FC<Props> = (props) => {
  
   const [inputCoin, setInputCoin] = useState<Token>({
     tokenAvartar: ARCADE,
-    tokenName: '$ARCADE',
-    tokenFullName: 'Arcade'
+    tokenName: '$ARC',
+    tokenFullName: 'ARC'
   })
   const [outputCoin, setOutputCoin] = useState<Token>({
     tokenAvartar: STARSHARD,
     tokenName: 'STARSHARD',
-    tokenFullName: 'StarShard'
+    tokenFullName: 'StarShards'
   })
   const { slowRefresh } = useRefresh()
   const [arcadeDogeRate, setArcadeDogeRate] = useState(new BigNumber(NaN))
@@ -109,7 +109,7 @@ const PointSwap: React.FC<Props> = (props) => {
   }
 
   const updateInputAlert = useCallback(() => {
-    if (inputCoin.tokenName === "$ARCADE")
+    if (inputCoin.tokenName === "$ARC")
     {
       if(arcadeBalance.comparedTo(new BigNumber(inputBalance)) === -1)
         setInputAlert(true)
@@ -181,7 +181,7 @@ const PointSwap: React.FC<Props> = (props) => {
       return
     }
 
-    if (inputCoin && inputCoin?.tokenName === "$ARCADE") {
+    if (inputCoin && inputCoin?.tokenName === "$ARC") {
       setOpenSwapToken(true)
     } else {
       buyArcade()
@@ -221,7 +221,7 @@ const PointSwap: React.FC<Props> = (props) => {
         sellGamePointRate.s === null) {
       setSwapRate(0.0)
     }
-    else if (inputCoin?.tokenName !== "$ARCADE") {
+    else if (inputCoin?.tokenName !== "$ARC") {
       setSwapRate(sellGamePointRate.toNumber())
     }
     else {
@@ -236,7 +236,7 @@ const PointSwap: React.FC<Props> = (props) => {
     }
     setInputBalance(value)
     if (value > 0) {
-      if (inputCoin.tokenName === "$ARCADE")
+      if (inputCoin.tokenName === "$ARC")
       {
         if(arcadeBalance.comparedTo(new BigNumber(value)) === -1)
           setInputAlert(true)
@@ -361,7 +361,7 @@ const PointSwap: React.FC<Props> = (props) => {
             fontColor="#22303D"
             isInput={false}    
             coinName={outputCoin?.tokenName}
-            coinValue={ inputCoin?.tokenName === "$ARCADE" ? 
+            coinValue={ inputCoin?.tokenName === "$ARC" ? 
                         outputBalance.toFixed(0).toString() : 
                         outputBalance.toFixed(4).toString() }
             />

@@ -45,7 +45,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       return
     }
 
-    if (props.inputCoin && props.inputCoin?.tokenName !== "$ARCADE") {
+    if (props.inputCoin && props.inputCoin?.tokenName !== "$ARC") {
       setFirstStepClassName('item-processed')
       setSecondStepClassName('item')
       return
@@ -133,7 +133,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
   }
 
   const onBuy = () => {
-    if (props.inputCoin?.tokenName === "$ARCADE") {
+    if (props.inputCoin?.tokenName === "$ARC") {
       buyGamePoint()
     }
   }
@@ -150,7 +150,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       <DialogContent className="modal-order-content" dividers>
         <div {...props} style={{ padding: '2vh 0' }}>
           <p className="approval-header" style={{ textAlign: 'center', maxWidth: '300px' }}>
-            Swap $ARCADE to STARSHARD Token
+            Swap $ARC to STARSHARD Token
           </p>
 
           <div className={firstStepClassName}>
@@ -162,7 +162,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Approve</p>
-                  <p id="content">Approve your $ARCADE token</p>
+                  <p id="content">Approve your $ARC token</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">
@@ -188,7 +188,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
                 </div>
                 <div className="mr-15">
                   <p id="header">Buy</p>
-                  <p id="content">Buy STARSHARD with $ARCADE</p>
+                  <p id="content">Buy STARSHARD with $ARC</p>
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }} className="mh-auto r-mw-auto r-mt-5">

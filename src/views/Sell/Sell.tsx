@@ -445,7 +445,7 @@ const Sell: React.FC<SkinProps> = (data) => {
               </Flex>
               <Grid container spacing={2} alignItems="flex-start" className={classes.spacing}>
                 <Grid item sm={4}>
-                  <LabelComponent label="Price in $ARCADE">
+                  <LabelComponent label="Price in $ARC">
                     <TextField
                       fullWidth
                       placeholder="0.0"
