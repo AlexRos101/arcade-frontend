@@ -25,7 +25,7 @@ import useRefresh from 'hooks/useRefresh'
 import { getVerificationCode } from 'hooks/api'
 import { getBalance } from 'hooks/gameapi'
 import { useArcadeContext } from 'hooks/useArcadeContext'
-import { useSwap, useArcadeDoge } from 'hooks/useContract'
+import { useSwap, useArcadeDoge, useBep20Price } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setIsLoading } from 'state/show'
 import SkeletonLoading from 'components/SkeletonLoading'
@@ -47,6 +47,7 @@ const PointSwap: React.FC<Props> = (props) => {
   const { account } = useArcadeContext()
   const swap = useSwap()
   const arcadeDoge = useArcadeDoge()
+  const bep20Price = useBep20Price()
  
   const [inputCoin, setInputCoin] = useState<Token>({
     tokenAvartar: ARCADE,
@@ -71,7 +72,7 @@ const PointSwap: React.FC<Props> = (props) => {
   const [inputAlert, setInputAlert] = useState(false)
 
   const getArcadeDogeRate = async () => {
-    swap.methods.getArcadeRate().call()
+    bep20Price.methods.getTokenPrice(process.env.REACT_APP_ARCADEDOGE_ADDRESS, 18).call()
     .then((result: string) => {
       if (result) 
 		    setArcadeDogeRate(new BigNumber(result).div(10 ** 18))

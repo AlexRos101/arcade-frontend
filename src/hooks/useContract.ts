@@ -3,6 +3,7 @@ import ERC20_ABI from 'contracts/ERC20.json'
 import EXCHANGE_ABI from 'contracts/EXCHANGE.json'
 import ERC721_ABI from 'contracts/ERC721.json'
 import SWAP_ABI from 'contracts/SWAP.json'
+import BEP20PRICE_ABI from 'contracts/BEP20Price.json'
 import { AbiItem } from 'web3-utils'
 import { useArcadeContext } from './useArcadeContext'
 
@@ -41,3 +42,9 @@ export const useSwap = () => {
   }, [web3])
 }
 
+export const useBep20Price = () => {
+  const { web3 } = useArcadeContext() 
+  return useMemo(() => {
+    return new web3.eth.Contract(BEP20PRICE_ABI as AbiItem[], process.env.REACT_APP_BEP20PRICE_ADDRESS)
+  }, [web3])
+}
