@@ -375,9 +375,9 @@ a {
   
   iframe {
     width: calc(100vw - 96px);
-    height: calc(70vh - 16px);
+    height: calc(56.25vw - 54px);
     max-width: 1344px;
-    max-height: 529px;
+    max-height: 756px;
     border: 0;
     background: #F8F4E1;
     margin:auto;
@@ -1692,7 +1692,7 @@ a {
 
     iframe {
       width: calc(100vw - 48px);
-      height: calc(80vh - 16px);
+      height: calc(56.25vw - 27px);
     }
 
     .r-mw-auto {
