@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3'
 import * as Wallet from '../../global/wallet'
@@ -85,18 +86,25 @@ const BuyModal: React.FC<Props> = (props) => {
     }
 
     arcadeDoge.methods
-      .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(props.item.arcadedoge_price + '', 'ether'))
-      .send({ from: account })
-      .then((res: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item-processed')
-        setSecondStepClassName('item')
-      })
-      .catch((err: any) => {
-        console.log(err)
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item')
-        setSecondStepClassName('item-disabled')
+      .balanceOf(account)
+      .call()
+      .then((res: string) => {
+        const currentBalance = new BigNumber(res).div(10 ** 18)
+
+        arcadeDoge.methods
+          .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(currentBalance.toString() + '', 'ether'))
+          .send({ from: account })
+          .then((res: any) => {
+            dispatch(setIsLoading(false))
+            setFirstStepClassName('item-processed')
+            setSecondStepClassName('item')
+          })
+          .catch((err: any) => {
+            console.log(err)
+            dispatch(setIsLoading(false))
+            setFirstStepClassName('item')
+            setSecondStepClassName('item-disabled')
+          })
       })
   }
 

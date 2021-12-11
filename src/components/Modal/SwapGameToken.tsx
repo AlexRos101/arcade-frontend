@@ -84,22 +84,27 @@ const SwapGameToken: React.FC<Props> = (props) => {
       dispatch(setConnectWallet(true))
       return
     }
-
-    Wallet.sendTransaction(
     arcadeDoge.methods
-      .approve(
-        process.env.REACT_APP_SWAP_ADDRESS,
-        Web3.utils.toWei(props.amount.toString() + '', 'ether'),
-      ), account)
-      .then((res: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item-processed')
-        setSecondStepClassName('item')
-      })
-      .catch((err: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item')
-        setSecondStepClassName('item-disabled')
+      .balanceOf(account)
+      .call()
+      .then((res: string) => {
+        const currentBalance = new BigNumber(res).div(10 ** 18)
+        Wallet.sendTransaction(
+          arcadeDoge.methods
+            .approve(
+              process.env.REACT_APP_SWAP_ADDRESS,
+              Web3.utils.toWei(currentBalance.toString() + '', 'ether'),
+            ), account)
+            .then((res: any) => {
+              dispatch(setIsLoading(false))
+              setFirstStepClassName('item-processed')
+              setSecondStepClassName('item')
+            })
+            .catch((err: any) => {
+              dispatch(setIsLoading(false))
+              setFirstStepClassName('item')
+              setSecondStepClassName('item-disabled')
+            })
       })
   }
 

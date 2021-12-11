@@ -80,22 +80,27 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       dispatch(setConnectWallet(true))
       return
     }
-
     bUSD.methods
-      .approve(
-        process.env.REACT_APP_EXCHANGE_ADDRESS,
-        Web3.utils.toWei(props.rate.multipliedBy(Number(props.item.arcadedoge_price)).toString() + '', 'ether'),
-      )
-      .send({ from: account })
-      .then((res: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item-processed')
-        setSecondStepClassName('item')
-      })
-      .catch((err: any) => {
-        dispatch(setIsLoading(false))
-        setFirstStepClassName('item')
-        setSecondStepClassName('item-disabled')
+      .balanceOf(account)
+      .call()
+      .then((res: string) => {
+        const currentBalance = new BigNumber(res).div(10 ** 18)
+        bUSD.methods
+          .approve(
+            process.env.REACT_APP_EXCHANGE_ADDRESS,
+            Web3.utils.toWei(currentBalance.toString() + '', 'ether'),
+          )
+          .send({ from: account })
+          .then((res: any) => {
+            dispatch(setIsLoading(false))
+            setFirstStepClassName('item-processed')
+            setSecondStepClassName('item')
+          })
+          .catch((err: any) => {
+            dispatch(setIsLoading(false))
+            setFirstStepClassName('item')
+            setSecondStepClassName('item-disabled')
+          })
       })
   }
 
