@@ -11,8 +11,8 @@ declare let window: any
 const providerParam: any = {
   infuraId: 'a7a08bee7e2e427591a17baafee2c515',
   rpc: {
-    // 56: "https://bsc-dataseed1.binance.org/",
-    97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+    56: "https://bsc-dataseed1.binance.org/",
+    //97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
   },
 }
 
@@ -75,14 +75,14 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
                   params: [
                     {
                       chainId: '0x' + Number(process.env.REACT_APP_CHAIN_ID).toString(16),
-                      chainName: 'BSC Testnet',
-                      rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+                      chainName: 'BSC Mainnet',
+                      rpcUrls: ['https://bsc-dataseed.binance.org/'],
                       nativeCurrency: {
                         name: 'BNB',
                         symbol: 'BNB',
                         decimals: 18,
                       },
-                      blockExplorerUrls: ['https://testnet.bscscan.com/'],
+                      blockExplorerUrls: ['https://bscscan.com/'],
                     },
                   ],
                 })
@@ -257,7 +257,7 @@ export const checkSign = async (text: string, signature: string, account: string
 export const sendTransaction = async (transaction: any, account: string | undefined) => {
   let gasData: any = null
   try {
-    gasData = await axios.get(process.env.REACT_APP_GAS_URL_TESTNET as string);
+    gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
 
     if (gasData.data !== undefined) {
       gasData = gasData.data;

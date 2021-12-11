@@ -13,7 +13,6 @@ import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import { ReactComponent as Ticket } from 'assets/img/ticket.svg'
 
 import HeaderLabel from 'components/Label/HeaderLabel'
-import ConnectWallet from './components/ConnectWallet'
 import { homeTheme } from 'styles/theme'
 import HowToPlay from 'components/Modal/HowToPlay'
 import { useArcadeContext } from 'hooks/useArcadeContext'
