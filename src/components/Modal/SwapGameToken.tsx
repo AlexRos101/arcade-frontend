@@ -8,6 +8,7 @@ import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { arcadeAlert } from 'utils/arcadealert'
 import Web3 from 'web3'
+import { ethers } from 'ethers'
 import * as Wallet from '../../global/wallet'
 import { Token } from 'global/interface'
 import { useArcadeContext } from 'hooks/useArcadeContext'
@@ -84,28 +85,23 @@ const SwapGameToken: React.FC<Props> = (props) => {
       dispatch(setConnectWallet(true))
       return
     }
-    arcadeDoge.methods
-      .balanceOf(account)
-      .call()
-      .then((res: string) => {
-        const currentBalance = new BigNumber(res).div(10 ** 18)
-        Wallet.sendTransaction(
-          arcadeDoge.methods
-            .approve(
-              process.env.REACT_APP_SWAP_ADDRESS,
-              Web3.utils.toWei(currentBalance.toString() + '', 'ether'),
-            ), account)
-            .then((res: any) => {
-              dispatch(setIsLoading(false))
-              setFirstStepClassName('item-processed')
-              setSecondStepClassName('item')
-            })
-            .catch((err: any) => {
-              dispatch(setIsLoading(false))
-              setFirstStepClassName('item')
-              setSecondStepClassName('item-disabled')
-            })
-      })
+
+    Wallet.sendTransaction(
+      arcadeDoge.methods
+        .approve(
+          process.env.REACT_APP_SWAP_ADDRESS,
+          Web3.utils.toWei(ethers.constants.MaxUint256.toString() + '', 'ether'),
+        ), account)
+        .then((res: any) => {
+          dispatch(setIsLoading(false))
+          setFirstStepClassName('item-processed')
+          setSecondStepClassName('item')
+        })
+        .catch((err: any) => {
+          dispatch(setIsLoading(false))
+          setFirstStepClassName('item')
+          setSecondStepClassName('item-disabled')
+        })
   }
 
   const buyGamePoint = async () => {

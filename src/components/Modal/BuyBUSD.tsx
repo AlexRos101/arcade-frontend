@@ -7,6 +7,7 @@ import { ReactComponent as CloseIcon } from 'assets/img/close.svg'
 import { Typography, Button } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
+import { ethers } from 'ethers'
 import * as Wallet from '../../global/wallet'
 import * as API from '../../hooks/api'
 import { GameItem } from 'global/interface'
@@ -80,27 +81,22 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       dispatch(setConnectWallet(true))
       return
     }
+
     bUSD.methods
-      .balanceOf(account)
-      .call()
-      .then((res: string) => {
-        const currentBalance = new BigNumber(res).div(10 ** 18)
-        bUSD.methods
-          .approve(
-            process.env.REACT_APP_EXCHANGE_ADDRESS,
-            Web3.utils.toWei(currentBalance.toString() + '', 'ether'),
-          )
-          .send({ from: account })
-          .then((res: any) => {
-            dispatch(setIsLoading(false))
-            setFirstStepClassName('item-processed')
-            setSecondStepClassName('item')
-          })
-          .catch((err: any) => {
-            dispatch(setIsLoading(false))
-            setFirstStepClassName('item')
-            setSecondStepClassName('item-disabled')
-          })
+      .approve(
+        process.env.REACT_APP_EXCHANGE_ADDRESS,
+        Web3.utils.toWei(ethers.constants.MaxUint256.toString() + '', 'ether'),
+      )
+      .send({ from: account })
+      .then((res: any) => {
+        dispatch(setIsLoading(false))
+        setFirstStepClassName('item-processed')
+        setSecondStepClassName('item')
+      })
+      .catch((err: any) => {
+        dispatch(setIsLoading(false))
+        setFirstStepClassName('item')
+        setSecondStepClassName('item-disabled')
       })
   }
 
