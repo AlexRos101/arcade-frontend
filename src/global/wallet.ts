@@ -270,6 +270,6 @@ export const sendTransaction = async (transaction: any, account: string | undefi
 
   return transaction.estimateGas({ from: account })
   .then(async (gasAmount: any) => { 
-    return transaction.send({ from: account, gas: gasAmount, gasPrice: parseInt(gasData.result, 16).toString() })
+    return transaction.send({ from: account, gas: gasAmount/*, gasPrice: parseInt(gasData.result, 16).toString()*/ })
   })
 }
