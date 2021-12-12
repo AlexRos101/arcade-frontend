@@ -32,7 +32,7 @@ const Home: React.FC = () => {
   }
 
   const onClickBuyArcadeDoge = () => {
-    window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0x9F2eEA5375992F8EB33Eb1fdf56476C6f1a89Ded'
+    window.location.href = `https://pancakeswap.finance/swap?outputCurrency=${process.env.REACT_APP_ARCADEDOGE_ADDRESS}`
   }
 
   const onOpenConvertGameToken = () => {
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
   return (
     <Page className="no-width-limit">
       <div className="iframe-template">
-        <iframe title="Game Frame" id="game_panel" src="https://i.arcadetoken.games/game/"/>
+        <iframe title="Game Frame" id="game_panel" src={process.env.REACT_APP_GAME_URL}/>
         {/*
           (<div className="rect rect-1" />
           <div className="rect rect-2" />

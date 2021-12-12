@@ -10,11 +10,10 @@ declare let window: any
 
 const providerParam: any = {
   infuraId: 'a7a08bee7e2e427591a17baafee2c515',
-  rpc: {
-    56: "https://bsc-dataseed1.binance.org/",
-    //97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-  },
+  rpc: { },
 }
+
+providerParam.rpc[Number(process.env.REACT_APP_CHAIN_ID)] = process.env.REACT_APP_RPC_URL
 
 export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => {
   if (wallet_type === CONST.WALLET_TYPE.WALLETCONNECT) {
@@ -75,14 +74,14 @@ export const connect = async (wallet_type = CONST.WALLET_TYPE.WALLETCONNECT) => 
                   params: [
                     {
                       chainId: '0x' + Number(process.env.REACT_APP_CHAIN_ID).toString(16),
-                      chainName: 'BSC Mainnet',
-                      rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                      chainName: process.env.REACT_APP_CHAIN_NAME,
+                      rpcUrls: [ process.env.REACT_APP_RPC_URL ],
                       nativeCurrency: {
                         name: 'BNB',
                         symbol: 'BNB',
                         decimals: 18,
                       },
-                      blockExplorerUrls: ['https://bscscan.com/'],
+                      blockExplorerUrls: [ process.env.REACT_APP_BLOCKEXPLORER ],
                     },
                   ],
                 })
