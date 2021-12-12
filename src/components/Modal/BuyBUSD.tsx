@@ -85,7 +85,7 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
     bUSD.methods
       .approve(
         process.env.REACT_APP_EXCHANGE_ADDRESS,
-        Web3.utils.toWei(ethers.constants.MaxUint256.toString() + '', 'ether'),
+        ethers.constants.MaxUint256
       )
       .send({ from: account })
       .then((res: any) => {

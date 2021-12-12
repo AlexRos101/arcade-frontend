@@ -86,7 +86,7 @@ const BuyModal: React.FC<Props> = (props) => {
     }
 
     arcadeDoge.methods
-      .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, Web3.utils.toWei(ethers.constants.MaxUint256.toString() + '', 'ether'))
+      .approve(process.env.REACT_APP_EXCHANGE_ADDRESS, ethers.constants.MaxUint256)
       .send({ from: account })
       .then((res: any) => {
         dispatch(setIsLoading(false))

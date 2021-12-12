@@ -90,7 +90,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       arcadeDoge.methods
         .approve(
           process.env.REACT_APP_SWAP_ADDRESS,
-          Web3.utils.toWei(ethers.constants.MaxUint256.toString() + '', 'ether'),
+          ethers.constants.MaxUint256,
         ), account)
         .then((res: any) => {
           dispatch(setIsLoading(false))
