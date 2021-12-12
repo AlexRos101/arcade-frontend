@@ -254,7 +254,7 @@ export const checkSign = async (text: string, signature: string, account: string
 }
 
 export const sendTransaction = async (transaction: any, account: string | undefined) => {
-  let gasData: any = null
+  /* let gasData: any = null
   try {
     gasData = await axios.get(process.env.REACT_APP_GAS_URL as string);
 
@@ -265,7 +265,7 @@ export const sendTransaction = async (transaction: any, account: string | undefi
       console.log(err);
       arcadeAlert("Get gas price failed!")
       return;
-  }
+  } */
 
   return transaction.estimateGas({ from: account })
   .then(async (gasAmount: any) => { 
