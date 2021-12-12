@@ -24,6 +24,7 @@
     "axios": "^0.21.4",
     "bignumber.js": "^9.0.1",
     "clsx": "^1.1.1",
+    "env-cmd": "^10.1.0",
     "ethers": "^5.5.1",
     "javascript-time-ago": "^2.3.9",
     "jquery": "^3.6.0",
@@ -54,7 +55,11 @@
     "build": "rimraf ./build && react-scripts build HTTPS=true && rimraf ./build/**/*.map",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts --ext .tsx --fix"
+    "lint": "eslint . --ext .ts --ext .tsx --fix",
+    "start:dev": "env-cmd -f .env.development npm run-script start",
+    "start:product": "env-cmd -f .env.product npm run-script start",
+    "build:dev": "env-cmd -f .env.development npm run-script build",
+    "build:product": "env-cmd -f .env.product npm run-script build"
   },
   "eslintConfig": {
     "extends": [
