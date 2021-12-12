@@ -74,24 +74,16 @@ const PointSwap: React.FC<Props> = (props) => {
   const [txDuration, setTxDuration] = useState<number>(100)
 
   const getConvertableStatus = async () => {
-    if (inputCoin.tokenName === "$ARC") {
-      setConvertable(true)
-      return
-    }
+    if (!account) return
 
     swap.methods.txDuration().call()
     .then((result: string) => {
       setTxDuration(parseInt(result, 10))
       swap.methods.lastTxTime(account, 1).call()
       .then((lastTime: string) => {
-        const now = new Date()
-        const last = new Date(lastTime)
-        console.log(now)
-        console.log(last)
-        console.log(txDuration)
-        console.log(isConvertable)
-        last.setSeconds(last.getSeconds() + txDuration)
-        if (now < last)
+        const now = new Date().getTime() / 1000
+        const last = parseInt(lastTime, 10)
+        if (now > last + txDuration)
           setConvertable(true)
         else
           setConvertable(false)
@@ -236,7 +228,7 @@ const PointSwap: React.FC<Props> = (props) => {
       arcadeAlert("Please input valid amount!")
       return
     }
-    setConvertable(false)
+    
     if (inputCoin && inputCoin?.tokenName === "$ARC") {
       setOpenSwapToken(true)
     } else {
@@ -307,7 +299,13 @@ const PointSwap: React.FC<Props> = (props) => {
     }
   }
 
- 
+  const onCloseSwapToken = (txHappened: boolean = false) => {
+      if (txHappened) {
+        setConvertable(false)
+      }
+      
+      setOpenSwapToken(false)
+  }
 
   const onClose = () => {
     setInputBalance(0)
@@ -460,9 +458,7 @@ const PointSwap: React.FC<Props> = (props) => {
         amount={new BigNumber(inputBalance)}
         inputCoin={inputCoin}
         outputCoin={outputCoin}
-        onClose={() => {
-          setOpenSwapToken(false)
-        }}
+        onClose={onCloseSwapToken}
       />
     </Dialog>
   )

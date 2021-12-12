@@ -28,7 +28,7 @@ interface Props {
   amount: BigNumber
   inputCoin?: Token
   outputCoin?: Token
-  onClose: () => void
+  onClose: (txHappened: boolean) => void
 }
 
 const SwapGameToken: React.FC<Props> = (props) => {
@@ -125,7 +125,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
       .then(() => {
         arcadeAlert("StarShards successfully exchanged!")
         dispatch(setIsLoading(false))
-        props.onClose()
+        props.onClose(true)
       })
       .catch(() => {
         arcadeAlert("Buy Game Point failed!")
@@ -139,10 +139,14 @@ const SwapGameToken: React.FC<Props> = (props) => {
     }
   }
 
+  const onClose = () => {
+    props.onClose(false)
+  }
+
   return (
     <Dialog
       className="card-dialog"
-      onClose={props.onClose}
+      onClose={onClose}
       maxWidth="sm"
       aria-labelledby="customized-dialog-title"
       open={props.open}
@@ -201,7 +205,7 @@ const SwapGameToken: React.FC<Props> = (props) => {
           </div>
         </div>
       </DialogContent>
-      <IconButton aria-label="close" className="modal-close" onClick={props.onClose}>
+      <IconButton aria-label="close" className="modal-close" onClick={onClose}>
         <CloseIcon />
       </IconButton>
     </Dialog>
