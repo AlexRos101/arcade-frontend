@@ -16,3 +16,8 @@ export const getValidationCheck = async (address: string): Promise<any> => {
   const response = await sendPost('verify/address' , { address: address })
   return response
 }
+
+export const getGamepointValidation = async (txid: string): Promise<any> => {
+  const response = await sendPost('verify/txid', { txid: txid })
+  return response
+}

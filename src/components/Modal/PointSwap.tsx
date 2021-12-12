@@ -23,7 +23,7 @@ import { Token } from 'global/interface'
 import * as Wallet from '../../global/wallet'
 import useRefresh from 'hooks/useRefresh'
 import { getVerificationCode } from 'hooks/api'
-import { getBalance } from 'hooks/gameapi'
+import { getBalance, getGamepointValidation } from 'hooks/gameapi'
 import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useSwap, useArcadeDoge, useBep20Price } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
@@ -135,6 +135,29 @@ const PointSwap: React.FC<Props> = (props) => {
     updateInputAlert()
   }, [updateInputAlert])
 
+  const checkGamePoint = (txid: string, step: number = 0) => {
+    try{
+      getGamepointValidation(txid)
+      .then((res: any) => {
+        if (res.result === 0) {
+          arcadeAlert("The in-game currency has been successfully converted!")
+          dispatch(setIsLoading(false))
+        } else {
+          throw new Error()
+        }
+      })
+    } catch(err) {
+      if (step === 30) {
+        arcadeAlert("The in-game currency convertion failed!")
+        dispatch(setIsLoading(false))
+      } else {
+        setTimeout(checkGamePoint, 1000, [txid, step+1])
+      }
+    }
+    
+  }
+
+
   const buyArcade = async () => {
     dispatch(setIsLoading(true))
 
@@ -158,15 +181,14 @@ const PointSwap: React.FC<Props> = (props) => {
       const verificationToken = res.data.verification_token
 
       Wallet.sendTransaction(
-      swap.methods
+        swap.methods
         .sellGamePoint(
           1,
           inputBalance,
           verificationToken
         ), account)
-        .then(() => {
-          arcadeAlert("The in-game currency has been successfully converted!")
-          dispatch(setIsLoading(false))
+        .then((res: any) => {
+          checkGamePoint(res.transactionHash)
         })
         .catch(() => {
           arcadeAlert("Oh no! The conversion failed. Please try again.")
