@@ -32,7 +32,7 @@ const Home: React.FC = () => {
   }
 
   const onClickBuyArcadeDoge = () => {
-    window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0xfF6269A074Af20D42571407E8E0E6648134F8878'
+    window.location.href = 'https://pancakeswap.finance/swap?outputCurrency=0x9F2eEA5375992F8EB33Eb1fdf56476C6f1a89Ded'
   }
 
   const onOpenConvertGameToken = () => {
