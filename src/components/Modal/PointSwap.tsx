@@ -143,8 +143,8 @@ const PointSwap: React.FC<Props> = (props) => {
           arcadeAlert("The in-game currency has been successfully converted!")
           dispatch(setIsLoading(false))
         } else {
-          if (step === 30) {
-            arcadeAlert("The in-game currency convertion failed!")
+          if (step === 60) {
+            arcadeAlert("The in-game currency conversion will be processed in a few minutes")
             dispatch(setIsLoading(false))
           } else {
             setTimeout(checkGamePoint, 1000, txid, step+1)
@@ -152,8 +152,8 @@ const PointSwap: React.FC<Props> = (props) => {
         }
       })
     } catch(err) {
-      if (step === 30) {
-        arcadeAlert("The in-game currency convertion failed!")
+      if (step === 60) {
+        arcadeAlert("The in-game currency conversion will be processed in a few minutes")
         dispatch(setIsLoading(false))
       } else {
         setTimeout(checkGamePoint, 1000, txid, step+1)
