@@ -70,6 +70,26 @@ const PointSwap: React.FC<Props> = (props) => {
   const [outputBalance, setOutputBalance] = useState(0)
   const [inputBalance, setInputBalance] = useState(0)
   const [inputAlert, setInputAlert] = useState(false)
+  const [isConvertable, setConvertable] = useState(false)
+  const [txDuration, setTxDuration] = useState<number>(100)
+
+  const getConvertableStatus = async () => {
+    if (!account) return
+
+    swap.methods.txDuration().call()
+    .then((result: string) => {
+      setTxDuration(parseInt(result, 10))
+      swap.methods.lastTxTime(account, 1).call()
+      .then((lastTime: string) => {
+        const now = new Date().getTime() / 1000
+        const last = parseInt(lastTime, 10)
+        if (now > last + txDuration)
+          setConvertable(true)
+        else
+          setConvertable(false)
+      })
+    })
+  }
 
   const getArcadeDogeRate = async () => {
     bep20Price.methods.getTokenPrice(process.env.REACT_APP_ARCADEDOGE_ADDRESS, 18).call()
@@ -147,7 +167,7 @@ const PointSwap: React.FC<Props> = (props) => {
             arcadeAlert("The in-game currency conversion will be processed in a few minutes")
             dispatch(setIsLoading(false))
           } else {
-            setTimeout(checkGamePoint, 1000, txid, step+1)
+            setTimeout(checkGamePoint, 1000, txid, step + 1)
           }
         }
       })
@@ -156,7 +176,7 @@ const PointSwap: React.FC<Props> = (props) => {
         arcadeAlert("The in-game currency conversion will be processed in a few minutes")
         dispatch(setIsLoading(false))
       } else {
-        setTimeout(checkGamePoint, 1000, txid, step+1)
+        setTimeout(checkGamePoint, 1000, txid, step + 1)
       }
     }
     
@@ -208,7 +228,7 @@ const PointSwap: React.FC<Props> = (props) => {
       arcadeAlert("Please input valid amount!")
       return
     }
-
+    
     if (inputCoin && inputCoin?.tokenName === "$ARC") {
       setOpenSwapToken(true)
     } else {
@@ -279,7 +299,13 @@ const PointSwap: React.FC<Props> = (props) => {
     }
   }
 
- 
+  const onCloseSwapToken = (txHappened: boolean = false) => {
+      if (txHappened) {
+        setConvertable(false)
+      }
+      
+      setOpenSwapToken(false)
+  }
 
   const onClose = () => {
     setInputBalance(0)
@@ -291,6 +317,9 @@ const PointSwap: React.FC<Props> = (props) => {
       setOutputBalance(inputBalance * swapRate)
     else
       setOutputBalance(0)
+
+    getConvertableStatus()
+  // eslint-disable-next-line
   }, [inputCoin, inputBalance, swapRate])
 
   useEffect(() => {
@@ -300,6 +329,7 @@ const PointSwap: React.FC<Props> = (props) => {
     getSellGamePointRate()
     getArcadeBalance()
     getGamePointBalance()
+    getConvertableStatus()
   // eslint-disable-next-line
   }, [slowRefresh, account])
 
@@ -404,7 +434,7 @@ const PointSwap: React.FC<Props> = (props) => {
               color="primary" 
               onClick={onConvert} 
               style={{ float: "right" }}
-              disabled={inputAlert}
+              disabled={inputAlert || !isConvertable}
             >
               Convert
             </Button>
@@ -428,9 +458,7 @@ const PointSwap: React.FC<Props> = (props) => {
         amount={new BigNumber(inputBalance)}
         inputCoin={inputCoin}
         outputCoin={outputCoin}
-        onClose={() => {
-          setOpenSwapToken(false)
-        }}
+        onClose={onCloseSwapToken}
       />
     </Dialog>
   )
