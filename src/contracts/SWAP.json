@@ -346,6 +346,11 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "_snapshot",
+        "type": "uint256"
+      },
+      {
         "internalType": "bytes32",
         "name": "_verificationData",
         "type": "bytes32"
@@ -554,6 +559,13 @@
   },
   {
     "inputs": [],
+    "name": "upgradeToV2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "version",
     "outputs": [
       {
@@ -598,7 +610,7 @@
             "type": "address"
           }
         ],
-        "internalType": "struct ArcadeSwapV1.Commission",
+        "internalType": "struct ArcadeSwapV2.Commission",
         "name": "",
         "type": "tuple"
       }

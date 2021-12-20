@@ -204,12 +204,14 @@ const PointSwap: React.FC<Props> = (props) => {
       }
 
       const verificationToken = res.data.verification_token
+      const snapShot = res.data.timestamp;
 
       Wallet.sendTransaction(
         swap.methods
         .sellGamePoint(
           1,
           inputBalance,
+          snapShot,
           verificationToken
         ), account)
         .then((res: any) => {

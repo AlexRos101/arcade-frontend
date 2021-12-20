@@ -15,6 +15,7 @@ import { useArcadeContext } from 'hooks/useArcadeContext'
 import { useArcadeDoge, useSwap } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
 import { setConnectWallet, setIsLoading } from 'state/show'
+import { getGamepointValidation } from 'hooks/gameapi'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -38,6 +39,35 @@ const SwapGameToken: React.FC<Props> = (props) => {
   const swap = useSwap()
   const [firstStepClassName, setFirstStepClassName] = useState('item')
   const [secondStepClassName, setSecondStepClassName] = useState('item-disabled')
+
+  const checkGamePoint = (txid: string, step: number = 0) => {
+    try{
+      getGamepointValidation(txid)
+      .then((res: any) => {
+        if (res.result === 0) {
+          arcadeAlert("StarShards successfully exchanged!")
+          dispatch(setIsLoading(false))
+          props.onClose(true)
+        } else {
+          if (step === 60) {
+            arcadeAlert("Buy Game Point failed!")
+            dispatch(setIsLoading(false))
+          } else {
+            setTimeout(checkGamePoint, 1000, txid, step + 1)
+          }
+        }
+      })
+    } catch(err) {
+      if (step === 60) {
+        arcadeAlert("Buy Game Point failed!")
+        dispatch(setIsLoading(false))
+      } else {
+        setTimeout(checkGamePoint, 1000, txid, step + 1)
+      }
+    }
+    
+  }
+
 
   const refresh = useCallback(async () => {
     // dispatch(setIsLoading(true));
@@ -122,10 +152,8 @@ const SwapGameToken: React.FC<Props> = (props) => {
           'ether',
         )
       ), account)
-      .then(() => {
-        arcadeAlert("StarShards successfully exchanged!")
-        dispatch(setIsLoading(false))
-        props.onClose(true)
+      .then((res: any) => {
+        checkGamePoint(res.transactionHash)
       })
       .catch(() => {
         arcadeAlert("Buy Game Point failed!")
