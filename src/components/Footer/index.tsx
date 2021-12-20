@@ -45,7 +45,7 @@ const Footer = () => {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
   const dispatch = useAppDispatch()
-  const { connectType } = useArcadeContext()
+  const { connectType, fullscreen } = useArcadeContext()
   const { termOfUse, privacyPolicy, pointSwap, walletMenu } = useShow()
 
   const handleClose = useCallback(() => {
@@ -60,27 +60,31 @@ const Footer = () => {
     dispatch(setPointSwap(false))
   }, [dispatch])
 
-  return (
-    <AppBar position="static" className={classes.root} id="footer">
-      <Grid container className={clsx(classes.container, commonClasses.containerWidth)}>
-        <Grid item md={3}>
-          <FooterContact />
+  if (!fullscreen) {
+    return (
+      <AppBar position="static" className={classes.root} id="footer">
+        <Grid container className={clsx(classes.container, commonClasses.containerWidth)}>
+          <Grid item md={3}>
+            <FooterContact />
+          </Grid>
+          <Grid container item md={6} style={{ justifyContent: 'space-between' }}>
+            <FooterRoadmap />
+          </Grid>
+          <Grid item md={3}>
+            <FooterFollowUs />
+          </Grid>
         </Grid>
-        <Grid container item md={6} style={{ justifyContent: 'space-between' }}>
-          <FooterRoadmap />
-        </Grid>
-        <Grid item md={3}>
-          <FooterFollowUs />
-        </Grid>
-      </Grid>
-      <TermOfUse onClose={handleClose} open={termOfUse} />
-      <PrivacyPolicy onClose={handleClosePrivacy} open={privacyPolicy} />
-      <PointSwap onClose={handleClosePointSwap} open={pointSwap} />
-      <Hidden smUp>
-        <SelectWalletModal open={walletMenu} connectedWallet={connectType}/>
-      </Hidden>
-    </AppBar>
-  )
+        <TermOfUse onClose={handleClose} open={termOfUse} />
+        <PrivacyPolicy onClose={handleClosePrivacy} open={privacyPolicy} />
+        {/* <PointSwap onClose={handleClosePointSwap} open={pointSwap} /> */}
+        <Hidden smUp>
+          <SelectWalletModal open={walletMenu} connectedWallet={connectType}/>
+        </Hidden>
+      </AppBar>
+    )
+  } else {
+    return (<div/>)
+  }
 }
 
 export default memo(Footer)

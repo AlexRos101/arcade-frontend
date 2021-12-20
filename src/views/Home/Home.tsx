@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-
+import fscreen from 'fscreen'
 import { ThemeProvider } from '@material-ui/core/styles'
 
 import { greenTheme, pinkTheme } from 'styles/theme'
@@ -11,6 +11,7 @@ import { ReactComponent as AstronautBuy } from 'assets/img/astronautbuy.svg'
 import Info from '@material-ui/icons/Info'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import { ReactComponent as Ticket } from 'assets/img/ticket.svg'
+import { ReactComponent as FullScreen } from 'assets/img/fullscreen.svg'
 
 import HeaderLabel from 'components/Label/HeaderLabel'
 import { homeTheme } from 'styles/theme'
@@ -21,11 +22,14 @@ import { setWalletMenu, setPointSwap } from 'state/show'
 import { getValidationCheck } from 'hooks/gameapi'
 import { arcadeAlert } from 'utils/arcadealert'
 
+declare let window: any
+
 const Home: React.FC = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
-  const { account } = useArcadeContext()
+  const { account, fullscreen, setFullScreenMode } = useArcadeContext()
   const [showHowToPlay, setShowHowToPlay] = useState(false)
+
 
   const onClickArcadeMarket = () => {
     history.push('/market')
@@ -50,10 +54,33 @@ const Home: React.FC = () => {
     }
   }
 
+  const requestFullScreen = (element: any, fullscreen: boolean) => {
+    if (fullscreen === true) {
+      fscreen.requestFullscreen(element)
+    } else {
+      fscreen.exitFullscreen()
+    }
+  }
+
+  const onClickFullScreen = () => {
+    setFullScreenMode(!fullscreen)
+    requestFullScreen(document.body, !fullscreen)
+  }
+
+  fscreen.onfullscreenchange = () => {
+    console.log(fscreen.fullscreenEnabled)
+    if (fullscreen && !fscreen.fullscreenElement) {
+      setFullScreenMode(false)
+    }
+  }
+
   return (
     <Page className="no-width-limit">
-      <div className="iframe-template">
+      <div className={`iframe-template ${fullscreen ? 'fullscreen' : ''}`}>
         <iframe title="Game Frame" id="game_panel" src={process.env.REACT_APP_GAME_URL}/>
+        <div className="rect btn-fullscreen" onClick={onClickFullScreen} id="fullscreen_btn">
+          <FullScreen />
+        </div>
         {/*
           (<div className="rect rect-1" />
           <div className="rect rect-2" />

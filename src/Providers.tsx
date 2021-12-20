@@ -12,6 +12,7 @@ export const ArcadeProvider: React.FC = ({ children }) => {
   const [web3, setWeb3] = useState<Web3>(new Web3())
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const [connectType, setConnectType] = useState<number>(CONST.WALLET_TYPE.NONE)
+  const [fullscreen, setFullscreen] = useState<boolean>(false)
   
   const getWeb3 = async () => {
     const provider = await Wallet.getCurrentProvider()
@@ -52,6 +53,10 @@ export const ArcadeProvider: React.FC = ({ children }) => {
     }
   }
 
+  const setFullScreenMode = (isSet: boolean) => {
+    setFullscreen(isSet)
+  }
+
   useEffect(() => {
     initConnection()
     initWeb3()
@@ -71,9 +76,11 @@ export const ArcadeProvider: React.FC = ({ children }) => {
       account,
       isConnected,
       connectType,
+      fullscreen,
       disconnectWallet,
       connectWallet,
       updateConnect,
+      setFullScreenMode,
     }}>
       {children}
     </ArcadeContext.Provider>

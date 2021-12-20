@@ -10,6 +10,7 @@ import { useCommonStyles } from '../../styles/use-styles'
 import { ReactComponent as Wallet } from 'assets/img/wallet.svg'
 import { setWalletMenu, setHiddenMenu } from 'state/show'
 import { useAppDispatch } from 'state'
+import { useArcadeContext } from 'hooks/useArcadeContext'
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -34,25 +35,29 @@ const Menu = () => {
   const dispatch = useAppDispatch()
   const classes = useStyles()
   const commonClasses = useCommonStyles()
+  const { fullscreen } = useArcadeContext()
 
   const onConnectWalletHandler = async () => {
     dispatch(setWalletMenu(true))
     dispatch(setHiddenMenu('hidden-menu'))
   }
-
-  return (
-    <AppBar position="relative" className={classes.appBar}>
-      <Toolbar className={clsx(classes.toolbar, commonClasses.containerWidth)}>
-        <Wallet className="wallet-cage" onClick={onConnectWalletHandler} />
-        <div className={classes.container}>
-          <Logo />
-        </div>
-        <div className={classes.container}>
-          <NavBarMenu />
-        </div>
-      </Toolbar>
-    </AppBar>
-  )
+  if (!fullscreen) {
+    return (
+      <AppBar position="relative" className={classes.appBar}>
+        <Toolbar className={clsx(classes.toolbar, commonClasses.containerWidth)}>
+          <Wallet className="wallet-cage" onClick={onConnectWalletHandler} />
+          <div className={classes.container}>
+            <Logo />
+          </div>
+          <div className={classes.container}>
+            <NavBarMenu />
+          </div>
+        </Toolbar>
+      </AppBar>
+    )
+  } else {
+    return (<div/>)
+  }
 }
 
 export default memo(Menu)

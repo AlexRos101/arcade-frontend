@@ -204,7 +204,7 @@ const PointSwap: React.FC<Props> = (props) => {
       }
 
       const verificationToken = res.data.verification_token
-      const snapShot = res.data.timestamp;
+      const snapShot = res.data.timestamp
 
       Wallet.sendTransaction(
         swap.methods

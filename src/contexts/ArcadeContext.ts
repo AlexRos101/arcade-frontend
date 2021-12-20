@@ -6,9 +6,11 @@ export interface ArcadeContextValue {
   account: string | undefined,
   isConnected: boolean,
   connectType: number,
+  fullscreen: boolean,
   disconnectWallet: () => void,
   connectWallet: (connectType: number) => void,
   updateConnect: () => void,
+  setFullScreenMode: (isSet: boolean) => void,
 }
 
 export const ArcadeContext = createContext<null | ArcadeContextValue>(null)

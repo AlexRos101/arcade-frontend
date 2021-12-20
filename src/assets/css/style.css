@@ -372,6 +372,13 @@ a {
     padding: 45px;
     background: #FFFCED;
   }
+
+  .fullscreen iframe {
+    width: 100vw;
+    height: 56.25vw;
+    max-width: 100vw;
+    max-height: 100vw;
+  }
   
   iframe {
     width: calc(100vw - 96px);
@@ -485,6 +492,26 @@ a {
     background: #1571FF;
     right: -48px;
     top: 96px;
+  }
+
+  .btn-fullscreen {
+    background: #1571FF;
+    right: 24px;
+    bottom: 24px;
+  }
+
+  .btn-fullscreen svg {
+    margin: 15%;
+  }
+
+  .fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+    position: fixed !important;
+    z-index: 100;
+    background-color: black;
+    top: 0;
+    left: 0;
   }
 
   .pb-0 {
@@ -2292,6 +2319,16 @@ a {
       background: #1571FF;
       right: -24px;
       top: 48px;
+    }
+
+    .btn-fullscreen {
+      background: #1571FF;
+      right: 12px;
+      bottom: 12px;
+    }
+
+    .btn-fullscreen svg {
+      margin: 20%;
     }
 
     .market-header-action {
