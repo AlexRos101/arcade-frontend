@@ -12,6 +12,7 @@ import Info from '@material-ui/icons/Info'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import { ReactComponent as Ticket } from 'assets/img/ticket.svg'
 import { ReactComponent as FullScreen } from 'assets/img/fullscreen.svg'
+import Logo from 'assets/img/logo-circle.png'
 
 import HeaderLabel from 'components/Label/HeaderLabel'
 import { homeTheme } from 'styles/theme'
@@ -77,7 +78,10 @@ const Home: React.FC = () => {
   return (
     <Page className="no-width-limit">
       <div className={`iframe-template ${fullscreen ? 'fullscreen' : ''}`}>
-        <iframe title="Game Frame" id="game_panel" src={process.env.REACT_APP_GAME_URL}/>
+        <div className='replace-iframe' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={Logo} alt="Logo" style={{ width: '120px', height: '120px'}} />
+        </div>
+        {/* <iframe title="Game Frame" id="game_panel" src={process.env.REACT_APP_GAME_URL}/> */}
         <div className="rect btn-fullscreen" onClick={onClickFullScreen} id="fullscreen_btn">
           <FullScreen />
         </div>

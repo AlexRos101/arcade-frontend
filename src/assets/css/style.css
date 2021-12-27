@@ -380,7 +380,7 @@ a {
     max-height: 100vw;
   }
   
-  iframe {
+  iframe, .replace-iframe {
     width: calc(100vw - 96px);
     height: calc(56.25vw - 54px);
     max-width: 1344px;
