@@ -373,7 +373,7 @@ a {
     background: #FFFCED;
   }
 
-  .fullscreen iframe {
+  .fullscreen iframe, .fullscreen .replace-iframe {
     width: 100vw;
     height: 56.25vw;
     max-width: 100vw;
