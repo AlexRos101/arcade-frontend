@@ -124,7 +124,12 @@ const BuyBUSDModal: React.FC<Props> = (props) => {
       ), account)
       .then((res: any) => {
         const checkDBStatus = async () => {
-          const item = (await API.getItemById(props.item.id)).data
+          const res = await API.getItemById(props.item.id)
+          if (!res.result) {
+            setTimeout(checkDBStatus, 500)
+            return
+          }
+          const item = res.data
           if (account && item.owner === Web3.utils.toChecksumAddress(account)) {
             window.location.href = '/listing'
           } else {

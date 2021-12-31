@@ -61,8 +61,10 @@ const Listing: React.FC = () => {
       }
       setShowLoading(true)
       const items = await API.getItemsByAddress(account, CONST.SORT_TYPE.NONE, limit, cnt)
-      setCount(Number(items.total))
-      setRows(items.data)
+      if (items.result) {
+        setCount(Number(items.total))
+        setRows(items.data)
+      }
 
       setShowLoading(false)
     },
@@ -92,7 +94,12 @@ const Listing: React.FC = () => {
       .burn(rows[index].token_id), account
     ).then((res: any) => {
       const checkItemStatus = async () => {
-        const item = (await API.getItemById(rows[index].id)).data
+        const res = await API.getItemById(rows[index].id)
+        if (!res.result) {
+          setTimeout(checkItemStatus, 500)
+          return
+        }
+        const item = res.data
         if (item.is_burnt) {
           document.location.reload()
         } else {
