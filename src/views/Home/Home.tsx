@@ -124,7 +124,7 @@ const Home: React.FC = () => {
               Browse Arcade Market
             </Button>
           </ThemeProvider>
-          {/* <ThemeProvider theme={pinkTheme}>
+          <ThemeProvider theme={pinkTheme}>
             <Button
               className="mg-8 btn-wd-limit"
               variant="contained"
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
             >
               Convert Game Tokens
             </Button>
-          </ThemeProvider> */}
+          </ThemeProvider>
         </div>
         <div className="flex-row row col-2" style={{ paddingBottom: '0px', position: 'relative' }}>
           <ThemeProvider theme={homeTheme}>

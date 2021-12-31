@@ -4,7 +4,11 @@ const sendPost = (requestUrl: string, params: any): Promise<any> => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
   }
-  return fetch(process.env.REACT_APP_GAME_API_NODE + requestUrl, requestOptions).then((response) => response.json())
+  return fetch(process.env.REACT_APP_GAME_API_NODE + requestUrl, requestOptions)
+    .then((response) => response.json())
+    .catch((ex) => {
+      return { result: false, msg: ex.message }
+    })
 }
 
 export const getBalance = async (address: string): Promise<any> => {

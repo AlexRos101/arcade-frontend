@@ -76,7 +76,7 @@ const Footer = () => {
         </Grid>
         <TermOfUse onClose={handleClose} open={termOfUse} />
         <PrivacyPolicy onClose={handleClosePrivacy} open={privacyPolicy} />
-        {/* <PointSwap onClose={handleClosePointSwap} open={pointSwap} /> */}
+        <PointSwap onClose={handleClosePointSwap} open={pointSwap} />
         <Hidden smUp>
           <SelectWalletModal open={walletMenu} connectedWallet={connectType}/>
         </Hidden>
