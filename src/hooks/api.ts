@@ -6,17 +6,22 @@ const sendPost = (requestUrl: string, params: any): Promise<any> => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
   }
-  return fetch(process.env.REACT_APP_API_NODE + requestUrl, requestOptions).then((response) => response.json())
+
+  return fetch(process.env.REACT_APP_API_NODE + requestUrl, requestOptions)
+    .then((response) => response.json())
+    .catch((ex) => {
+      return { result: false, msg: ex.message }
+    })
 }
 
 export const getAllStuff = async (): Promise<any> => {
   const response = await sendPost('stuff/all', {})
-  return response.data
+  return response
 }
 
 export const getStuff = async (id: number): Promise<any> => {
   const response = await sendPost('stuff', { id: id })
-  return response.data
+  return response
 }
 
 export const getAllDiscussion = async (id: number, limit: number, cnt: number): Promise<any> => {
@@ -26,7 +31,7 @@ export const getAllDiscussion = async (id: number, limit: number, cnt: number): 
 
 export const getSearch = async (keyword: string): Promise<any> => {
   const response = await sendPost('stuff/search/', { keyword: keyword })
-  return response.data
+  return response
 }
 
 export const getDiscussion = async (id: number, account: string, limit: number = 0, cnt: number = 2): Promise<any> => {

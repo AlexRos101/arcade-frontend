@@ -19,9 +19,11 @@ const Discussion: React.FC = () => {
   useEffect(() => {
     if (staffIsSet === false) {
       setStaffIsSet(true)
-      getAllStuff().then((data) => {
-        setStaffs(data)
-        setShowLoading(false)
+      getAllStuff().then((res) => {
+        if (res.result) {
+          setStaffs(res.data)
+          setShowLoading(false)
+        }
       })
     }
   }, [staffIsSet])

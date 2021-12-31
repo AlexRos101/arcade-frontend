@@ -25,9 +25,11 @@ const DiscussionStaff: React.FC = () => {
   useEffect(() => {
     if (staffIsSet === false) {
       setStaffIsSet(true)
-      getStuff(Number(staffId)).then((data) => {
-        setStaff(data)
-        setShowLoading(false)
+      getStuff(Number(staffId)).then((res) => {
+        if (res.result) {
+          setStaff(res.data)
+          setShowLoading(false)
+        }
       })
     }
   }, [staffIsSet, staffId])

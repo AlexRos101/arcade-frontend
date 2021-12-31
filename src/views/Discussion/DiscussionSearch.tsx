@@ -34,11 +34,12 @@ const DiscussionSearch: React.FC = () => {
   useEffect(() => {
     if (staffIsSet === false) {
       setStaffIsSet(true)
-      getSearch(keyword).then((data) => {
-        setStaffs(data)
+      getSearch(keyword).then((res) => {
+        if (!res.result) return;
+        setStaffs(res.data)
         let cnt = 0
-        for (let i = 0; i < data.length; i++) {
-          const discussions = data[i].discussions as Array<Discussion>
+        for (let i = 0; i < res.data.length; i++) {
+          const discussions = res.data[i].discussions as Array<Discussion>
           cnt += discussions.length
           if (discussions.length === 0) checkArray.push(false)
           else checkArray.push(true)

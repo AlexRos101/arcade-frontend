@@ -49,6 +49,8 @@ const Staff: React.FC<Props> = (props) => {
         setDiscussions(data)
       } else {
         getAllDiscussion(staff.id, pageNum * 8, 8).then((response) => {
+          if (!response.result) return
+          
           let hotIndex = -1
           let hotValue = -1
 
